@@ -40,7 +40,7 @@ Route::middleware(['auth', RoleMiddleware::class.':user'])->group(function () {
 });
 
 Route::middleware(['auth', RoleMiddleware::class.':admin'])->group(function () {
-    Route::get('/admin/dashboard', fn() => view('admin.dashboard'));
+    Route::get('/admin/dashboard', fn() => view('backend.pages.dashboard'));
 });
 
 
