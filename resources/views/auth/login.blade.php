@@ -1,12 +1,3 @@
-<!-- <form method="POST" action="{{ route('login') }}">
-    @csrf
-    <input type="email" name="email" placeholder="Email" required>
-    <input type="password" name="password" placeholder="Password" required>
-    <button type="submit">Login</button>
-</form>
-@if($errors->any()) <div>{{ $errors->first() }}</div> @endif
- -->
-
 @extends('signinlayout')
 @section('title', 'Dashboard')
 @section('content')
@@ -40,12 +31,21 @@
               </a>
             </div>
             <div class="text-center 2xl:mb-10 mb-4">
-              <h4 class="font-medium">Sign in</h4>
+              <h4 class="font-medium">{{ __('Login') }}</h4>
               <div class="text-slate-500 text-base">
                 Sign in to your account to start using Unexplore
               </div>
             </div>
             <!-- BEGIN: Login Form -->
+
+            <form id="lang-form" action="" method="get">
+              <select onchange="window.location.href=this.value;">
+                  <option value="{{ route('lang.switch', 'en') }}" {{ app()->getLocale() == 'en' ? 'selected' : '' }}>English</option>
+                  <option value="{{ route('lang.switch', 'de') }}" {{ app()->getLocale() == 'de' ? 'selected' : '' }}>Deutsch</option>
+                  <option value="{{ route('lang.switch', 'ar') }}" {{ app()->getLocale() == 'ar' ? 'selected' : '' }}>العربية</option>
+              </select>
+          </form>
+
             <form class="space-y-4" method="POST" action="{{ route('login') }}" >
             @csrf
               <div class="fromGroup">
