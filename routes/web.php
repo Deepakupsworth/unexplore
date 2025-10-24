@@ -4,6 +4,18 @@ use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\RoleMiddleware;
 use App\Http\Middleware\RedirectIfAuthenticated;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\App;
+
+// routes/web.php
+Route::get('/lang/{locale}', function ($locale) {
+    if (in_array($locale, ['en', 'de', 'ar'])) {
+        Session::put('locale', $locale); 
+        App::setLocale($locale);
+    }
+    return redirect()->back();
+})->name('lang.switch');
+
 
 Route::get('/', function () {
     return view('backend.pages. dashboard');
