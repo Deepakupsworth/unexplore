@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('backend.layout')
 @section('title', 'Dashboard')
 @section('content')
 <div class="content-wrapper transition-all duration-150 ltr:ml-[248px] rtl:mr-[248px]" id="content_wrapper">
@@ -33,7 +33,7 @@
                   <div class="grid grid-cols-12 gap-5 mb-5">
                     <div class="2xl:col-span-3 lg:col-span-4 col-span-12">
                       <div class="bg-no-repeat bg-cover bg-center p-4 rounded-[6px] relative"
-                        style="background-image: url(/images/all-img/widget-bg-1.png)">
+                        style="background-image: url(/backend/images/all-img/widget-bg-1.png)">
                         <div class="max-w-[180px]">
                           <div class="text-xl font-medium text-slate-900 mb-2">
                             Upgrade your Dashcode
@@ -241,7 +241,7 @@
                                         <div class="flex items-center">
                                           <div class="flex-none">
                                             <div class="w-8 h-8 rounded-[100%] ltr:mr-3 rtl:ml-3">
-                                              <img src=/images/users/user-1.jpg alt=""
+                                              <img src="/backend/images/users/user-1.jpg" alt=""
                                                 class="w-full h-full rounded-[100%] object-cover">
                                             </div>
                                           </div>
@@ -276,7 +276,7 @@
                                         <div class="flex items-center">
                                           <div class="flex-none">
                                             <div class="w-8 h-8 rounded-[100%] ltr:mr-3 rtl:ml-3">
-                                              <img src=/images/users/user-2.jpg alt=""
+                                              <img src="/backend/images/users/user-2.jpg" alt=""
                                                 class="w-full h-full rounded-[100%] object-cover">
                                             </div>
                                           </div>
@@ -311,7 +311,7 @@
                                         <div class="flex items-center">
                                           <div class="flex-none">
                                             <div class="w-8 h-8 rounded-[100%] ltr:mr-3 rtl:ml-3">
-                                              <img src=/images/users/user-3.jpg alt=""
+                                              <img src="/backend/images/users/user-3.jpg" alt=""
                                                 class="w-full h-full rounded-[100%] object-cover">
                                             </div>
                                           </div>
@@ -346,7 +346,7 @@
                                         <div class="flex items-center">
                                           <div class="flex-none">
                                             <div class="w-8 h-8 rounded-[100%] ltr:mr-3 rtl:ml-3">
-                                              <img src=/images/users/user-4.jpg alt=""
+                                              <img src="/backend/images/users/user-4.jpg" alt=""
                                                 class="w-full h-full rounded-[100%] object-cover">
                                             </div>
                                           </div>
@@ -381,7 +381,7 @@
                                         <div class="flex items-center">
                                           <div class="flex-none">
                                             <div class="w-8 h-8 rounded-[100%] ltr:mr-3 rtl:ml-3">
-                                              <img src=/images/users/user-5.jpg alt=""
+                                              <img src="/backend/images/users/user-5.jpg" alt=""
                                                 class="w-full h-full rounded-[100%] object-cover">
                                             </div>
                                           </div>
@@ -416,7 +416,7 @@
                                         <div class="flex items-center">
                                           <div class="flex-none">
                                             <div class="w-8 h-8 rounded-[100%] ltr:mr-3 rtl:ml-3">
-                                              <img src=/images/users/user-6.jpg alt=""
+                                              <img src="/backend/images/users/user-6.jpg" alt=""
                                                 class="w-full h-full rounded-[100%] object-cover">
                                             </div>
                                           </div>
@@ -506,7 +506,7 @@
                                 class="flex items-center space-x-3 rtl:space-x-reverse border-b border-slate-100 dark:border-slate-700 last:border-b-0 pb-3 last:pb-0">
                                 <div>
                                   <div class="w-8 h-8 rounded-[100%]">
-                                    <img src=/images/users/user-1.jpg alt=""
+                                    <img src="/backend/images/users/user-1.jpg" alt=""
                                       class="w-full h-full rounded-[100%] object-cover">
                                   </div>
                                 </div>
@@ -528,7 +528,7 @@
                                 class="flex items-center space-x-3 rtl:space-x-reverse border-b border-slate-100 dark:border-slate-700 last:border-b-0 pb-3 last:pb-0">
                                 <div>
                                   <div class="w-8 h-8 rounded-[100%]">
-                                    <img src=/images/users/user-2.jpg alt=""
+                                    <img src="/backend/images/users/user-2.jpg" alt=""
                                       class="w-full h-full rounded-[100%] object-cover">
                                   </div>
                                 </div>
@@ -550,7 +550,7 @@
                                 class="flex items-center space-x-3 rtl:space-x-reverse border-b border-slate-100 dark:border-slate-700 last:border-b-0 pb-3 last:pb-0">
                                 <div>
                                   <div class="w-8 h-8 rounded-[100%]">
-                                    <img src=/images/users/user-3.jpg alt=""
+                                    <img src="/backend/images/users/user-3.jpg" alt=""
                                       class="w-full h-full rounded-[100%] object-cover">
                                   </div>
                                 </div>
@@ -572,7 +572,7 @@
                                 class="flex items-center space-x-3 rtl:space-x-reverse border-b border-slate-100 dark:border-slate-700 last:border-b-0 pb-3 last:pb-0">
                                 <div>
                                   <div class="w-8 h-8 rounded-[100%]">
-                                    <img src=/images/users/user-4.jpg alt=""
+                                    <img src="/backend/images/users/user-4.jpg" alt=""
                                       class="w-full h-full rounded-[100%] object-cover">
                                   </div>
                                 </div>
@@ -594,7 +594,7 @@
                                 class="flex items-center space-x-3 rtl:space-x-reverse border-b border-slate-100 dark:border-slate-700 last:border-b-0 pb-3 last:pb-0">
                                 <div>
                                   <div class="w-8 h-8 rounded-[100%]">
-                                    <img src=/images/users/user-5.jpg alt=""
+                                    <img src="/backend/images/users/user-5.jpg" alt=""
                                       class="w-full h-full rounded-[100%] object-cover">
                                   </div>
                                 </div>
@@ -616,7 +616,7 @@
                                 class="flex items-center space-x-3 rtl:space-x-reverse border-b border-slate-100 dark:border-slate-700 last:border-b-0 pb-3 last:pb-0">
                                 <div>
                                   <div class="w-8 h-8 rounded-[100%]">
-                                    <img src=/images/users/user-6.jpg alt=""
+                                    <img src="/backend/images/users/user-6.jpg" alt=""
                                       class="w-full h-full rounded-[100%] object-cover">
                                   </div>
                                 </div>
@@ -638,7 +638,7 @@
                                 class="flex items-center space-x-3 rtl:space-x-reverse border-b border-slate-100 dark:border-slate-700 last:border-b-0 pb-3 last:pb-0">
                                 <div>
                                   <div class="w-8 h-8 rounded-[100%]">
-                                    <img src=/images/users/user-1.jpg alt=""
+                                    <img src="/backend/images/users/user-1.jpg" alt=""
                                       class="w-full h-full rounded-[100%] object-cover">
                                   </div>
                                 </div>
@@ -660,7 +660,7 @@
                                 class="flex items-center space-x-3 rtl:space-x-reverse border-b border-slate-100 dark:border-slate-700 last:border-b-0 pb-3 last:pb-0">
                                 <div>
                                   <div class="w-8 h-8 rounded-[100%]">
-                                    <img src=/images/users/user-2.jpg alt=""
+                                    <img src="/backend/images/users/user-2.jpg" alt=""
                                       class="w-full h-full rounded-[100%] object-cover">
                                   </div>
                                 </div>
@@ -682,7 +682,7 @@
                                 class="flex items-center space-x-3 rtl:space-x-reverse border-b border-slate-100 dark:border-slate-700 last:border-b-0 pb-3 last:pb-0">
                                 <div>
                                   <div class="w-8 h-8 rounded-[100%]">
-                                    <img src=/images/users/user-3.jpg alt=""
+                                    <img src="/backend/images/users/user-3.jpg" alt=""
                                       class="w-full h-full rounded-[100%] object-cover">
                                   </div>
                                 </div>

@@ -15,7 +15,7 @@
 @if($errors->any()) <div>{{ $errors->first() }}</div> @endif -->
 
 
-@extends('signinlayout')
+@extends('backend.signinlayout')
 @section('title', 'Dashboard')
 @section('content')
 <div class="loginwrapper">
@@ -98,6 +98,10 @@
               <div class="flex justify-between">
                 <label class="flex items-center cursor-pointer">
                   <input type="checkbox" class="hiddens">
+                  <span class="h-4 w-4 border flex-none border-slate-100 dark:border-slate-800 rounded 
+        inline-flex ltr:mr-3 rtl:ml-3 relative transition-all duration-150
+        bg-slate-100 dark:bg-slate-600 dark:border-slate-600
+        "></span>
                   <span class="text-slate-500 dark:text-slate-400 text-sm leading-6 capitalize">You accept our Terms and Conditions and
                 Privacy Policy</span>
                 </label>

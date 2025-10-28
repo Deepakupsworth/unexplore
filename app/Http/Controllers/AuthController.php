@@ -104,4 +104,55 @@ class AuthController extends Controller
             ? redirect('/login')->with('status', __($status))
             : back()->withErrors(['email' => [__($status)]]);
     }
+
+    public function profile()
+    {
+        $user = Auth::user();
+        return view('backend.pages.profile', compact('user'));
+    }    
+// Show edit profile page
+public function editProfile()
+{
+    $user = Auth::user();
+    return view('backend.pages.profile_edit', compact('user'));
+}
+
+// Update profile
+public function updateProfile(Request $request)
+{
+    $user = Auth::user();
+
+    $request->validate([
+        'name' => 'required|string|max:100',
+        'password' => 'nullable|confirmed|min:6',
+        'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+    ]);
+
+    // Update name
+    $user->name = $request->name;
+
+    // Update password if entered
+    if ($request->filled('password')) {
+        $user->password = Hash::make($request->password);
+    }
+
+    // Handle profile image upload
+    if ($request->hasFile('image')) {
+        // Delete old image if exists
+        if ($user->image && file_exists(public_path('uploads/profile/' . $user->image))) {
+            unlink(public_path('uploads/profile/' . $user->image));
+        }
+
+        $image = $request->file('image');
+        $imageName = time() . '.' . $image->getClientOriginalExtension();
+        $image->move(public_path('uploads/profile'), $imageName);
+        $user->image = $imageName;
+    }
+
+    $user->save();
+
+    return back()->with('success', 'Profile updated successfully!');
+}
+
+
 }

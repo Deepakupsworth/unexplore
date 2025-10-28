@@ -21,7 +21,7 @@
     <p><a href="{{ route('login') }}">Back to Login</a></p>
 </body>
 </html> -->
-@extends('signinlayout')
+@extends('backend.signinlayout')
 @section('title', 'Dashboard')
 @section('content')
 

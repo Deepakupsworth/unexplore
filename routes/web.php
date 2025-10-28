@@ -18,7 +18,7 @@ Route::get('/lang/{locale}', function ($locale) {
 
 
 Route::get('/', function () {
-    return view('backend.pages. dashboard');
+    return view('backend.pages.dashboard');
 });
 
 Route::get('/signup', function () {
@@ -55,4 +55,23 @@ Route::middleware(['auth', RoleMiddleware::class.':admin'])->group(function () {
     Route::get('/admin/dashboard', fn() => view('backend.pages.dashboard'));
 });
 
+// Route::get('/profile', function () {
+//     return view('backend.pages.profile');
+// });
 
+Route::middleware(['auth', RoleMiddleware::class.':admin'])->group(function () {
+    // Profile Routes
+    // Route::get('/admin/profile', fn() => view('backend.pages.profile'));
+    // Route::get('/admin/profile/edit', fn() => view('backend.pages.Profile_edit'));
+    Route::get('/admin/profile', [AuthController::class, 'profile'])->name('admin.profile');
+    Route::get('/admin/profile/edit', [AuthController::class, 'editProfile'])->name('admin.profile.edit');
+    Route::post('/admin/profile/update', [AuthController::class, 'updateProfile'])->name('admin.profile.update');
+});
+
+Route::get('/basic_form', function () {
+    return view('backend.pages.basicform');
+})->name('form.view');
+
+Route::get('/basic_table', function () {
+    return view('backend.pages.basic_table');
+})->name('table.view');

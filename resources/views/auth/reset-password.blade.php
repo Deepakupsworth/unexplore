@@ -31,7 +31,7 @@
 </html> -->
 
 
-@extends('signinlayout')
+@extends('backend.signinlayout')
 @section('title', 'Dashboard')
 @section('content')
 
@@ -149,3 +149,5 @@
       </div>
     </div>
   </div>
+
+  @endsection
