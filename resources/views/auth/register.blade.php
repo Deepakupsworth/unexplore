@@ -22,16 +22,16 @@
     <div class="lg-inner-column">
       <div class="left-column relative z-[1]">
         <div class="max-w-[520px] pt-20 ltr:pl-20 rtl:pr-20">
-          <a href="{{ url('/') }}">
-            <img src="backend/images/logo/logo.svg" alt="" class="mb-10 dark_logo">
-            <img src="backend/images/logo/logo-white.svg" alt="" class="mb-10 white_logo">
+          <a href="{{ url('backend/admin/dashboard') }}">
+            <img src="{{ asset('backend/images/logo/Unxplord-Saudi.png') }}" alt="" class="mb-10 dark_logo w-16 h-16">
+            <img src="{{ asset('backend/images/logo/Unxplord-Saudi.png') }}" alt="" class="mb-10 white_logo w-16 h-16">
           </a>
-          <h4>
+          <!-- <h4>
             Unlock your Project
             <span class="text-slate-800 dark:text-slate-400 font-bold">
                             performance
                         </span>
-          </h4>
+          </h4> -->
         </div>
         <div class="absolute left-0 2xl:bottom-[-160px] bottom-[-130px] h-full w-full z-[-1]">
           <img src="backend/images/auth/ils1.svg" alt="" class=" h-full w-full object-contain">
@@ -42,14 +42,14 @@
           <div class="auth-box h-full flex flex-col justify-center">
             <div class="mobile-logo text-center mb-6 lg:hidden block">
               <a href="{{ url('/') }}">
-                <img src="backend/images/logo/logo.svg" alt="" class="mb-10 dark_logo">
-                <img src="backend/images/logo/logo-white.svg" alt="" class="mb-10 white_logo">
+                <img src="{{ asset('backend/images/logo/Unxplord-Saudi.png') }}" alt="" class="mb-10 dark_logo w-16 h-16">
+                <img src="{{ asset('backend/images/logo/Unxplord-Saudi.png') }}" alt="" class="mb-10 white_logo w-16 h-16">
               </a>
             </div>
             <div class="text-center 2xl:mb-10 mb-4">
               <h4 class="font-medium">Sign in</h4>
               <div class="text-slate-500 text-base">
-                Sign in to your account to start using Dashcode
+                Sign in to your account to start using Unexplore
               </div>
             </div>
 
@@ -97,12 +97,9 @@
 
               <div class="flex justify-between">
                 <label class="flex items-center cursor-pointer">
-                  <input type="checkbox" class="hiddens">
-                  <span class="h-4 w-4 border flex-none border-slate-100 dark:border-slate-800 rounded 
-        inline-flex ltr:mr-3 rtl:ml-3 relative transition-all duration-150
-        bg-slate-100 dark:bg-slate-600 dark:border-slate-600
-        "></span>
-                  <span class="text-slate-500 dark:text-slate-400 text-sm leading-6 capitalize">You accept our Terms and Conditions and
+                  <input type="checkbox" >
+                 
+                  <span class="pl-2 text-slate-500 dark:text-slate-400 text-sm leading-6 capitalize">You accept our Terms and Conditions and
                 Privacy Policy</span>
                 </label>
               </div>
@@ -111,16 +108,16 @@
 
             @if($errors->any()) <div>{{ $errors->first() }}</div> @endif
             <!-- END: Registration Form -->
-            <div class="relative border-b-[#9AA2AF] border-opacity-[16%] border-b pt-6">
+            <!-- <div class="relative border-b-[#9AA2AF] border-opacity-[16%] border-b pt-6">
               <div class="absolute inline-block bg-white dark:bg-slate-800 dark:text-slate-400 left-1/2 top-1/2 transform -translate-x-1/2
                                     px-4 min-w-max text-sm text-slate-500 font-normal">
                 Or continue with
               </div>
-            </div>
-            <div class="max-w-[242px] mx-auto mt-8 w-full">
+            </div> -->
+            <!-- <div class="max-w-[242px] mx-auto mt-8 w-full"> -->
 
               <!-- BEGIN: Social Log in Area -->
-              <ul class="flex">
+              <!-- <ul class="flex">
                 <li class="flex-1">
                   <a href="#" class="inline-flex h-10 w-10 bg-[#1C9CEB] text-white text-2xl flex-col items-center justify-center rounded-full">
                     <img src="backend/images/icon/tw.svg" alt="">
@@ -141,9 +138,9 @@
                     <img src="backend/images/icon/gp.svg" alt="">
                   </a>
                 </li>
-              </ul>
+              </ul> -->
               <!-- END: Social Log In Area -->
-            </div>
+            <!-- </div> -->
             <div class="md:max-w-[345px] mx-auto font-normal text-slate-500 dark:text-slate-400 mt-8 uppercase text-sm">
               <span>ALREADY REGISTERED?
                             </span>
@@ -152,9 +149,10 @@
               </a>
 
             </div>
+
           </div>
           <div class="auth-footer text-center">
-            Copyright 2021, Dashcode All Rights Reserved.
+          Copyright 2025, Unexplord Saudi All Rights Reserved.
           </div>
         </div>
       </div>

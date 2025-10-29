@@ -4,10 +4,10 @@
       <div id="bodyOverlay"
         class="w-screen h-screen fixed top-0 bg-slate-900 bg-opacity-50 backdrop-blur-sm z-10 hidden"></div>
       <div class="logo-segment">
-        <a class="flex items-center" href="index.html">
-          <img src="/backend/images/logo/logo-c.svg" class="black_logo" alt="logo">
-          <img src="/backend/images/logo/logo-c-white.svg" class="white_logo" alt="logo">
-          <span class="ltr:ml-3 rtl:mr-3 text-xl font-Inter font-bold text-slate-900 dark:text-white">DashCode</span>
+        <a class="flex items-center" href="{{ url('/admin/dashboard') }}">
+          <img src="{{ asset('backend/images/logo/Unxplord-Saudi.png') }}" class="black_logo w-16 h-16" alt="logo">
+          <img src="{{ asset('backend/images/logo/Unxplord-Saudi.png') }}" class="white_logo w-16 h-16" alt="logo">
+          <!-- <span class="ltr:ml-3 rtl:mr-3 text-xl font-Inter font-bold text-slate-900 dark:text-white">DashCode</span> -->
         </a>
         <!-- Sidebar Type Button -->
         <div id="sidebar_type" class="cursor-pointer text-slate-900 dark:text-white text-lg">
@@ -33,14 +33,14 @@
         <ul class="sidebar-menu">
           <li class="sidebar-menu-title">MENU</li>
           <li class="">
-            <a href="#" class="navItem">
+            <a href="{{ url('/admin/dashboard') }}" class="navItem">
               <span class="flex items-center">
                 <iconify-icon class=" nav-icon" icon="heroicons-outline:home"></iconify-icon>
                 <span>Dashboard</span>
               </span>
-              <iconify-icon class="icon-arrow" icon="heroicons-outline:chevron-right"></iconify-icon>
+              <!-- <iconify-icon class="icon-arrow" icon="heroicons-outline:chevron-right"></iconify-icon> -->
             </a>
-            <ul class="sidebar-submenu">
+            <!-- <ul class="sidebar-submenu">
               <li>
                 <a href="index.html">Analytics Dashboard</a>
               </li>
@@ -60,43 +60,54 @@
                 <a href="banking-dashboard.html">Banking Dashboard
                 </a>
               </li>
-            </ul>
+            </ul> -->
           </li>
           <!-- Apps Area -->
           <li class="sidebar-menu-title">APPS</li>
           <li>
-            <a href="chat.html" class="navItem">
+            <a href="javascript:void(0)" class="navItem">
               <span class="flex items-center">
-                <iconify-icon class="nav-icon" icon="heroicons-outline:chat"></iconify-icon>
-                <span>Chat</span>
+                <iconify-icon class="nav-icon" icon="heroicons-outline:view-grid"></iconify-icon>
+                <span>Category</span>
+              </span>
+              <iconify-icon class="icon-arrow" icon="heroicons-outline:chevron-right"></iconify-icon>
+            </a>
+
+            <ul class="sidebar-submenu">
+              <li>
+                <a href="{{ route('category.addcategory') }}">Add Category</a>
+              </li>
+             
+              <li>
+                <a href="{{ route('category.viewcategory') }}">View Categories</a>
+              </li>
+            </ul>
+          </li>
+          <li class="">
+            <a href="javascript:void(0);" class="navItem">
+              <span class="flex items-center">
+                <iconify-icon class=" nav-icon" icon="heroicons-outline:building-office"></iconify-icon>
+                <span>City</span>
               </span>
             </a>
           </li>
           <li class="">
-            <a href="email.html" class="navItem">
+            <a href="javascript:void(0);" class="navItem">
               <span class="flex items-center">
-                <iconify-icon class=" nav-icon" icon="heroicons-outline:mail"></iconify-icon>
-                <span>Email</span>
+                <iconify-icon class=" nav-icon" icon="heroicons-outline:clipboard-list"></iconify-icon>
+                <span>Things to Do</span>
               </span>
             </a>
           </li>
           <li class="">
-            <a href="kanban.html" class="navItem">
-              <span class="flex items-center">
-                <iconify-icon class=" nav-icon" icon="heroicons-outline:view-boards"></iconify-icon>
-                <span>Kanban</span>
-              </span>
-            </a>
-          </li>
-          <li class="">
-            <a href="calander.html" class="navItem">
+            <a href="javascript:void(0);" class="navItem">
               <span class="flex items-center">
                 <iconify-icon class=" nav-icon" icon="heroicons-outline:calendar"></iconify-icon>
-                <span>Calander</span>
+                <span>Event</span>
               </span>
             </a>
           </li>
-          <li class="">
+          <!-- <li class="">
             <a href="todo.html" class="navItem">
               <span class="flex items-center">
                 <iconify-icon class=" nav-icon" icon="heroicons-outline:clipboard-check"></iconify-icon>
@@ -120,19 +131,19 @@
                 <a href="project-details.html">Project Details</a>
               </li>
             </ul>
-          </li>
+          </li> -->
           <!-- Pages Area -->
-          <li class="sidebar-menu-title">PAGES</li>
+          <li class="sidebar-menu-title">SETTINGS</li>
           <!-- Authentication -->
           <li class="">
             <a href="javascript:void(0)" class="navItem">
               <span class="flex items-center">
-                <iconify-icon class=" nav-icon" icon="heroicons-outline:lock-closed"></iconify-icon>
-                <span>Authentication</span>
+                <iconify-icon class=" nav-icon" icon="heroicons-outline:globe-alt"></iconify-icon>
+                <span>Languages</span>
               </span>
-              <iconify-icon class="icon-arrow" icon="heroicons-outline:chevron-right"></iconify-icon>
+              <!-- <iconify-icon class="icon-arrow" icon="heroicons-outline:chevron-right"></iconify-icon> -->
             </a>
-            <ul class="sidebar-submenu">
+            <!-- <ul class="sidebar-submenu">
               <li>
                 <a href="signin-one.html">Signin One</a>
               </li>
@@ -169,10 +180,10 @@
               <li>
                 <a href="lock-screen-three.html">Lock Screen Three</a>
               </li>
-            </ul>
+            </ul> -->
           </li>
           <!-- Utility -->
-          <li class="">
+          <!-- <li class="">
             <a href="javascript:void(0)" class="navItem">
               <span class="flex items-center">
                 <iconify-icon class=" nav-icon" icon="heroicons-outline:view-boards"></iconify-icon>
@@ -209,11 +220,11 @@
                 <a href="under-maintanance.html">Under Maintanance</a>
               </li>
             </ul>
-          </li>
+          </li>  -->
           <!-- Elements Area -->
-          <li class="sidebar-menu-title">ELEMENTS</li>
+          <!-- <li class="sidebar-menu-title">ELEMENTS</li> -->
           <!-- Widgets -->
-          <li class="">
+          <!-- <li class="">
             <a href="javascript:void(0)" class="navItem">
               <span class="flex items-center">
                 <iconify-icon class=" nav-icon" icon="heroicons-outline:view-grid-add"></iconify-icon>
@@ -229,9 +240,9 @@
                 <a href="statistics-widgets.html">Statistic</a>
               </li>
             </ul>
-          </li>
+          </li> -->
           <!-- Components -->
-          <li>
+          <!-- <li>
             <a href="javascript:void(0)" class="navItem">
               <span class="flex items-center">
                 <iconify-icon class=" nav-icon" icon="heroicons-outline:collection"></iconify-icon>
@@ -289,9 +300,9 @@
                 <a href="tooltip-popover.html">Tooltip & Popover</a>
               </li>
             </ul>
-          </li>
+          </li> -->
           <!-- Forms -->
-          <li class="">
+          <!-- <li class="">
             <a href="javascript:void(0)" class="navItem">
               <span class="flex items-center">
                 <iconify-icon class=" nav-icon" icon="heroicons-outline:clipboard-list"></iconify-icon>
@@ -343,9 +354,9 @@
                 <a href="date-picker.html">Date time picker</a>
               </li>
             </ul>
-          </li>
+          </li> -->
           <!-- Tables -->
-          <li class="">
+          <!-- <li class="">
             <a href="javascript:void(0)" class="navItem">
               <span class="flex items-center">
                 <iconify-icon class=" nav-icon" icon="heroicons-outline:table"></iconify-icon>
@@ -361,9 +372,9 @@
                 <a href="advance-table.html">Advanced table</a>
               </li>
             </ul>
-          </li>
+          </li> -->
           <!-- Charts -->
-          <li class="">
+          <!-- <li class="">
             <a href="javascript:void(0)" class="navItem">
               <span class="flex items-center">
                 <iconify-icon class=" nav-icon" icon="heroicons-outline:chart-bar"></iconify-icon>
@@ -379,28 +390,28 @@
                 <a href="chartjs.html">Chart js</a>
               </li>
             </ul>
-          </li>
+          </li> -->
           <!-- Map -->
-          <li class="">
+          <!-- <li class="">
             <a href="map.html" class="navItem">
               <span class="flex items-center">
                 <iconify-icon class=" nav-icon" icon="heroicons-outline:map"></iconify-icon>
                 <span>Map</span>
               </span>
             </a>
-          </li>
+          </li> -->
           <!-- Icons -->
-          <li class="">
+          <!-- <li class="">
             <a href="icons.html" class="navItem">
               <span class="flex items-center">
                 <iconify-icon class=" nav-icon" icon="heroicons-outline:emoji-happy"></iconify-icon>
                 <span>Icons</span>
               </span>
             </a>
-          </li>
+          </li> -->
         </ul>
         <!-- Upgrade Your Business Plan Card Start -->
-        <div class="bg-slate-900 mb-10 mt-24 p-4 relative text-center rounded-2xl text-white"
+        <!-- <div class="bg-slate-900 mb-10 mt-24 p-4 relative text-center rounded-2xl text-white"
           id="sidebar_bottom_wizard">
           <img src="/backend/images/svg/rabit.svg" alt="" class="mx-auto relative -mt-[73px]">
           <div class="max-w-[160px] mx-auto mt-6">
@@ -415,7 +426,7 @@
               Upgrade
             </button>
           </div>
-        </div>
+        </div> -->
         <!-- Upgrade Your Business Plan Card Start -->
       </div>
     </div>

@@ -17,9 +17,12 @@ Route::get('/lang/{locale}', function ($locale) {
     return redirect()->back();
 })->name('lang.switch');
 
-
 Route::get('/', function () {
-    return view('backend.pages.dashboard');
+    return view('frontend.home');
+}); 
+
+Route::get('/admin/dashboard', function () {
+    return view('backend.admin.dashboard');
 });
 
 Route::get('/signup', function () {
@@ -53,7 +56,7 @@ Route::middleware(['auth', RoleMiddleware::class.':user'])->group(function () {
 });
 
 Route::middleware(['auth', RoleMiddleware::class.':admin'])->group(function () {
-    Route::get('/admin/dashboard', fn() => view('backend.pages.dashboard'));
+    Route::get('/admin/dashboard', fn() => view('backend.admin.dashboard'));
 });
 
 // Route::get('/profile', function () {
@@ -67,6 +70,7 @@ Route::middleware(['auth', RoleMiddleware::class.':admin'])->group(function () {
     Route::get('/admin/profile', [AuthController::class, 'profile'])->name('admin.profile');
     Route::get('/admin/profile/edit', [AuthController::class, 'editProfile'])->name('admin.profile.edit');
     Route::post('/admin/profile/update', [AuthController::class, 'updateProfile'])->name('admin.profile.update');
+    // Route::get('/admin/category/view', [AuthController::class, 'updateProfile'])->name('admin.category.view');
 });
 
 Route::get('/basic_form', function () {
@@ -77,14 +81,23 @@ Route::get('/basic_table', function () {
     return view('backend.pages.basic_table');
 })->name('table.view');
 
-Route::get('/categories', function () {
-    return view('backend.pages.categories');
-})->name('categories.view');
+// Route::get('/categories', function () {
+//     return view('backend.pages.categories');
+// })->name('categories.view');
+
+Route::get('/admin/category', function () {
+    return view('backend.category.viewcategory');
+})->name('category.viewcategory'); 
+
+Route::get('/admin/addcategory', function () {
+    return view('backend.category.addcategory');
+})->name('category.addcategory');  
 
 
 Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
 
 Route::get('/categories/{id}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
 Route::post('/categories/{id}/update', [CategoryController::class, 'update'])->name('categories.update');
+
 
 

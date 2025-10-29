@@ -74,7 +74,7 @@ public function edit($id, Request $request)
             $q->where('language_id', $language->id ?? 1);
         }])->findOrFail($id);
         // print_r($category);die;
-        return view('backend.pages.edit_categories', compact('category', 'lang'));
+        return view('backend.pages.edit_categories', compact('category', 'lang'))->back()->with('success', 'Category created successfully!');
     }
 
     public function update(Request $request, $id)

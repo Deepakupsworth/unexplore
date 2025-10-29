@@ -4,6 +4,13 @@
     height: 4rem;
   }
 </style>
+
+@php
+    use App\Models\Language;
+
+    $languages = Language::all();
+    $currentLang = request('lang', 'en'); // default to 'en' if not in URL
+@endphp
 <div class="content-wrapper transition-all duration-150 ltr:ml-[248px] rtl:mr-[248px]" id="content_wrapper">
   <div class="page-content">
     <div class="transition-all duration-150 container-fluid" id="page_layout">
@@ -38,7 +45,19 @@
       enctype="multipart/form-data">
     @csrf
     <input type="hidden" name="lang" value="{{ $lang }}">
-
+    <div class="input-area relative">
+               
+               <label for="largeInput" class="form-label">Lang</label>
+                   <select id="select" class="form-control" onchange="changeLanguage(this)">
+                   @foreach($languages as $language)
+                   <option  value="{{ $language->code }}" 
+                   {{ $currentLang == $language->code ? 'selected' : '' }}>
+                   {{ strtoupper($language->code) }}
+                   </option>
+                   @endforeach
+                               </select>
+                   </div>
+                   
     <div class="grid grid-cols-1 gap-7">
         <!-- Name -->
         <div class="input-area relative">

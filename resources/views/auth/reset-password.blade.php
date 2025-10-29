@@ -40,8 +40,8 @@
       <div class="left-column relative z-[1]">
         <div class="max-w-[520px] pt-20 ltr:pl-20 rtl:pr-20">
           <a href="{{ url('/') }}">
-            <img src="/backend/images/logo/logo.svg" alt="" class="mb-10 dark_logo">
-            <img src="/backend/images/logo/logo-white.svg" alt="" class="mb-10 white_logo">
+            <img src="{{ asset('backend/images/logo/Unxplord-Saudi.png') }}" alt="" class="mb-10 dark_logo">
+            <img src="{{ asset('backend/images/logo/Unxplord-Saudi.png') }}" alt="" class="mb-10 white_logo">
           </a>
           <h4>
             Unlock your Project
@@ -58,9 +58,9 @@
         <div class="inner-content h-full flex flex-col bg-white dark:bg-slate-800">
           <div class="auth-box h-full flex flex-col justify-center">
             <div class="mobile-logo text-center mb-6 lg:hidden block">
-              <a href="{{ url('/') }}">
-                <img src="/backend/images/logo/logo.svg" alt="" class="mb-10 dark_logo">
-                <img src="/backend/images/logo/logo-white.svg" alt="" class="mb-10 white_logo">
+              <a href="{{ url('/admin/dashboard') }}">
+                <img src="{{ asset('backend/images/logo/Unxplord-Saudi.png') }}" alt="" class="mb-10 dark_logo">
+                <img src="{{ asset('backend/images/logo/Unxplord-Saudi.png') }}" alt="" class="mb-10 white_logo">
               </a>
             </div>
             <div class="text-center 2xl:mb-10 mb-4">
