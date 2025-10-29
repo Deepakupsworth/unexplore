@@ -7,6 +7,7 @@ use App\Http\Middleware\RoleMiddleware;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\App;
+use App\Http\Controllers\Admin\CityController;
 
 // routes/web.php
 Route::get('/lang/{locale}', function ($locale) {
@@ -71,6 +72,15 @@ Route::middleware(['auth', RoleMiddleware::class.':admin'])->group(function () {
     Route::get('/admin/profile/edit', [AuthController::class, 'editProfile'])->name('admin.profile.edit');
     Route::post('/admin/profile/update', [AuthController::class, 'updateProfile'])->name('admin.profile.update');
     // Route::get('/admin/category/view', [AuthController::class, 'updateProfile'])->name('admin.category.view');
+
+    Route::prefix('admin')->group(function () {
+        Route::get('/cities', [CityController::class, 'index'])->name('cities.index');
+        Route::get('/cities/create', [CityController::class, 'form'])->name('cities.create');
+        Route::get('/cities/{id}/edit', [CityController::class, 'form'])->name('cities.edit');
+        Route::post('/cities/save', [CityController::class, 'save'])->name('cities.save');
+        Route::delete('/cities/gallery/delete/{id}',[CityController::class, 'deleteGalleryImage'])->name('cities.gallery.delete');
+    });
+
 });
 
 Route::get('/basic_form', function () {
