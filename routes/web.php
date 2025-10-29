@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\RoleMiddleware;
@@ -75,3 +76,15 @@ Route::get('/basic_form', function () {
 Route::get('/basic_table', function () {
     return view('backend.pages.basic_table');
 })->name('table.view');
+
+Route::get('/categories', function () {
+    return view('backend.pages.categories');
+})->name('categories.view');
+
+
+Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
+
+Route::get('/categories/{id}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
+Route::post('/categories/{id}/update', [CategoryController::class, 'update'])->name('categories.update');
+
+

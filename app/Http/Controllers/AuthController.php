@@ -114,7 +114,7 @@ class AuthController extends Controller
 public function editProfile()
 {
     $user = Auth::user();
-    return view('backend.pages.profile_edit', compact('user'));
+    return view('profile_edit', compact('user'));
 }
 
 // Update profile
