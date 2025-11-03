@@ -217,9 +217,6 @@
 @include('backend.includes.commonjs')
 @endsection
 
-{{-- SCRIPTS --}}
-<script src="https://cdn.ckeditor.com/ckeditor5/41.3.1/classic/ckeditor.js"></script>
-
 
 
 
