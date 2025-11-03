@@ -48,7 +48,7 @@
               </a>
             </li>
             <li class="inline-block text-sm text-slate-500">
-              {{ $model->id ? 'Edit City' : 'Add City' }}
+              {{ $model->id ? 'Edit City' : 'Add Category' }}
             </li>
           </ul>
         </div>
@@ -59,12 +59,12 @@
               <header class="flex mb-5 items-center border-b pb-5">
                 <div class="flex-1">
                   <div class="card-title text-slate-900 dark:text-white">
-                    {{ $model->id ? 'Edit City' : 'Add City' }}
+                    {{ $model->id ? 'Edit City' : 'Add Category' }}
                   </div>
                 </div>
               </header>
 
-              <form action="{{ route('cities.save') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+              <form action="{{ route('categories.save') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
                 @csrf
                 <input type="hidden" name="id" value="{{ $model->id }}">
 
@@ -104,43 +104,20 @@
                           @enderror
                         </div>
 
-                        {{-- Tagline --}}
-                        <div class="input-area">
-                          <label class="form-label">Tagline ({{ strtoupper($lang->code) }})
-                          @if($lang->code === 'en') <span class="text-red-500">*</span> @endif</label>
-                          <input type="text"
-                                name="translations[{{ $lang->id }}][tagline]"
-                                class="form-control"
-                                value="{{ old("translations.$lang->id.tagline", $trans->tagline ?? '') }}">
-                          @error("translations.$lang->id.tagline")
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                          @enderror
-                        </div>
-
-                        {{-- About --}}
-                        <div class="input-area">
-                          <label class="form-label">About ({{ strtoupper($lang->code) }})
-                          @if($lang->code === 'en') <span class="text-red-500">*</span> @endif</label>
-                          <textarea id="editor-{{ $lang->code }}"
-                                    name="translations[{{ $lang->id }}][about]"
-                                    class="form-control editor">{{ old("translations.$lang->id.about", $trans->about ?? '') }}</textarea>
-                          @error("translations.$lang->id.about")
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                          @enderror
-                        </div>
+                       
                       </div>
                     @endforeach
                   </div>
                 </div>
 
-                <!-- {{-- Slug --}}
+                {{-- Slug --}}
                 <div class="input-area">
                   <label class="form-label">Slug <span class="text-red-500">*</span></label>
                   <input type="text" name="slug" class="form-control" value="{{ old('slug', $model->slug) }}" required>
                   @error('slug')
                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                   @enderror
-                </div> -->
+                </div>
                 <header class="flex mb-5 items-center pb-5 pt-5">
                 <div class="flex-1">
                   <div class="card-title text-slate-900 dark:text-white">
@@ -149,16 +126,9 @@
                 </div>
               </header>
 
-                {{-- Video URL --}}
-                <div class="input-area">
-                  <label class="form-label">Video URL</label>
-                  <input type="url" name="video_url" class="form-control" value="{{ old('video_url', $model->video_url) }}">
-                  @error('video_url')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                  @enderror
-                </div>
+               
 
-                {{-- Thumb Image --}}
+                <!-- {{-- Thumb Image --}}
                 <div class="input-area relative">
                   <label class="form-label">Thumb Image</label>
                   <input type="file" id="imageInput" name="thumb_image" class="form-control" accept="image/*">
@@ -182,31 +152,94 @@
                   </div>
                 </div>
 
+                {{-- Thumb icon --}}
                 <div class="input-area mt-4">
-                <label class="form-label">Gallery Images</label>
-                <input type="file" id="galleryInput" name="gallery_images[]" class="form-control" accept="image/*" multiple>
+                    <label class="form-label">Thumb Icon</label>
+                    <input 
+                        type="file" 
+                        id="galleryInput" 
+                        name="thumb_icon" 
+                        class="form-control" 
+                        accept="image/*" 
+                        multiple
+                    >
+                    @error('thumb_icon')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                  @enderror
+                  <div id="previewContainer" class="mt-4 relative pb-10 {{ $model->thumb_icon ? '' : 'hidden' }}">
+                    <img id="previewImage"
+                         src="{{ $model->thumb_icon ? asset('storage/'.$model->thumb_icon) : '#' }}"
+                         alt="Preview"
+                         class="rounded border border-slate-200"
+                         style="width: 50px; height: 50px;">
 
-                {{-- Existing images from DB --}}
-                @if($model->galleryImages && $model->galleryImages->count())
-                    <div class="mt-3 grid grid-cols-12 gap-3" id="existingGallery">
-                    @foreach($model->galleryImages as $img)
-                        <div class="relative w-14 h-14 border rounded overflow-hidden">
-                        <img src="{{ asset('storage/'.$img->image_path) }}" 
-                            class="w-14 h-14 object-cover rounded">
-
-                        <button type="button"
-                                class="absolute top-0 left-0 m-1 bg-red-500 text-white rounded-full text-xs px-1 py-0.5 rounded delete-image"
-                                data-id="{{ $img->id }}">
+                         <button type="button" id="removeImageBtn"
+                                class="absolute top-0 left-0 m-1 bg-red-500 text-white rounded-full text-xs px-1 py-0.5 items-center justify-center"
+                                >
                             ✕
                         </button>
-                        </div>
-                    @endforeach
-                    </div>
-                @endif
+                 
+                  </div>
 
-                {{-- New images preview (before upload) --}}
-                <div id="galleryPreview" class="mt-4 grid grid-cols-12 gap-3"></div>
-                </div>
+                   
+                </div> -->
+                {{-- Thumb Image --}}
+<div class="input-area relative">
+  <label class="form-label">Thumb Image</label>
+  <input type="file" id="thumbImageInput" name="thumb_image" class="form-control" accept="image/*">
+  @error('thumb_image')
+    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+  @enderror
+
+  <div id="thumbImagePreview" class="mt-4 relative pb-10 {{ $model->thumb_image ? '' : 'hidden' }}">
+    <img
+      src="{{ $model->thumb_image ? asset('storage/'.$model->thumb_image) : '#' }}"
+      alt="Thumb Preview"
+      class="rounded border border-slate-200 object-cover"
+      style="width: 50px; height: 50px;"
+    >
+    <button
+      type="button"
+      data-type="thumb_image"
+      data-id="{{ $model->id ?? '' }}"
+      class="absolute top-0 left-0 m-1 bg-red-500 text-white rounded-full text-xs px-1 py-0.5 items-center justify-center remove-existing"
+    >
+      ✕
+    </button>
+  </div>
+</div>
+
+{{-- Thumb Icon --}}
+<div class="input-area mt-4">
+  <label class="form-label">Thumb Icon</label>
+  <input
+    type="file"
+    id="thumbIconInput"
+    name="thumb_icon"
+    class="form-control"
+    accept="image/*"
+  >
+  @error('thumb_icon')
+    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+  @enderror
+
+  <div id="thumbIconPreview" class="mt-4 relative pb-10 {{ $model->thumb_icon ? '' : 'hidden' }}">
+    <img
+      src="{{ $model->thumb_icon ? asset('storage/'.$model->thumb_icon) : '#' }}"
+      alt="Icon Preview"
+      class="rounded border border-slate-200 object-cover"
+      style="width: 50px; height: 50px;"
+    >
+    <button
+      type="button"
+      data-type="thumb_icon"
+      data-id="{{ $model->id ?? '' }}"
+      class="absolute top-0 left-0 m-1 bg-red-500 text-white rounded-full text-xs px-1 py-0.5 items-center justify-center remove-existing"
+    >
+      ✕
+    </button>
+  </div>
+</div>
 
               
 
@@ -229,12 +262,113 @@
 document.addEventListener("DOMContentLoaded", function () {
 
   // ============================================================
+  // 🖼️ SINGLE IMAGE PREVIEW (Thumb Image + Thumb Icon)
+  // ============================================================
+
+  function setupImagePreview(inputId, previewId, deleteUrl) {
+    const input = document.getElementById(inputId);
+    const previewContainer = document.getElementById(previewId);
+    const previewImg = previewContainer.querySelector('img');
+
+    if (!input || !previewContainer) return;
+
+    // Live Preview on New File Select
+    input.addEventListener("change", function (event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        previewImg.src = e.target.result;
+        previewContainer.classList.remove("hidden");
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // Apply to both fields
+  setupImagePreview("thumbImageInput", "thumbImagePreview", "/admin/cities/thumb-image/delete");
+  setupImagePreview("thumbIconInput", "thumbIconPreview", "/admin/cities/thumb-icon/delete");
+
+
+  // ============================================================
+  // 🗑️ DELETE EXISTING IMAGE (AJAX)
+  // ============================================================
+
+  document.querySelectorAll(".remove-existing").forEach((btn) => {
+    btn.addEventListener("click", function () {
+      const type = this.dataset.type; // thumb_image or thumb_icon
+      const id = this.dataset.id;
+      const container = this.closest("div[id$='Preview']"); // dynamic select (thumbImagePreview or thumbIconPreview)
+
+      if (!id) {
+        // If new upload (not saved yet)
+        const input = document.querySelector(`input[name='${type}']`);
+        input.value = "";
+        container.classList.add("hidden");
+        container.querySelector("img").src = "#";
+        return;
+      }
+
+      if (confirm("Are you sure you want to delete this image?")) {
+        fetch(`/admin/cities/${type}/delete/${id}`, {
+          method: "DELETE",
+          headers: {
+            "X-CSRF-TOKEN": "{{ csrf_token() }}",
+            "Accept": "application/json",
+          },
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            container.classList.add("hidden");
+            container.querySelector("img").src = "#";
+            const input = document.querySelector(`input[name='${type}']`);
+            input.value = "";
+          } else {
+            alert("Failed to delete image.");
+          }
+        })
+        .catch(() => alert("Something went wrong."));
+      }
+    });
+  });
+
+    // Language button toggle
+    const langButtons = document.querySelectorAll('.lang-btn');
+  const langSections = document.querySelectorAll('.lang-section');
+
+  langButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const targetLang = button.dataset.lang;
+
+      // Toggle active button
+      langButtons.forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+
+      // Toggle active language section
+      langSections.forEach(section => {
+        section.classList.remove('active');
+        if (section.id === 'lang-section-' + targetLang) {
+          section.classList.add('active');
+        }
+      });
+    });
+  });
+
+});
+</script>
+
+<!-- <script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  // ============================================================
   // 🖼️ SINGLE THUMBNAIL IMAGE PREVIEW
   // ============================================================
-  const thumbInput = document.querySelector('input[name="thumb_image"]');
+  const thumbInput = document.querySelector('input[name="thumb_image"], input[name="thumb_icon"]');
   if (thumbInput) {
     const existingPreview = document.createElement('div');
-    existingPreview.id = 'thumbPreview';
+    existingPreview.id = 'thumbPreview, iconPreview';
     existingPreview.className = 'mt-3';
     thumbInput.insertAdjacentElement('afterend', existingPreview);
 
@@ -337,8 +471,10 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
+
+
     // Language button toggle
-    const langButtons = document.querySelectorAll('.lang-btn');
+const langButtons = document.querySelectorAll('.lang-btn');
   const langSections = document.querySelectorAll('.lang-section');
 
   langButtons.forEach(button => {
@@ -360,7 +496,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   
 });
-</script>
+</script> -->
 
 @endsection
 

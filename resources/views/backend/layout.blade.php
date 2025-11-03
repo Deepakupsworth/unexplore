@@ -42,7 +42,7 @@
 </div>  
 </main>
 
-
+@yield('scripts') 
 
   <!-- Footer End -->
   <!-- scripts -->

@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\CategoryController;
+
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\RoleMiddleware;
@@ -8,6 +8,10 @@ use App\Http\Middleware\RedirectIfAuthenticated;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\App;
 use App\Http\Controllers\Admin\CityController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ThingtodoController;
+use App\Http\Controllers\Admin\EventController;
+
 
 // routes/web.php
 Route::get('/lang/{locale}', function ($locale) {
@@ -79,7 +83,33 @@ Route::middleware(['auth', RoleMiddleware::class.':admin'])->group(function () {
         Route::get('/cities/{id}/edit', [CityController::class, 'form'])->name('cities.edit');
         Route::post('/cities/save', [CityController::class, 'save'])->name('cities.save');
         Route::delete('/cities/gallery/delete/{id}',[CityController::class, 'deleteGalleryImage'])->name('cities.gallery.delete');
+        Route::delete('/cities/delete/{id}', [CityController::class, 'destroy'])->name('cities.delete'); 
     });
+
+    Route::prefix('admin')->group(function () {
+        Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
+        Route::get('/categories/create', [CategoryController::class, 'form'])->name('categories.create');
+        Route::get('/categories/{id}/edit', [CategoryController::class, 'form'])->name('categories.edit');
+        Route::post('/categories/save', [CategoryController::class, 'save'])->name('categories.save');
+        Route::delete('/categories/delete/{id}', [CategoryController::class, 'destroy'])->name('categories.delete');
+    });
+
+    Route::prefix('admin')->group(function () {
+        Route::get('/thingtodo', [ThingtodoController::class, 'index'])->name('thingtodos.index');
+        Route::get('/thingtodo/create', [ThingtodoController::class, 'form'])->name('thingtodos.create');
+        Route::get('/thingtodo/{id}/edit', [ThingtodoController::class, 'form'])->name('thingtodos.edit');
+        Route::post('/thingtodo/save', [ThingtodoController::class, 'save'])->name('thingtodos.save');
+        Route::delete('/thingtodo/delete/{id}', [ThingtodoController::class, 'destroy'])->name('thingtodos.delete');   
+    });
+
+    Route::prefix('admin')->group(function () {
+        Route::get('/events', [EventController::class, 'index'])->name('events.index'); 
+        Route::get('/events/create', [EventController::class, 'form'])->name('events.create');
+        Route::get('/events/{id}/edit', [EventController::class, 'form'])->name('events.edit');
+        Route::post('/events/save', [EventController::class, 'save'])->name('events.save');
+        Route::delete('/events/delete/{id}', [EventController::class, 'destroy'])->name('events.delete');   
+    });
+
 
 });
 
@@ -95,19 +125,19 @@ Route::get('/basic_table', function () {
 //     return view('backend.pages.categories');
 // })->name('categories.view');
 
-Route::get('/admin/category', function () {
-    return view('backend.category.viewcategory');
-})->name('category.viewcategory'); 
+// Route::get('/admin/category', function () {
+//     return view('backend.category.viewcategory');
+// })->name('category.viewcategory'); 
 
-Route::get('/admin/addcategory', function () {
-    return view('backend.category.addcategory');
-})->name('category.addcategory');  
+// Route::get('/admin/addcategory', function () {
+//     return view('backend.category.addcategory');
+// })->name('category.addcategory');  
 
 
-Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
+// Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
 
-Route::get('/categories/{id}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
-Route::post('/categories/{id}/update', [CategoryController::class, 'update'])->name('categories.update');
+// Route::get('/categories/{id}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
+// Route::post('/categories/{id}/update', [CategoryController::class, 'update'])->name('categories.update');
 
 
 

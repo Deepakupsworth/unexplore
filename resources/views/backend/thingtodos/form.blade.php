@@ -42,13 +42,13 @@
         <div class="mb-5">
           <ul class="m-0 p-0 list-none">
             <li class="inline-block text-base text-primary-500">
-              <a href="{{ route('cities.index') }}">
+              <a href="{{ route('thingtodos.index') }}">
                 <iconify-icon icon="heroicons-outline:home"></iconify-icon>
                 <iconify-icon icon="heroicons-outline:chevron-right" class="text-slate-500 text-sm rtl:rotate-180"></iconify-icon>
               </a>
             </li>
             <li class="inline-block text-sm text-slate-500">
-              {{ $model->id ? 'Edit City' : 'Add City' }}
+              {{ $model->id ? 'Edit Things To Do' : 'Add Things To Do' }}
             </li>
           </ul>
         </div>
@@ -59,12 +59,12 @@
               <header class="flex mb-5 items-center border-b pb-5">
                 <div class="flex-1">
                   <div class="card-title text-slate-900 dark:text-white">
-                    {{ $model->id ? 'Edit City' : 'Add City' }}
+                    {{ $model->id ? 'Edit Things To Do' : 'Add Things To Do' }}
                   </div>
                 </div>
               </header>
 
-              <form action="{{ route('cities.save') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+              <form action="{{ route('thingtodos.save') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
                 @csrf
                 <input type="hidden" name="id" value="{{ $model->id }}">
 
@@ -104,22 +104,11 @@
                           @enderror
                         </div>
 
-                        {{-- Tagline --}}
-                        <div class="input-area">
-                          <label class="form-label">Tagline ({{ strtoupper($lang->code) }})
-                          @if($lang->code === 'en') <span class="text-red-500">*</span> @endif</label>
-                          <input type="text"
-                                name="translations[{{ $lang->id }}][tagline]"
-                                class="form-control"
-                                value="{{ old("translations.$lang->id.tagline", $trans->tagline ?? '') }}">
-                          @error("translations.$lang->id.tagline")
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                          @enderror
-                        </div>
+                        
 
                         {{-- About --}}
                         <div class="input-area">
-                          <label class="form-label">About ({{ strtoupper($lang->code) }})
+                          <label class="form-label">  About ({{ strtoupper($lang->code) }})
                           @if($lang->code === 'en') <span class="text-red-500">*</span> @endif</label>
                           <textarea id="editor-{{ $lang->code }}"
                                     name="translations[{{ $lang->id }}][about]"
@@ -132,15 +121,50 @@
                     @endforeach
                   </div>
                 </div>
+                
 
-                <!-- {{-- Slug --}}
+                {{-- city Select box --}}
+                <div class="input-area">
+                  <label for="city" class="form-label">City</label>
+                    <select id="city" name="city_id" class="form-control">
+                        @foreach($cities as $id => $name)
+                            <option value="{{ $id }}" 
+                                    class="dark:bg-slate-700" 
+                                    {{ old('city_id', $model->city_id) == $id ? 'selected' : '' }}>
+                                {{ $name }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('city_id')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                {{-- category Select box --}}
+                <div class="input-area">
+                  <label for="category" class="form-label">Category</label>
+                    <select id="category" name="category_id" class="form-control">
+                        @foreach($categories as $c_id => $c_name)
+                            <option value="{{ $c_id }}" 
+                                    class="dark:bg-slate-700" 
+                                    {{ old('category_id', $model->category_id) == $c_id ? 'selected' : '' }}>
+                                {{ $c_name }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('category_id')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                {{-- Slug --}}
                 <div class="input-area">
                   <label class="form-label">Slug <span class="text-red-500">*</span></label>
                   <input type="text" name="slug" class="form-control" value="{{ old('slug', $model->slug) }}" required>
                   @error('slug')
                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                   @enderror
-                </div> -->
+                </div>
                 <header class="flex mb-5 items-center pb-5 pt-5">
                 <div class="flex-1">
                   <div class="card-title text-slate-900 dark:text-white">
@@ -149,14 +173,7 @@
                 </div>
               </header>
 
-                {{-- Video URL --}}
-                <div class="input-area">
-                  <label class="form-label">Video URL</label>
-                  <input type="url" name="video_url" class="form-control" value="{{ old('video_url', $model->video_url) }}">
-                  @error('video_url')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                  @enderror
-                </div>
+                
 
                 {{-- Thumb Image --}}
                 <div class="input-area relative">
@@ -166,9 +183,9 @@
                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                   @enderror
 
-                  <div id="previewContainer" class="mt-4 relative pb-10 {{ $model->thumb_image ? '' : 'hidden' }}">
+                  <div id="previewContainer" class="mt-4 relative pb-10 {{ $model->image ? '' : 'hidden' }}">
                     <img id="previewImage"
-                         src="{{ $model->thumb_image ? asset('storage/'.$model->thumb_image) : '#' }}"
+                         src="{{ $model->image ? asset('storage/'.$model->image) : '#' }}"
                          alt="Preview"
                          class="rounded border border-slate-200"
                          style="width: 50px; height: 50px;">

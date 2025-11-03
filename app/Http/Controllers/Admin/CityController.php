@@ -30,28 +30,30 @@ class CityController extends Controller
     {
         $model = City::with(['translations', 'galleryImages'])->find($id) ?? new City();
         $languages = Language::all();
+    //   print_r($model->toArray()); exit;
         return view('backend.cities.form', compact('model', 'languages'));
     }
 
     public function save(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'slug' => 'required|string|max:255',
+            // 'slug' => 'required|string|max:255',
             'translations.*.name' => 'nullable|string|max:255',
             'translations.1.name' => 'required|string|max:255', // English required (id=1)
         ]);
-
-        if ($validator->fails()) {
+                   if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
 
         $city = City::updateOrCreate(
             ['id' => $request->id],
             [
-                'slug' => $request->slug,
-                'video_url' => $request->video_url,
+                'slug' => $request->slug ?? Str::slug($request->translations[1]['name']),
+                'video_url' => $request->video_url, 
             ]
         );
+
+
 
         if ($request->hasFile('thumb_image')) {
             if ($city->thumb_image) {
@@ -83,7 +85,7 @@ class CityController extends Controller
                 ]);
             }
         }
-
+    
         return redirect()->route('cities.index')->with('success', 'City saved successfully!');
     }
 
@@ -97,4 +99,12 @@ class CityController extends Controller
 
         return response()->json(['success' => true]);
     }
-}
+
+    public function destroy($id)
+    {
+        $city = \App\Models\City::findOrFail($id);
+        $city->delete();
+        return redirect()->back()->with('success', 'City deleted successfully.');
+    } 
+    
+} 

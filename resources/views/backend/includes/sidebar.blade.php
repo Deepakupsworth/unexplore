@@ -65,26 +65,16 @@
           <!-- Apps Area -->
           <li class="sidebar-menu-title">APPS</li>
           <li>
-            <a href="javascript:void(0)" class="navItem">
+            <a href="{{ url('/admin/categories') }}" class="navItem">
               <span class="flex items-center">
                 <iconify-icon class="nav-icon" icon="heroicons-outline:view-grid"></iconify-icon>
                 <span>Category</span>
               </span>
-              <iconify-icon class="icon-arrow" icon="heroicons-outline:chevron-right"></iconify-icon>
+              <!-- <iconify-icon class="icon-arrow" icon="heroicons-outline:chevron-right"></iconify-icon> -->
             </a>
-
-            <ul class="sidebar-submenu">
-              <li>
-                <a href="{{ route('category.addcategory') }}">Add Category</a>
-              </li>
-             
-              <li>
-                <a href="{{ route('category.viewcategory') }}">View Categories</a>
-              </li>
-            </ul>
           </li>
           <li class="">
-            <a href="javascript:void(0);" class="navItem">
+            <a href="{{ url('/admin/cities') }}" class="navItem">
               <span class="flex items-center">
                 <iconify-icon class=" nav-icon" icon="heroicons-outline:building-office"></iconify-icon>
                 <span>City</span>
@@ -92,7 +82,7 @@
             </a>
           </li>
           <li class="">
-            <a href="javascript:void(0);" class="navItem">
+            <a href="{{ url('/admin/thingtodo') }}" class="navItem">
               <span class="flex items-center">
                 <iconify-icon class=" nav-icon" icon="heroicons-outline:clipboard-list"></iconify-icon>
                 <span>Things to Do</span>
@@ -100,7 +90,7 @@
             </a>
           </li>
           <li class="">
-            <a href="javascript:void(0);" class="navItem">
+            <a href="{{ url('/admin/events') }}" class="navItem">
               <span class="flex items-center">
                 <iconify-icon class=" nav-icon" icon="heroicons-outline:calendar"></iconify-icon>
                 <span>Event</span>

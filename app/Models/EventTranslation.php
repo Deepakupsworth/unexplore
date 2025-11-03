@@ -9,4 +9,16 @@ class EventTranslation extends Model
 {
     /** @use HasFactory<\Database\Factories\EventTranslationFactory> */
     use HasFactory;
+
+    protected $fillable = ['event_id', 'language_id', 'name', 'about'];
+
+    public function language()
+    {
+        return $this->belongsTo(Language::class);
+    }
+
+    public function event()
+    {
+        return $this->belongsTo(Event::class);
+    } 
 }

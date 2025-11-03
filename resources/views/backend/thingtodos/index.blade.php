@@ -17,7 +17,7 @@
               </a>
             </li>
             <li class="inline-block relative text-sm text-slate-500 font-Inter dark:text-white">
-              Cities List
+            Things To Do List
             </li>
           </ul>
         </div>
@@ -25,10 +25,10 @@
 
         <div class="card">
           <header class="card-header noborder flex justify-between items-center">
-            <h4 class="card-title">Cities Table</h4>
-            <a href="{{ route('cities.create') }}" 
+            <h4 class="card-title">Things To Do Table</h4>
+            <a href="{{ route('thingtodos.create') }}" 
                class="btn bg-primary-600 text-white text-sm px-4 py-2 rounded">
-              + Add City
+              + Add Thing To Do
             </a>
           </header>
 
@@ -51,13 +51,13 @@
                     </thead>
                     <tbody class="bg-white divide-y divide-slate-100 dark:bg-slate-800 dark:divide-slate-700">
                       
-                      @forelse($cities as $city)
+                      @forelse($thingstodos as $thingtodo)
                         <tr>
-                          <td class="table-td">{{ $city->id }}</td>
+                          <td class="table-td">{{ $thingtodo->id }}</td>
                           
                           <td class="table-td">
-                            @if($city->thumb_image)
-                              <img src="{{ asset('storage/'.$city->thumb_image) }}" 
+                            @if($thingtodo->image)
+                              <img src="{{ asset('storage/'.$thingtodo->image) }}" 
                                    alt="thumb" class="w-12 h-12 rounded object-cover">
                             @else
                               <span class="text-xs text-slate-400">No Image</span>
@@ -65,18 +65,18 @@
                           </td>
 
                           <td class="table-td">
-                            {{ optional($city->translations->where('language.code', 'en')->first())->name ?? '—' }}
+                            {{ optional($thingtodo->translations->where('language.code', 'en')->first())->name ?? '—' }}
                           </td>
 
-                          <td class="table-td">{{ $city->slug }}</td>
-                          <td class="table-td">{{ $city->created_at->format('d M Y') }}</td>
+                          <td class="table-td">{{ $thingtodo->slug }}</td>
+                          <td class="table-td">{{ $thingtodo->created_at->format('d M Y') }}</td>
 
                           <td class="table-td">
                             <div>
                               <div class="relative">
                                 <div class="dropdown relative">
                                   <button class="text-xl text-center block w-full" 
-                                          type="button" id="tableDropdownMenuButton{{ $city->id }}" 
+                                          type="button" id="tableDropdownMenuButton{{ $thingtodo->id }}" 
                                           data-bs-toggle="dropdown" aria-expanded="false">
                                     <iconify-icon icon="heroicons-outline:dots-vertical"></iconify-icon>
                                   </button>
@@ -84,7 +84,7 @@
                                     shadow z-[2] float-left overflow-hidden list-none text-left rounded-lg mt-1 m-0 bg-clip-padding border-none">
                                     
                                     <li>
-                                      <a href="{{ route('cities.edit', $city->id) }}" 
+                                      <a href="{{ route('thingtodos.edit', $thingtodo->id) }}" 
                                          class="hover:bg-slate-900 hover:text-white dark:hover:bg-slate-600 w-full border-b border-b-gray-500 border-opacity-10 px-4 py-2 text-sm flex space-x-2 items-center">
                                         <iconify-icon icon="heroicons:pencil-square"></iconify-icon>
                                         <span>Edit</span>
@@ -93,9 +93,9 @@
 
                                     <li>
                                           <form 
-                                              action="{{ route('cities.delete', $city->id) }}" 
+                                              action="{{ route('thingtodos.delete', $thingtodo->id) }}" 
                                               method="POST" 
-                                              onsubmit="return confirm('Are you sure you want to delete this city?')"
+                                              onsubmit="return confirm('Are you sure you want to delete this thing to do?')"
                                           >
                                               @csrf
                                               @method('DELETE')
@@ -109,8 +109,6 @@
                                               </button>
                                           </form>
                                       </li>
-
-                                    
                                   </ul>
                                 </div>
                               </div>
@@ -130,7 +128,7 @@
             </div>
 
             <div class="mt-5">
-              {{ $cities->links() }}
+              {{ $thingstodos->links() }}
             </div>
 
           </div>
@@ -141,27 +139,4 @@
   </div>
 </div>
 
-<script>
- function deleteCity(id) {
-    if (confirm('Are you sure you want to delete this city?')) {
-        fetch(`/admin/cities/${id}`, {
-            method: 'DELETE',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Accept': 'application/json'
-            }
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                alert('City deleted successfully');
-                location.reload();
-            } else {
-                alert('Failed to delete city');
-            }
-        })
-        .catch(() => alert('Something went wrong'));
-    }
-}
-</script>
 @endsection

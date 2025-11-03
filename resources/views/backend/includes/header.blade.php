@@ -5,9 +5,9 @@
             class="app-header z-[999] ltr:ml-[248px] rtl:mr-[248px] bg-white dark:bg-slate-800 shadow-sm dark:shadow-slate-700">
             <div class="flex justify-between items-center h-full">
               <div class="flex items-center md:space-x-4 space-x-2 xl:space-x-0 rtl:space-x-reverse vertical-box">
-                <a href="{{ url('/') }}" class="mobile-logo xl:hidden inline-block">
-                  <img src="/backend/images/logo/logo-c.svg" class="black_logo" alt="logo">
-                  <img src="/backend/images/logo/logo-c-white.svg" class="white_logo" alt="logo">
+                <a href="{{ url('/admin/dashboard') }}" class="mobile-logo xl:hidden inline-block">
+                  <img src="{{ asset('backend/images/logo/Unxplord-Saudi.png') }}" class="black_logo w-16 h-16" alt="logo">
+                  <img src="{{ asset('backend/images/logo/Unxplord-Saudi.png') }}" class="white_logo w-16 h-16" alt="logo">
                 </a>
                 <button class="smallDeviceMenuController hidden md:inline-block xl:hidden">
                   <iconify-icon
@@ -1225,9 +1225,9 @@
       overflow-hidden">
                     <ul class="py-1 text-sm text-slate-800 dark:text-slate-200">
                       <li>
-                        <a href="{{ ('/admin/deshboard') }}" class="block px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white font-inter text-sm text-slate-600
+                        <a href="{{ ('/admin/dashboard') }}" class="block px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-600 dark:hover:text-white font-inter text-sm text-slate-600
             dark:text-white font-normal">
-                          <iconify-icon icon="heroicons-outline:user"
+                          <iconify-icon icon="heroicons-outline:home"
                             class="relative top-[2px] text-lg ltr:mr-1 rtl:ml-1"></iconify-icon>
                           <span class="font-Inter">Dashboard</span>
                         </a>
