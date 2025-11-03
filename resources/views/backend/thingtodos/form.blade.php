@@ -18,9 +18,9 @@
   }
 
   .lang-btn.active {
-    background-color: #2563eb; /* bg-primary-600 (Tailwind blue-600) */
+    background-color: #1e293b; /* bg-primary-600 (Tailwind blue-600) */
     color: #fff;
-    border-color: #2563eb;
+    border-color: #1e293b;
   }
 
   .lang-section {
@@ -158,13 +158,8 @@
                 </div>
 
                 {{-- Slug --}}
-                <div class="input-area">
-                  <label class="form-label">Slug <span class="text-red-500">*</span></label>
-                  <input type="text" name="slug" class="form-control" value="{{ old('slug', $model->slug) }}" required>
-                  @error('slug')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                  @enderror
-                </div>
+                  <input type="hidden" name="slug" class="form-control" value="{{ old('slug', $model->slug) }}">
+                
                 <header class="flex mb-5 items-center pb-5 pt-5">
                 <div class="flex-1">
                   <div class="card-title text-slate-900 dark:text-white">
@@ -190,11 +185,7 @@
                          class="rounded border border-slate-200"
                          style="width: 50px; height: 50px;">
 
-                         <button type="button" id="removeImageBtn"
-                                class="absolute top-0 left-0 m-1 bg-red-500 text-white rounded-full text-xs px-1 py-0.5 items-center justify-center"
-                                >
-                            ✕
-                        </button>
+                         
                  
                   </div>
                 </div>
@@ -213,7 +204,7 @@
 
                         <button type="button"
                                 class="absolute top-0 left-0 m-1 bg-red-500 text-white rounded-full text-xs px-1 py-0.5 rounded delete-image"
-                                data-id="{{ $img->id }}">
+                                data-url="{{ route('thingtodos.gallery.delete', $img->id) }}">
                             ✕
                         </button>
                         </div>
@@ -242,142 +233,7 @@
 </div>
 
 
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-
-  // ============================================================
-  // 🖼️ SINGLE THUMBNAIL IMAGE PREVIEW
-  // ============================================================
-  const thumbInput = document.querySelector('input[name="thumb_image"]');
-  if (thumbInput) {
-    const existingPreview = document.createElement('div');
-    existingPreview.id = 'thumbPreview';
-    existingPreview.className = 'mt-3';
-    thumbInput.insertAdjacentElement('afterend', existingPreview);
-
-    thumbInput.addEventListener('change', function (event) {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = e => {
-        existingPreview.innerHTML = `
-          <div class="relative w-14 h-14 border rounded overflow-hidden">
-            <img src="${e.target.result}" class="w-14 h-14 object-cover rounded">
-            <button type="button" class="absolute m-1 top-0 left-0 bg-red-500 text-white text-xs px-1 py-0.5 rounded remove-thumb">✕</button>
-          </div>
-        `;
-      };
-      reader.readAsDataURL(file);
-    });
-
-    // Remove thumb before upload
-    existingPreview.addEventListener('click', function (e) {
-      if (e.target.classList.contains('remove-thumb')) {
-        thumbInput.value = "";
-        existingPreview.innerHTML = "";
-      }
-    });
-  }
-
-  // ============================================================
-  // 🖼️ MULTIPLE GALLERY IMAGE PREVIEW (BEFORE UPLOAD)
-  // ============================================================
-  const galleryInput = document.getElementById('galleryInput');
-  const galleryPreview = document.getElementById('galleryPreview');
-  let selectedFiles = [];
-
-  if (galleryInput) {
-    galleryInput.addEventListener('change', function (event) {
-      const newFiles = Array.from(event.target.files);
-      selectedFiles = selectedFiles.concat(newFiles);
-      renderPreviews();
-    });
-
-    function renderPreviews() {
-      galleryPreview.innerHTML = '';
-      selectedFiles.forEach((file, index) => {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          const wrapper = document.createElement('div');
-          wrapper.className = 'relative w-14 h-14 border rounded overflow-hidden';
-          wrapper.innerHTML = `
-            <img src="${e.target.result}" class="w-14 h-14 object-cover rounded">
-            <button type="button" data-index="${index}" 
-                    class="absolute top-0 m-1 left-0 bg-red-500 text-white text-xs px-1 py-0.5 rounded remove-preview">✕</button>
-          `;
-          galleryPreview.appendChild(wrapper);
-        };
-        reader.readAsDataURL(file);
-      });
-      updateInputFiles();
-    }
-
-    function updateInputFiles() {
-      const dataTransfer = new DataTransfer();
-      selectedFiles.forEach(file => dataTransfer.items.add(file));
-      galleryInput.files = dataTransfer.files;
-    }
-
-    galleryPreview.addEventListener('click', function (e) {
-      if (e.target.classList.contains('remove-preview')) {
-        const index = parseInt(e.target.dataset.index);
-        selectedFiles.splice(index, 1);
-        renderPreviews();
-      }
-    });
-  }
-
-  // ============================================================
-  // 🗑️ DELETE EXISTING GALLERY IMAGE (AJAX)
-  // ============================================================
-  document.querySelectorAll('.delete-image').forEach(btn => {
-    btn.addEventListener('click', function () {
-      if (confirm('Are you sure you want to delete this image?')) {
-        fetch(`/admin/cities/gallery/delete/${this.dataset.id}`, {
-          method: 'DELETE',
-          headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            'Accept': 'application/json'
-          }
-        })
-        .then(res => res.json())
-        .then(data => {
-          if (data.success) {
-            this.closest('div.relative').remove();
-          } else {
-            alert('Failed to delete image');
-          }
-        })
-        .catch(() => alert('Something went wrong'));
-      }
-    });
-  });
-
-    // Language button toggle
-    const langButtons = document.querySelectorAll('.lang-btn');
-  const langSections = document.querySelectorAll('.lang-section');
-
-  langButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      const targetLang = button.dataset.lang;
-
-      // Toggle active button
-      langButtons.forEach(btn => btn.classList.remove('active'));
-      button.classList.add('active');
-
-      // Toggle active language section
-      langSections.forEach(section => {
-        section.classList.remove('active');
-        if (section.id === 'lang-section-' + targetLang) {
-          section.classList.add('active');
-        }
-      });
-    });
-  });
-  
-});
-</script>
+@include('backend.includes.commonjs')
 
 @endsection
 

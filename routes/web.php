@@ -78,36 +78,62 @@ Route::middleware(['auth', RoleMiddleware::class.':admin'])->group(function () {
     // Route::get('/admin/category/view', [AuthController::class, 'updateProfile'])->name('admin.category.view');
 
     Route::prefix('admin')->group(function () {
-        Route::get('/cities', [CityController::class, 'index'])->name('cities.index');
-        Route::get('/cities/create', [CityController::class, 'form'])->name('cities.create');
-        Route::get('/cities/{id}/edit', [CityController::class, 'form'])->name('cities.edit');
-        Route::post('/cities/save', [CityController::class, 'save'])->name('cities.save');
-        Route::delete('/cities/gallery/delete/{id}',[CityController::class, 'deleteGalleryImage'])->name('cities.gallery.delete');
-        Route::delete('/cities/delete/{id}', [CityController::class, 'destroy'])->name('cities.delete'); 
-    });
 
-    Route::prefix('admin')->group(function () {
-        Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
-        Route::get('/categories/create', [CategoryController::class, 'form'])->name('categories.create');
-        Route::get('/categories/{id}/edit', [CategoryController::class, 'form'])->name('categories.edit');
-        Route::post('/categories/save', [CategoryController::class, 'save'])->name('categories.save');
-        Route::delete('/categories/delete/{id}', [CategoryController::class, 'destroy'])->name('categories.delete');
-    });
-
-    Route::prefix('admin')->group(function () {
-        Route::get('/thingtodo', [ThingtodoController::class, 'index'])->name('thingtodos.index');
-        Route::get('/thingtodo/create', [ThingtodoController::class, 'form'])->name('thingtodos.create');
-        Route::get('/thingtodo/{id}/edit', [ThingtodoController::class, 'form'])->name('thingtodos.edit');
-        Route::post('/thingtodo/save', [ThingtodoController::class, 'save'])->name('thingtodos.save');
-        Route::delete('/thingtodo/delete/{id}', [ThingtodoController::class, 'destroy'])->name('thingtodos.delete');   
-    });
-
-    Route::prefix('admin')->group(function () {
-        Route::get('/events', [EventController::class, 'index'])->name('events.index'); 
-        Route::get('/events/create', [EventController::class, 'form'])->name('events.create');
-        Route::get('/events/{id}/edit', [EventController::class, 'form'])->name('events.edit');
-        Route::post('/events/save', [EventController::class, 'save'])->name('events.save');
-        Route::delete('/events/delete/{id}', [EventController::class, 'destroy'])->name('events.delete');   
+        /*
+        |--------------------------------------------------------------------------
+        | Cities Routes
+        |--------------------------------------------------------------------------
+        */
+        Route::prefix('cities')->group(function () {
+            Route::get('/', [CityController::class, 'index'])->name('cities.index');
+            Route::get('/create', [CityController::class, 'form'])->name('cities.create');
+            Route::get('/{id}/edit', [CityController::class, 'form'])->name('cities.edit');
+            Route::post('/save', [CityController::class, 'save'])->name('cities.save');
+            Route::delete('/delete/{id}', [CityController::class, 'destroy'])->name('cities.delete');
+            Route::delete('/gallery/delete/{id}', [CityController::class, 'deleteGalleryImage'])->name('cities.gallery.delete');
+        });
+    
+        /*
+        |--------------------------------------------------------------------------
+        | Categories Routes
+        |--------------------------------------------------------------------------
+        */
+        Route::prefix('categories')->group(function () {
+            Route::get('/', [CategoryController::class, 'index'])->name('categories.index');
+            Route::get('/create', [CategoryController::class, 'form'])->name('categories.create');
+            Route::get('/{id}/edit', [CategoryController::class, 'form'])->name('categories.edit');
+            Route::post('/save', [CategoryController::class, 'save'])->name('categories.save');
+            Route::delete('/delete/{id}', [CategoryController::class, 'destroy'])->name('categories.delete');
+        });
+    
+        /*
+        |--------------------------------------------------------------------------
+        | Things To Do Routes
+        |--------------------------------------------------------------------------
+        */
+        Route::prefix('thingtodo')->group(function () {
+            Route::get('/', [ThingtodoController::class, 'index'])->name('thingtodos.index');
+            Route::get('/create', [ThingtodoController::class, 'form'])->name('thingtodos.create');
+            Route::get('/{id}/edit', [ThingtodoController::class, 'form'])->name('thingtodos.edit');
+            Route::post('/save', [ThingtodoController::class, 'save'])->name('thingtodos.save');
+            Route::delete('/delete/{id}', [ThingtodoController::class, 'destroy'])->name('thingtodos.delete');
+            Route::delete('/gallery/delete/{id}', [ThingtodoController::class, 'deleteGalleryImage'])->name('thingtodos.gallery.delete');
+        });
+    
+        /*
+        |--------------------------------------------------------------------------
+        | Events Routes
+        |--------------------------------------------------------------------------
+        */
+        Route::prefix('events')->group(function () {
+            Route::get('/', [EventController::class, 'index'])->name('events.index');
+            Route::get('/create', [EventController::class, 'form'])->name('events.create');
+            Route::get('/{id}/edit', [EventController::class, 'form'])->name('events.edit');
+            Route::post('/save', [EventController::class, 'save'])->name('events.save');
+            Route::delete('/delete/{id}', [EventController::class, 'destroy'])->name('events.delete');
+            Route::delete('/gallery/delete/{id}', [EventController::class, 'deleteGalleryImage'])->name('events.gallery.delete');
+        });
+    
     });
 
 

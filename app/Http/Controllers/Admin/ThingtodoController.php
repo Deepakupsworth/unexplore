@@ -49,7 +49,6 @@ class ThingtodoController extends Controller
     public function save(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'slug' => 'required|string|max:255',
             'translations.*.name' => 'nullable|string|max:255',
             'translations.1.name' => 'required|string|max:255', // English required (id=1)
         ]);
@@ -62,8 +61,7 @@ class ThingtodoController extends Controller
         $thingstodo = ThingToDo::updateOrCreate(
             ['id' => $request->id],
             [
-                'slug' => $request->slug,
-                'image' => $request->image,
+                'slug' => $request->slug ?? Str::slug($request->translations[1]['name']),
                 'location' => $request->location,
                 'city_id' => $request->city_id,
                 'category_id' => $request->category_id
@@ -80,13 +78,15 @@ class ThingtodoController extends Controller
 
         // Save translations
         foreach ($request->translations as $langId => $data) {
-            ThingToDoTranslation::updateOrCreate(
-                ['thing_id' => $thingstodo->id, 'language_id' => $langId],
-                [
-                    'name' => $data['name'] ?? '',
-                    'about' => $data['about'] ?? '',
-                ]
-            );
+            if($data['name']){
+                ThingToDoTranslation::updateOrCreate(
+                    ['thing_id' => $thingstodo->id, 'language_id' => $langId],
+                    [
+                        'name' => $data['name'] ?? '',
+                        'about' => $data['about'] ?? '',
+                    ]
+                );
+            }
         }
 
         // Save gallery images

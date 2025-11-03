@@ -65,14 +65,18 @@ class CityController extends Controller
 
         // Save translations
         foreach ($request->translations as $langId => $data) {
-            CityTranslation::updateOrCreate(
-                ['city_id' => $city->id, 'language_id' => $langId],
-                [
-                    'name' => $data['name'] ?? '',
-                    'tagline' => $data['tagline'] ?? '',
-                    'about' => $data['about'] ?? '',
-                ]
-            );
+            if($data['name'])
+            {
+                CityTranslation::updateOrCreate(
+                    ['city_id' => $city->id, 'language_id' => $langId],
+                    [
+                        'name' => $data['name'] ?? '',
+                        'tagline' => $data['tagline'] ?? '',
+                        'about' => $data['about'] ?? '',
+                    ]
+                );
+            }
+
         }
 
         // Save gallery images

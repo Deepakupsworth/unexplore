@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="{{ asset('backend/css/app.css') }}">
   <!-- End : Theme CSS-->
   <script src="{{ asset('backend/js/settings.js') }}" sync></script>
+  <style>.dataTables_paginate{display:none;}</style>
 </head>
 
 <body class=" font-inter dashcode-app" id="body_class">

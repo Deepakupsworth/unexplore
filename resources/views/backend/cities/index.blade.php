@@ -25,9 +25,9 @@
 
         <div class="card">
           <header class="card-header noborder flex justify-between items-center">
-            <h4 class="card-title">Cities Table</h4>
+            <h4 class="card-title">Cities</h4>
             <a href="{{ route('cities.create') }}" 
-               class="btn bg-primary-600 text-white text-sm px-4 py-2 rounded">
+               class="btn btn-dark text-white text-sm px-4 py-2 rounded">
               + Add City
             </a>
           </header>
@@ -72,50 +72,28 @@
                           <td class="table-td">{{ $city->created_at->format('d M Y') }}</td>
 
                           <td class="table-td">
-                            <div>
-                              <div class="relative">
-                                <div class="dropdown relative">
-                                  <button class="text-xl text-center block w-full" 
-                                          type="button" id="tableDropdownMenuButton{{ $city->id }}" 
-                                          data-bs-toggle="dropdown" aria-expanded="false">
-                                    <iconify-icon icon="heroicons-outline:dots-vertical"></iconify-icon>
-                                  </button>
-                                  <ul class="dropdown-menu min-w-[120px] absolute text-sm text-slate-700 dark:text-white hidden bg-white dark:bg-slate-700
-                                    shadow z-[2] float-left overflow-hidden list-none text-left rounded-lg mt-1 m-0 bg-clip-padding border-none">
-                                    
-                                    <li>
-                                      <a href="{{ route('cities.edit', $city->id) }}" 
-                                         class="hover:bg-slate-900 hover:text-white dark:hover:bg-slate-600 w-full border-b border-b-gray-500 border-opacity-10 px-4 py-2 text-sm flex space-x-2 items-center">
-                                        <iconify-icon icon="heroicons:pencil-square"></iconify-icon>
-                                        <span>Edit</span>
-                                      </a>
-                                    </li>
-
-                                    <li>
-                                          <form 
-                                              action="{{ route('cities.delete', $city->id) }}" 
-                                              method="POST" 
-                                              onsubmit="return confirm('Are you sure you want to delete this city?')"
-                                          >
-                                              @csrf
-                                              @method('DELETE')
-
-                                              <button 
-                                                  type="submit" 
-                                                  class="hover:bg-slate-900 hover:text-white dark:hover:bg-slate-600 w-full border-b border-b-gray-500 border-opacity-10 px-4 py-2 text-sm flex space-x-2 items-center"
-                                              >
-                                                  <iconify-icon icon="heroicons:trash" class="pr-2"></iconify-icon> 
-                                                  Delete
-                                              </button>
-                                          </form>
-                                      </li>
-
-                                    
-                                  </ul>
-                                </div>
+                              <div class="flex space-x-3 rtl:space-x-reverse">
+                                <a href="{{ route('cities.edit', $city->id) }}" >
+                                    <button class="action-btn" type="button">
+                                      <iconify-icon icon="heroicons:pencil-square"></iconify-icon>
+                                    </button>
+                                </a>
+                                <form action="{{ route('cities.delete', $city->id) }}" 
+                                    method="POST" 
+                                    onsubmit="return confirm('Are you sure you want to delete this city?')"
+                                    >
+                                    @csrf
+                                    @method('DELETE')
+                                    <button 
+                                      type="submit" 
+                                      class="action-btn"
+                                      >
+                                      <iconify-icon icon="heroicons:trash"></iconify-icon>
+                                    </button>
+                                </form>
                               </div>
-                            </div>
                           </td>
+
                         </tr>
                       @empty
                         <tr>
@@ -140,28 +118,4 @@
     </div>
   </div>
 </div>
-
-<script>
- function deleteCity(id) {
-    if (confirm('Are you sure you want to delete this city?')) {
-        fetch(`/admin/cities/${id}`, {
-            method: 'DELETE',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Accept': 'application/json'
-            }
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                alert('City deleted successfully');
-                location.reload();
-            } else {
-                alert('Failed to delete city');
-            }
-        })
-        .catch(() => alert('Something went wrong'));
-    }
-}
-</script>
 @endsection
