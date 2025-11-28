@@ -11,6 +11,8 @@ use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ThingtodoController;
 use App\Http\Controllers\Admin\EventController;
+use App\Http\Controllers\Admin\ProfileController;
+
 
 
 // routes/web.php
@@ -72,9 +74,9 @@ Route::middleware(['auth', RoleMiddleware::class.':admin'])->group(function () {
     // Profile Routes
     // Route::get('/admin/profile', fn() => view('backend.pages.profile'));
     // Route::get('/admin/profile/edit', fn() => view('backend.pages.Profile_edit'));
-    Route::get('/admin/profile', [AuthController::class, 'profile'])->name('admin.profile');
-    Route::get('/admin/profile/edit', [AuthController::class, 'editProfile'])->name('admin.profile.edit');
-    Route::post('/admin/profile/update', [AuthController::class, 'updateProfile'])->name('admin.profile.update');
+    // Route::get('/admin/profile', [AuthController::class, 'profile'])->name('admin.profile');
+    // Route::get('/admin/profile/edit', [AuthController::class, 'editProfile'])->name('admin.profile.edit');
+    // Route::post('/admin/profile/update', [AuthController::class, 'updateProfile'])->name('admin.profile.update');
     // Route::get('/admin/category/view', [AuthController::class, 'updateProfile'])->name('admin.category.view');
 
     Route::prefix('admin')->group(function () {
@@ -110,6 +112,11 @@ Route::middleware(['auth', RoleMiddleware::class.':admin'])->group(function () {
         Route::delete('/events/delete/{id}', [EventController::class, 'destroy'])->name('events.delete');   
     });
 
+    Route::prefix('admin')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    });
 
 });
 
@@ -141,3 +148,46 @@ Route::get('/basic_table', function () {
 
 
 
+// Frontend Routes
+Route::get('/destination', function () {
+    return view('frontend.destination');
+})->name('destination');
+
+Route::get('/destination-details', function () {
+    return view('frontend.destination-details');
+})->name('destination.details');
+
+
+Route::get('/event-details', function () {
+    return view('frontend.event-details');
+})->name('event.details');
+
+Route::get('/event-listing', function () {
+    return view('frontend.event-listing');
+})->name('event.listing');
+
+Route::get('/package-details', function () {
+    return view('frontend.package-details');
+})->name('package.details');
+
+Route::get('/package-listing', function () {
+    return view('frontend.package-listing');
+})->name('package.listing'); 
+
+Route::get('/profile', function () {
+    return view('frontend.profile');
+})->name('profile.view'); 
+ 
+Route::get('/things-to-do-nature', function () {
+    return view('frontend.things-to-do-nature');
+})->name('things-to-do-nature'); 
+
+
+Route::get('/things-to-do', function () {
+    return view('frontend.things-to-do');
+})->name('things.to.do');  
+
+
+Route::get('/to-do-things-search', function () {
+    return view('frontend.to-do-things-search');
+})->name('to.do.things.search');

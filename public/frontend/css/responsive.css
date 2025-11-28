@@ -1,0 +1,1057 @@
+/* ==========================================================================
+   Variables
+   ========================================================================== */
+:root {
+	/* Colors */
+	--color-primary: #169754;
+	--color-primary-dark: #062a18;
+	--color-text-dark: #333333;
+	--color-text-light2: #565656;
+	--color-text-light: #9c9c9c;
+	--color-light: #f7f7fb;
+	--color-light2: #cad0d9;
+	--color-light3: #d0d0d0;
+	--color-bg-light: #f4f4f4;
+	--color-bg-dark: #484848;
+	--color-bg-dark2: #666666;
+	--color-white: #ffffff;
+	--color-black: #000000;
+
+	/* Typography */
+	--font-family-base: "Poppins", sans-serif;
+	--font-size-base: 16px;
+	--line-height-base: 1.5;
+	--heading-color: var(--color-text-dark);
+
+	/* Spacing */
+	--spacing-unit: 16px;
+	--spacing-sm: 40px;
+	--spacing-md: 46px;
+
+	/* Box shadow */
+	--box-shadow-light: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* XXL devices (wider screens, 2K monitors) */
+@media (min-width: 1440px) {
+}
+
+/* Extra large devices (large desktops) */
+@media (max-width: 1439px) {
+	.container {
+		max-width: 1240px;
+	}
+
+	.navbar-expand-lg .navbar-nav .nav-link {
+		font-size: 14px;
+	}
+
+	.navbar-nav .nav-item {
+		margin-left: 10px;
+		margin-right: 10px;
+	}
+
+	h2.section__heading {
+		font-size: 42px;
+	}
+
+	.explore-saudi__tabs .nav-link {
+		font-size: 14px;
+	}
+
+	.carousel__full-width {
+		/* width: calc((100% - 1340px) / 2 + 15px); Align with container left */
+		/* width: calc(100% - (100% - 1280px) / 2); */
+		/* margin-left: calc((100% - 1280px) / 2); */
+		/* margin-left: calc((100vw - 1340px) / -2); */
+		/* padding-right: 20px; */
+		/* padding-left: 20px; */
+		/* padding-left: calc((100% - 1280px) / 2 + 24px); */
+	}
+}
+
+/* Large devices (desktops) */
+@media (max-width: 1199px) {
+	/* ==========================================================================
+	   Base Styles
+	   ========================================================================== */
+	h1,
+	.h1 {
+		font-size: 55px;
+		/* Adjusted for this viewport */
+	}
+
+	h2,
+	.h2 {
+		font-size: 42px;
+	}
+
+	h4,
+	.h4 {
+		font-size: 26px;
+	}
+
+	h5,
+	.h5 {
+		font-size: 20px;
+	}
+
+	h6,
+	.h6 {
+		font-size: 18px;
+		line-height: 24px;
+	}
+
+	.d-none-md {
+		display: unset;
+	}
+
+	/* Section */
+	h2.section__heading {
+		font-size: 38px;
+	}
+
+	/* Buttons */
+	.btn-primary,
+	.btn-outline-light {
+		min-height: 30px;
+		padding: 4px 12px;
+	}
+
+	.btn-sm {
+		font-size: 14px;
+		min-height: 24px;
+		padding: 2px 12px;
+	}
+
+	/* Header */
+	.navbar-expand-lg .navbar-nav .nav-link {
+		font-size: 14px;
+	}
+
+	.navbar-nav .nav-item {
+		margin-left: 10px;
+		margin-right: 10px;
+	}
+
+	.navbar__buttons .btn {
+		font-size: 12px;
+		gap: 8px;
+	}
+
+	.header__logo {
+		max-height: 38px;
+	}
+
+	/* Footer */
+	footer .footer-bottom {
+		font-size: 14px;
+	}
+
+	/* HOME */
+	.hero-banner__explore-btn {
+		font-size: 16px;
+		/* Slightly smaller for this viewport */
+		gap: 20px;
+		/* Reduce gap if needed */
+		padding: 15px 22px;
+		/* Adjust padding */
+	}
+
+	.upcoming-event__carousel-item {
+		/* max-width: 320px; */
+	}
+
+	.upcoming-event__carousel-item-img {
+		height: 290px;
+	}
+
+	.plan-trip__vertical-text {
+		font-size: 88px;
+		left: -90%;
+	}
+
+	.explore-saudi__tabs .nav-link {
+		font-size: 14px;
+	}
+
+	.plan-trip__features .plan-trip__feature-text p {
+		font-size: 14px;
+	}
+
+	.carousel__full-width {
+		/* width: calc(100% - (100% - 1280px) / 2);
+	  margin-left: calc((100% - 1280px) / 2);
+	  padding-right: 20px;
+	  padding-left: 20px; */
+		/* padding-left: calc((100% - 1280px) / 2 + 24px); */
+	}
+
+	/* Destination Page */
+	.explore-destinations__item-content {
+		padding: 20px;
+	}
+
+	.explore-destinations__item button {
+		font-size: 12px;
+		padding: 8px 16px;
+		gap: 8px;
+	}
+
+	.explore-destinations__item-title {
+		font-size: 14px;
+	}
+
+	.explore-destinations__item-description {
+		font-size: 18px;
+	}
+
+	/* Things To Do Page */
+	.discover-category__item-content {
+		padding: 18px 12px;
+	}
+
+	.discover-category__item-content button {
+		gap: 12px;
+		font-size: 13px;
+	}
+	.event-info__block {
+		width: 25%;
+	}
+}
+
+/* Medium devices (tablets) */
+@media (max-width: 991.98px) {
+	/* ==========================================================================
+	   Base Styles
+	   ========================================================================== */
+	h1,
+	.h1 {
+		font-size: 50px;
+	}
+
+	h2,
+	.h2 {
+		font-size: 42px;
+	}
+
+	h4,
+	.h4 {
+		font-size: 26px;
+	}
+
+	h5,
+	.h5 {
+		font-size: 20px;
+	}
+
+	h6,
+	.h6 {
+		font-size: 16px;
+		line-height: 22px;
+	}
+
+	.gap-4-md {
+		gap: 24px;
+	}
+
+	.d-none-sm {
+		display: unset;
+	}
+
+	.d-none-md {
+		display: none;
+	}
+
+	/* Section */
+	h2.section__heading {
+		font-size: 32px;
+		/* ~48px */
+	}
+
+	/* Buttons */
+	.btn-primary,
+	.btn-outline-light {
+		font-size: 1rem;
+		/* ~16px */
+		padding: 0.5rem 1rem;
+		/* ~8px 16px */
+		min-height: unset;
+	}
+
+	.hero-banner__explore-btn {
+		font-size: 1rem;
+		/* ~16px */
+		gap: 1rem;
+		/* ~16px */
+		padding: 0.75rem 1.5rem;
+		/* ~12px 24px */
+	}
+
+	.btn-sm {
+		font-size: 14px;
+		min-height: 24px;
+		padding: 2px 12px;
+	}
+
+	/* HEADER */
+	.navbar-expand-lg .navbar-nav .nav-link {
+		font-size: 0.875rem;
+		/* ~14px */
+	}
+
+	.navbar-nav .nav-item {
+		margin-left: 10px;
+		/* ~12px */
+		margin-right: 10px;
+	}
+
+	.navbar__buttons .btn {
+		font-size: 0.75rem;
+		/* ~12px */
+		gap: 0.5rem;
+		/* ~8px */
+	}
+
+	.header__logo {
+		max-height: 2.25rem;
+		/* ~36px */
+	}
+
+	.navbar-collapse {
+		background: black;
+		position: absolute;
+		top: 75px;
+		width: 100%;
+		left: 0;
+		z-index: 99;
+		padding: 16px 0px;
+	}
+
+	.navbar-expand-lg .navbar-nav .nav-link {
+		color: var(--color-white);
+	}
+
+	.navbar-nav {
+		gap: 20px;
+	}
+
+	.navbar__buttons {
+		margin: 20px 16px 4px 16px;
+	}
+
+	.navbar-nav .nav-item {
+		margin-left: 20px;
+		margin-right: 20px;
+	}
+	.desktop-nav {
+		display: none;
+	}
+	.mobile-nav {
+		display: block;
+	}
+	.mobile-nav .accordion-item {
+		background-color: transparent;
+	}
+	.mobile-nav .accordion-button {
+		padding: 0;
+		background-color: transparent;
+		color: var(--color-white);
+	}
+	.mobile-nav .accordion-button:after {
+		filter: grayscale(1) invert(1);
+	}
+	.mobile-nav .accordion-button:focus {
+		box-shadow: none;
+	}
+	.mobile-nav .navbar-nav {
+		gap: 12px;
+	}
+
+	/* FOOTER */
+	footer .footer-bottom {
+		font-size: 0.875rem;
+		/* ~14px */
+	}
+
+	/* HOME */
+
+	.hero-banner__desc {
+		font-size: 1rem;
+		/* ~16px */
+	}
+
+	/* Carousel & blocks */
+	.upcoming-event__carousel-item {
+		/* max-width: 360px; */
+	}
+
+	.upcoming-event__carousel-item-img {
+		height: 330px;
+		/* ~400px */
+	}
+
+	.plan-trip__vertical-text {
+		font-size: 5rem;
+		/* ~80px */
+		left: -85%;
+	}
+
+	.explore-saudi__tabs .nav-link {
+		font-size: 0.875rem;
+		/* ~14px */
+	}
+
+	.plan-trip__features .plan-trip__feature-text p {
+		font-size: 0.875rem;
+		/* ~14px */
+	}
+
+	.plan-trip__content {
+		padding: 0;
+	}
+
+	.explore-saudi__content {
+		padding: 0;
+	}
+
+	.explore-saudi__map {
+		max-width: 50%;
+	}
+
+	/* Section spacing */
+	.section-padding {
+		padding-top: var(--spacing-md);
+		padding-bottom: var(--spacing-md);
+	}
+
+	/* Destination Page */
+	.explore-destinations__item-content {
+		padding: 20px;
+	}
+
+	.explore-destinations__item button {
+		font-size: 12px;
+		padding: 8px 16px;
+	}
+}
+
+/* Small devices (landscape phones) */
+@media (max-width: 768px) {
+	/* ==========================================================================
+	   Base Styles
+	   ========================================================================== */
+	h1,
+	.h1 {
+		font-size: 32px;
+	}
+
+	h2,
+	.h2 {
+		font-size: 26px;
+	}
+
+	h3,
+	.h3 {
+		font-size: 24px;
+	}
+
+	h4,
+	.h4 {
+		font-size: 20px;
+	}
+
+	h5,
+	.h5 {
+		font-size: 18px;
+	}
+
+	h6,
+	.h6 {
+		font-size: 16px;
+		line-height: 22px;
+	}
+
+	.p-large {
+		font-size: 16px;
+	}
+
+	.d-none-sm {
+		display: none;
+	}
+
+	.gap-2-sm {
+		gap: 8px;
+	}
+
+	.gap-3-sm {
+		gap: 16px;
+	}
+
+	.gap-4-sm {
+		gap: 24px;
+	}
+
+	/* Section */
+	.section-padding {
+		padding-top: var(--spacing-sm);
+		padding-bottom: var(--spacing-sm);
+	}
+
+	.section__header {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 20px;
+	}
+
+	h2.section__heading {
+		font-size: 32px;
+		font-weight: 600;
+	}
+
+	.section__description {
+		font-size: 16px;
+	}
+
+	/* Buttons */
+	.btn-primary {
+		font-size: 14px;
+		gap: 12px;
+		padding: 6px 16px;
+		min-height: unset;
+	}
+
+	.btn-sm {
+		font-size: 14px;
+		min-height: 24px;
+		padding: 2px 12px;
+	}
+
+	/* Carousel Common */
+	.custom__carousel-pagination {
+		gap: 8px;
+	}
+
+	/* Header */
+	.navbar-collapse {
+		background: black;
+		position: absolute;
+		top: 75px;
+		width: 100%;
+		left: 0;
+		z-index: 99;
+		padding: 16px 0px;
+	}
+
+	.navbar-expand-lg .navbar-nav .nav-link {
+		color: var(--color-white);
+	}
+
+	.navbar-nav {
+		gap: 16px;
+	}
+
+	.navbar__buttons {
+		margin: 16px 16px 0px 16px;
+	}
+
+	.navbar-nav .nav-item {
+		margin-left: 16px;
+		margin-right: 16px;
+	}
+
+	/* FOOTER */
+	footer .footer-bottom {
+		font-size: 14px;
+		padding: 18px 0;
+	}
+
+	footer .footer-link-heading {
+		margin-bottom: 16px;
+	}
+
+	footer .footer-links-section ul {
+		gap: 10px;
+		margin-bottom: 0;
+	}
+
+	footer .footer-icons-section {
+		margin-bottom: 24px;
+	}
+
+	/* HOME PAGE */
+	.hero-banner {
+		padding: 170px 0 50px;
+	}
+
+	.hero-banner__desc {
+		font-size: 16px;
+	}
+
+	.hero-banner__explore-btn {
+		font-size: 16px;
+		gap: 10px;
+		padding: 10px 20px;
+	}
+
+	.hero-banner__carousel {
+		width: 100%;
+		padding: 0 12px;
+	}
+
+	.plan-trip__content {
+		padding: 0;
+	}
+
+	.plan-trip__features .plan-trip__feature-text p {
+		font-size: 14px;
+	}
+
+	.plan-trip__features {
+		margin-top: 32px;
+	}
+
+	.explore-saudi .explore-saudi__container {
+		padding-left: 20px;
+		padding-right: 20px;
+	}
+
+	.explore-saudi__content {
+		padding-left: 12px;
+	}
+
+	.explore-saudi__tabs,
+	.explore-saudi__content .tab-content {
+		max-width: 100%;
+	}
+
+	.explore-saudi__tabs .nav-link {
+		font-size: 14px;
+	}
+
+	.visa-banner__content {
+		margin: 0 12px;
+		padding: 40px;
+	}
+
+	.visa-banner {
+		padding: 40px 0;
+	}
+
+	.news-event__carousel-container {
+		gap: 8px;
+	}
+
+	.upcoming-event__carousel-item-img .upcoming-event__carousel-item-dates p {
+		font-size: 12px;
+		padding: 6px 16px;
+	}
+
+	.news-event__carousel-container {
+		margin-top: 32px;
+	}
+
+	.saudi-pass-banner {
+		margin: 0 12px;
+	}
+
+	.saudi-pass-banner__container {
+		overflow: hidden;
+	}
+
+	.saudi-pass-banner__container .section__header {
+		padding: 24px;
+	}
+
+	.saudi-pass-banner__image-container {
+		padding: 0;
+	}
+
+	.saudi-pass-banner__container .section__heading > div {
+		display: inline;
+	}
+
+	/* Destination Page */
+	.explore-destinations__item-content {
+		padding: 20px;
+	}
+
+	.explore-destinations__item button {
+		font-size: 12px;
+		padding: 8px 16px;
+	}
+
+	.explore-destinations__item-image,
+	.explore-destinations__item-image img {
+		height: 316px;
+	}
+	/* Package Listing */
+	.package-listing__results-applied-list {
+		flex-direction: column;
+		padding: 16px 0;
+	}
+	.package-listing__results-header {
+		flex-wrap: wrap;
+	}
+	.package-listing__results-list {
+		padding: 16px 0;
+	}
+	.package-listing__filters {
+		flex-direction: column;
+	}
+	.package-listing__filter-section {
+		width: 100%;
+	}
+	.package-listing__results {
+		margin-top: 16px;
+	}
+	.event-info-wrapper {
+		flex-direction: column;
+	}
+	.event-info-wrapper .event-info__block {
+		min-width: 100%;
+		padding: 16px 20px;
+		flex-direction: column;
+		align-items: flex-start !important;
+	}
+	.event-info-wrapper .event-divider {
+		display: none;
+	}
+	.event-listing__faq .accordion-body {
+		width: 100%;
+	}
+	.pkg-details__wrapper {
+		flex-direction: column;
+	}
+	.pkg-details__banner img {
+		height: 320px;
+	}
+	.pkg-details__banner-carousel-item img {
+		max-height: 80px;
+	}
+	.pkg-details__pricing {
+		width: 100%;
+	}
+	.package-listing__results-applied-list .package-listing__results-sort-dropdown {
+		margin-left: 0 !important;
+	}
+	.user-profile__content {
+		flex-direction: column;
+	}
+	.user-profile__menu {
+		width: 100%;
+	}
+	.user-profile__details-body {
+		flex-direction: column-reverse;
+	}
+	.user-profile__details-avatar,
+	.user-dashboard__packages {
+		width: 100%;
+	}
+	.user-dashboard__explore .section__header {
+		align-items: flex-start !important;
+        gap: 12px !important;
+	}
+	.user-dashboard__section {
+		flex-direction: column;
+	}
+	.user-profile__details-body {
+		padding-left: 0 !important;
+        padding-right: 0 !important;
+	}
+	.user-profile__details-body .user-profile__box {
+		border: none;
+	}
+	.user-bookings__nav > .nav {
+		gap: 0;
+	}
+	.user-bookings__nav .nav-link {
+		padding: 10px 16px;
+		font-size: 14px;
+	}
+	.things-to-do-nature__about-content {
+		padding: 16px;
+	}
+	.things-to-do-nature__about-img-wrapper .things-to-do-nature__about-img {
+		min-height: 200px;
+	}
+	.things-to-do-nature__about-text {
+		padding: 0;
+	}
+	.things-to-do-nature__adventure-wrapper {
+		padding: 24px 22px;
+	}
+	.things-to-do-nature__adventure-wrapper {
+		min-height: 380px;
+	}
+	.to-do-things-search .package-listing__results-header {
+		height: unset;
+	}
+}
+
+/* Extra small devices (phones) */
+@media (max-width: 575px) {
+	/* ==========================================================================
+	   Base Styles
+	   ========================================================================== */
+	h1,
+	.h1 {
+		font-size: 32px;
+	}
+
+	h2,
+	.h2 {
+		font-size: 26px;
+	}
+
+	h4,
+	.h4 {
+		font-size: 20px;
+	}
+
+	h5,
+	.h5 {
+		font-size: 18px;
+	}
+
+	h6,
+	.h6 {
+		font-size: 16px;
+		line-height: 22px;
+	}
+
+	.p-large {
+		font-size: 16px;
+	}
+
+	.d-none-sm {
+		display: none;
+	}
+
+	.gap-2-sm {
+		gap: 8px;
+	}
+
+	.gap-3-sm {
+		gap: 16px;
+	}
+
+	.gap-4-sm {
+		gap: 24px;
+	}
+
+	/* Section */
+	.section-padding {
+		padding-top: var(--spacing-sm);
+		padding-bottom: var(--spacing-sm);
+	}
+
+	.section__header {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 20px;
+	}
+
+	h2.section__heading {
+		font-size: 32px;
+		font-weight: 600;
+	}
+
+	.section__description {
+		font-size: 16px;
+	}
+
+	/* Buttons */
+	.btn-primary {
+		font-size: 14px;
+		gap: 12px;
+		padding: 6px 16px;
+		min-height: unset;
+	}
+
+	/* Carousel Common */
+	.custom__carousel-pagination {
+		gap: 8px;
+	}
+
+	/* Header */
+	.navbar-collapse {
+		background: black;
+		position: absolute;
+		top: 75px;
+		width: 100%;
+		left: 0;
+		z-index: 99;
+		padding: 16px 0px;
+	}
+
+	.navbar-expand-lg .navbar-nav .nav-link {
+		color: var(--color-white);
+	}
+
+	.navbar-nav {
+		gap: 16px;
+	}
+
+	.navbar__buttons {
+		margin: 16px 16px 0px 16px;
+	}
+
+	.navbar-nav .nav-item {
+		margin-left: 16px;
+		margin-right: 16px;
+	}
+
+	/* FOOTER */
+	footer .footer-bottom {
+		font-size: 14px;
+		padding: 18px 0;
+	}
+
+	footer .footer-link-heading {
+		margin-bottom: 16px;
+	}
+
+	footer .footer-links-section ul {
+		gap: 10px;
+		margin-bottom: 0;
+	}
+
+	footer .footer-icons-section {
+		margin-bottom: 24px;
+	}
+
+	/* HOME PAGE */
+	.hero-banner {
+		padding: 150px 0 50px;
+	}
+
+	.hero-banner__desc {
+		font-size: 16px;
+	}
+
+	.hero-banner__explore-btn {
+		font-size: 16px;
+		gap: 10px;
+		padding: 10px 20px;
+	}
+
+	.hero-banner__carousel {
+		width: 100%;
+		padding: 0 12px;
+	}
+
+	.plan-trip__content {
+		padding: 0;
+	}
+
+	.plan-trip__features .plan-trip__feature-text p {
+		font-size: 14px;
+	}
+
+	.plan-trip__features {
+		margin-top: 32px;
+		gap: 24px;
+	}
+
+	.explore-saudi .explore-saudi__container {
+		padding-left: 20px;
+		padding-right: 20px;
+	}
+
+	.explore-saudi__content {
+		padding-left: 12px;
+	}
+
+	.explore-saudi__tabs,
+	.explore-saudi__content .tab-content {
+		max-width: 100%;
+	}
+
+	.explore-saudi__tabs .nav-link {
+		font-size: 14px;
+	}
+
+	.dis-adventure__carousel .dis-adventure__carousel-item {
+		max-width: 100%;
+	}
+
+	.visa-banner__content {
+		margin: 0 12px;
+		padding: 40px;
+	}
+
+	.visa-banner {
+		padding: 40px 0;
+	}
+
+	.news-event__carousel-container {
+		gap: 8px;
+	}
+
+	.upcoming-event__carousel-item-img .upcoming-event__carousel-item-dates p {
+		font-size: 12px;
+		padding: 6px 16px;
+	}
+
+	.exclusive-offers__carousel-item {
+		max-width: 100%;
+	}
+
+	.news-event__carousel-container {
+		margin-top: 32px;
+	}
+
+	.saudi-pass-banner {
+		margin: 0 12px;
+	}
+
+	.saudi-pass-banner__container {
+		overflow: hidden;
+	}
+
+	.saudi-pass-banner__container .section__header {
+		padding: 24px;
+	}
+
+	.saudi-pass-banner__image-container {
+		padding: 0;
+	}
+
+	.saudi-pass-banner__container .section__heading > div {
+		display: inline;
+	}
+
+	/* Destination Page */
+	.dest-banner {
+		padding: 150px 0 20px;
+	}
+
+	.explore-destinations__item-content {
+		padding: 20px;
+	}
+
+	.explore-destinations__item button {
+		font-size: 12px;
+		padding: 8px 16px;
+	}
+
+	/* Destination Details Page */
+	.dest-details-banner__btn-group {
+		bottom: "-50px";
+		flex-direction: column;
+		width: 100%;
+	}
+
+	.dest-details-banner {
+		min-height: 80vh;
+		padding: 30px 0;
+	}
+
+	.dest-details-banner__content {
+		height: calc(80vh - 60px);
+	}
+	.user-wishlist__search-bar {
+		max-width: 100%;
+	}
+}
