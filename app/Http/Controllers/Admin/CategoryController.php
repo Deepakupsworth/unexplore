@@ -37,7 +37,6 @@ class CategoryController extends Controller
     public function save(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'slug' => 'required|string|max:255',
             'translations.*.name' => 'nullable|string|max:255',
             'translations.1.name' => 'required|string|max:255', // English required (id=1)
         ]);
@@ -50,7 +49,7 @@ class CategoryController extends Controller
         $categories = Category::updateOrCreate(
             ['id' => $request->id],
             [
-                'slug' => $request->slug, 
+                'slug' => $request->slug ?? Str::slug($request->translations[1]['name']), 
 
             ]
         );
@@ -74,54 +73,22 @@ class CategoryController extends Controller
             $categories->update(['thumb_icon' => $path]);
         }
 
-        //updateorcreate thumb_icon and thumb_image if exists 
-
-        // if ($categories->thumb_image || $categories->thumb_icon) {
-        //     $categories->update([
-        //         'thumb_image' => $categories->thumb_image,
-        //         'thumb_icon' => $categories->thumb_icon,
-        //     ]);
-        // }
-
         // Save translations
         foreach ($request->translations as $langId => $data) {
-            categoryTranslation::updateOrCreate(
-                ['category_id' => $categories->id, 'language_id' => $langId],
-                [
-                    'name' => $data['name'] ?? ''
-                ]
-            );
+            if($data['name'])
+            {
+                categoryTranslation::updateOrCreate(
+                    ['category_id' => $categories->id, 'language_id' => $langId],
+                    [
+                        'name' => $data['name'] ?? ''
+                    ]
+                );
+            }
         }
 
-        // Save gallery images
-        // if ($request->hasFile('gallery_images')) {
-        //     foreach ($request->file('gallery_images') as $file) {
-        //         $path = $file->store('cities/gallery', 'public');
-        //         CityGalleryImage::create([
-        //             'city_id' => $city->id,
-        //             'image_path' => $path,
-        //         ]);
-        //     }
-        // }
-        // if ($request->hasFile('thumb_image')) {
-        //     $path = $request->file('thumb_image')->store('categories/thumbs', 'public');
-        //     $model->thumb_image = $path;
-        // }
-
-       
         return redirect()->route('categories.index')->with('success', 'Category saved successfully!');
     }
 
-    // public function deleteGalleryImage($id)
-    // {
-    //     $image = CityGalleryImage::findOrFail($id);
-    //     if ($image->image_path && \Storage::disk('public')->exists($image->image_path)) {
-    //         \Storage::disk('public')->delete($image->image_path);
-    //     }
-    //     $image->delete();
-
-    //     return response()->json(['success' => true]);
-    // }
 
     public function destroy($id)
     {

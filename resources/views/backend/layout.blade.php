@@ -6,7 +6,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="">
-  <title>Dashcode - HTML Template</title>
+  <title>Unxplord saudi - Backend</title>
   <link rel="icon" type="image/png" href="/images/logo/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="{{ asset('backend/css/app.css') }}">
   <!-- End : Theme CSS-->
   <script src="{{ asset('backend/js/settings.js') }}" sync></script>
+  <style>.dataTables_paginate{display:none;}</style>
 </head>
 
 <body class=" font-inter dashcode-app" id="body_class">
@@ -49,5 +50,34 @@
   <script src="{{ asset('backend/js/jquery-3.6.0.min.js') }}"></script>
   <script src="{{ asset('backend/js/rt-plugins.js') }}"></script>
   <script src="{{ asset('backend/js/app.js') }}"></script>
+  <script src="https://cdn.ckeditor.com/ckeditor5/41.3.1/classic/ckeditor.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll('textarea').forEach((textarea) => {
+            ClassicEditor
+                .create(textarea, {
+                    toolbar: [
+                        'heading', '|',
+                        'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|',
+                        'blockQuote', 'insertTable', 'undo', 'redo'
+                    ],
+                    heading: {
+                        options: [
+                            { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                            { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+                            { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' }
+                        ]
+                    }
+                })
+                .then(editor => {
+                    console.log('CKEditor initialized for:', textarea.name);
+                })
+                .catch(error => {
+                    console.error('CKEditor initialization error:', error);
+                });
+        });
+    });
+</script>
 </body>
 </html>

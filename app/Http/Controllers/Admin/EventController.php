@@ -49,7 +49,6 @@ class EventController extends Controller
     public function save(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'slug' => 'required|string|max:255',
             'translations.*.name' => 'nullable|string|max:255',
             'translations.1.name' => 'required|string|max:255', // English required (id=1)
         ]);
@@ -62,8 +61,7 @@ class EventController extends Controller
         $events = Event::updateOrCreate(
             ['id' => $request->id],
             [
-                'slug' => $request->slug,
-                'image' => $request->image,
+                'slug' => $request->slug ?? Str::slug($request->translations[1]['name']),
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
                 'opening_days' => $request->opening_days,
@@ -82,25 +80,27 @@ class EventController extends Controller
 
         // Save translations
         foreach ($request->translations as $langId => $data) {
-            EventTranslation::updateOrCreate(
-                ['event_id' => $events->id, 'language_id' => $langId],
-                [
-                    'name' => $data['name'] ?? '',
-                    'about' => $data['about'] ?? '',
-                ]
-            );
+            if($data['name']){
+                EventTranslation::updateOrCreate(
+                    ['event_id' => $events->id, 'language_id' => $langId],
+                    [
+                        'name' => $data['name'] ?? '',
+                        'about' => $data['about'] ?? '',
+                    ]
+                );
+            }
         }
 
-        // Save gallery images
-        // if ($request->hasFile('gallery_images')) {
-        //     foreach ($request->file('gallery_images') as $file) {
-        //         $path = $file->store('thingtodos/gallery', 'public');
-        //         ThingGalleryImage::create([
-        //             'thing_id' => $thingstodo->id,
-        //             'image_path' => $path,
-        //         ]);
-        //     }
-        // }
+       // Save gallery images
+        if ($request->hasFile('gallery_images')) {
+            foreach ($request->file('gallery_images') as $file) {
+                $path = $file->store('event/gallery', 'public');
+                EventGalleryImage::create([
+                    'event_id' => $events->id,
+                    'image_path' => $path,
+                ]);
+            }
+        }
 
         return redirect()->route('events.index')->with('success', 'Event saved successfully!');
     }

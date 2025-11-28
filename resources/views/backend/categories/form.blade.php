@@ -18,9 +18,9 @@
   }
 
   .lang-btn.active {
-    background-color: #2563eb; /* bg-primary-600 (Tailwind blue-600) */
+    background-color: #1e293b; /* bg-primary-600 (Tailwind blue-600) */
     color: #fff;
-    border-color: #2563eb;
+    border-color: #1e293b;
   }
 
   .lang-section {
@@ -111,13 +111,7 @@
                 </div>
 
                 {{-- Slug --}}
-                <div class="input-area">
-                  <label class="form-label">Slug <span class="text-red-500">*</span></label>
-                  <input type="text" name="slug" class="form-control" value="{{ old('slug', $model->slug) }}" required>
-                  @error('slug')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                  @enderror
-                </div>
+                <input type="hidden" name="slug" class="form-control" value="{{ old('slug', $model->slug) }}">
                 <header class="flex mb-5 items-center pb-5 pt-5">
                 <div class="flex-1">
                   <div class="card-title text-slate-900 dark:text-white">
