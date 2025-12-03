@@ -234,7 +234,7 @@
                             <div class="col-md-6 col-lg-6 col-xl-4">
                                 <div class="upcoming-event__carousel-item swiper-slide">
                                     <div class="upcoming-event__carousel-item-img">
-                                        <img src="{{ asset('frontend/assets/event-1.png') }}" alt="Event" class="img-fluid">
+                                        <img src="{{ asset('frontend/assets/things_to_do/upcoming_events/cultural_performances.jpg') }}" alt="Event" class="img-fluid">
                                         <div class="upcoming-event__carousel-item-dates">
                                             <p>25 Aug 2025</p>
                                             <div class="vertical-divider"></div>
@@ -257,7 +257,7 @@
                             <div class="col-md-6 col-lg-6 col-xl-4">
                                 <div class="upcoming-event__carousel-item swiper-slide">
                                     <div class="upcoming-event__carousel-item-img">
-                                        <img src="{{ asset('frontend/assets/event-1.png') }}" alt="Event" class="img-fluid">
+                                        <img src="{{ asset('frontend/assets/things_to_do/upcoming_events/alula_arts_festival.jpg') }}" alt="Event" class="img-fluid">
                                         <div class="upcoming-event__carousel-item-dates">
                                             <p>25 Aug 2025</p>
                                             <div class="vertical-divider"></div>
@@ -280,7 +280,7 @@
                             <div class="col-md-6 col-lg-6 col-xl-4">
                                 <div class="upcoming-event__carousel-item swiper-slide">
                                     <div class="upcoming-event__carousel-item-img">
-                                        <img src="{{ asset('frontend/assets/event-1.png') }}" alt="Event" class="img-fluid">
+                                        <img src="{{ asset('frontend/assets/things_to_do/upcoming_events/camel_racing.jpg') }}" alt="Event" class="img-fluid">
                                         <div class="upcoming-event__carousel-item-dates">
                                             <p>25 Aug 2025</p>
                                             <div class="vertical-divider"></div>
@@ -303,7 +303,7 @@
                             <div class="col-md-6 col-lg-6 col-xl-4">
                                 <div class="upcoming-event__carousel-item swiper-slide">
                                     <div class="upcoming-event__carousel-item-img">
-                                        <img src="{{ asset('frontend/assets/event-1.png') }}" alt="Event" class="img-fluid">
+                                        <img src="{{ asset('frontend/assets/things_to_do/upcoming_events/diriyah_season.jpg') }}" alt="Event" class="img-fluid">
                                         <div class="upcoming-event__carousel-item-dates">
                                             <p>25 Aug 2025</p>
                                             <div class="vertical-divider"></div>
@@ -326,7 +326,7 @@
                             <div class="col-md-6 col-lg-6 col-xl-4">
                                 <div class="upcoming-event__carousel-item swiper-slide">
                                     <div class="upcoming-event__carousel-item-img">
-                                        <img src="{{ asset('frontend/assets/event-1.png') }}" alt="Event" class="img-fluid">
+                                        <img src="{{ asset('frontend/assets/things_to_do/upcoming_events/riyadh_session.jpg') }}" alt="Event" class="img-fluid">
                                         <div class="upcoming-event__carousel-item-dates">
                                             <p>25 Aug 2025</p>
                                             <div class="vertical-divider"></div>
@@ -349,7 +349,7 @@
                             <div class="col-md-6 col-lg-6 col-xl-4">
                                 <div class="upcoming-event__carousel-item swiper-slide">
                                     <div class="upcoming-event__carousel-item-img">
-                                        <img src="{{ asset('frontend/assets/event-1.png') }}" alt="Event" class="img-fluid">
+                                        <img src="{{ asset('frontend/assets/things_to_do/event_s/mdlbeast_soundstorm_in_riyadh.jpg') }}" alt="Event" class="img-fluid">
                                         <div class="upcoming-event__carousel-item-dates">
                                             <p>25 Aug 2025</p>
                                             <div class="vertical-divider"></div>
@@ -372,7 +372,7 @@
                             <div class="col-md-6 col-lg-6 col-xl-4">
                                 <div class="upcoming-event__carousel-item swiper-slide">
                                     <div class="upcoming-event__carousel-item-img">
-                                        <img src="{{ asset('frontend/assets/event-1.png') }}" alt="Event" class="img-fluid">
+                                        <img src="{{ asset('frontend/assets/things_to_do/event_s/red_sea_international_film_festival_in_jeddah.jpg') }}" alt="Event" class="img-fluid">
                                         <div class="upcoming-event__carousel-item-dates">
                                             <p>25 Aug 2025</p>
                                             <div class="vertical-divider"></div>
@@ -395,7 +395,7 @@
                             <div class="col-md-6 col-lg-6 col-xl-4">
                                 <div class="upcoming-event__carousel-item swiper-slide">
                                     <div class="upcoming-event__carousel-item-img">
-                                        <img src="{{ asset('frontend/assets/event-1.png') }}" alt="Event" class="img-fluid">
+                                        <img src="{{ asset('frontend/assets/things_to_do/event_s/riyadh_season_festival_in_riyadh.jpg') }}" alt="Event" class="img-fluid">
                                         <div class="upcoming-event__carousel-item-dates">
                                             <p>25 Aug 2025</p>
                                             <div class="vertical-divider"></div>
@@ -418,7 +418,7 @@
                             <div class="col-md-6 col-lg-6 col-xl-4">
                                 <div class="upcoming-event__carousel-item swiper-slide">
                                     <div class="upcoming-event__carousel-item-img">
-                                        <img src="{{ asset('frontend/assets/event-1.png') }}" alt="Event" class="img-fluid">
+                                        <img src="{{ asset('frontend/assets/things_to_do/event_s/Saudi_National_Day_in_Nationwide.jpg') }}" alt="Event" class="img-fluid">
                                         <div class="upcoming-event__carousel-item-dates">
                                             <p>25 Aug 2025</p>
                                             <div class="vertical-divider"></div>
@@ -441,7 +441,7 @@
                             <div class="col-md-6 col-lg-6 col-xl-4">
                                 <div class="upcoming-event__carousel-item swiper-slide">
                                     <div class="upcoming-event__carousel-item-img">
-                                        <img src="{{ asset('frontend/assets/event-1.png') }}" alt="Event" class="img-fluid">
+                                        <img src="{{ asset('frontend/assets/things_to_do/event_s/janadriyah_national_festival_in_riyadh.jpg') }}" alt="Event" class="img-fluid">
                                         <div class="upcoming-event__carousel-item-dates">
                                             <p>25 Aug 2025</p>
                                             <div class="vertical-divider"></div>
