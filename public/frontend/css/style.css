@@ -1237,9 +1237,9 @@ footer .footer-icon:hover {
 
 .visa-banner {
 	padding: 130px 0;
-	background-image: url("../assets/saudi-visa-banner.png");
+	background-image: url("../assets/home-background.jpg");
 	background-size: cover;
-	background-position: center;
+	background-position: right;
 	color: var(--color-white);
 	text-align: center;
 }

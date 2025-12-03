@@ -65,11 +65,10 @@
             <div class="dis-adventure__carousel swiper">
                 <div class="swiper-wrapper">
                     <div class="dis-adventure__carousel-item swiper-slide">
-                        <img src="{{ asset('frontend/assets/adventure1.png') }}" alt="Adventure Image 1" class="img-fluid">
+                        <img src="{{ asset('frontend/assets/destinations/asser/4.jpg') }}" alt="Adventure Image 1" class="img-fluid">
                         <div class="dis-adventure__carousel-item-content">
                             <div class="dis-adventure__carousel-item-top">
-                                <div class="badge carousel-badge"><i class="fa-solid fa-location-dot"></i> Religious
-                                    Site</div>
+                                <div class="badge carousel-badge"><i class="fa-solid fa-location-dot"></i> Asser</div>
                             </div>
                             <div class="dis-adventure__carousel-item-bottom">
                                 <h6>4 Days in Aseer: A Cultural and Scenic Escape Through Nature...</h6>
@@ -80,13 +79,13 @@
                         </div>
                     </div>
                     <div class="dis-adventure__carousel-item swiper-slide">
-                        <img src="{{ asset('frontend/assets/adventure1.png') }}" alt="Adventure Image 1" class="img-fluid">
+                        <img src="{{ asset('frontend/assets/destinations/diriyah/4.jpg') }}" alt="Adventure Image 1" class="img-fluid">
                         <div class="dis-adventure__carousel-item-content">
                             <div class="dis-adventure__carousel-item-top">
-                                <div class="badge carousel-badge"><i class="fa-solid fa-location-dot"></i> Macca</div>
+                                <div class="badge carousel-badge"><i class="fa-solid fa-location-dot"></i> Diriyah</div>
                             </div>
                             <div class="dis-adventure__carousel-item-bottom">
-                                <h6>4 Days in Aseer: A Cultural and Scenic Escape Through Nature...</h6>
+                                <h6>4 Days in Diriyah: A Cultural and Scenic Escape Through Nature...</h6>
                                 <div class="dis-adventure__carousel-item-footer">
                                     <a class="btn btn-outline-light rounded-pill">Related packages (20)</a>
                                 </div>
@@ -94,13 +93,13 @@
                         </div>
                     </div>
                     <div class="dis-adventure__carousel-item swiper-slide">
-                        <img src="{{ asset('frontend/assets/adventure1.png') }}" alt="Adventure Image 1" class="img-fluid">
+                        <img src="{{ asset('frontend/assets/destinations/eastern_province/2.jpg') }}" alt="Adventure Image 1" class="img-fluid">
                         <div class="dis-adventure__carousel-item-content">
                             <div class="dis-adventure__carousel-item-top">
-                                <div class="badge carousel-badge"><i class="fa-solid fa-location-dot"></i> Macca</div>
+                                <div class="badge carousel-badge"><i class="fa-solid fa-location-dot"></i> Eastern Province</div>
                             </div>
                             <div class="dis-adventure__carousel-item-bottom">
-                                <h6>4 Days in Aseer: A Cultural and Scenic Escape Through Nature...</h6>
+                                <h6>4 Days in Eastern Province: A Cultural and Scenic Escape Through Nature...</h6>
                                 <div class="dis-adventure__carousel-item-footer">
                                     <a class="btn btn-outline-light rounded-pill">Related packages (20)</a>
                                 </div>
@@ -108,13 +107,13 @@
                         </div>
                     </div>
                     <div class="dis-adventure__carousel-item swiper-slide">
-                        <img src="{{ asset('frontend/assets/adventure1.png') }}" alt="Adventure Image 1" class="img-fluid">
+                        <img src="{{ asset('frontend/assets/destinations/hail/1.jpg') }}" alt="Adventure Image 1" class="img-fluid">
                         <div class="dis-adventure__carousel-item-content">
                             <div class="dis-adventure__carousel-item-top">
-                                <div class="badge carousel-badge"><i class="fa-solid fa-location-dot"></i> Macca</div>
+                                <div class="badge carousel-badge"><i class="fa-solid fa-location-dot"></i> Hail</div>
                             </div>
                             <div class="dis-adventure__carousel-item-bottom">
-                                <h6>4 Days in Aseer: A Cultural and Scenic Escape Through Nature...</h6>
+                                <h6>4 Days in Hail: A Cultural and Scenic Escape Through Nature...</h6>
                                 <div class="dis-adventure__carousel-item-footer">
                                     <a class="btn btn-outline-light rounded-pill">Related packages (20)</a>
                                 </div>
@@ -122,13 +121,13 @@
                         </div>
                     </div>
                     <div class="dis-adventure__carousel-item swiper-slide">
-                        <img src="{{ asset('frontend./assets/adventure1.png') }}" alt="Adventure Image 1" class="img-fluid">
+                        <img src="{{ asset('frontend/assets/destinations/jazan/1.jpg') }}" alt="Adventure Image 1" class="img-fluid">
                         <div class="dis-adventure__carousel-item-content">
                             <div class="dis-adventure__carousel-item-top">
-                                <div class="badge carousel-badge"><i class="fa-solid fa-location-dot"></i> Macca</div>
+                                <div class="badge carousel-badge"><i class="fa-solid fa-location-dot"></i> Jazan</div>
                             </div>
                             <div class="dis-adventure__carousel-item-bottom">
-                                <h6>4 Days in Aseer: A Cultural and Scenic Escape Through Nature...</h6>
+                                <h6>4 Days in Jazan: A Cultural and Scenic Escape Through Nature...</h6>
                                 <div class="dis-adventure__carousel-item-footer">
                                     <a class="btn btn-outline-light rounded-pill">Related packages (20)</a>
                                 </div>
@@ -136,13 +135,13 @@
                         </div>
                     </div>
                     <div class="dis-adventure__carousel-item swiper-slide">
-                        <img src="{{ asset('frontend/assets/adventure1.png') }}" alt="Adventure Image 1" class="img-fluid">
+                        <img src="{{ asset('frontend/assets/destinations/kaec/1.jpg') }}" alt="Adventure Image 1" class="img-fluid">
                         <div class="dis-adventure__carousel-item-content">
                             <div class="dis-adventure__carousel-item-top">
-                                <div class="badge carousel-badge"><i class="fa-solid fa-location-dot"></i> Macca</div>
+                                <div class="badge carousel-badge"><i class="fa-solid fa-location-dot"></i> Kaec</div>
                             </div>
                             <div class="dis-adventure__carousel-item-bottom">
-                                <h6>4 Days in Aseer: A Cultural and Scenic Escape Through Nature...</h6>
+                                <h6>4 Days in Kaec: A Cultural and Scenic Escape Through Nature...</h6>
                                 <div class="dis-adventure__carousel-item-footer">
                                     <a class="btn btn-outline-light rounded-pill">Related packages (20)</a>
                                 </div>
@@ -175,7 +174,7 @@
                 <div class="upcoming-event__carousel-wrapper swiper-wrapper">
                     <div class="upcoming-event__carousel-item swiper-slide">
                         <div class="upcoming-event__carousel-item-img">
-                            <img src="{{ asset('frontend/assets/event-1.png') }}" alt="Event" class="img-fluid">
+                            <img src="{{ asset('frontend/assets/things_to_do/event_s/janadriyah_national_festival_in_riyadh.jpg') }}" alt="Event" class="img-fluid">
                             <div class="upcoming-event__carousel-item-dates">
                                 <p>25 Aug 2025</p>
                                 <div class="vertical-divider"></div>
@@ -196,7 +195,7 @@
                     </div>
                     <div class="upcoming-event__carousel-item swiper-slide">
                         <div class="upcoming-event__carousel-item-img">
-                            <img src="{{ asset('frontend/assets/event-1.png') }}" alt="Event" class="img-fluid">
+                            <img src="{{ asset('frontend/assets/things_to_do/event_s/mdlbeast_soundstorm_in_riyadh.jpg') }}" alt="Event" class="img-fluid">
                             <div class="upcoming-event__carousel-item-dates">
                                 <p>25 Aug 2025</p>
                                 <div class="vertical-divider"></div>
@@ -217,7 +216,7 @@
                     </div>
                     <div class="upcoming-event__carousel-item swiper-slide">
                         <div class="upcoming-event__carousel-item-img">
-                            <img src="{{ asset('frontend/assets/event-1.png') }}" alt="Event" class="img-fluid">
+                            <img src="{{ asset('frontend/assets/things_to_do/event_s/red_sea_international_film_festival_in_jeddah.jpg') }}" alt="Event" class="img-fluid">
                             <div class="upcoming-event__carousel-item-dates">
                                 <p>25 Aug 2025</p>
                                 <div class="vertical-divider"></div>
@@ -238,7 +237,7 @@
                     </div>
                     <div class="upcoming-event__carousel-item swiper-slide">
                         <div class="upcoming-event__carousel-item-img">
-                            <img src="{{ asset('frontend/assets/event-1.png') }}" alt="Event" class="img-fluid">
+                            <img src="{{ asset('frontend/assets/things_to_do/event_s/riyadh_season_festival_in_riyadh.jpg') }}" alt="Event" class="img-fluid">
                             <div class="upcoming-event__carousel-item-dates">
                                 <p>25 Aug 2025</p>
                                 <div class="vertical-divider"></div>
@@ -259,7 +258,7 @@
                     </div>
                     <div class="upcoming-event__carousel-item swiper-slide">
                         <div class="upcoming-event__carousel-item-img">
-                            <img src="{{ asset('frontend/assets/event-1.png') }}" alt="Event" class="img-fluid">
+                            <img src="{{ asset('frontend/assets/things_to_do/event_s/Saudi_National_Day_in_Nationwide.jpg') }}" alt="Event" class="img-fluid">
                             <div class="upcoming-event__carousel-item-dates">
                                 <p>25 Aug 2025</p>
                                 <div class="vertical-divider"></div>
@@ -280,7 +279,7 @@
                     </div>
                     <div class="upcoming-event__carousel-item swiper-slide">
                         <div class="upcoming-event__carousel-item-img">
-                            <img src="{{ asset('frontend/assets/event-1.png') }}" alt="Event" class="img-fluid">
+                            <img src="{{ asset('frontend/assets/things_to_do/event_s/winter_at_tantora_festival_in_alula.jpg') }}" alt="Event" class="img-fluid">
                             <div class="upcoming-event__carousel-item-dates">
                                 <p>25 Aug 2025</p>
                                 <div class="vertical-divider"></div>
@@ -330,27 +329,27 @@
                 <div class="stories-insight__carousel swiper">
                     <div class="swiper-wrapper">
                         <div class="stories-insight__carousel-item swiper-slide">
-                            <img src="{{ asset('frontend/assets/stories-insight-1.png') }}" alt="Story Image" class="img-fluid">
+                            <img src="{{ asset('frontend/assets/things_to_do/at_turaif_in_diriyah.jpg') }}" alt="Story Image" class="img-fluid">
                             <div class="stories-insight__carousel-item-content">
                                 <p class="text-light2">Culture & History, Art Gallery</p>
                                 <p class="p-large text-black stories-insight__carousel-title">5 Must-Do Experiences in
-                                    Jeddah</p>
+                                Diriyah</p>
                             </div>
                         </div>
                         <div class="stories-insight__carousel-item swiper-slide">
-                            <img src="{{ asset('frontend/assets/stories-insight-1.png') }}" alt="Story Image" class="img-fluid">
+                            <img src="{{ asset('frontend/assets/things_to_do/hegra_in_alula.jpg') }}" alt="Story Image" class="img-fluid">
                             <div class="stories-insight__carousel-item-content">
                                 <p class="text-light2">Culture & History, Art Gallery</p>
                                 <p class="p-large text-black stories-insight__carousel-title">5 Must-Do Experiences in
-                                    Jeddah</p>
+                                    Alula</p>
                             </div>
                         </div>
                         <div class="stories-insight__carousel-item swiper-slide">
-                            <img src="{{ asset('frontend/assets/stories-insight-1.png') }}" alt="Story Image" class="img-fluid">
+                            <img src="{{ asset('frontend/assets/things_to_do/riyadh_front-& -boulevard_city.jpg') }}" alt="Story Image" class="img-fluid">
                             <div class="stories-insight__carousel-item-content">
                                 <p class="text-light2">Culture & History, Art Gallery</p>
                                 <p class="p-large text-black stories-insight__carousel-title">5 Must-Do Experiences in
-                                    Jeddah</p>
+                                Riyadh</p>
                             </div>
                         </div>
                     </div>
@@ -388,15 +387,15 @@
                 <div class="swiper-wrapper">
                     <div class="exclusive-offers__carousel-item swiper-slide">
                         <div class="exclusive-offers__carousel-item-img">
-                            <img src="{{ asset('frontend/assets/exclusive-offer.png') }}" alt="Exclusive Offer" class="img-fluid">
-                            <div class="badge carousel-badge"><i class="fa-solid fa-location-dot"></i> Macca</div>
+                            <img src="{{ asset('frontend/assets/destinations/hail/3.jpg') }}" alt="Exclusive Offer" class="img-fluid">
+                            <div class="badge carousel-badge"><i class="fa-solid fa-location-dot"></i>  Hail</div>
                         </div>
                         <div class="exclusive-offers__carousel-item-info">
                             <div class="d-flex justify-content-between mb-1">
-                                <h6 class="fw-bold">Bujairi Terrace</h6>
+                                <h6 class="fw-bold">Ha’il Adventure</h6>
                                 <span class="badge carousel-badge-outline rounded-pill">2N/3D</span>
                             </div>
-                            <p class="text-muted small mb-2">2N Diriyah • 3D Jeddah</p>
+                            <p class="text-muted small mb-2">2N Hail • 3D Jeddah</p>
                             <hr>
                             <ul class="exclusive-offers__carousel-features-list">
                                 <li><span>Round Trip Flights</span></li>
@@ -428,15 +427,15 @@
                     </div>
                     <div class="exclusive-offers__carousel-item swiper-slide">
                         <div class="exclusive-offers__carousel-item-img">
-                            <img src="{{ asset('frontend/assets/exclusive-offer.png') }}" alt="Exclusive Offer" class="img-fluid">
-                            <div class="badge carousel-badge"><i class="fa-solid fa-location-dot"></i> Macca</div>
+                            <img src="{{ asset('frontend/assets/destinations/jazan/1.jpg') }}" alt="Exclusive Offer" class="img-fluid">
+                            <div class="badge carousel-badge"><i class="fa-solid fa-location-dot"></i>  Jazan</div>
                         </div>
-                        <div class="exclusive-offers__carousel-item-info">
+                        <div class="exclusive-offers__carousel-item-info"> 
                             <div class="d-flex justify-content-between mb-1">
-                                <h6 class="fw-bold">Bujairi Terrace</h6>
+                                <h6 class="fw-bold">Best of Jazan </h6>
                                 <span class="badge carousel-badge-outline rounded-pill">2N/3D</span>
                             </div>
-                            <p class="text-muted small mb-2">2N Diriyah • 3D Jeddah</p>
+                            <p class="text-muted small mb-2">2N  Jazan • 3D Jeddah</p>
                             <hr>
                             <ul class="exclusive-offers__carousel-features-list">
                                 <li>Round Trip Flights</li>
@@ -468,15 +467,15 @@
                     </div>
                     <div class="exclusive-offers__carousel-item swiper-slide">
                         <div class="exclusive-offers__carousel-item-img">
-                            <img src="{{ asset('frontend/assets/exclusive-offer.png') }}" alt="Exclusive Offer" class="img-fluid">
-                            <div class="badge carousel-badge"><i class="fa-solid fa-location-dot"></i> Macca</div>
+                            <img src="{{ asset('frontend/assets/destinations/kaec/2.jpg') }}" alt="Exclusive Offer" class="img-fluid">
+                            <div class="badge carousel-badge"><i class="fa-solid fa-location-dot"></i>  kaec</div>
                         </div>
                         <div class="exclusive-offers__carousel-item-info">
                             <div class="d-flex justify-content-between mb-1">
-                                <h6 class="fw-bold">Bujairi Terrace</h6>
+                                <h6 class="fw-bold">KAEC Luxury </h6>
                                 <span class="badge carousel-badge-outline rounded-pill">2N/3D</span>
                             </div>
-                            <p class="text-muted small mb-2">2N Diriyah • 3D Jeddah</p>
+                            <p class="text-muted small mb-2">2N KAEC • 3D Jeddah</p>
                             <hr>
                             <ul class="exclusive-offers__carousel-features-list">
                                 <li>Round Trip Flights</li>
@@ -508,15 +507,15 @@
                     </div>
                     <div class="exclusive-offers__carousel-item swiper-slide">
                         <div class="exclusive-offers__carousel-item-img">
-                            <img src="{{ asset('frontend/assets/exclusive-offer.png') }}" alt="Exclusive Offer" class="img-fluid">
-                            <div class="badge carousel-badge"><i class="fa-solid fa-location-dot"></i> Macca</div>
+                            <img src="{{ asset('frontend/assets/destinations/madinah/2.jpg') }}" alt="Exclusive Offer" class="img-fluid">
+                            <div class="badge carousel-badge"><i class="fa-solid fa-location-dot"></i>  Madinah</div>
                         </div>
                         <div class="exclusive-offers__carousel-item-info">
                             <div class="d-flex justify-content-between mb-1">
-                                <h6 class="fw-bold">Bujairi Terrace</h6>
+                                <h6 class="fw-bold">Madinah Peaceful </h6>
                                 <span class="badge carousel-badge-outline rounded-pill">2N/3D</span>
                             </div>
-                            <p class="text-muted small mb-2">2N Diriyah • 3D Jeddah</p>
+                            <p class="text-muted small mb-2">2N Madinah • 3D Jeddah</p>
                             <hr>
                             <ul class="exclusive-offers__carousel-features-list">
                                 <li>Round Trip Flights</li>
@@ -548,15 +547,15 @@
                     </div>
                     <div class="exclusive-offers__carousel-item swiper-slide">
                         <div class="exclusive-offers__carousel-item-img">
-                            <img src="{{ asset('frontend/assets/exclusive-offer.png') }}" alt="Exclusive Offer" class="img-fluid">
-                            <div class="badge carousel-badge"><i class="fa-solid fa-location-dot"></i> Macca</div>
+                            <img src="{{ asset('frontend/assets/destinations/makkah/1.jpg') }}" alt="Exclusive Offer" class="img-fluid">
+                            <div class="badge carousel-badge"><i class="fa-solid fa-location-dot"></i>  Makkah</div>
                         </div>
                         <div class="exclusive-offers__carousel-item-info">
                             <div class="d-flex justify-content-between mb-1">
-                                <h6 class="fw-bold">Bujairi Terrace</h6>
+                                <h6 class="fw-bold">Spiritual Journey</h6>
                                 <span class="badge carousel-badge-outline rounded-pill">2N/3D</span>
                             </div>
-                            <p class="text-muted small mb-2">2N Diriyah • 3D Jeddah</p>
+                            <p class="text-muted small mb-2">2N Makkah • 3D Jeddah</p>
                             <hr>
                             <ul class="exclusive-offers__carousel-features-list">
                                 <li>Round Trip Flights</li>
@@ -588,12 +587,12 @@
                     </div>
                     <div class="exclusive-offers__carousel-item swiper-slide">
                         <div class="exclusive-offers__carousel-item-img">
-                            <img src="{{ asset('frontend/assets/exclusive-offer.png') }}" alt="Exclusive Offer" class="img-fluid">
-                            <div class="badge carousel-badge"><i class="fa-solid fa-location-dot"></i> Macca</div>
+                            <img src="{{ asset('frontend/assets/destinations/najran/1.jpg') }}" alt="Exclusive Offer" class="img-fluid">
+                            <div class="badge carousel-badge"><i class="fa-solid fa-location-dot"></i>  Najran</div>
                         </div>
                         <div class="exclusive-offers__carousel-item-info">
                             <div class="d-flex justify-content-between mb-1">
-                                <h6 class="fw-bold">Bujairi Terrace</h6>
+                                <h6 class="fw-bold">Heritage Escape</h6>
                                 <span class="badge carousel-badge-outline rounded-pill">2N/3D</span>
                             </div>
                             <p class="text-muted small mb-2">2N Diriyah • 3D Jeddah</p>
@@ -638,8 +637,7 @@
             <div class="section__header">
                 <div class="section__header-content">
                     <h2 class="section__heading"><span class="fw-600">Start exploring</span></h2>
-                    <p class="section__description">Embark on unforgettable journeys and explore the hidden gems across
-                        the heart of Saudi Arabia</p>
+                    <p class="section__description">Unlock unforgettable experiences as you explore the beauty, culture, and heritage of Saudi Arabia.</p>
                 </div>
                 <div class="section__header-CTA">
                     <a href="#" class="btn btn-primary rounded-pill">
@@ -651,37 +649,37 @@
             <div class="row start-exploring__row gy-3">
                 <div class="col-md-6 col-lg-3">
                     <div class="start-exploring__item">
-                        <img src="{{ asset('frontend/assets/start-explore-1.png') }}" alt="Explore" class="img-fluid">
+                        <img src="{{ asset('frontend/assets/destinations/riyadh/6.jpg') }}" alt="Explore" class="img-fluid">
                         <div class="start-exploring__item-content">
-                            <p class="mb-1 p-large fw-600">Diriyah</p>
-                            <p class="p-small">A City Embracing Saudi History</p>
+                            <p class="mb-1 p-large fw-600">Riyadh</p>
+                            <p class="p-small">Where Modern Vision Meets Deep Heritage</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-3">
                     <div class="start-exploring__item">
-                        <img src="{{ asset('frontend/assets/start-explore-1.png') }}" alt="Explore" class="img-fluid">
+                        <img src="{{ asset('frontend/assets/destinations/jeddah/2.jpg') }}" alt="Explore" class="img-fluid">
                         <div class="start-exploring__item-content">
-                            <p class="mb-1 p-large fw-600">Diriyah</p>
-                            <p class="p-small">A City Embracing Saudi History</p>
+                            <p class="mb-1 p-large fw-600">Jeddah</p>
+                            <p class="p-small">The Gateway to the Red Sea’s Vibrant Culture</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-3">
                     <div class="start-exploring__item">
-                        <img src="{{ asset('frontend/assets/start-explore-1.png') }}" alt="Explore" class="img-fluid">
+                        <img src="{{ asset('frontend/assets/destinations/alula/3.jpg') }}" alt="Explore" class="img-fluid">
                         <div class="start-exploring__item-content">
-                            <p class="mb-1 p-large fw-600">Diriyah</p>
-                            <p class="p-small">A City Embracing Saudi History</p>
+                            <p class="mb-1 p-large fw-600">AlUla</p>
+                            <p class="p-small">A Timeless Oasis of Nature and Ancient Wonders</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-3">
                     <div class="start-exploring__item">
-                        <img src="{{ asset('frontend/assets/start-explore-1.png') }}" alt="Explore" class="img-fluid">
+                        <img src="{{ asset('frontend/assets/destinations/ai_baha/4.jpg') }}" alt="Explore" class="img-fluid">
                         <div class="start-exploring__item-content">
-                            <p class="mb-1 p-large fw-600">Diriyah</p>
-                            <p class="p-small">A City Embracing Saudi History</p>
+                            <p class="mb-1 p-large fw-600">Abha</p>
+                            <p class="p-small">The Mountain City of Cool Breezes and Scenic Beauty</p>
                         </div>
                     </div>
                 </div>
