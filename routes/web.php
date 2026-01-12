@@ -12,11 +12,17 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ThingtodoController;
 use App\Http\Controllers\Admin\EventController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Frontend\Profile\ProfileController as FrontendProfileController;
+
 use App\Http\Controllers\DemoJsonController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DestinationController;
-
-
+use App\Http\Controllers\Frontend\Blog\BlogController;
+use App\Http\Controllers\Frontend\Checkout\CheckoutController;
+use App\Http\Controllers\Frontend\Package\PackageController;
+use App\Http\Controllers\Frontend\PageController;
+use App\Http\Controllers\Frontend\ToDoThings\ToDoThingsController;
+use App\Models\Event;
 
 // routes/web.php
 Route::get('/lang/{locale}', function ($locale) {
@@ -27,11 +33,7 @@ Route::get('/lang/{locale}', function ($locale) {
     return redirect()->back();
 })->name('lang.switch');
 
-// Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/', function () {
-    return view('frontend.home');
-});
-
+Route::get('/', [PageController::class, 'index'])->name('home');
 
 Route::get('/admin/dashboard', function () {
     return view('backend.admin.dashboard');
@@ -39,10 +41,10 @@ Route::get('/admin/dashboard', function () {
 
 Route::get('/signup', function () {
     return view('backend.pages.signup');
-})->name('sign_up') ;
+})->name('sign_up');
 
 Route::middleware([RedirectIfAuthenticated::class])->group(function () {
-// Auth Routes
+    // Auth Routes
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'register']);
 
@@ -51,7 +53,7 @@ Route::middleware([RedirectIfAuthenticated::class])->group(function () {
 
 
     // Password Reset
-    Route::get('/forgot-password', function() {
+    Route::get('/forgot-password', function () {
         return view('auth.forgot-password');
     })->name('password.request');
     Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('password.email');
@@ -64,12 +66,12 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // User Dashboard
 
 Route::middleware(['auth', RoleMiddleware::class . ':user'])->group(function () {
-    Route::get('/user/dashboard', fn () => view('user.dashboard'))
+    Route::get('/user/dashboard', fn() => view('user.dashboard'))
         ->name('user.dashboard');
 });
 
 Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function () {
-    Route::get('/admin/dashboard', fn () => view('backend.admin.dashboard'))
+    Route::get('/admin/dashboard', fn() => view('backend.admin.dashboard'))
         ->name('admin.dashboard');
 });
 
@@ -77,7 +79,7 @@ Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function ()
 //     return view('backend.pages.profile');
 // });
 
-Route::middleware(['auth', RoleMiddleware::class.':admin'])->group(function () {
+Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function () {
     // Profile Routes
     // Route::get('/admin/profile', fn() => view('backend.pages.profile'));
     // Route::get('/admin/profile/edit', fn() => view('backend.pages.Profile_edit'));
@@ -142,15 +144,13 @@ Route::middleware(['auth', RoleMiddleware::class.':admin'])->group(function () {
             Route::delete('/delete/{id}', [EventController::class, 'destroy'])->name('events.delete');
             Route::delete('/gallery/delete/{id}', [EventController::class, 'deleteGalleryImage'])->name('events.gallery.delete');
         });
-
     });
 
     Route::prefix('admin')->group(function () {
-    Route::get('/profile', [AuthController::class, 'show'])->name('profile.show');
-    Route::get('/profile/edit', [AuthController::class, 'edit'])->name('profile.edit');
-    Route::post('/profile/update', [AuthController::class, 'update'])->name('profile.update');
+        Route::get('/profile', [AuthController::class, 'show'])->name('profile.show');
+        Route::get('/profile/edit', [AuthController::class, 'edit'])->name('profile.edit');
+        Route::post('/profile/update', [AuthController::class, 'update'])->name('profile.update');
     });
-
 });
 
 Route::get('/basic_form', function () {
@@ -186,33 +186,22 @@ Route::get('/destination', function () {
     return view('frontend.destination');
 })->name('destination');
 
-// Route::get('/destination-details', function () {
-//     return view('frontend.destination-details');
-// })->name('destination.details');
-
 
 Route::get('/destination-details/{slug?}', [HomeController::class, 'destination_details'])->name('destination.details');
 
-// Route::get('/event-details', function () {
-//     return view('frontend.event-details');
-// })->name('event.details');
-Route::get('/event-details/{slug?}', [HomeController::class, 'event_details'])->name('event.details');
+// event routes
 
-Route::get('/event-listing', function () {
-    return view('frontend.event-listing');
-})->name('event.listing');
+Route::get('/event-details/{slug?}', [EventController::class, 'event_details'])->name('event.details');
 
-Route::get('/package-details', function () {
-    return view('frontend.package-details');
-})->name('package.details');
+Route::get('/event-listing' ,[EventController::class,'index'])->name('event.listing');
 
-Route::get('/package-listing', function () {
-    return view('frontend.package-listing');
-})->name('package.listing');
+//package routes
 
-Route::get('/profile', function () {
-    return view('frontend.profile');
-})->name('profile.view');
+Route::get('/package-listing', [PackageController::class, 'index'])->name('package.listing');
+
+Route::get('/package-details', [PackageController::class,'details'])->name('package.details');
+
+Route::get('/profile',[FrontendProfileController::class,'index'])->name('profile.view');
 
 // Route::get('/things-to-do-nature', function () {
 //     return view('frontend.things-to-do-nature');
@@ -220,35 +209,22 @@ Route::get('/profile', function () {
 
 Route::get('/things-to-do-nature/{slug?}', [HomeController::class, 'things_to_do_nature'])->name('things-to-do.nature');
 
+// routes for to do things
+Route::get('/things-to-do', [ToDoThingsController::class, 'index'])->name('things.to.do');
 
-Route::get('/things-to-do', function () {
-    return view('frontend.things-to-do');
-})->name('things.to.do');
+Route::get('/to-do-things-search', [ToDoThingsController::class, 'search'])->name('to.do.things.search');
+
+// blog routes
+Route::get('/blogs',[BlogController::class,'index'])->name('blogs.view');
+Route::get('/blog-details', [BlogController::class,'detail'])->name('blog.details');
 
 
-Route::get('/to-do-things-search', function () {
-    return view('frontend.to-do-things-search');
-})->name('to.do.things.search');
+// checkout route
+Route::get('/checkout', [CheckoutController::class,'index'])->name('checkout.view');
 
-Route::get('/about-us', function () {
-    return view('frontend.about-us');
-})->name('about.us');
-
-Route::get('/blog-details', function () {
-    return view('frontend.blog-details');
-})->name('blog.details');
-
-Route::get('/blogs', function () {
-    return view('frontend.blogs');
-})->name('blogs.view');
-
-Route::get('/checkout', function () {
-    return view('frontend.checkout');
-})->name('checkout.view');
-
-Route::get('/contact-us', function () {
-    return view('frontend.contact-us');
-})->name('contact.us.view');
+//pages routes
+Route::get('/about-us', [PageController::class, 'about_us'])->name('about.us');
+Route::get('/contact-us', [PageController::class, 'contact_us'])->name('contact.us.view');
 
 //Route::post('/contact-submit', [AuthController::class, 'send'])->name('contact.send');
 Route::match(['get', 'post'], '/contact-submit', [AuthController::class, 'send'])->name('contact.send');
@@ -259,5 +235,3 @@ Route::get('/packege-details-json', [DemoJsonController::class, 'packege_details
 Route::get('/things-to-do-nature-json', [DemoJsonController::class, 'things_to_do_nature_page']);
 Route::get('/event-details-json', [DemoJsonController::class, 'event_details_page']);
 Route::get('/destination-details-json', [DemoJsonController::class, 'destination_detail_page']);
-
-
