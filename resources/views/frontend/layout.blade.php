@@ -19,6 +19,8 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
   <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}">
   <link rel="stylesheet" href="{{ asset('frontend/css/responsive.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
 </head>
 
 <body>
@@ -33,7 +35,7 @@
 
 <!-- Main Content -->
 <!-- content-->
-@yield('content')  
+@yield('content')
 <!-- content-->
 
   <!--Footer-->
@@ -43,18 +45,41 @@
 
 
 
-@yield('scripts') 
+@yield('scripts')
 
   <!-- Footer End -->
   <!-- scripts -->
-  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  {{-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script> --}}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
     crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-  <script src="{{ asset('frontend/js/main.js') }}"></script> 
+  <script src="{{ asset('frontend/js/main.js') }}"></script>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+  <script>
+    @if(session('success'))
+        toastr.success("{{ session('success') }}");
+    @endif
 
- 
+    @if(session('error'))
+        toastr.error("{{ session('error') }}");
+    @endif
+
+    @if(session('warning'))
+        toastr.warning("{{ session('warning') }}");
+    @endif
+
+    @if(session('info'))
+        toastr.info("{{ session('info') }}");
+    @endif
+
+    @foreach ($errors->all() as $error)
+        toastr.error("{{ $error }}");
+    @endforeach
+    </script>
+
 </body>
 </html>

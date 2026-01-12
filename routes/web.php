@@ -21,7 +21,7 @@ use App\Http\Controllers\DestinationController;
 // routes/web.php
 Route::get('/lang/{locale}', function ($locale) {
     if (in_array($locale, ['en', 'de', 'ar'])) {
-        Session::put('locale', $locale); 
+        Session::put('locale', $locale);
         App::setLocale($locale);
     }
     return redirect()->back();
@@ -30,7 +30,7 @@ Route::get('/lang/{locale}', function ($locale) {
 // Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/', function () {
     return view('frontend.home');
-}); 
+});
 
 
 Route::get('/admin/dashboard', function () {
@@ -63,12 +63,14 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // User Dashboard
 
-Route::middleware(['auth', RoleMiddleware::class.':user'])->group(function () {
-    Route::get('/user/dashboard', fn() => view('user.dashboard'));
+Route::middleware(['auth', RoleMiddleware::class . ':user'])->group(function () {
+    Route::get('/user/dashboard', fn () => view('user.dashboard'))
+        ->name('user.dashboard');
 });
 
-Route::middleware(['auth', RoleMiddleware::class.':admin'])->group(function () {
-    Route::get('/admin/dashboard', fn() => view('backend.admin.dashboard'));
+Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function () {
+    Route::get('/admin/dashboard', fn () => view('backend.admin.dashboard'))
+        ->name('admin.dashboard');
 });
 
 // Route::get('/profile', function () {
@@ -99,7 +101,7 @@ Route::middleware(['auth', RoleMiddleware::class.':admin'])->group(function () {
             Route::delete('/delete/{id}', [CityController::class, 'destroy'])->name('cities.delete');
             Route::delete('/gallery/delete/{id}', [CityController::class, 'deleteGalleryImage'])->name('cities.gallery.delete');
         });
-    
+
         /*
         |--------------------------------------------------------------------------
         | Categories Routes
@@ -112,7 +114,7 @@ Route::middleware(['auth', RoleMiddleware::class.':admin'])->group(function () {
             Route::post('/save', [CategoryController::class, 'save'])->name('categories.save');
             Route::delete('/delete/{id}', [CategoryController::class, 'destroy'])->name('categories.delete');
         });
-    
+
         /*
         |--------------------------------------------------------------------------
         | Things To Do Routes
@@ -126,7 +128,7 @@ Route::middleware(['auth', RoleMiddleware::class.':admin'])->group(function () {
             Route::delete('/delete/{id}', [ThingtodoController::class, 'destroy'])->name('thingtodos.delete');
             Route::delete('/gallery/delete/{id}', [ThingtodoController::class, 'deleteGalleryImage'])->name('thingtodos.gallery.delete');
         });
-    
+
         /*
         |--------------------------------------------------------------------------
         | Events Routes
@@ -140,7 +142,7 @@ Route::middleware(['auth', RoleMiddleware::class.':admin'])->group(function () {
             Route::delete('/delete/{id}', [EventController::class, 'destroy'])->name('events.delete');
             Route::delete('/gallery/delete/{id}', [EventController::class, 'deleteGalleryImage'])->name('events.gallery.delete');
         });
-    
+
     });
 
     Route::prefix('admin')->group(function () {
@@ -165,11 +167,11 @@ Route::get('/basic_table', function () {
 
 // Route::get('/admin/category', function () {
 //     return view('backend.category.viewcategory');
-// })->name('category.viewcategory'); 
+// })->name('category.viewcategory');
 
 // Route::get('/admin/addcategory', function () {
 //     return view('backend.category.addcategory');
-// })->name('category.addcategory');  
+// })->name('category.addcategory');
 
 
 // Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
@@ -206,22 +208,22 @@ Route::get('/package-details', function () {
 
 Route::get('/package-listing', function () {
     return view('frontend.package-listing');
-})->name('package.listing'); 
+})->name('package.listing');
 
 Route::get('/profile', function () {
     return view('frontend.profile');
-})->name('profile.view'); 
- 
-// Route::get('/things-to-do-nature', function () { 
+})->name('profile.view');
+
+// Route::get('/things-to-do-nature', function () {
 //     return view('frontend.things-to-do-nature');
-// })->name('things-to-do-nature'); 
+// })->name('things-to-do-nature');
 
 Route::get('/things-to-do-nature/{slug?}', [HomeController::class, 'things_to_do_nature'])->name('things-to-do.nature');
 
 
 Route::get('/things-to-do', function () {
     return view('frontend.things-to-do');
-})->name('things.to.do');  
+})->name('things.to.do');
 
 
 Route::get('/to-do-things-search', function () {
@@ -248,13 +250,13 @@ Route::get('/contact-us', function () {
     return view('frontend.contact-us');
 })->name('contact.us.view');
 
-//Route::post('/contact-submit', [AuthController::class, 'send'])->name('contact.send'); 
+//Route::post('/contact-submit', [AuthController::class, 'send'])->name('contact.send');
 Route::match(['get', 'post'], '/contact-submit', [AuthController::class, 'send'])->name('contact.send');
 
-//json file route 
-Route::get('/saudi-packages', [DemoJsonController::class, 'index']); 
-Route::get('/packege-details-json', [DemoJsonController::class, 'packege_details_page']); 
-Route::get('/things-to-do-nature-json', [DemoJsonController::class, 'things_to_do_nature_page']); 
+//json file route
+Route::get('/saudi-packages', [DemoJsonController::class, 'index']);
+Route::get('/packege-details-json', [DemoJsonController::class, 'packege_details_page']);
+Route::get('/things-to-do-nature-json', [DemoJsonController::class, 'things_to_do_nature_page']);
 Route::get('/event-details-json', [DemoJsonController::class, 'event_details_page']);
 Route::get('/destination-details-json', [DemoJsonController::class, 'destination_detail_page']);
 

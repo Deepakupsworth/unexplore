@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\User;
@@ -20,22 +21,26 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:100',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|confirmed|min:6',
-            // 'role' => 'admin'
-            'role' => 'required|in:user,admin'
+            'first_name' => 'required|string|max:50',
+            'last_name'  => 'required|string|max:50',
+            'email'      => 'required|email|unique:users',
+            'password'   => 'required|min:8|confirmed',
+            'terms'      => 'accepted'
+        ], [
+            'terms.accepted' => 'You must accept the Terms & Conditions'
         ]);
 
-        $user = User::create($request->only('name', 'email', 'password', 'role'));
+        User::create([
+            'first_name' => $request->first_name,
+            'last_name'  => $request->last_name,
+            'email'      => $request->email,
+            'password'   => Hash::make($request->password),
+            'role'       => 'user',                // 🔒 forced, cannot be admin
+            'terms_accepted' => true
+        ]);
 
-        Auth::login($user);
-
-        return $user->role === 'admin'
-            ? redirect('/admin/dashboard')
-            : redirect('/user/dashboard');
+        return redirect('/login')->with('success', 'Account created successfully! Please login.');
     }
-
     // Show login form
     public function showLogin()
     {
@@ -45,20 +50,24 @@ class AuthController extends Controller
     // Login logic
     public function login(Request $request)
     {
-        $credentials = $request->validate([
+        $request->validate([
             'email' => 'required|email',
             'password' => 'required',
         ]);
 
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-            // print_r($user);die;
-            return $user->role === 'admin'
-                ? redirect('/admin/dashboard')
-                : redirect('/user/dashboard');
+        if (!Auth::attempt($request->only('email', 'password'))) {
+            return back()->with('error', 'Invalid email or password');
         }
 
-        return back()->withErrors(['email' => 'Invalid credentials']);
+        $request->session()->regenerate();
+
+        $user = Auth::user();
+
+        return redirect()->intended(
+            $user->role === 'admin'
+                ? route('admin.dashboard')
+                : route('user.dashboard')
+        )->with('success', 'Welcome back ' . $user->first_name . ' 👋');
     }
 
     // Logout
@@ -110,52 +119,52 @@ class AuthController extends Controller
     {
         $user = Auth::user();
         return view('backend.pages.profile', compact('user'));
-    }    
-// Show edit profile page
-public function editProfile()
-{
-    $user = Auth::user();
-    return view('profile_edit', compact('user'));
-}
-
-// Update profile
-public function updateProfile(Request $request)
-{
-    $user = Auth::user();
-
-    $request->validate([
-        'name' => 'required|string|max:100',
-        'password' => 'nullable|confirmed|min:6',
-        'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-    ]);
-
-    // Update name
-    $user->name = $request->name;
-
-    // Update password if entered
-    if ($request->filled('password')) {
-        $user->password = Hash::make($request->password);
+    }
+    // Show edit profile page
+    public function editProfile()
+    {
+        $user = Auth::user();
+        return view('profile_edit', compact('user'));
     }
 
-    // Handle profile image upload
-    if ($request->hasFile('image')) {
-        // Delete old image if exists
-        if ($user->image && file_exists(public_path('uploads/profile/' . $user->image))) {
-            unlink(public_path('uploads/profile/' . $user->image));
+    // Update profile
+    public function updateProfile(Request $request)
+    {
+        $user = Auth::user();
+
+        $request->validate([
+            'name' => 'required|string|max:100',
+            'password' => 'nullable|confirmed|min:6',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        // Update name
+        $user->name = $request->name;
+
+        // Update password if entered
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
         }
 
-        $image = $request->file('image');
-        $imageName = time() . '.' . $image->getClientOriginalExtension();
-        $image->move(public_path('uploads/profile'), $imageName);
-        $user->image = $imageName;
+        // Handle profile image upload
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($user->image && file_exists(public_path('uploads/profile/' . $user->image))) {
+                unlink(public_path('uploads/profile/' . $user->image));
+            }
+
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('uploads/profile'), $imageName);
+            $user->image = $imageName;
+        }
+
+        $user->save();
+
+        return back()->with('success', 'Profile updated successfully!');
     }
 
-    $user->save();
-
-    return back()->with('success', 'Profile updated successfully!');
-}
-
-public function send(Request $request)
+    public function send(Request $request)
     {
         $request->validate([
             'first_name' => 'required',
@@ -174,7 +183,7 @@ public function send(Request $request)
             'subject'    => $request->subject,
             'message_new'    => $request->message_new,
         ];
-// print_r( $data);die;
+        // print_r( $data);die;
         Mail::send('emails.contact-mail', $data, function ($msg) use ($data) {
             $msg->to('dheeraj@upsworth.com'); // <-- replace with your email
             $msg->subject('New Contact Form Submission');
@@ -182,6 +191,4 @@ public function send(Request $request)
 
         return back()->with('success', 'Your message has been sent successfully!');
     }
-
-
 }
