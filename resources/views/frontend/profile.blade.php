@@ -275,7 +275,7 @@
                                             </div>
                                             <div class="explore-destinations__item-content">
                                                 <div>
-                                                    <p class="explore-destinations__item-title mb-1">Culture & History
+                                                    <p class="explore-destinations__item-title mb-1">Nature, Culture & History, Beaut & Relax
                                                     </p>
                                                     <h5 class="explore-destinations__item-description p-small fw-600">
                                                         AlUla

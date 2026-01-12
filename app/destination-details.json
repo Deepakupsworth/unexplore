@@ -1,0 +1,301 @@
+{
+    "destination_detail_page": [
+      {
+        "city": "The Red Sea",
+        "slug": "the-red-sea",
+        "image": "",
+        "tags": "Nature, Luxury, Adventure",
+        "about_title": "About The Red Sea",
+        "about_description": [
+          "The Red Sea is one of Saudi Arabia’s most stunning coastal destinations, famous for its crystal-clear waters, untouched coral reefs, and pristine islands. This region offers a unique blend of natural beauty and sustainable luxury, making it a paradise for beach lovers and marine enthusiasts.<br><br>Visitors can relax on white sandy beaches, explore vibrant marine life, and experience world-class eco-resorts designed to preserve the region’s natural ecosystem.",
+          "Beyond relaxation, The Red Sea is ideal for adventure seekers. Snorkeling, diving, sailing, and island hopping provide unforgettable experiences, while luxury hospitality ensures comfort in one of the most exclusive coastal destinations in the world."
+        ],
+        "related_packages": 34
+      },
+      {
+        "city": "Taif",
+        "slug": "taif",
+        "image": "",
+        "tags": "Nature, Culture & History, Relaxation",
+        "about_title": "About Taif",
+        "about_description": [
+          "Taif is a beautiful mountain city known for its pleasant climate, lush greenery, and fragrant rose gardens. Often referred to as the summer capital of Saudi Arabia, Taif offers a refreshing escape from the heat with scenic landscapes and cool mountain air.<br><br>The city is also rich in history, featuring traditional markets, ancient forts, and cultural landmarks that reflect its deep-rooted heritage.",
+          "Taif is famous for its world-renowned Taif roses, which are used to produce premium perfumes and rose water. Visitors can enjoy mountain views, local cuisine, and peaceful surroundings, making Taif an ideal destination for relaxation and cultural exploration."
+        ],
+        "related_packages": 23
+      },
+      {
+        "city": "Tabuk",
+        "slug": "tabuk",
+        "image": "",
+        "tags": "Nature, History, Adventure",
+        "about_title": "About Tabuk",
+        "about_description": [
+          "Tabuk is a region of remarkable natural beauty and historical significance, located in northwestern Saudi Arabia. Surrounded by mountains, valleys, and desert landscapes, Tabuk offers a peaceful yet adventurous travel experience.<br><br>The region is home to ancient archaeological sites, historical mosques, and traditional forts that highlight its importance throughout history.",
+          "In addition to its cultural heritage, Tabuk features stunning coastlines along the Red Sea and unique natural wonders. Visitors can explore dramatic landscapes, enjoy outdoor adventures, and experience the region’s calm and welcoming atmosphere."
+        ],
+        "related_packages": 10
+      },
+      {
+        "city": "Tabuk",
+        "slug": "tabuk",
+        "image": "",
+        "tags": "Nature, History, Adventure",
+        "about_title": "About Tabuk",
+        "about_description": [
+          "Tabuk is a region of remarkable natural beauty and historical significance, located in northwestern Saudi Arabia. Surrounded by mountains, valleys, and desert landscapes, Tabuk offers a peaceful yet adventurous travel experience.<br><br>The region is home to ancient archaeological sites, historical mosques, and traditional forts that highlight its importance throughout history.",
+          "In addition to its cultural heritage, Tabuk features stunning coastlines along the Red Sea and unique natural wonders. Visitors can explore dramatic landscapes, enjoy outdoor adventures, and experience the region’s calm and welcoming atmosphere."
+        ],
+        "related_packages": 14
+      },
+      {
+        "city": "Tabuk",
+        "slug": "tabuk",
+        "image": "frontend/assets/destinations/tabuk/1.jpg",
+        "tags": "Nature, History, Adventure",
+        "about_title": "About Tabuk",
+        "about_description": [
+          "Tabuk is a region of remarkable natural beauty and historical significance, located in northwestern Saudi Arabia. Surrounded by mountains, valleys, and desert landscapes, Tabuk offers a peaceful yet adventurous travel experience.<br><br>The region is home to ancient archaeological sites, historical mosques, and traditional forts that highlight its importance throughout history.",
+          "In addition to its cultural heritage, Tabuk features stunning coastlines along the Red Sea and unique natural wonders. Visitors can explore dramatic landscapes, enjoy outdoor adventures, and experience the region’s calm and welcoming atmosphere."
+        ],
+        "related_packages": 30
+      },
+      {
+        "city": "Tabuk",
+        "slug": "tabuk",
+        "image": "frontend/assets/destinations/tabuk/1.jpg",
+        "tags": "Nature, History, Adventure",
+        "about_title": "About Tabuk",
+        "about_description": [
+          "Tabuk is a region of remarkable natural beauty and historical significance, located in northwestern Saudi Arabia. Surrounded by mountains, valleys, and desert landscapes, Tabuk offers a peaceful yet adventurous travel experience.<br><br>The region is home to ancient archaeological sites, historical mosques, and traditional forts that highlight its importance throughout history.",
+          "In addition to its cultural heritage, Tabuk features stunning coastlines along the Red Sea and unique natural wonders. Visitors can explore dramatic landscapes, enjoy outdoor adventures, and experience the region’s calm and welcoming atmosphere."
+        ],
+        "related_packages": 25
+      },
+      {
+        "city": "Yanbu",
+        "slug": "yanbu",
+        "image": "frontend/assets/destinations/yanbu/1.jpg",
+        "tags": "Beach, Nature, Relaxation",
+        "about_title": "About Yanbu",
+        "about_description": [
+          "Yanbu is a charming coastal city on the Red Sea, known for its beautiful beaches, colorful coral reefs, and laid-back atmosphere. It is one of Saudi Arabia’s top destinations for diving and snorkeling enthusiasts.<br><br>The city combines modern development with traditional charm, offering waterfront promenades, parks, and cultural areas for visitors to explore.",
+          "Yanbu is also a gateway to peaceful seaside relaxation and marine adventures. With its clear waters and vibrant underwater life, the city provides a perfect balance of leisure, nature, and coastal beauty."
+        ],
+        "related_packages": 12
+      },
+      {
+        "city": "Al Baha",
+        "slug": "al-baha",
+        "image": "frontend/assets/destinations/al-baha/1.jpg",
+        "tags": "Nature, Mountains, Culture",
+        "about_title": "About Al Baha",
+        "about_description": [
+          "Al Baha is a scenic mountain region famous for its cool climate, dense forests, and breathtaking landscapes. Often called the \"Garden of Saudi Arabia,\" it offers lush valleys, ancient villages, and stunning viewpoints.<br><br>The region is rich in culture and heritage, featuring traditional stone houses, historic forts, and local markets that reflect its authentic charm.",
+          "Al Baha is ideal for nature lovers and travelers seeking tranquility. Hiking trails, picnic spots, and panoramic mountain views make it a perfect destination for relaxation, exploration, and cultural discovery."
+        ],
+        "related_packages": 13
+      },
+      {
+        "city": "Al Jubail",
+        "slug": "al-jubail",
+        "image": "frontend/assets/destinations/al-jubail/1.jpg",
+        "tags": "Beach, Nature, Family",
+        "about_title": "About Al Jubail",
+        "about_description": [
+          "Al Jubail is a modern coastal city located on the Arabian Gulf, known for its beautiful beaches, well-planned urban spaces, and family-friendly environment. The city combines industrial development with scenic waterfronts and green parks, offering a balanced lifestyle for residents and visitors alike.<br><br>Jubail Corniche and Fanateer Beach are popular attractions, providing relaxing sea views, walking paths, and leisure activities.",
+          "Beyond its coastal charm, Al Jubail offers cultural experiences, shopping centers, and recreational facilities. Its clean surroundings and peaceful atmosphere make it an ideal destination for families, beach lovers, and travelers seeking comfort and relaxation."
+        ],
+        "related_packages": 16
+      },
+      {
+        "city": "Najran",
+        "slug": "najran",
+        "image": "frontend/assets/destinations/najran/1.jpg",
+        "tags": "Culture & History, Nature, Heritage",
+        "about_title": "About Najran",
+        "about_description": [
+          "Najran is a culturally rich city located in southern Saudi Arabia, known for its unique architecture, ancient history, and diverse heritage. The region is home to historical sites, traditional mud-brick buildings, and archaeological landmarks that reflect its deep-rooted past.<br><br>Najran Fort and the Al-Ukhdood archaeological site are among the city’s most notable attractions, offering insights into ancient civilizations.",
+          "Surrounded by mountains and valleys, Najran also offers beautiful natural scenery. Visitors can experience traditional markets, local cuisine, and warm hospitality, making Najran a destination that blends history, culture, and nature."
+        ],
+        "related_packages": 20
+      },
+      {
+        "city": "Qassim",
+        "slug": "qassim",
+        "image": "frontend/assets/destinations/qassim/1.jpg",
+        "tags": "Culture & History, Agriculture, Shopping",
+        "about_title": "About Qassim",
+        "about_description": [
+          "Qassim is a central region of Saudi Arabia known for its fertile land, date palm farms, and strong cultural traditions. Often referred to as the heart of agriculture in the Kingdom, Qassim plays a vital role in producing high-quality dates and local crops.<br><br>The region features traditional souqs, heritage villages, and museums that showcase its authentic Najdi culture.",
+          "Qassim offers a blend of modern living and traditional charm. Visitors can enjoy cultural festivals, local cuisine, and shopping experiences while exploring a region that reflects the true spirit of Saudi heritage."
+        ],
+        "related_packages": 15
+      },                                                
+      {
+            
+        "city": "AlUla",
+        "slug": "alula",
+        "image": "frontend/assets/destinations/alula/2.jpg",
+        "tags": "Nature, Culture & History, Beauty & Relax",
+        "about_title": "About AlUla",
+        "about_description": [
+  "AlUla is one of Saudi Arabia’s most extraordinary destinations, known for its dramatic sandstone mountains, ancient tombs, and breathtaking desert landscapes. The region is home to Hegra (Madain Saleh), Saudi Arabia’s first UNESCO World Heritage Site, showcasing well-preserved Nabataean architecture carved into rock formations.<br><br>Visitors can explore centuries-old history while enjoying modern cultural experiences, luxury desert resorts, and guided heritage tours that bring the past to life.",
+  "Beyond its historical importance, AlUla offers unique natural beauty and adventure experiences. From hot air balloon rides over golden canyons to stargazing in pristine desert skies, AlUla blends history, nature, and luxury into a truly unforgettable journey."
+],
+        "related_packages": 20
+      },
+      {
+        "city": "Jeddah",
+        "slug": "jeddah",
+        "image": "frontend/assets/destinations/jeddah/2.jpg",
+        "tags": "Nature, Culture & History, Shopping",
+        "about_title": "About Jeddah",
+        "about_description": [
+  "Jeddah is a vibrant coastal city on the Red Sea, famous for its rich cultural heritage, modern lifestyle, and stunning waterfront. As the gateway to Makkah, Jeddah plays a vital role in Saudi Arabia’s history while offering a cosmopolitan atmosphere with art galleries, cafes, and luxury shopping.<br><br>The historic district of Al-Balad, a UNESCO World Heritage Site, features traditional coral-stone buildings and bustling souks that reflect the city’s deep-rooted traditions.",
+  "Alongside its heritage, Jeddah boasts beautiful beaches, a lively Corniche, and world-class dining experiences. Whether you are exploring historical landmarks or relaxing by the sea, Jeddah offers the perfect balance of tradition and modern living."
+], 
+        "related_packages": 20
+      },
+      {
+        "city": "Al Ahsa",
+        "slug": "al-ahsa",
+        "image": "frontend/assets/destinations/ai-ahsa/4.jpg",
+        "tags": "Nature, Culture & History, Shopping",
+        "about_title": "About Al Ahsa",
+       "about_description": [
+  "Al Ahsa is one of the largest oases in the world and a destination rich in natural beauty and cultural heritage. Recognized as a UNESCO World Heritage Site, the oasis is home to millions of palm trees, natural springs, and ancient irrigation systems that have supported life for thousands of years.<br><br>Visitors can explore traditional villages, historic mosques, and local markets that showcase authentic Saudi culture.",
+  "In addition to its history, Al Ahsa offers peaceful landscapes and family-friendly attractions. From scenic farms to cultural festivals, the region provides a relaxing escape that highlights Saudi Arabia’s agricultural and cultural roots."
+], 
+        "related_packages": 20
+      },
+      {
+        "city": "Eastern Province",
+        "slug": "eastern-province",
+        "image": "frontend/assets/destinations/eastern_province/1.jpg",
+        "tags": "Nature, Shopping, Culture & History",
+        "about_title": "About Eastern Province",
+        "about_description": [
+  "The Eastern Province is a diverse region that combines coastal charm, modern cities, and economic significance. Stretching along the Arabian Gulf, it includes popular cities such as Dammam, Al Khobar, and Dhahran, known for their waterfront views and contemporary lifestyle.<br><br>The region offers beautiful promenades, shopping destinations, and cultural centers that attract both residents and visitors.",
+  "With its beaches, family attractions, and business hubs, the Eastern Province caters to all types of travelers. Whether you are seeking leisure by the sea or exploring cultural landmarks, this region delivers a dynamic and enjoyable experience."
+], 
+        "related_packages": 20
+      },
+      {
+        "city": "Riyadh",
+        "slug": "riyadh",
+        "image": "frontend/assets/destinations/riyadh/2.jpg",
+        "tags": "Culture & History, Nature, Shopping",
+        "about_title": "About Riyadh",
+       "about_description": [
+  "Riyadh, the capital of Saudi Arabia, is a dynamic city where tradition meets modern development. The city is home to historic landmarks such as Masmak Fort alongside towering skyscrapers, luxury malls, and cultural institutions that reflect the Kingdom’s rapid growth.<br><br>Riyadh offers museums, heritage villages, and cultural festivals that provide insight into Saudi Arabia’s past and present.",
+  "Beyond its history, Riyadh is a hub for entertainment, shopping, and fine dining. With new attractions, events, and green spaces, the city continues to evolve as a top destination for both tourists and business travelers."
+], 
+        "related_packages": 20
+      },
+      {
+        "city": "Makkah",
+        "slug": "makkah",
+        "image": "frontend/assets/destinations/makkah/1.jpg",
+        "tags": "Historic Site, Shopping, Religious Site",
+        "about_title": "About Makkah",
+        "about_description": [
+  "Makkah is the holiest city in Islam and a spiritual destination visited by millions of pilgrims each year. Home to the Masjid al-Haram and the Holy Kaaba, Makkah holds immense religious significance and serves as the center of Islamic worship.<br><br>The city’s sacred atmosphere creates a deeply meaningful experience for visitors from around the world.",
+  "In addition to its spiritual importance, Makkah offers modern infrastructure, hotels, and shopping facilities designed to accommodate pilgrims comfortably. The city continues to develop while preserving its profound religious heritage."
+], 
+        "related_packages": 20
+      },
+      {
+        "city": "Madinah",
+        "slug": "madinah",  
+        "image": "frontend/assets/destinations/madinah/2.jpg",
+        "tags": "Culture & History, Nature, Adventure",
+        "about_title": "About Madinah",
+        "about_description": [
+  "Madinah is a city of peace, spirituality, and deep historical importance in Islam. It is home to Al-Masjid an-Nabawi, the Prophet Muhammad’s Mosque, making it one of the most sacred destinations for Muslims worldwide.<br><br>The city’s calm environment and well-preserved Islamic landmarks offer a spiritually uplifting experience.",
+  "Beyond its religious significance, Madinah features beautiful gardens, historical sites, and modern amenities. Visitors can explore museums, markets, and cultural attractions while experiencing the city’s welcoming and serene atmosphere."
+], 
+        "related_packages": 20
+      },
+      {
+        "city": "KAEC",
+        "slug": "kaec",
+        "image": "frontend/assets/destinations/kaec/5.jpg",
+        "tags": "Sports, Entertainment, Nature",
+        "about_title": "About King Abdullah Economic City",
+        "about_description": [
+  "King Abdullah Economic City (KAEC) is a modern coastal destination designed for innovation, lifestyle, and leisure. Located along the Red Sea, KAEC offers world-class infrastructure, clean beaches, and a well-planned urban environment.<br><br>The city is ideal for families, professionals, and travelers seeking a contemporary lifestyle by the sea.",
+  "From golf courses and marinas to shopping districts and entertainment venues, KAEC provides a wide range of recreational activities. Its smart city planning and scenic coastal views make it a unique destination for relaxation and modern living."
+], 
+        "related_packages": 20
+      },
+    
+      {
+        "city": "Asser",
+        "slug": "asser",
+        "banner_title": "Things to Do in Asser",
+        "about_title": "About Asser",
+        "about_description": [
+          "Nestled in the southwest of Saudi Arabia, Asser is a breathtaking region known for its lush green mountains, cool climate, and rich cultural heritage. Unlike the desert landscapes often associated with the Kingdom, Asser offers misty peaks, scenic valleys, and charming villages that feel worlds apart.",
+          "Home to the vibrant city of Abha, Asser is famous for its traditional architecture, colorful markets, and historic landmarks such as Rijal Almaa village. Adventure seekers can explore Asir National Park, hike along mountain trails, or take a cable car ride offering panoramic views of the region. Whether you are drawn by nature, history, or authentic Saudi culture, Asser delivers a refreshing and unforgettable experience."
+        ],
+        "related_packages": 12
+      },
+      {
+        "city": "Diriyah",
+        "slug": "diriyah",
+        "banner_title": "Things to Do in Diriyah",
+        "about_title": "About Diriyah",
+        "about_description": [
+          "Diriyah is the birthplace of the Saudi state and one of the Kingdom’s most culturally significant destinations. Located just outside Riyadh, this historic city is home to At-Turaif, a UNESCO World Heritage Site that showcases stunning Najdi architecture and centuries-old mud-brick structures.",
+          "Visitors can walk through beautifully restored palaces, museums, and cultural districts that tell the story of Saudi Arabia’s origins. With world-class dining, cultural events, and immersive heritage experiences, Diriyah perfectly blends tradition with modern luxury, making it a must-visit destination for history enthusiasts and culture lovers."
+        ],
+        "related_packages": 15
+      },
+      {
+        "city": "Eastern Province",
+        "slug": "eastern-province",
+        "banner_title": "Things to Do in Eastern Province",
+        "about_title": "About Eastern Province",
+        "about_description": [
+          "The Eastern Province is a dynamic region that combines coastal beauty, urban sophistication, and economic importance. Stretching along the Arabian Gulf, it is home to vibrant cities like Dammam, Al Khobar, and Dhahran, offering stunning waterfronts and modern attractions.",
+          "From relaxing on pristine beaches and enjoying seaside promenades to exploring cultural centers and shopping destinations, the Eastern Province caters to all types of travelers. Its strategic location and cosmopolitan lifestyle make it a hub of culture, commerce, and leisure in Saudi Arabia."
+        ],
+        "related_packages": 18
+      },
+      {
+        "city": "Hail",
+        "slug": "hail",
+        "banner_title": "Things to Do in Hail",
+        "about_title": "About Hail",
+        "about_description": [
+          "Hail is a region steeped in history and surrounded by dramatic desert landscapes and ancient rock formations. Known for its hospitality and rich traditions, Hail offers a unique glimpse into Saudi Arabia’s archaeological and cultural heritage.",
+          "Visitors can explore UNESCO-listed rock art sites in Jubbah and Shuwaymis, wander through historic forts, and experience local festivals that celebrate poetry, heritage, and cuisine. Hail’s blend of history, culture, and desert adventure makes it an exceptional destination for explorers."
+        ],
+        "related_packages": 10
+      },
+      {
+        "city": "Jazan",
+        "slug": "jazan",
+        "banner_title": "Things to Do in Jazan",
+        "about_title": "About Jazan",
+        "about_description": [
+          "Located along the Red Sea in southern Saudi Arabia, Jazan is a region of natural beauty, tropical charm, and cultural diversity. With its coastal plains, fertile farmlands, and nearby islands, Jazan offers a refreshing travel experience.",
+          "Visitors can explore the stunning Farasan Islands, enjoy traditional markets, and discover unique architectural styles influenced by African and Yemeni cultures. Jazan’s warm climate, friendly locals, and scenic landscapes make it an ideal destination for nature lovers and cultural explorers."
+        ],
+        "related_packages": 9
+      },
+      {
+        "city": "King Abdullah Economic City (KAEC)",
+        "slug": "kaec",
+        "banner_title": "Things to Do in KAEC",
+        "about_title": "About KAEC",
+        "about_description": [
+          "King Abdullah Economic City (KAEC) is a modern coastal destination designed for innovation, lifestyle, and leisure. Located along the Red Sea near Jeddah, KAEC offers a contemporary urban experience with world-class infrastructure.",
+          "From pristine beaches and golf courses to marinas, shopping districts, and family-friendly attractions, KAEC is perfect for relaxation and recreation. Its clean environment, smart city planning, and seaside charm make it a popular destination for both tourists and residents seeking modern luxury by the sea."
+        ],
+        "related_packages": 14
+      }
+    ]
+  }
+  

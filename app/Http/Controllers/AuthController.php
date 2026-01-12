@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
@@ -153,6 +154,34 @@ public function updateProfile(Request $request)
 
     return back()->with('success', 'Profile updated successfully!');
 }
+
+public function send(Request $request)
+    {
+        $request->validate([
+            'first_name' => 'required',
+            'last_name'  => 'required',
+            'email'      => 'nullable|email',
+            'phone'      => 'required',
+            'subject'    => 'required',
+            'message_new'    => 'nullable',
+        ]);
+
+        $data = [
+            'first_name' => $request->first_name,
+            'last_name'  => $request->last_name,
+            'email'      => $request->email,
+            'phone'      => $request->phone,
+            'subject'    => $request->subject,
+            'message_new'    => $request->message_new,
+        ];
+// print_r( $data);die;
+        Mail::send('emails.contact-mail', $data, function ($msg) use ($data) {
+            $msg->to('dheeraj@upsworth.com'); // <-- replace with your email
+            $msg->subject('New Contact Form Submission');
+        });
+
+        return back()->with('success', 'Your message has been sent successfully!');
+    }
 
 
 }

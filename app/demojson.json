@@ -1,0 +1,906 @@
+
+
+{
+    "Things_to_do": {   
+   "section1": [
+    {
+      "image": "frontend/assets/things_to_do/nature/al_watan_park_in_riyad.jpg",
+      "city_name": "Riyadh",
+      "title": "Al Watan Park",
+      "package_count": 20
+    },
+    {
+      "image": "frontend/assets/things_to_do/nature/ibex_reserve_area_in_riyad.jpg",
+      "city_name": "Riyadh",
+      "title": "IBEX Reserve Area",
+      "package_count": 20
+    },
+    {
+      "image": "frontend/assets/things_to_do/nature/joud_camp_in_aseer.jpg",
+      "city_name": "Aseer",
+      "title": "Joud Camp",
+      "package_count": 20
+    },
+    {
+      "image": "frontend/assets/things_to_do/nature/jubal_shada_reserve_area_in_al_baha.jpg",
+      "city_name": "Al Baha",
+      "title": "Jabal Shada Reserve Area",
+      "package_count": 20
+    }
+  ],
+  
+    "section2": [
+      {
+        "city_image": "http://localhost:8000/frontend/assets/things_to_do/at_turaif_in_diriyah.jpg",
+        "title": "Top Attractions You Must Explore in Diriyah",
+        "sub_title": "Modern Culture, Heritage Landmarks"
+      },
+      {
+        "city_image": "http://localhost:8000/frontend/assets/things_to_do/hegra_in_alula.jpg",
+        "title": "Unforgettable Hidden Gems to Discover in AlUla",
+        "sub_title": "Ancient Wonders, Natural Landscapes"
+      },
+      {
+        "city_image": "http://localhost:8000/frontend/assets/things_to_do/riyadh_front-&%20-boulevard_city.jpg",
+        "title": "Best Experiences to Enjoy in Riyadh Scenic Highlands",
+        "sub_title": "Mountain Escapes, Local Traditions" 
+      } 
+    ], 
+  
+    "section3": [
+    {
+      "city": "Jeddah",
+      "city_image": "/frontend/assets/things_to_do/al_balad_(jeddah)_in_saudi_arabia.jpg",
+      "title": "5 Must-Do Experiences in Jeddah",
+      "sub_title": "Culture & History, Art Gallery"
+    },
+    {
+      "city": "Riyadh",
+      "city_image": "/frontend/assets/things_to_do/edge_of_the_world_in_riyadh.jpg",
+      "title": "5 Must-Do Experiences in Riyadh",
+      "sub_title": "Culture & History, Art Gallery"
+    },
+    {
+      "city": "Alula",
+      "city_image": "/frontend/assets/things_to_do/hegra_(madain-saleh)_alula.jpg",
+      "title": "5 Must-Do Experiences in Alula",
+      "sub_title": "Culture & History, Art Gallery"
+    }
+  ],
+  
+ "section4": [
+    {
+      "image": "frontend/assets/things_to_do/event_s/janadriyah_national_festival_in_riyadh.jpg",
+      "start_date": "25 Aug 2025",
+      "end_date": "28 Aug 2025",
+      "location": "Riyadh",
+      "category": "Business Events",
+      "title": "4 Days in Aseer"
+    },
+    {
+      "image": "frontend/assets/things_to_do/event_s/mdlbeast_soundstorm_in_riyadh.jpg",
+      "start_date": "25 Aug 2025",
+      "end_date": "28 Aug 2025",
+      "location": "Riyadh",
+      "category": "Business Events",
+      "title": "4 Days in Riyadh"
+    },
+    {
+      "image": "frontend/assets/things_to_do/event_s/red_sea_international_film_festival_in_jeddah.jpg",
+      "start_date": "25 Aug 2025",
+      "end_date": "28 Aug 2025",
+      "location": "Jeddah",
+      "category": "Business Events",
+      "title": "4 Days in Jeddah"
+    },
+    {
+      "image": "frontend/assets/things_to_do/event_s/riyadh_season_festival_in_riyadh.jpg",
+      "start_date": "25 Aug 2025",
+      "end_date": "28 Aug 2025",
+      "location": "Riyadh",
+      "category": "Business Events",
+      "title": "Riyadh Season Festival"
+    },
+    {
+      "image": "frontend/assets/things_to_do/event_s/Saudi_National_Day_in_Nationwide.jpg",
+      "start_date": "25 Aug 2025",
+      "end_date": "28 Aug 2025",
+      "location": "Nationwide",
+      "category": "National Event",
+      "title": "Saudi National Day"
+    },
+    {
+      "image": "frontend/assets/things_to_do/event_s/winter_at_tantora_festival_in_alula.jpg",
+      "start_date": "25 Aug 2025",
+      "end_date": "28 Aug 2025",
+      "location": "Alula",
+      "category": "Cultural Festival",
+      "title": "Winter at Tantora"
+    }
+  ],
+  
+    "section5": [
+      {
+        "city_name": "AlUla",
+        "image": "frontend/assets/destinations/alula/5.jpg",
+        "title": "Heritage Escape",
+        "package_days": "2N/3D",
+        "city_days": "2N AlUla • 3D Jeddah",
+        "details_points": [
+          "Round Trip Flights",
+          "5 Star Hotels",
+          "Airport Transfers",
+          "5 Activities",
+          "Selected Meals"
+        ],
+        "offer_price": 8332,
+        "price_per_person": 40000,
+        "total_price": 122100
+      },
+      {
+        "city_name": "Riyadh",
+        "image": "frontend/assets/destinations/riyadh/4.jpg",
+        "title": "Cultural Journey",
+        "package_days": "2N/3D",
+        "city_days": "2N Riyadh • 3D Jeddah",
+        "details_points": [
+          "Round Trip Flights",
+          "5 Star Hotels",
+          "Airport Transfers",
+          "5 Activities",
+          "Selected Meals"
+        ],
+        "offer_price": 8332,
+        "price_per_person": 40000,
+        "total_price": 122100
+      },
+      {
+        "city_name": "KAEC",
+        "image": "frontend/assets/destinations/kaec/4.jpg",
+        "title": "Luxury Getaway",
+        "package_days": "2N/3D",
+        "city_days": "2N Diriyah • 3D Jeddah",
+        "details_points": [
+          "Round Trip Flights",
+          "5 Star Hotels",
+          "Airport Transfers",
+          "5 Activities",
+          "Selected Meals"
+        ],
+        "offer_price": 8332,
+        "price_per_person": 40000,
+        "total_price": 122100
+      },
+      {
+        "city_name": "Al Bahah",
+        "image": "frontend/assets/destinations/ai_baha/3.jpg",
+        "title": "Mountain Retreat",
+        "package_days": "2N/3D",
+        "city_days": "2N Al Bahah • 3D Jeddah",
+        "details_points": [
+          "Round Trip Flights",
+          "5 Star Hotels",
+          "Airport Transfers",
+          "5 Activities",
+          "Selected Meals"
+        ],
+        "offer_price": 8332,
+        "price_per_person": 40000,
+        "total_price": 122100
+      },
+      {
+        "city_name": "Jazan",
+        "image": "frontend/assets/destinations/jazan/1.jpg",
+        "title": "Coastal Escape",
+        "package_days": "2N/3D",
+        "city_days": "2N Jazan • 3D Jeddah",
+        "details_points": [
+          "Round Trip Flights",
+          "5 Star Hotels",
+          "Airport Transfers",
+          "5 Activities",
+          "Selected Meals"
+        ],
+        "offer_price": 8332,
+        "price_per_person": 40000,
+        "total_price": 122100
+      },
+      {
+        "city_name": "Najran",
+        "image": "frontend/assets/destinations/najran/3.jpg",
+        "title": "Heritage Adventure",
+        "package_days": "2N/3D",
+        "city_days": "2N Najran • 3D Jeddah",
+        "details_points": [
+          "Round Trip Flights",
+          "5 Star Hotels",
+          "Airport Transfers",
+          "5 Activities",
+          "Selected Meals"
+        ],
+        "offer_price": 8332,
+        "price_per_person": 40000,
+        "total_price": 122100
+      }
+    ]
+  
+},
+    
+    "home_page": {    
+        
+            "heroBanner": [
+                      {
+                        "title": "Discover Riyadh",
+                        "description": "Culture, heritage, modern city",
+                        "image": "/frontend/assets/destinations/riyadh/4.jpg"
+                      },
+                      {
+                        "title": "Explore Jeddah",
+                        "description": "Red Sea culture and heritage",
+                        "image": "/frontend/assets/destinations/jeddah/3.jpg"
+                      },
+                      {
+                        "title": "Journey Through Tabuk",
+                        "description": "Mountains, desert, ancient history",
+                        "image": "/frontend/assets/destinations/tabuk/6.jpg"
+                      },
+                      {
+                        "title": "Relax in Yanbu",
+                        "description": "Beaches, reefs, peaceful coast",
+                        "image": "/frontend/assets/destinations/yanbu/3.jpg"
+                      },
+                      {
+                        "title": "Experience Qassim",
+                        "description": "Souks, dates, authentic culture",
+                        "image": "/frontend/assets/destinations/qassim/1.jpg"
+                      },
+                      {
+                        "title": "Explore AlUla",
+                        "description": "Ancient wonders and landscapes",
+                        "image": "/frontend/assets/destinations/alula/3.jpg"
+                      }
+                    ],
+
+      
+           "adventures": [
+                    {
+                      "location": "Al Baha",
+                      "title": "4 Days in Al Baha: Forests, Mountains, and Cool Climate Retreat",
+                      "image": "/frontend/assets/destinations/1.jpg",
+                      "price": 1400
+                    },
+                    {
+                      "location": "Al Ahsa",
+                      "title": "4 Days in Al Ahsa: Oasis Heritage and Cultural Discovery",
+                      "image": "/frontend/assets/destinations/4.jpg",
+                      "price": 1450
+                    },
+                    {
+                      "location": "Qassim",
+                      "title": "4 Days in Qassim: Traditional Markets and Authentic Saudi Culture",
+                      "image": "/frontend/assets/destinations/3.jpg",
+                      "price": 1350
+                    },
+                    {
+                      "location": "Riyadh",
+                      "title": "6 Days in Riyadh: Heritage Sites, Modern Life, and City Experiences",
+                      "image": "/frontend/assets/destinations/2.jpg",
+                      "price": 1800
+                    },
+                    {
+                      "location": "Al Jubail",
+                      "title": "8 Days in Al Jubail: Coastal Views, Beaches, and Relaxation",
+                      "image": "/frontend/assets/destinations/5.jpg",
+                      "price": 2100
+                    },
+                    {
+                      "location": "Tabuk",
+                      "title": "10 Days in Tabuk: Mountains, Desert Landscapes, and Adventure",
+                      "image": "/frontend/assets/destinations/tabuk/6.jpg",
+                      "price": 2600
+                    }
+                  ],
+
+                
+                   "exclusive_offers": [
+                    {
+                    "id": 1,
+                    "title": "Ha’il Adventure",
+                    "location": "Hail",
+                    "duration_badge": "2N/3D",
+                    "route": "2N Hail • 3D Jeddah",
+                    "image": "frontend/assets/destinations/hail/3.jpg",
+                    "features": [
+                        "Round Trip Flights",
+                        "5 Star Hotels",
+                        "Airport Transfers",
+                        "5 Activities",
+                        "Selected Meals"
+                    ],
+                        "currency": "SAR",
+                        "price_per_person": 40000,
+                        "emi_price": 8332,
+                        "total_price": 122100
+
+                    },
+
+                    {
+                    "id": 2,
+                    "title": "Best of Jazan",
+                    "location": "Jazan",
+                    "duration_badge": "2N/3D",
+                    "route": "2N Jazan • 3D Jeddah",
+                    "image": "frontend/assets/destinations/jazan/1.jpg",
+                    "features": [
+                        "Round Trip Flights",
+                        "5 Star Hotels",
+                        "Airport Transfers",
+                        "5 Activities",
+                        "Selected Meals"
+                    ],
+                        "currency": "SAR",
+                        "price_per_person": 40000,
+                        "emi_price": 8332,
+                        "total_price": 122100
+
+                    },
+                    {
+                    "id": 3,
+                    "title": "KAEC Luxury",
+                    "location": "KAEC",
+                    "duration_badge": "2N/3D",
+                    "route": "2N Diriyah • 3D Jeddah",
+                    "image": "frontend/assets/destinations/kaec/2.jpg",
+                    "features": [
+                        "Round Trip Flights",
+                        "5 Star Hotels",
+                        "Airport Transfers",
+                        "5 Activities",
+                        "Selected Meals"
+                    ],
+                        "currency": "SAR",
+                        "price_per_person": 40000,
+                        "emi_price": 8332,
+                        "total_price": 122100
+                    },
+                    {
+                    "id": 4,
+                    "title": "Madinah Peaceful",
+                    "location": "Madinah",
+                    "duration_badge": "2N/3D",
+                    "route": "2N Madinah • 3D Jeddah",
+                    "image": "frontend/assets/destinations/madinah/2.jpg",
+                    "features": [
+                        "Round Trip Flights",
+                        "5 Star Hotels",
+                        "Airport Transfers",
+                        "5 Activities",
+                        "Selected Meals"
+                    ],
+                        "currency": "SAR",
+                        "price_per_person": 40000,
+                        "emi_price": 8332,
+                        "total_price": 122100
+                    },
+                    {
+                    "id": 5,
+                    "title": "Spiritual Journey",
+                    "location": "Makkah",
+                    "duration_badge": "2N/3D",
+                    "route": "2N Makkah • 3D Jeddah",
+                    "image": "frontend/assets/destinations/makkah/1.jpg",
+                    "features": [
+                        "Round Trip Flights",
+                        "5 Star Hotels",
+                        "Airport Transfers",
+                        "5 Activities",
+                        "Selected Meals"
+                    ],
+                
+                        "currency": "SAR",
+                        "price_per_person": 40000,
+                        "emi_price": 8332,
+                        "total_price": 122100
+                    },
+                    {
+                    "id": 6,
+                    "title": "Heritage Escape",
+                    "location": "Najran",
+                    "duration_badge": "2N/3D",
+                    "route": "2N Diriyah • 3D Jeddah",
+                    "image": "frontend/assets/destinations/najran/1.jpg",
+                    "features": [
+                        "Round Trip Flights",
+                        "5 Star Hotels",
+                        "Airport Transfers",
+                        "5 Activities",
+                        "Selected Meals"
+                    ],
+                        "currency": "SAR",
+                        "price_per_person": 40000,
+                        "emi_price": 8332,
+                        "total_price": 122100
+
+                    }
+                ],
+
+                    "upcoming_events": [
+                      {
+                        "title": "4 Days in Riyadh",
+                        "city": "Riyadh",
+                        "category": "Heritage & Festival",
+                        "start_date": "2025-08-25",
+                        "end_date": "2025-08-28",
+                        "duration_days": 4,
+                        "image": "frontend/assets/things_to_do/event_s/janadriyah_national_festival_in_riyadh.jpg"
+                      },
+                      {
+                        "title": "6 Days in Riyadh",
+                        "city": "Riyadh",
+                        "category": "Music & Entertainment",
+                        "start_date": "2025-08-25",
+                        "end_date": "2025-08-28",
+                        "duration_days": 6,
+                        "image": "frontend/assets/things_to_do/event_s/mdlbeast_soundstorm_in_riyadh.jpg"
+                      },
+                      {
+                        "id": 3,
+                        "title": "8 Days in Jeddah",
+                        "city": "Jeddah",
+                        "category": "Film & Arts Festival",
+                        "start_date": "2025-08-25",
+                        "end_date": "2025-08-28",
+                        "duration_days": 8,
+                        "image": "frontend/assets/things_to_do/event_s/red_sea_international_film_festival_in_jeddah.jpg"
+                      },
+                      {
+                        "id": 4,
+                        "title": "10 Days in Riyadh",
+                        "city": "Riyadh",
+                        "category": "Entertainment",
+                        "start_date": "2025-08-25",
+                        "end_date": "2025-08-28",
+                        "duration_days": 10,
+                        "image": "frontend/assets/things_to_do/event_s/riyadh_season_festival_in_riyadh.jpg"
+                      },
+                      {
+                        "id": 5,
+                        "title": "4 Days Nationwide",
+                        "city": "Nationwide",
+                        "category": "Celebration",
+                        "start_date": "2025-08-25",
+                        "end_date": "2025-08-28",
+                        "duration_days": 4,
+                        "image": "frontend/assets/things_to_do/event_s/Saudi_National_Day_in_Nationwide.jpg"
+                      },
+                      {
+                        "id": 6,
+                        "title": "6 Days in Alula",
+                        "city": "Alula",
+                        "category": "Cultural & Heritage",
+                        "start_date": "2025-08-25",
+                        "end_date": "2025-08-28",
+                        "duration_days": 6,
+                        "image": "frontend/assets/things_to_do/event_s/winter_at_tantora_festival_in_alula.jpg"
+                      }
+                    ]
+
+       
+    },
+
+    "destination": {    
+
+        "destination_banner": [
+          {
+            
+            "city": "AlUla",
+            "slug": "alula",
+            "image": "frontend/assets/destinations/alula/2.jpg",
+            "tags": "Nature, Culture & History, Beauty & Relax",
+            "related_packages": 20
+          },
+          {
+            "city": "Jeddah",
+            "slug": "jeddah",
+            "image": "frontend/assets/destinations/jeddah/2.jpg",
+            "tags": "Nature, Culture & History, Shopping",
+            "related_packages": 16
+          },
+          {
+            "city": "Al Ahsa",
+            "slug": "al-ahsa",
+            "image": "frontend/assets/destinations/ai-ahsa/4.jpg",
+            "tags": "Nature, Culture & History, Shopping",
+            "related_packages": 22
+          },
+          {
+            "city": "Eastern Province",
+            "slug": "eastern-province",
+            "image": "frontend/assets/destinations/eastern_province/1.jpg",
+            "tags": "Nature, Shopping, Culture & History",
+            "related_packages": 20
+          },
+          {
+            "city": "Riyadh",
+            "slug": "riyadh",
+            "image": "frontend/assets/destinations/riyadh/2.jpg",
+            "tags": "Culture & History, Nature, Shopping",
+            "related_packages": 18
+          },
+          {
+            "city": "Makkah",
+            "slug": "makkah",
+            "image": "frontend/assets/destinations/makkah/1.jpg",
+            "tags": "Historic Site, Shopping, Religious Site",
+            "related_packages": 28
+          },
+          {
+            "city": "Madinah",
+            "slug": "madinah",  
+            "image": "frontend/assets/destinations/madinah/2.jpg",
+            "tags": "Culture & History, Nature, Adventure",
+            "related_packages": 30
+          },
+          {
+            "city": "KAEC",
+            "slug": "kaec",
+            "image": "frontend/assets/destinations/kaec/5.jpg",
+            "tags": "Sports, Entertainment, Nature",
+            "related_packages": 26
+          }
+        ],
+      
+        "explore_destinations": [
+          {
+            "city": "AlUla",
+            "slug": "alula",
+            "image": "frontend/assets/destinations/alula/1.jpg",
+            "tags": "Nature, Culture & History",
+            "about_title": "About AlUla",
+            "about_description": [
+              "AlUla is one of Saudi Arabia’s most remarkable destinations, famous for its dramatic rock formations, ancient tombs, and rich heritage. The region is home to Hegra, a UNESCO World Heritage Site that reflects the legacy of the Nabataean civilization.<br><br>Visitors can explore historical landmarks while enjoying luxury desert resorts and immersive cultural experiences.",
+              "From breathtaking canyon views to stargazing and heritage tours, AlUla offers a perfect blend of history, nature, and adventure."
+            ],
+            "related_packages": 20
+          },
+          {
+            "city": "Jeddah",
+            "slug": "jeddah",
+            "image": "frontend/assets/destinations/jeddah/2.jpg",
+            "tags": "Nature, Culture & History",
+            "about_title": "About Jeddah",
+            "about_description": [
+              "Jeddah is a vibrant coastal city on the Red Sea, known as the gateway to Makkah and Madinah. It blends rich Islamic history with a modern lifestyle, featuring historic districts like Al-Balad alongside contemporary attractions.<br><br>The city’s waterfront and Corniche offer stunning sea views and recreational activities.",
+              "With world-class shopping, diverse cuisine, and cultural landmarks, Jeddah is a dynamic destination for travelers and families alike."
+            ],
+            "related_packages": 16
+          },
+          {
+            "city": "Riyadh",
+            "slug": "riyadh",
+            "image": "frontend/assets/destinations/riyadh/2.jpg",
+            "tags": "Culture & History, Nature",
+            "about_title": "About Riyadh",
+            "about_description": [
+              "Riyadh, the capital of Saudi Arabia, represents the heart of the Kingdom’s heritage and progress. The city showcases historic forts, museums, and traditional souqs alongside modern skyscrapers.<br><br>Diriyah and Masmak Fort highlight the roots of Saudi history.",
+              "Riyadh also offers luxury shopping, fine dining, and entertainment experiences, making it a modern cultural hub."
+            ],
+            "related_packages": 18
+          },
+          {
+            "city": "Aseer",
+            "slug": "aseer",
+            "image": "frontend/assets/destinations/asser/1.jpg",
+            "tags": "Nature, Culture & History",
+            "about_title": "About Aseer",
+            "about_description": [
+              "Aseer is known for its cool climate, green mountains, and traditional villages. The region offers scenic landscapes that are unique within Saudi Arabia.<br><br>Its heritage architecture and colorful art reflect strong local traditions.",
+              "Visitors can enjoy outdoor adventures, cultural festivals, and panoramic views of valleys and mountains."
+            ],
+            "related_packages": 20
+          },
+          {
+            "city": "Al Ahsa",
+            "slug": "al-ahsa",
+            "image": "frontend/assets/destinations/ai-ahsa/4.jpg",
+            "tags": "Nature, Culture & History",
+            "about_title": "About Al Ahsa",
+            "about_description": [
+              "Al Ahsa is home to the largest oasis in the world and a UNESCO World Heritage Site. The region is rich in palm groves, springs, and historical landmarks.<br><br>Traditional markets and ancient forts reflect its deep-rooted culture.",
+              "Al Ahsa offers a peaceful experience with natural beauty, heritage, and authentic Saudi hospitality."
+            ],
+            "related_packages": 22
+          },
+          {
+            "city": "The Red Sea",
+            "slug": "the-red-sea",
+            "image": "frontend/assets/destinations/the_red_sea/1.jpg",
+            "tags": "Nature, Luxury",
+            "about_title": "About The Red Sea",
+            "about_description": [
+              "The Red Sea destination is a luxury tourism project known for pristine beaches, coral reefs, and crystal-clear waters. It offers eco-friendly resorts and world-class marine experiences.<br><br>The untouched islands provide a perfect escape into nature.",
+              "Ideal for relaxation and adventure, the Red Sea is a premium destination for luxury travelers."
+            ],
+            "related_packages": 24
+          },
+          {
+            "city": "KAEC",
+            "slug": "kaec",
+            "image": "frontend/assets/destinations/kaec/2.jpg",
+            "tags": "Sports, Entertainment",
+            "about_title": "About KAEC",
+            "about_description": [
+              "King Abdullah Economic City (KAEC) is a modern coastal city offering a mix of business, leisure, and entertainment. It features clean beaches and well-planned urban spaces.<br><br>The city hosts sports events, marinas, and family attractions.",
+              "KAEC is ideal for travelers seeking relaxation with modern facilities."
+            ],
+            "related_packages": 26
+          },
+          {
+            "city": "Makkah",
+            "slug": "makkah",
+            "image": "frontend/assets/destinations/makkah/5.jpg",
+            "tags": "Historic Site, Shopping",
+            "about_title": "About Makkah",
+            "about_description": [
+              "Makkah is the holiest city in Islam and a spiritual destination for millions of pilgrims every year. It is home to Masjid al-Haram and the Holy Kaaba.<br><br>The city offers deep religious significance and modern facilities for visitors.",
+              "Makkah also features shopping centers and hospitality services for pilgrims."
+            ],
+            "related_packages": 28
+          },
+          {
+            "city": "Madinah",
+            "slug": "madinah",
+            "image": "frontend/assets/destinations/madinah/2.jpg",
+            "tags": "Culture & History, Nature",
+            "about_title": "About Madinah",
+            "about_description": [
+              "Madinah is the second holiest city in Islam and home to Al-Masjid an-Nabawi. The city carries immense spiritual and historical value.<br><br>Its peaceful environment attracts visitors seeking reflection and faith.",
+              "Madinah also offers cultural landmarks and modern amenities for travelers."
+            ],
+            "related_packages": 30
+          },
+          {
+            "city": "Taif",
+            "slug": "taif",
+            "image": "frontend/assets/destinations/taif/1.jpg",
+            "tags": "Culture & History, Nature",
+            "about_title": "About Taif",
+            "about_description": [
+              "Taif is a scenic hill city known for its cool climate, rose farms, and mountain views. It has long been a summer retreat.<br><br>The city blends natural beauty with historical significance.",
+              "Visitors can enjoy gardens, markets, and cultural festivals."
+            ],
+            "related_packages": 15
+          },
+          {
+            "city": "Tabuk",
+            "slug": "tabuk",
+            "image": "frontend/assets/destinations/tabuk/3.jpg",
+            "tags": "Culture & History",
+            "about_title": "About Tabuk",
+            "about_description": [
+              "Tabuk is a historic city in northwestern Saudi Arabia, known for ancient trade routes and forts.<br><br>It serves as a gateway to dramatic desert and mountain landscapes.",
+              "Tabuk offers cultural exploration and outdoor adventure."
+            ],
+            "related_packages": 13
+          },
+          {
+            "city": "Yanbu",
+            "slug": "yanbu",
+            "image": "frontend/assets/destinations/yanbu/1.jpg",
+            "tags": "Nature, Beaches",
+            "about_title": "About Yanbu",
+            "about_description": [
+              "Yanbu is a beautiful coastal city famous for its beaches and coral reefs. It is a popular destination for diving and water sports.<br><br>The city also offers relaxing seaside promenades.",
+              "Yanbu combines marine beauty with a peaceful atmosphere."
+            ],
+            "related_packages": 18
+          },
+          {
+            "city": "Al Baha",
+            "slug": "al-baha",
+            "image": "frontend/assets/destinations/ai_baha/1.jpg",
+            "tags": "Adventure, Nature",
+            "about_title": "About Al Baha",
+            "about_description": [
+              "Al Baha is known for its forests, mountains, and pleasant climate. The region offers breathtaking natural scenery.<br><br>Traditional villages add cultural charm to the landscape.",
+              "It is ideal for eco-tourism and outdoor adventures."
+            ],
+            "related_packages": 23
+          },
+          {
+            "city": "Jazan",
+            "slug": "jazan",
+            "image": "frontend/assets/destinations/jazan/1.jpg",
+            "tags": "Culture & History",
+            "about_title": "About Jazan",
+            "about_description": [
+              "Jazan is a coastal region known for its cultural heritage and island landscapes. It offers a mix of history and natural beauty.<br><br>The area features mountains, beaches, and traditional villages.",
+              "Jazan is perfect for travelers seeking culture and nature together."
+            ],
+            "related_packages": 27
+          },
+          {
+            "city": "Hail",
+            "slug": "hail",
+            "image": "frontend/assets/destinations/hail/1.jpg",
+            "tags": "Nature, Adventure",
+            "about_title": "About Hail",
+            "about_description": [
+              "Hail is known for its deserts, rock art, and mountain ranges. The region has strong historical significance.<br><br>It offers outdoor adventures and archaeological exploration.",
+              "Hail is ideal for history lovers and adventure seekers."
+            ],
+            "related_packages": 36
+          },
+          {
+            "city": "Al Jubail",
+            "slug": "al-jubail",
+            "image": "frontend/assets/destinations/ai_jubail/1.jpg",
+            "tags": "Nature, Sports",
+            "about_title": "About Al Jubail",
+            "about_description": [
+              "Al Jubail is a modern coastal city known for its beaches and urban planning. It offers family-friendly environments and sea views.<br><br>The Corniche is a major attraction.",
+              "The city balances industrial development with leisure and recreation."
+            ],
+            "related_packages": 38
+          },
+          {
+            "city": "Najran",
+            "slug": "najran",
+            "image": "frontend/assets/destinations/najran/3.jpg",
+            "tags": "Culture & History",
+            "about_title": "About Najran",
+            "about_description": [
+              "Najran is rich in ancient history and traditional architecture. The region reflects deep cultural roots.<br><br>Historic forts and archaeological sites attract visitors.",
+              "Najran offers a unique blend of heritage and natural scenery."
+            ],
+            "related_packages": 25
+          },
+          {
+            "city": "Qassim",
+            "slug": "qassim",
+            "image": "frontend/assets/destinations/qassim/1.jpg",
+            "tags": "Culture & History",
+            "about_title": "About Qassim",
+            "about_description": [
+              "Qassim is known for agriculture, especially date farming, and traditional Najdi culture.<br><br>The region features heritage villages and cultural festivals.",
+              "Qassim represents authentic Saudi traditions and lifestyle."
+            ],
+            "related_packages": 16
+          }
+        ]        
+               
+  },
+  "destination-details": {    
+   "discover_adventure": [
+      {
+        "city": "Asser",
+        "slug": "asser",
+        "image": "/frontend/assets/destinations/asser/4.jpg",
+        "title": "4 Days in Aseer: A Cultural and Scenic Escape Through Nature",
+        "related_packages": 20
+      },
+      {
+        "city": "Diriyah",
+        "slug": "diriyah",
+        "image": "/frontend/assets/destinations/diriyah/4.jpg",
+        "title": "4 Days in Diriyah: Heritage, Culture & Historic Saudi Arabia",
+        "related_packages": 20
+      },
+      {
+        "city": "Eastern Province",
+        "slug": "eastern-province",
+        "image": "/frontend/assets/destinations/eastern_province/2.jpg",
+        "title": "4 Days in Eastern Province: Coastline, Culture & Modern Life",
+        "related_packages": 20
+      },
+      {
+        "city": "Hail",
+        "slug": "hail",
+        "image": "/frontend/assets/destinations/hail/1.jpg",
+        "title": "4 Days in Hail: Desert Adventures & Ancient Rock Art",
+        "related_packages": 20
+      },
+      {
+        "city": "Jazan",
+        "slug": "jazan",
+        "image": "/frontend/assets/destinations/jazan/1.jpg",
+        "title": "4 Days in Jazan: Mountains, Islands & Coastal Beauty",
+        "related_packages": 20
+      },
+      {
+        "city": "KAEC",
+        "slug": "kaec",
+        "image": "/frontend/assets/destinations/kaec/1.jpg",
+        "title": "4 Days in KAEC: Luxury Living & Red Sea Experiences",
+        "related_packages": 20
+      }
+    ],
+    "upcoming_events": [
+      {
+        "title": "14 Days in Riyadh",
+        "slug": "janadriyah-heritage-culture-festival",
+        "city": "Riyadh",
+        "category": "Heritage & Culture",
+        "start_date": "10 Feb 2026",
+        "end_date": "24 Feb 2026",
+        "image": "/frontend/assets/things_to_do/event_s/janadriyah_national_festival_in_riyadh.jpg"
+      },
+      {
+        "title": "6 Days in Riyadh",
+        "slug": "mdlbeast-soundstorm-music-festival",
+        "city": "Riyadh",
+        "category": "Music & Entertainment",
+        "start_date": "24 Dec 2025",
+        "end_date": "30 Dec 2025",
+        "image": "/frontend/assets/things_to_do/event_s/mdlbeast_soundstorm_in_riyadh.jpg"
+      },
+      {
+        "title": "9 Days in Jeddah",
+        "slug": "red-sea-international-film-festival",
+        "city": "Jeddah",
+        "category": "Film & Arts",
+        "start_date": "05 Fab 2025",
+        "end_date": "14 Fab 2025",
+        "image": "/frontend/assets/things_to_do/event_s/red_sea_international_film_festival_in_jeddah.jpg"
+      },
+      {
+        "title": "21 Days in Riyadh",
+        "slug": "riyadh-season-entertainment-festival",
+        "city": "Riyadh",
+        "category": "Entertainment",
+        "start_date": "10 Mar 2026",
+        "end_date": "31 Mar 2026",
+        "image": "/frontend/assets/things_to_do/event_s/riyadh_season_festival_in_riyadh.jpg"
+      },
+      {
+        "title": "30 Days in Saudi Arabia",
+        "slug": "saudi-national-day-celebrations",
+        "city": "Saudi Arabia",
+        "category": "Celebration",
+        "start_date": "01 Apr 2026",
+        "end_date": "23 Apr 2026",
+        "image": "/frontend/assets/things_to_do/event_s/Saudi_National_Day_in_Nationwide.jpg"
+      },
+      {
+        "title": "10 Days in AlUla",
+        "slug": "winter-at-tantora-cultural-festival",
+        "city": "AlUla",
+        "category": "Culture, Music",
+        "start_date": "15 Aug 2026",
+        "end_date": "25 Aug 2026",
+        "image": "/frontend/assets/things_to_do/event_s/winter_at_tantora_festival_in_alula.jpg"
+      }
+    ],
+  
+    "start_exploring": [
+    {
+      "location": "Riyadh",
+      "image": "/frontend/assets/destinations/riyadh/6.jpg",
+      "title": "Riyadh",
+      "subtitle": "Where Modern Vision Meets Deep Heritage"
+    },
+    {
+      "location": "Jeddah",
+      "image": "/frontend/assets/destinations/jeddah/2.jpg",
+      "title": "Jeddah",
+      "subtitle": "The Gateway to the Red Sea’s Vibrant Culture"
+    },
+    {
+      "location": "AlUla",
+      "image": "/frontend/assets/destinations/alula/3.jpg",
+      "title": "AlUla",
+      "subtitle": "A Timeless Oasis of Nature and Ancient Wonders"
+    },
+    {
+      "location": "Abha",
+      "image": "/frontend/assets/destinations/ai_baha/4.jpg",
+      "title": "Abha",
+      "subtitle": "The Mountain City of Cool Breezes and Scenic Beauty"
+    }
+  ]
+  
+    
+  }
+      
+}
+   

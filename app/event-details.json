@@ -1,0 +1,128 @@
+{
+"event_details_page": [
+    {
+      "id": 1,
+      "slug": "al-turaif-traditions-riyadh",
+      "title": "Al-Turaif Traditions",
+      "subtitle": "Get ready for an exceptional traditions journey.",
+      "about_title": "About Al-Turaif Traditions",
+      "description": [
+        "Experience the rich heritage of Saudi Arabia at the historic Al-Turaif district.",
+        "Enjoy cultural performances, traditional food, and immersive storytelling in Diriyah."
+      ],
+      "event_date": "Sunday, 27 Sep 2025",
+      "city": "Riyadh",
+      "location": "At-Turaif, Diriyah",
+      "price": 160,
+      "currency": "SAR",
+      "age_limit": "All",
+      "time": "03:00 PM to 06:00 PM",
+      "weather": {
+        "temperature": "30.4°",
+        "status": "Clear"
+      },
+      "banner_video": "frontend/assets/videos/seekers-entry-video.mp4",
+      "map_image": "frontend/assets/map.png"
+    },
+  
+    {
+      "id": 2,
+      "slug": "red-sea-film-festival-jeddah",
+      "title": "Red Sea International Film Festival",
+      "subtitle": "A cinematic celebration by the Red Sea.",
+      "about_title": "About Red Sea Film Festival",
+      "description": [
+        "An international platform celebrating global cinema and emerging filmmakers.",
+        "Screenings, workshops, and red-carpet premieres in the heart of Jeddah."
+      ],
+      "event_date": "Friday, 12 Dec 2025",
+      "city": "Jeddah",
+      "location": "Jeddah Corniche",
+      "price": 250,
+      "currency": "SAR",
+      "age_limit": "18+",
+      "time": "05:00 PM to 11:00 PM",
+      "weather": {
+        "temperature": "28.2°",
+        "status": "Partly Cloudy"
+      },
+      "banner_video": "frontend/assets/videos/seekers-entry-video.mp4",
+      "map_image": "frontend/assets/map.png"
+    },
+  
+    {
+      "id": 3,
+      "slug": "winter-at-tantora-alula",
+      "title": "Winter at Tantora",
+      "subtitle": "Where music meets ancient wonders.",
+      "about_title": "About Winter at Tantora",
+      "description": [
+        "A world-class cultural festival set among AlUla’s ancient landscapes.",
+        "Enjoy concerts, art exhibitions, and heritage experiences."
+      ],
+      "event_date": "Saturday, 10 Jan 2026",
+      "city": "AlUla",
+      "location": "AlUla Heritage Site",
+      "price": 300,
+      "currency": "SAR",
+      "age_limit": "All",
+      "time": "04:00 PM to 10:00 PM",
+      "weather": {
+        "temperature": "22.5°",
+        "status": "Cool & Clear"
+      },
+      "banner_video": "frontend/assets/videos/seekers-entry-video.mp4",
+      "map_image": "frontend/assets/map.png"
+    },
+  
+    {
+      "id": 4,
+      "slug": "aseer-summer-festival-abha",
+      "title": "Aseer Summer Festival",
+      "subtitle": "Celebrate culture in the cool mountains.",
+      "about_title": "About Aseer Summer Festival",
+      "description": [
+        "A seasonal festival highlighting local traditions, crafts, and music.",
+        "Perfect for families and nature lovers visiting Abha."
+      ],
+      "event_date": "Monday, 03 Aug 2025",
+      "city": "Abha",
+      "location": "Aseer National Park",
+      "price": 120,
+      "currency": "SAR",
+      "age_limit": "All",
+      "time": "02:00 PM to 08:00 PM",
+      "weather": {
+        "temperature": "24.1°",
+        "status": "Pleasant"
+      },
+      "banner_video": "frontend/assets/videos/seekers-entry-video.mp4",
+      "map_image": "frontend/assets/map.png"
+    },
+  
+    {
+      "id": 5,
+      "slug": "najran-heritage-days",
+      "title": "Najran Heritage Days",
+      "subtitle": "Discover the southern soul of Saudi Arabia.",
+      "about_title": "About Najran Heritage Days",
+      "description": [
+        "Explore Najran’s unique architecture, crafts, and folk traditions.",
+        "Live performances and traditional markets throughout the festival."
+      ],
+      "event_date": "Thursday, 19 Feb 2026",
+      "city": "Najran",
+      "location": "Najran Heritage Village",
+      "price": 90,
+      "currency": "SAR",
+      "age_limit": "All",
+      "time": "04:00 PM to 09:00 PM",
+      "weather": {
+        "temperature": "26.8°",
+        "status": "Sunny"
+      },
+      "banner_video": "frontend/assets/videos/seekers-entry-video.mp4",
+      "map_image": "frontend/assets/map.png"
+    }
+]
+}

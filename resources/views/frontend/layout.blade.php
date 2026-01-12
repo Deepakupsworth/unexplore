@@ -23,7 +23,11 @@
 
 <body>
   <!-- HEADER -->
-  <div id="header">
+@php
+    $whiteHeaderPages = ['package-details', 'package-listing', 'profile', 'to-do-things-search', 'about-us', 'blog-details', 'blogs','checkout', 'contact-us'];
+@endphp
+
+<div id="header" class="{{ request()->is($whiteHeaderPages) ? 'white-header-static' : '' }}">
 @include('frontend.includes.header')
   </div>
 
