@@ -1,4 +1,4 @@
-<header class="navbar navbar-expand-lg">
+<header class="navbar navbar-expand-lg ">
 	<div class="container">
 		<a class="navbar-brand d-flex align-items-center" href="/">
 			<img src="frontend/assets/logo-white.png" alt="Unxplord Saudi" class="header__logo" />

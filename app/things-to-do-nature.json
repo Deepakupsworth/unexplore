@@ -1,0 +1,237 @@
+{
+    "things_to_do_nature": [
+      {
+        "slug": "al-didhan-reserve-riyadh",
+        "title": "Al-Didhan Reserve",
+        "region": "Riyadh",
+        "country": "Saudi Arabia",
+        "hero": {
+          "video": "frontend/assets/videos/seekers-entry-video.mp4",
+          "poster": "frontend/assets/hero-banner-bg.png"
+        },
+        "about_section": {
+          "heading": "About Al-Didhan Reserve",
+          "paragraphs": [
+            "Al-Didhan Reserve is a protected natural area in the Riyadh Region of Saudi Arabia, offering serene desert landscapes and rich biodiversity.",
+            "The reserve provides visitors with a peaceful escape into nature while preserving the Kingdom’s environmental heritage."
+          ]
+        },
+        "nature_beauty": {
+          "heading": "Nature and Beauty",
+          "description": "Surrounded by rolling desert plains and dramatic rock formations, Al-Didhan Reserve reflects the raw natural beauty of central Saudi Arabia."
+        },
+        "facilities_and_services": {
+          "heading": "Facilities and Services",
+          "description": "The reserve is equipped with various facilities to enhance the visitor experience:",
+          "facilities": [
+            "Shaded outdoor seating areas",
+            "Local food trucks and refreshment points",
+            "Walking trails and photography spots",
+            "Family-friendly picnic zones"
+          ]
+        },
+        
+        "information": {
+          "location": "At-Turaif, Riyadh",
+          "ages": "All ages",
+          "time": "Sunday to Thursday: 03:00 PM – 06:00 PM"
+        },
+        "about_blocks":
+          {
+            "title": "Al-Didhan Reserve Experience",
+            "image": "frontend/assets/159.jpg",
+            "points": [
+              "Protected desert ecosystem",
+              "Ideal for nature walks and relaxation",
+              "Peaceful environment away from city life",
+              "Popular destination for sunset photography"
+            ]
+          }, 
+       
+        "additional_blocks":
+          {
+            "title": "Didhan Valley",
+            "image": "frontend/assets/44877.jpg",
+            "points": [
+              "Hidden valley surrounded by cliffs",
+              "Natural hiking paths and viewpoints",
+              "Ancient rock formations",
+              "Perfect for calm outdoor exploration"
+            ]
+          } 
+      },
+  
+      {
+        "slug": "al-ula-rock-formations",
+        "title": "AlUla Rock Formations",
+        "region": "AlUla",
+        "country": "Saudi Arabia",
+        "hero": {
+          "video": "frontend/assets/videos/seekers-entry-video.mp4",
+          "poster": "frontend/assets/hero-banner-bg.png"
+        },
+        "about_section": {
+          "heading": "About AlUla",
+          "paragraphs": [
+            "AlUla is famous for its sandstone rock formations and ancient history.",
+            "It is a unique blend of culture, nature, and heritage."
+          ]
+        },
+        "nature_beauty": {
+          "heading": "Nature and Beauty",
+          "description": "Massive rocks shaped by nature over millions of years."
+        },
+        "facilities_and_services": {
+          "heading": "Facilities and Services",
+          "description": "Available facilities include:",
+          "facilities": [
+            "Tourist guides",
+            "Walking paths",
+            "Viewing decks",
+            "Rest areas"
+          ]
+        },
+        "information": {
+          "location": "AlUla",
+          "ages": "All ages",
+          "time": "Daily"
+        },
+        "about_blocks": {
+          "title": "AlUla Experience",
+          "image": "frontend/assets/159.jpg",
+          "points": [
+            "Ancient landscapes",
+            "Historic environment",
+            "Natural sculptures",
+            "Peaceful atmosphere"
+          ]
+        },
+        "additional_blocks": {
+          "title": "Elephant Rock",
+          "image": "frontend/assets/44877.jpg",
+          "points": [
+            "Iconic stone shape",
+            "Photo opportunities",
+            "Desert charm",
+            "Tourist favorite"
+          ]
+        }
+      },
+    
+      {
+        "slug": "farasan-islands",
+        "title": "Farasan Islands",
+        "region": "Jazan",
+        "country": "Saudi Arabia",
+        "hero": {
+          "video": "frontend/assets/videos/seekers-entry-video.mp4",
+          "poster": "frontend/assets/hero-banner-bg.png"
+        },
+        "about_section": {
+          "heading": "About Farasan Islands",
+          "paragraphs": [
+            "Farasan Islands are known for coral reefs and marine life.",
+            "They are a protected natural reserve."
+          ]
+        },
+        "nature_beauty": {
+          "heading": "Nature and Beauty",
+          "description": "Clear waters, coral reefs, and pristine beaches."
+        },
+        "facilities_and_services": {
+          "heading": "Facilities and Services",
+          "description": "Visitors can access:",
+          "facilities": [
+            "Boat services",
+            "Snorkeling areas",
+            "Rest zones",
+            "Local guides"
+          ]
+        },
+        "information": {
+          "location": "Jazan Coast",
+          "ages": "All ages",
+          "time": "Daytime visits"
+        },
+        "about_blocks": {
+          "title": "Island Adventure",
+          "image": "frontend/assets/159.jpg",
+          "points": [
+            "Marine biodiversity",
+            "Island scenery",
+            "Water activities",
+            "Peaceful environment"
+          ]
+        },
+        "additional_blocks": {
+          "title": "Coral Coast",
+          "image": "frontend/assets/44877.jpg",
+          "points": [
+            "Clear waters",
+            "Rich coral reefs",
+            "Fishing zones",
+            "Nature reserve"
+          ]
+        }
+      },
+    
+      {
+        "slug": "taif-al-hada-mountains",
+        "title": "Al Hada Mountains",
+        "region": "Taif",
+        "country": "Saudi Arabia",
+        "hero": {
+          "video": "frontend/assets/videos/seekers-entry-video.mp4",
+          "poster": "frontend/assets/hero-banner-bg.png"
+        },
+        "about_section": {
+          "heading": "About Al Hada",
+          "paragraphs": [
+            "Al Hada is a mountainous area known for cool weather.",
+            "It offers scenic views and winding roads."
+          ]
+        },
+        "nature_beauty": {
+          "heading": "Nature and Beauty",
+          "description": "Green hills, valleys, and mountain roads."
+        },
+        "facilities_and_services": {
+          "heading": "Facilities and Services",
+          "description": "Facilities include:",
+          "facilities": [
+            "Viewpoints",
+            "Restaurants",
+            "Cable car",
+            "Parking"
+          ]
+        },
+        "information": {
+          "location": "Taif",
+          "ages": "All ages",
+          "time": "Open daily"
+        },
+        "about_blocks": {
+          "title": "Mountain Escape",
+          "image": "frontend/assets/159.jpg",
+          "points": [
+            "Cool climate",
+            "Mountain scenery",
+            "Road trips",
+            "Photography"
+          ]
+        },
+        "additional_blocks": {
+          "title": "Scenic Valleys",
+          "image": "frontend/assets/44877.jpg",
+          "points": [
+            "Lush views",
+            "Fresh air",
+            "Nature walks",
+            "Relaxing atmosphere"
+          ]
+        }
+      }    
+      
+    ]
+  }
+  

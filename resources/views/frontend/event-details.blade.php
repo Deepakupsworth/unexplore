@@ -10,8 +10,8 @@
         <!-- <img class="hero-banner__image" src="../assets/hero-banner-bg.png" alt="Banner"> -->
         <div class="container">
             <div class="dest-details-banner__content flex-column gap-3 text-center">
-                <h1 class="text-white w-100">Al-Turaif Traditions</h1>
-                <h5>Get ready for an exceptional traditions journey.</h5>
+                <h1 class="text-white w-100">{{ $event_detailsss['title'] }} </h1>
+                <h5>{{ $event_detailsss['subtitle'] }}</h5>
             </div>
         </div>
     </section>
@@ -21,15 +21,12 @@
         <div class="container">
             <div class="section__header">
                 <div class="section__header-content">
-                    <h2 class="section__heading">About Al-Turaif Traditions</h2>
-                    <p class="section__description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                        eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                        nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                    <p class="section__description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                        eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                        nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
-                        dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Lorem
-                        ipsum dolor sit amet, consectetur adipiscing </p>
+                    <h2 class="section__heading">{{ $event_detailsss['about_title'] }}</h2>
+                    @foreach($event_detailsss['description'] as $desc)
+                            <p>{{ $desc }}</p>
+                        @endforeach
+                   
+                    
                 </div>
             </div>
         </div>
@@ -42,7 +39,7 @@
                 <!-- Event Date -->
                 <div class="event-info__block">
                     <p class="p-large mb-2"><i class="fa-regular fa-calendar"></i> Event Date</p>
-                    <h5 class="m-0 fw-bold">Sunday, 27 Sep 2025</h5>
+                    <h5 class="m-0 fw-bold">{{ $event_detailsss['event_date'] }}</h5>
                 </div>
 
                 <div class="event-divider"></div>
@@ -50,7 +47,7 @@
                 <!-- Location -->
                 <div class="event-info__block">
                     <p class="p-large mb-2"><i class="fa-solid fa-location-dot"></i> Location</p>
-                    <h6 class="m-0 fw-bold">At Turaif</h6>
+                    <h6 class="m-0 fw-bold">{{ $event_detailsss['city'] }}</h6>
                 </div>
 
                 <div class="event-divider"></div>
@@ -59,7 +56,7 @@
                 <div class="d-flex align-items-center gap-3 justify-content-between w-100 event-info__block">
                     <div>
                         <p class="p-large mb-2">Starting from </p>
-                        <h5 class="m-0 fw-bold">SAR 160</h5>
+                        <h5 class="m-0 fw-bold">SAR {{ $event_detailsss['price'] }}</h5>
                     </div>
                     <div class="d-flex align-items-center gap-3">
                         <!-- Wishlist -->
@@ -128,7 +125,7 @@
                             <div class="icon primary-text flex-center"><i class="fa-solid fa-location-dot"></i></div>
                             <div>
                                 <p class="text-light2 p-small">Location:</p>
-                                <p class="p-large fw-600">At-Turaif, Riyadh</p>
+                                <p class="p-large fw-600">{{ $event_detailsss['location'] }}</p>
                             </div>
                         </div>
 
@@ -136,7 +133,7 @@
                             <div class="icon primary-text flex-center"><i class="fa-solid fa-cake-candles"></i></div>
                             <div>
                                 <p class="text-light2 p-small">Ages:</p>
-                                <p class="p-large fw-600">All</p>
+                                <p class="p-large fw-600">{{ $event_detailsss['age_limit'] }}</p>
                             </div>
                         </div>
 
@@ -144,7 +141,7 @@
                             <div class="icon primary-text flex-center"><i class="fa-regular fa-clock"></i></div>
                             <div>
                                 <p class="text-light2 p-small">Time:</p>
-                                <p class="p-large fw-600">Sun: 03:00 PM to 06:00 PM</p>
+                                <p class="p-large fw-600">{{ $event_detailsss['time'] }}</p>
                             </div>
                         </div>
                     </div>
@@ -324,7 +321,7 @@
                 </div>
                 <div class="section__header-CTA">
                     <a href="#" class="btn btn-primary rounded-pill">
-                        View All
+                        View All 
                         <i class="fa-solid fa-angles-right"></i>
                     </a>
                 </div>

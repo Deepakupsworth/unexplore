@@ -1,6 +1,119 @@
 @extends('frontend.layout')
 @section('content')
 
+<!-- <section class="mb-0 package-filter-bar-section">
+        <div class="container">
+            <div class="package-filter-bar package-filter-bar__desktop d-flex flex-wrap align-items-center gap-2 justify-content-between">
+                <div class="d-flex gap-2">
+                    <div class="pkg-fil-bar__input-wrapper flex-center">
+                        <label>Starting From</label>
+                        <input type="text" value="" placeholder="Enter...">
+                    </div>
+
+                    <div class="pkg-fil-bar__input-wrapper flex-center">
+                        <label>Starting From</label>
+                        <input type="text" value="" placeholder="Enter...">
+                    </div>
+
+                    <div class="pkg-fil-bar__input-wrapper flex-center">
+                        <label>Starting From</label>
+                        <input type="date" value="" placeholder="Enter...">
+                    </div>
+
+                    <div class="pkg-fil-bar__input-wrapper flex-center dropdown">
+                        <label>Starting From</label>
+                        <div class="w-100 d-flex justify-content-between align-items-center text-white gap-1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <p class="text-truncate">3 Adults, Economy</p>
+                            <i class="fa-solid fa-angle-down"></i>
+                        </div>
+                        <div class="dropdown-menu travellers-dropdown p-3 shadow-lg"> -->
+
+                            <!-- Adults -->
+                            <!-- <div class="traveller-row d-flex justify-content-between align-items-center mb-3">
+                                <div>
+                                    <strong>Adults</strong>
+                                    <p class="text-muted small m-0">12+ Years</p>
+                                </div>
+
+                                <div class="traveller-counter d-flex align-items-center gap-2">
+                                    <button class="traveller-counter-btn minus">
+                                        <i class="fa-solid fa-minus"></i>
+                                    </button>
+                                    <span class="count">1</span>
+                                    <button class="traveller-counter-btn plus">
+                                        <i class="fa-solid fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div> -->
+
+                            <!-- Children -->
+                            <!-- <div class="traveller-row d-flex justify-content-between align-items-center mb-3">
+                                <div>
+                                    <strong>Children</strong>
+                                    <p class="text-muted small m-0">2–12 Years</p>
+                                </div>
+
+                                <div class="traveller-counter d-flex align-items-center gap-2">
+                                    <button class="traveller-counter-btn minus">
+                                        <i class="fa-solid fa-minus"></i>
+                                    </button>
+                                    <span class="count">1</span>
+                                    <button class="traveller-counter-btn plus">
+                                        <i class="fa-solid fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div> -->
+
+                            <!-- Infants -->
+                            <!-- <div class="traveller-row d-flex justify-content-between align-items-center mb-3">
+                                <div>
+                                    <strong>Infants</strong>
+                                    <p class="text-muted small m-0">Below 2 Years</p>
+                                </div>
+
+                                <div class="traveller-counter d-flex align-items-center gap-2">
+                                    <button class="traveller-counter-btn minus">
+                                        <i class="fa-solid fa-minus"></i>
+                                    </button>
+                                    <span class="count">1</span>
+                                    <button class="traveller-counter-btn plus">
+                                        <i class="fa-solid fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div> -->
+                            <!-- Travel Classes -->
+                            <!-- <div class="d-flex flex-wrap gap-2 mt-2">
+                                <span class="traveller-chip active">Economy</span>
+                                <span class="traveller-chip">Business Class</span>
+                                <span class="traveller-chip">First Class</span>
+                                <span class="traveller-chip">Premium Economy</span>
+                            </div>
+                        </div>
+                    </div> -->
+
+                    <!-- Search Button -->
+                    <!-- <button class="btn btn-dark pkg-fil-bar__search-btn px-4 rounded-pill">Search</button>
+                </div> -->
+
+                <!-- Explore More Button -->
+                <!-- <button class="btn btn-light pkg-fil-bar__explore-btn flex-v-center gap-3">
+                    Explore More <i class="fa-solid fa-angles-right"></i>
+                </button>
+            </div>
+            <div class="w-100 text-start package-filter-bar__mobile mb-2">
+                <p class="f-14">Riyadh to</p>
+                <h4 class="fw-bold">Jeddah</h4>
+                <div class="d-flex align-items-center gap-2">
+                    <p class="f-14">25 Dec 2025, 2 Adults, 1 Room</p>
+                    <div class="primary-text" id="package-filter-bar-edit-btn" data-bs-toggle="modal" data-bs-target="#packageFilterModal">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+</section> -->
+
+
     <!-- 1. PACKAGE LISTING BANNER -->
     <section class="package-listing__banner">
         <div class="container">

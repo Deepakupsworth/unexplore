@@ -1,6 +1,6 @@
 <?php
 
-
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\RoleMiddleware;
@@ -12,6 +12,9 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ThingtodoController;
 use App\Http\Controllers\Admin\EventController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\DemoJsonController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\DestinationController;
 
 
 
@@ -24,9 +27,11 @@ Route::get('/lang/{locale}', function ($locale) {
     return redirect()->back();
 })->name('lang.switch');
 
+// Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/', function () {
     return view('frontend.home');
 }); 
+
 
 Route::get('/admin/dashboard', function () {
     return view('backend.admin.dashboard');
@@ -139,9 +144,9 @@ Route::middleware(['auth', RoleMiddleware::class.':admin'])->group(function () {
     });
 
     Route::prefix('admin')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
-    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/profile', [AuthController::class, 'show'])->name('profile.show');
+    Route::get('/profile/edit', [AuthController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile/update', [AuthController::class, 'update'])->name('profile.update');
     });
 
 });
@@ -179,14 +184,17 @@ Route::get('/destination', function () {
     return view('frontend.destination');
 })->name('destination');
 
-Route::get('/destination-details', function () {
-    return view('frontend.destination-details');
-})->name('destination.details');
+// Route::get('/destination-details', function () {
+//     return view('frontend.destination-details');
+// })->name('destination.details');
 
 
-Route::get('/event-details', function () {
-    return view('frontend.event-details');
-})->name('event.details');
+Route::get('/destination-details/{slug?}', [HomeController::class, 'destination_details'])->name('destination.details');
+
+// Route::get('/event-details', function () {
+//     return view('frontend.event-details');
+// })->name('event.details');
+Route::get('/event-details/{slug?}', [HomeController::class, 'event_details'])->name('event.details');
 
 Route::get('/event-listing', function () {
     return view('frontend.event-listing');
@@ -204,9 +212,11 @@ Route::get('/profile', function () {
     return view('frontend.profile');
 })->name('profile.view'); 
  
-Route::get('/things-to-do-nature', function () {
-    return view('frontend.things-to-do-nature');
-})->name('things-to-do-nature'); 
+// Route::get('/things-to-do-nature', function () { 
+//     return view('frontend.things-to-do-nature');
+// })->name('things-to-do-nature'); 
+
+Route::get('/things-to-do-nature/{slug?}', [HomeController::class, 'things_to_do_nature'])->name('things-to-do.nature');
 
 
 Route::get('/things-to-do', function () {
@@ -217,3 +227,35 @@ Route::get('/things-to-do', function () {
 Route::get('/to-do-things-search', function () {
     return view('frontend.to-do-things-search');
 })->name('to.do.things.search');
+
+Route::get('/about-us', function () {
+    return view('frontend.about-us');
+})->name('about.us');
+
+Route::get('/blog-details', function () {
+    return view('frontend.blog-details');
+})->name('blog.details');
+
+Route::get('/blogs', function () {
+    return view('frontend.blogs');
+})->name('blogs.view');
+
+Route::get('/checkout', function () {
+    return view('frontend.checkout');
+})->name('checkout.view');
+
+Route::get('/contact-us', function () {
+    return view('frontend.contact-us');
+})->name('contact.us.view');
+
+//Route::post('/contact-submit', [AuthController::class, 'send'])->name('contact.send'); 
+Route::match(['get', 'post'], '/contact-submit', [AuthController::class, 'send'])->name('contact.send');
+
+//json file route 
+Route::get('/saudi-packages', [DemoJsonController::class, 'index']); 
+Route::get('/packege-details-json', [DemoJsonController::class, 'packege_details_page']); 
+Route::get('/things-to-do-nature-json', [DemoJsonController::class, 'things_to_do_nature_page']); 
+Route::get('/event-details-json', [DemoJsonController::class, 'event_details_page']);
+Route::get('/destination-details-json', [DemoJsonController::class, 'destination_detail_page']);
+
+

@@ -10,11 +10,11 @@
     <!-- <img class="hero-banner__image" src="../assets/hero-banner-bg.png" alt="Banner"> -->
     <div class="container">
       <div class="dest-details-banner__content">
-        <h1 class="text-white"><strong>Al-Didhan</strong> Reserve</h1>
+        <h1 class="text-white"><strong>{{ $things_to_doss ['region'] ?? '' }}</strong> Reserve</h1> 
         <img src="{{ asset('frontend/assets/hero-banner-vision.png') }}" alt="Vision 2030"
           class="dest-details-banner__vision d-none-sm d-none-md">
         <div class="dest-details-banner__btn-group">
-          <button class="btn btn-primary rounded-pill">See Images</button>
+          <button class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#galleryModal">See Images</button>
         </div>
       </div>
     </div>
@@ -27,43 +27,26 @@
         <div class="col-lg-8">
           <div class="section__header mb-5">
             <div class="section__header-content">
-              <h2 class="section__heading">About Al-Didhan Reserve</h2>
-              <p class="section__description">Steeped in heritage yet bursting with modern flair, Jeddah effortlessly
-                blends its captivating past with a dynamic present. Explore the UNESCO-listed streets of Al Balad, where
-                centuries-old architecture tells stories of trade, tradition, and culture. Indulge in world-class
-                shopping experiences at the Mall of Arabia and the prestigious Red Sea Mall, home to international
-                brands and vibrant local boutiques.</p>
-              <p class="section__description">Breathe in the refreshing sea breeze along the iconic Jeddah Corniche, or
-                dive beneath the waves into
-                crystal-clear waters to explore some of the Red Sea’s most vibrant coral reefs. As night falls, gaze
-                upon the breathtaking spectacle of the King Fahd Fountain, illuminating the sky as it propels water an
-                astonishing 312 meters upward, making it the tallest fountain in the world.
-                 Whether seeking adventure, culture, or relaxation, Jeddah promises an unforgettable experience on the
-                shores of the Red Sea</p>
+              <h2 class="section__heading">{{ $things_to_doss ['about_section'] ['heading'] ?? '' }} </h2>
+              <p class="section__description"> {{ $things_to_doss['about_section'] ['description'] ?? '' }}  </p>
+              
             </div>
           </div>
           <div class="section__header mb-5">
             <div class="section__header-content">
-              <h4 class="section__heading primary-text">Nature and Beauty</h4>
-              <p class="section__description">Steeped in heritage yet bursting with modern flair, Jeddah effortlessly
-                blends its captivating past with a dynamic present. Explore the UNESCO-listed streets of Al Balad, where
-                centuries-old architecture tells stories of trade, tradition, and culture. Indulge in world-class
-                shopping experiences at the Mall of Arabia and the prestigious Red Sea Mall, home to international
-                brands and vibrant local boutiques.</p>
+              <h4 class="section__heading primary-text">{{ $things_to_doss ['nature_beauty'] ['heading'] ?? '' }}</h4>
+              <p class="section__description">{{ $things_to_doss['nature_beauty'] ['description'] ?? '' }} </p>
             </div>
           </div>
           <div class="section__header">
             <div class="section__header-content">
-              <h4 class="section__heading primary-text">Facilities and Services</h4>
-              <p class="section__description">Visitors can enjoy a fully immersive experience at the reserve, thanks to
-                its variety of facilities and services:</p>
+              <h4 class="section__heading primary-text">{{ $things_to_doss ['facilities_and_services'] ['heading'] ?? '' }}</h4> 
+              <p class="section__description">{{ $things_to_doss ['facilities_and_services'] ['description'] ?? '' }}</p> 
               <ul>
-                <li>Outdoor seating and private cabins for families and individuals</li>
-                <li>Food trucks offering popular local dishes</li>
-                <li>Local brands and seasonal agricultural products</li>
-                <li>Outdoor seating and private cabins for families and individuals</li>
-                <li>Food trucks offering popular local dishes</li>
-                <li>Local brands and seasonal agricultural products</li>
+                @foreach($things_to_doss ['facilities_and_services'] ['facilities'] as $facility)
+                  <li>{{ $facility }}</li>
+                @endforeach
+               
               </ul>
             </div>
           </div>
@@ -76,7 +59,7 @@
               <div class="icon primary-text flex-center"><i class="fa-solid fa-location-dot"></i></div>
               <div>
                 <p class="text-light2 p-small">Location:</p>
-                <p class="p-large fw-600">At-Turaif, Riyadh</p>
+                <p class="p-large fw-600">{{ $things_to_doss['information'] ['location'] ?? '' }}</p>
               </div>
             </div>
 
@@ -84,7 +67,7 @@
               <div class="icon primary-text flex-center"><i class="fa-solid fa-cake-candles"></i></div>
               <div>
                 <p class="text-light2 p-small">Ages:</p>
-                <p class="p-large fw-600">All</p>
+                <p class="p-large fw-600">{{ $things_to_doss['information'] ['ages'] ?? '' }}</p>
               </div>
             </div>
 
@@ -92,7 +75,7 @@
               <div class="icon primary-text flex-center"><i class="fa-regular fa-clock"></i></div>
               <div>
                 <p class="text-light2 p-small">Time:</p>
-                <p class="p-large fw-600">Sun: 03:00 PM to 06:00 PM</p>
+                <p class="p-large fw-600">{{ $things_to_doss['information'] ['time'] ?? '' }}</p>
               </div>
             </div>
           </div>
@@ -135,7 +118,11 @@
         <div class="row gy-3">
           <div class="col-lg-5">
             <div class="things-to-do-nature__about-img-wrapper">
-              <img class="img-fluid things-to-do-nature__about-img" src="{{ asset('frontend/assets/159.jpg') }}" alt="">
+           
+            
+            <img class="img-fluid things-to-do-nature__about-img" src="{{ asset($things_to_doss['about_blocks']['image']) }}" alt="">
+    
+            
               <img class="things-to-do-nature__about-img-strip" src="{{ asset('frontend/assets/vertical-strip.png') }}" alt="">
             </div>
           </div>
@@ -143,16 +130,12 @@
             <div class="things-to-do-nature__about-text">
               <div class="section__header">
                 <div class="section__header-content gap-3">
-                  <h3 class="section__heading">About Al-Didhan Reserve</h3>
+                  <h3 class="section__heading">{{ $things_to_doss['about_blocks'] ['title'] ?? '' }} </h3>
                   <ul>
-                    <li>Steeped in heritage yet bursting with modern flair, Jeddah effortlessly blends its captivating
-                      past with a dynamic present. </li>
-                    <li>Breathe in the refreshing sea breeze along the iconic Jeddah Corniche, or dive beneath the waves
-                      into crystal-clear waters to explore some of the Red Sea’s most vibrant coral reefs. </li>
-                    <li>Explore the UNESCO-listed streets of Al Balad, where centuries-old architecture tells stories of
-                      trade, tradition, and culture.</li>
-                    <li>Indulge in world-class shopping experiences at the Mall of Arabia and the prestigious Red Sea
-                      Mall, home to international brands and vibrant local boutiques.</li>
+                  @foreach($things_to_doss['about_blocks']['points'] as $block)
+                  <li>{{ $block}}</li>
+                @endforeach
+                    
                   </ul>
                 </div>
               </div>
@@ -172,15 +155,11 @@
             <div class="things-to-do-nature__about-text">
               <div class="section__header">
                 <div class="section__header-content gap-3">
-                  <h3 class="section__heading">About Didhan Valley</h3>
+                  <h3 class="section__heading">{{ $things_to_doss['additional_blocks'] ['title'] ?? '' }}</h3>
                   <ul>
-                    <li>hidden natural gem surrounded by stunning cliffs and desert landscapes</li>
-                    <li>Blends ancient heritage with peaceful, scenic views</li>
-                    <li>Home to unique rock formations, trails, and natural springs</li>
-                    <li>Perfect for hiking, photography, and nature exploration</li>
-                     <li>Offers tranquil sunrise and sunset views over rugged mountains</li>
-                     <li>Rich with archaeological sites and historical carvings</li>
-                     <li>Ideal for visitors seeking calm, culture, and outdoor adventure</li> 
+                  @foreach($things_to_doss['additional_blocks']['points'] as $block)
+                  <li>{{ $block}}</li>
+                @endforeach
                   </ul>
                 </div>
               </div>
@@ -188,7 +167,7 @@
           </div>
           <div class="col-lg-5">
             <div class="things-to-do-nature__about-img-wrapper">
-              <img class="img-fluid things-to-do-nature__about-img" src="{{ asset('frontend/assets/44877.jpg') }}" alt="">
+              <img class="img-fluid things-to-do-nature__about-img" src="{{ asset($things_to_doss['additional_blocks']['image']) }}" alt="">
               <img class="things-to-do-nature__about-img-strip right" src="{{ asset('frontend/assets/vertical-strip.png') }}" alt="">
             </div>
           </div>
@@ -470,5 +449,99 @@
       </div>
     </div>
   </section>
+
+  <div class="modal fade gallery-modal" id="galleryModal" tabindex="-1" data-bs-backdrop="static"
+    data-bs-keyboard="false" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+      <div class="modal-content bg-transparent border-0">
+
+        <!-- Close Button -->
+        <button type="button" class="btn-close gallery-close" data-bs-dismiss="modal"></button>
+
+        <div class="pkg-details__banner gallery-modal-parent-carousel-wrapper swiper m-0 p-0">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide">
+              <img src="../assets/package-details-banner.png" alt="Package Details Banner 1" class="img-fluid w-100">
+            </div>
+            <div class="swiper-slide">
+              <img src="../assets/package-banner.png" alt="Package Details Banner 1" class="img-fluid w-100">
+            </div>
+            <div class="swiper-slide">
+              <img src="../assets/about-saudi.png" alt="Package Details Banner 1" class="img-fluid w-100">
+            </div>
+            <div class="swiper-slide">
+              <img src="../assets/adventure1.png" alt="Package Details Banner 1" class="img-fluid w-100">
+            </div>
+            <div class="swiper-slide">
+              <img src="../assets/destination-banner-item.png" alt="Package Details Banner 1" class="img-fluid w-100">
+            </div>
+            <div class="swiper-slide">
+              <img src="../assets/exclusive-offer.png" alt="Package Details Banner 1" class="img-fluid w-100">
+            </div>
+            <div class="swiper-slide">
+              <img src="../assets/explore-destination1.png" alt="Package Details Banner 1" class="img-fluid w-100">
+            </div>
+          </div>
+          <div class="gallery-swiper-pagination"></div>
+        </div>
+        <div class="position-relative mt-4 gallery-modal-carousel-container">
+          <div class="gallery-modal-carousel-wrapper swiper">
+            <div class="swiper-wrapper">
+              <div class="pkg-details__banner-carousel-item swiper-slide">
+                <img src="../assets/package-details-banner.png" alt="Package Details Banner 1" class="img-fluid w-100">
+              </div>
+              <div class="pkg-details__banner-carousel-item swiper-slide">
+                <img src="../assets/package-banner.png" alt="Package Details Banner 2" class="img-fluid w-100">
+              </div>
+              <div class="pkg-details__banner-carousel-item swiper-slide">
+                <img src="../assets/about-saudi.png" alt="Package Details Banner 3" class="img-fluid w-100">
+              </div>
+              <div class="pkg-details__banner-carousel-item swiper-slide">
+                <img src="../assets/adventure1.png" alt="Package Details Banner 3" class="img-fluid w-100">
+              </div>
+              <div class="pkg-details__banner-carousel-item swiper-slide">
+                <img src="../assets/destination-banner-item.png" alt="Package Details Banner 3" class="img-fluid w-100">
+              </div>
+              <div class="pkg-details__banner-carousel-item swiper-slide">
+                <img src="../assets/exclusive-offer.png" alt="Package Details Banner 3" class="img-fluid w-100">
+              </div>
+              <div class="pkg-details__banner-carousel-item swiper-slide">
+                <img src="../assets/explore-destination1.png" alt="Package Details Banner 3" class="img-fluid w-100">
+              </div>
+            </div>
+          </div>
+          <div class="swiper-button-next gallery-carousel__next">
+            <i class="fa-solid fa-arrow-right"></i>
+          </div>
+          <div class="swiper-button-prev gallery-carousel__prev">
+            <i class="fa-solid fa-arrow-left"></i>
+          </div>
+        </div>
+
+        <!-- Main Image -->
+        <!-- <div class="gallery-main">
+          <img id="galleryMainImg" src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200"
+            class="img-fluid">
+        </div> -->
+
+        <!-- Thumbnails + Arrows -->
+        <!-- <div class="gallery-thumbs-wrapper">
+
+          <button class="gallery-arrow" id="prevImg">&#10094;</button>
+
+          <div class="gallery-thumbs">
+            <img class="thumb active" src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=300">
+            <img class="thumb" src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=300">
+            <img class="thumb" src="https://images.unsplash.com/photo-1519681393784-d120267933ba?w=300">
+            <img class="thumb" src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=300">
+            <img class="thumb" src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=300">
+          </div>
+
+          <button class="gallery-arrow" id="nextImg">&#10095;</button>
+        </div> -->
+
+      </div>
+    </div>
+  </div>
 
   @endsection

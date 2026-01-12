@@ -35,8 +35,8 @@
             <div class="col-md-4 mb-4">
               <p class="footer-link-heading p-large">Our company</p>
               <ul class="list-unstyled">
-                <li><a href="#" class="footer-link">About us</a></li>
-                <li><a href="#" class="footer-link">Contact Us</a></li>
+                <li><a href="{{ asset('/about-us') }}" class="footer-link">About us</a></li>
+                <li><a href="{{ asset('/contact-us') }}" class="footer-link">Contact Us</a></li>
                 <li><a href="#" class="footer-link">Sitemap</a></li>
               </ul>
             </div>

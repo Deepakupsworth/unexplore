@@ -33,8 +33,7 @@
 }
 
 /* XXL devices (wider screens, 2K monitors) */
-@media (min-width: 1440px) {
-}
+@media (min-width: 1440px) {}
 
 /* Extra large devices (large desktops) */
 @media (max-width: 1439px) {
@@ -59,22 +58,18 @@
 		font-size: 14px;
 	}
 
-	.carousel__full-width {
-		/* width: calc((100% - 1340px) / 2 + 15px); Align with container left */
-		/* width: calc(100% - (100% - 1280px) / 2); */
-		/* margin-left: calc((100% - 1280px) / 2); */
-		/* margin-left: calc((100vw - 1340px) / -2); */
-		/* padding-right: 20px; */
-		/* padding-left: 20px; */
-		/* padding-left: calc((100% - 1280px) / 2 + 24px); */
+	.pkg-fil-bar__input-wrapper {
+		width: 190px;
+		font-size: 14px;
 	}
 }
 
 /* Large devices (desktops) */
 @media (max-width: 1199px) {
+
 	/* ==========================================================================
-	   Base Styles
-	   ========================================================================== */
+		   Base Styles
+		   ========================================================================== */
 	h1,
 	.h1 {
 		font-size: 55px;
@@ -181,9 +176,9 @@
 
 	.carousel__full-width {
 		/* width: calc(100% - (100% - 1280px) / 2);
-	  margin-left: calc((100% - 1280px) / 2);
-	  padding-right: 20px;
-	  padding-left: 20px; */
+		  margin-left: calc((100% - 1280px) / 2);
+		  padding-right: 20px;
+		  padding-left: 20px; */
 		/* padding-left: calc((100% - 1280px) / 2 + 24px); */
 	}
 
@@ -215,16 +210,36 @@
 		gap: 12px;
 		font-size: 13px;
 	}
+
 	.event-info__block {
 		width: 25%;
+	}
+
+	.pkg-fil-bar__input-wrapper {
+		width: 160px;
+		font-size: 14px;
+	}
+
+	.pkg-fil-bar__search-btn {
+		max-width: 140px;
+	}
+
+	.pkg-fil-bar__explore-btn {
+		font-size: 14px;
+		padding: 6px 14px;
+	}
+
+	.auth-right {
+		padding: 40px;
 	}
 }
 
 /* Medium devices (tablets) */
 @media (max-width: 991.98px) {
+
 	/* ==========================================================================
-	   Base Styles
-	   ========================================================================== */
+		   Base Styles
+		   ========================================================================== */
 	h1,
 	.h1 {
 		font-size: 50px;
@@ -344,26 +359,33 @@
 		margin-left: 20px;
 		margin-right: 20px;
 	}
+
 	.desktop-nav {
 		display: none;
 	}
+
 	.mobile-nav {
 		display: block;
 	}
+
 	.mobile-nav .accordion-item {
 		background-color: transparent;
 	}
+
 	.mobile-nav .accordion-button {
 		padding: 0;
 		background-color: transparent;
 		color: var(--color-white);
 	}
+
 	.mobile-nav .accordion-button:after {
 		filter: grayscale(1) invert(1);
 	}
+
 	.mobile-nav .accordion-button:focus {
 		box-shadow: none;
 	}
+
 	.mobile-nav .navbar-nav {
 		gap: 12px;
 	}
@@ -434,13 +456,119 @@
 		font-size: 12px;
 		padding: 8px 16px;
 	}
+
+	.package-filter-bar__desktop {
+		display: none !important;
+	}
+
+	.package-listing__banner-content {
+		padding: 42px 12px 12px 12px;
+		gap: 24px;
+	}
+
+	.pkg-fil-modal-body .pkg-fil-bar__input-wrapper label {
+		background: var(--color-light2);
+		position: unset;
+		transform: unset;
+		padding: 0;
+		margin-bottom: 4px;
+		color: var(--color-text-dark);
+	}
+
+	.pkg-fil-modal-body .pkg-fil-bar__input-wrapper {
+		background-color: var(--color-light2);
+		display: flex;
+		flex-direction: column;
+		height: unset;
+		border-radius: 6px;
+		align-items: flex-start;
+		width: 100%;
+	}
+
+	.pkg-fil-modal-body .pkg-fil-bar__input-wrapper input {
+		color: var(--color-black);
+	}
+
+	.pkg-fil-modal-body .pkg-fil-bar__input-wrapper input::placeholder {
+		color: var(--color-text-light2);
+	}
+
+	.pkg-fil-modal-body .pkg-fil-bar__input-wrapper input[type="date"]::-webkit-calendar-picker-indicator {
+		filter: invert(0) brightness(200%);
+	}
+
+	.pkg-fil-modal-body .pkg-fil-bar__input-wrapper select {
+		color: var(--color-black);
+		background-image: url("data:image/svg+xml;utf8,<svg width='12' height='12' viewBox='0 0 12 12' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M4.64645 6.64645C4.84171 6.45118 5.15829 6.45118 5.35355 6.64645L8 9.29289L10.6464 6.64645C10.8417 6.45118 11.1583 6.45118 11.3536 6.64645C11.5488 6.84171 11.5488 7.15829 11.3536 7.35355L8.35355 10.3536C8.15829 10.5488 7.84171 10.5488 7.64645 10.3536L4.64645 7.35355C4.45118 7.15829 4.45118 6.84171 4.64645 6.64645Z' fill='black'/></svg>");
+	}
+
+	.pkg-fil-modal__close-btn {
+		border: none;
+		background: transparent;
+	}
+
+	.package-filter-bar-section {
+		position: unset;
+	}
+
+	.package-filter-bar__mobile {
+		display: block !important;
+	}
+
+	.pkg-fil-modal-body .travellers-dropdown {
+		width: 100%;
+	}
+
+	.blog-details__content-itinerary {
+		padding: 24px;
+	}
+
+	.blog-details__content-itinerary p {
+		font-size: 20px;
+	}
+
+	.blog-details__content {
+		margin-top: 32px;
+	}
+
+	.about-us__img-wrapper {
+		margin-top: 0;
+	}
+
+	.about-us__img-wrapper>div:first-child {
+		margin-top: 0;
+	}
+
+	.auth-wrapper {
+		flex-direction: column;
+	}
+
+	.auth-left {
+		width: 100%;
+		padding: 30px 30px 0px 30px;
+	}
+
+	.auth-back-btn {
+		position: unset;
+		width: fit-content;
+	}
+
+	.auth-left img {
+		display: none;
+	}
+
+	.auth-right {
+		width: 100%;
+		padding: 30px;
+	}
 }
 
 /* Small devices (landscape phones) */
 @media (max-width: 768px) {
+
 	/* ==========================================================================
-	   Base Styles
-	   ========================================================================== */
+		   Base Styles
+		   ========================================================================== */
 	h1,
 	.h1 {
 		font-size: 32px;
@@ -470,6 +598,10 @@
 	.h6 {
 		font-size: 16px;
 		line-height: 22px;
+	}
+
+	.p-small {
+		font-size: 12px;
 	}
 
 	.p-large {
@@ -544,7 +676,7 @@
 	}
 
 	.navbar-expand-lg .navbar-nav .nav-link {
-		color: var(--color-white);
+		color: var(--color-light2) !important;
 	}
 
 	.navbar-nav {
@@ -667,7 +799,7 @@
 		padding: 0;
 	}
 
-	.saudi-pass-banner__container .section__heading > div {
+	.saudi-pass-banner__container .section__heading>div {
 		display: inline;
 	}
 
@@ -685,115 +817,177 @@
 	.explore-destinations__item-image img {
 		height: 316px;
 	}
+
 	/* Package Listing */
 	.package-listing__results-applied-list {
 		flex-direction: column;
 		padding: 16px 0;
 	}
+
 	.package-listing__results-header {
 		flex-wrap: wrap;
 	}
+
 	.package-listing__results-list {
 		padding: 16px 0;
 	}
+
 	.package-listing__filters {
 		flex-direction: column;
 	}
+
 	.package-listing__filter-section {
 		width: 100%;
 	}
+
 	.package-listing__results {
 		margin-top: 16px;
 	}
+
 	.event-info-wrapper {
 		flex-direction: column;
 	}
+
 	.event-info-wrapper .event-info__block {
 		min-width: 100%;
 		padding: 16px 20px;
 		flex-direction: column;
 		align-items: flex-start !important;
 	}
+
 	.event-info-wrapper .event-divider {
 		display: none;
 	}
+
 	.event-listing__faq .accordion-body {
 		width: 100%;
 	}
+
 	.pkg-details__wrapper {
 		flex-direction: column;
 	}
+
 	.pkg-details__banner img {
 		height: 320px;
 	}
+
 	.pkg-details__banner-carousel-item img {
 		max-height: 80px;
 	}
+
 	.pkg-details__pricing {
 		width: 100%;
 	}
+
 	.package-listing__results-applied-list .package-listing__results-sort-dropdown {
 		margin-left: 0 !important;
 	}
+
 	.user-profile__content {
 		flex-direction: column;
 	}
+
 	.user-profile__menu {
 		width: 100%;
 	}
+
 	.user-profile__details-body {
 		flex-direction: column-reverse;
 	}
+
 	.user-profile__details-avatar,
 	.user-dashboard__packages {
 		width: 100%;
 	}
+
 	.user-dashboard__explore .section__header {
 		align-items: flex-start !important;
-        gap: 12px !important;
+		gap: 12px !important;
 	}
+
 	.user-dashboard__section {
 		flex-direction: column;
 	}
+
 	.user-profile__details-body {
 		padding-left: 0 !important;
-        padding-right: 0 !important;
+		padding-right: 0 !important;
 	}
+
 	.user-profile__details-body .user-profile__box {
 		border: none;
 	}
-	.user-bookings__nav > .nav {
+
+	.user-bookings__nav>.nav {
 		gap: 0;
 	}
+
 	.user-bookings__nav .nav-link {
 		padding: 10px 16px;
 		font-size: 14px;
 	}
+
 	.things-to-do-nature__about-content {
 		padding: 16px;
 	}
+
 	.things-to-do-nature__about-img-wrapper .things-to-do-nature__about-img {
 		min-height: 200px;
 	}
+
 	.things-to-do-nature__about-text {
 		padding: 0;
 	}
+
 	.things-to-do-nature__adventure-wrapper {
 		padding: 24px 22px;
 	}
+
 	.things-to-do-nature__adventure-wrapper {
 		min-height: 380px;
 	}
+
 	.to-do-things-search .package-listing__results-header {
 		height: unset;
+	}
+
+	.pkg-details__pricing {
+		position: unset;
+	}
+
+	.pkg-details__day-plan {
+		flex-direction: column;
+	}
+
+	.pkg-details__day-plan-left {
+		width: 100%;
+	}
+
+	.pkg-details__day-dates {
+		flex-direction: row !important;
+		width: max-content !important;
+		overflow-x: auto;
+	}
+
+	.pkg-details__day-dates-wrapper {
+		overflow-x: auto;
+	}
+
+	.pkg-details__day-date-item::before {
+		content: unset !important;
+	}
+
+	.pkg-details__accordion-item .accordion-header>div:first-child {
+		gap: 6px !important;
 	}
 }
 
 /* Extra small devices (phones) */
 @media (max-width: 575px) {
+
 	/* ==========================================================================
-	   Base Styles
-	   ========================================================================== */
+		   Base Styles
+		   ========================================================================== */
 	h1,
 	.h1 {
 		font-size: 32px;
@@ -1018,7 +1212,7 @@
 		padding: 0;
 	}
 
-	.saudi-pass-banner__container .section__heading > div {
+	.saudi-pass-banner__container .section__heading>div {
 		display: inline;
 	}
 
@@ -1051,7 +1245,51 @@
 	.dest-details-banner__content {
 		height: calc(80vh - 60px);
 	}
+
 	.user-wishlist__search-bar {
 		max-width: 100%;
+	}
+
+	.pkg-details__flight-segment {
+		/* flex-direction: column; */
+		align-items: flex-center;
+		flex-wrap: wrap;
+	}
+
+	.pkg-details__flight-duration-block {
+		display: none;
+	}
+
+	.pkg-details__flight-segment>div.w-100 {
+		width: fit-content !important;
+		gap: 12px;
+	}
+
+	.pkg-details__flight-segment>div.w-100>div {
+		gap: 12px;
+		align-items: center;
+	}
+
+	#travellerModal .modal-body {
+		padding: 16px;
+	}
+
+	.traveller-tabs button {
+		width: auto;
+		gap: 8px;
+	}
+
+	.trav-btn {
+		font-size: 12px;
+	}
+
+	.checkout-traveller-header {
+		flex-direction: column;
+		align-items: self-start !important;
+		gap: 12px;
+	}
+
+	.about-us__img-wrapper img {
+		min-height: 154px;
 	}
 }
