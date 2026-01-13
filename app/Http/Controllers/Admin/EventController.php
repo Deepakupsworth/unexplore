@@ -3,123 +3,109 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Event;
-use App\Models\EventGalleryImage;
 use App\Models\EventTranslation;
+use App\Models\City;
 use App\Models\Language;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
 
 class EventController extends Controller
 {
-    /**
-     * Show all events list
-     */
+    // List
     public function index()
     {
-        $events = Event::with(['translations' => function($q){
-            $q->whereHas('language', fn($l) => $l->where('code', 'en'));
-        }])->paginate(10); 
-
-        // print_r($events); die;
+        $events = Event::with(['en', 'city', 'thumb'])->paginate(10);
         return view('backend.events.index', compact('events'));
     }
 
+    // Form
     public function form($id = null)
     {
-        $model = Event::with(['translations', 'galleryImages'])->find($id) ?? new Event();
+        $model = Event::with(['translations', 'gallery', 'thumb'])->find($id) ?? new Event();
         $languages = Language::all();
+        $cities = City::pluck('slug', 'id');
 
-        // fetch all cities with plucked id and name in english
-        $cities = \App\Models\City::with(['translations' => function($q){
-            $q->whereHas('language', fn($l) => $l->where('code', 'en'));
-        }])->get()->pluck('translations.0.name', 'id'); 
-
-        $categories = \App\Models\Category::with(['translations' => function($q){
-            $q->whereHas('language', fn($l) => $l->where('code', 'en'));
-        }])->get()->pluck('translations.0.name', 'id'); 
-
-
-        // print_r($cities); die;
-        return view('backend.events.form', compact('model', 'languages', 'cities', 'categories'));
+        return view('backend.events.form', compact('model', 'languages', 'cities'));
     }
 
+    // Save
     public function save(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'translations.*.name' => 'nullable|string|max:255',
-            'translations.1.name' => 'required|string|max:255', // English required (id=1)
+        $request->validate([
+            'translations.en.title' => 'required|string|max:255',
+            'translations.en.url'   => 'required|string|max:255',
         ]);
 
-        
-        if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
-        }
-//   print_r($request->all()); die;
-        $events = Event::updateOrCreate(
+        // Save event
+        $event = Event::updateOrCreate(
             ['id' => $request->id],
             [
-                'slug' => $request->slug ?? Str::slug($request->translations[1]['name']),
-                'start_date' => $request->start_date,
-                'end_date' => $request->end_date,
+                'slug'         => $request->slug ?? Str::slug($request->translations['en']['title']),
+                'start_date'   => $request->start_date,
+                'end_date'     => $request->end_date,
                 'opening_days' => $request->opening_days,
-                'city_id' => $request->city_id,
+                'opening_time' => $request->opening_time,
+                'closing_time' => $request->closing_time,
+                'city_id'      => $request->city_id,
+                'capacity'     => $request->capacity,
+                'status'       => $request->status ?? 1,
+                'location'     => $request->location,
+                'latitude'     => $request->latitude,
+                'longitude'    => $request->longitude,
+                'video_url'    => $request->video_url,
             ]
         );
 
-
-        if ($request->hasFile('thumb_image')) {
-            if ($events->thumb_image) {
-                Storage::delete('public/' . $events->thumb_image);
-            }
-            $path = $request->file('thumb_image')->store('events/thumbs', 'public');
-            $events->update(['image' => $path]); 
-        }
-
         // Save translations
-        foreach ($request->translations as $langId => $data) {
-            if($data['name']){
+        foreach ($request->translations as $lang => $data) {
+            if (!empty($data['title'])) {
                 EventTranslation::updateOrCreate(
-                    ['event_id' => $events->id, 'language_id' => $langId],
                     [
-                        'name' => $data['name'] ?? '',
-                        'about' => $data['about'] ?? '',
+                        'event_id'     => $event->id,
+                        'language_code' => strtolower($lang),
+                    ],
+                    [
+                        'title'       => $data['title'],
+                        'sub_title'   => $data['sub_title'] ?? null,
+                        'url'         => $data['url'] ?? null,
+                        'description' => $data['description'] ?? null,
                     ]
                 );
             }
         }
 
-       // Save gallery images
-        if ($request->hasFile('gallery_images')) {
-            foreach ($request->file('gallery_images') as $file) {
-                $path = $file->store('event/gallery', 'public');
-                EventGalleryImage::create([
-                    'event_id' => $events->id,
-                    'image_path' => $path,
-                ]);
+        // Thumb
+        if ($request->hasFile('thumb')) {
+            if ($event->thumb) {
+                Storage::disk('public')->delete($event->thumb->image_path);
+                $event->thumb()->delete();
+            }
+            storeImage($event, $request->thumb, 'events/thumbs', 'thumb', 'en', true);
+        }
+
+        // Gallery
+        if ($request->hasFile('gallery')) {
+            foreach ($request->gallery as $img) {
+                storeImage($event, $img, 'events/gallery', 'gallery');
             }
         }
 
-        return redirect()->route('events.index')->with('success', 'Event saved successfully!');
+        return redirect()->route('events.index')->with('success', 'Event saved successfully');
     }
 
-    public function deleteGalleryImage($id)
+    // Delete
+    public function delete($id)
     {
-        $image = EventGalleryImage::findOrFail($id);
-        if ($image->image_path && \Storage::disk('public')->exists($image->image_path)) {
-            \Storage::disk('public')->delete($image->image_path);
+        $event = Event::findOrFail($id);
+
+        foreach ($event->images as $img) {
+            Storage::disk('public')->delete($img->image_path);
         }
-        $image->delete();
 
-        return response()->json(['success' => true]);
-    }
-
-    public function destroy($id)
-    {
-        $event = \App\Models\Event::findOrFail($id);
         $event->delete();
-        return redirect()->back()->with('success', 'Event deleted successfully.');
-    } 
+
+        return redirect()->back()->with('success', 'Event deleted');
+    }
 }

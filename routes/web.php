@@ -12,7 +12,9 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\ThingtodoController;
 use App\Http\Controllers\Admin\EventController;
+use App\Http\Controllers\Admin\HotelController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\TransportController;
 use App\Http\Controllers\Frontend\Profile\ProfileController as FrontendProfileController;
 
 use App\Http\Controllers\DemoJsonController;
@@ -102,7 +104,7 @@ Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function ()
             Route::get('/{id}/edit', [CityController::class, 'form'])->name('cities.edit');
             Route::post('/save', [CityController::class, 'save'])->name('cities.save');
             Route::delete('/delete/{id}', [CityController::class, 'destroy'])->name('cities.delete');
-            Route::delete('/gallery/delete/{id}', [CityController::class, 'deleteGalleryImage'])->name('cities.gallery.delete');
+            Route::delete('/gallery/delete/{id}', [CityController::class, 'deleteGalleryImage'])->name('cities.image.delete');
         });
 
         /*
@@ -163,6 +165,38 @@ Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function ()
 
         // AJAX
         Route::patch('/countries/{id}/toggle-status', [CountryController::class, 'toggleStatus']);
+    });
+
+    Route::prefix('admin') ->group(function () {
+            Route::prefix('hotels')->group(function () {
+
+            Route::get('/', [HotelController::class, 'index'])
+                ->name('hotels.index');
+
+            Route::get('/create', [HotelController::class, 'form'])
+                ->name('hotels.create');
+
+            Route::get('/{id}/edit', [HotelController::class, 'form'])
+                ->name('hotels.edit');
+
+            Route::post('/save', [HotelController::class, 'save'])
+                ->name('hotels.save');
+
+            Route::delete('/{id}', [HotelController::class, 'delete'])
+                ->name('hotels.delete');
+
+        });
+
+    });
+
+    Route::prefix('admin')->group(function () {
+        Route::prefix('transports')->group(function () {
+        Route::get('/', [TransportController::class, 'index'])->name('transports.index');
+        Route::get('/create', [TransportController::class, 'form'])->name('transports.create');
+        Route::get('/{id}/edit', [TransportController::class, 'form'])->name('transports.edit');
+        Route::post('/save', [TransportController::class, 'save'])->name('transports.save');
+        Route::delete('/{id}', [TransportController::class, 'delete'])->name('transports.delete');
+    });
     });
 
 });

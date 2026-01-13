@@ -5,45 +5,29 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Event extends Model
+class Transport extends Model
 {
     use SoftDeletes;
 
     protected $fillable = [
-        'slug',
-        'start_date',
-        'end_date',
-        'opening_days',
-        'opening_time',
-        'closing_time',
         'city_id',
+        'type',
+        'contact_number',
         'capacity',
         'status',
-        'location',
-        'latitude',
-        'longitude',
-        'video_url',
     ];
 
-    // City
+    public function translations()
+    {
+        return $this->hasMany(TransportTranslation::class);
+    }
+
     public function city()
     {
         return $this->belongsTo(City::class);
     }
 
-    // Translations
-    public function translations()
-    {
-        return $this->hasMany(EventTranslation::class);
-    }
-
-    // English shortcut
-    public function en()
-    {
-        return $this->hasOne(EventTranslation::class)->where('language_code', 'en');
-    }
-
-    // Images (polymorphic)
+    // For polymorphic images (thumb, gallery)
     public function images()
     {
         return $this->morphMany(Image::class, 'imageable');

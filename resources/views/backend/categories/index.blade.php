@@ -46,7 +46,8 @@
                                  @forelse ($categories as $key => $cat)
                                  <tr>
                                     <td class="table-td">{{ $key + 1 }}</td>
-                                    <td class="table-td">{{ $cat->translations->first()->name ?? '-' }}</td>
+                                    <td class="table-td">{{ $cat->translation->name ?? '-' }}
+                                    </td>
                                     <td class="table-td">
                                        <img src="{{ $cat->thumb_image ? asset('storage/'.$cat->thumb_image) : '#' }}" alt="Thumb Image" class="w-12 h-12 object-cover">
                                     </td>
@@ -60,14 +61,14 @@
                                                 <iconify-icon icon="heroicons:pencil-square"></iconify-icon>
                                              </button>
                                           </a>
-                                          <form action="{{ route('categories.delete', $cat->id) }}" 
-                                             method="POST" 
+                                          <form action="{{ route('categories.delete', $cat->id) }}"
+                                             method="POST"
                                              onsubmit="return confirm('Are you sure you want to delete this category?')"
                                              >
                                              @csrf
                                              @method('DELETE')
-                                             <button 
-                                                type="submit" 
+                                             <button
+                                                type="submit"
                                                 class="action-btn"
                                                 >
                                                 <iconify-icon icon="heroicons:trash"></iconify-icon>

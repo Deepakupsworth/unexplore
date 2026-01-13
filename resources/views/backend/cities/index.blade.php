@@ -12,7 +12,7 @@
             <li class="inline-block relative top-[3px] text-base text-primary-500 font-Inter ">
               <a href="{{ asset('/admin/dashboard') }}">
                 <iconify-icon icon="heroicons-outline:home"></iconify-icon>
-                <iconify-icon icon="heroicons-outline:chevron-right" 
+                <iconify-icon icon="heroicons-outline:chevron-right"
                   class="relative text-slate-500 text-sm rtl:rotate-180"></iconify-icon>
               </a>
             </li>
@@ -26,7 +26,7 @@
         <div class="card">
           <header class="card-header noborder flex justify-between items-center">
             <h4 class="card-title">Cities</h4>
-            <a href="{{ route('cities.create') }}" 
+            <a href="{{ route('cities.create') }}"
                class="btn btn-dark text-white text-sm px-4 py-2 rounded">
               + Add City
             </a>
@@ -50,14 +50,16 @@
                       </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-slate-100 dark:bg-slate-800 dark:divide-slate-700">
-                      
+
                       @forelse($cities as $city)
                         <tr>
                           <td class="table-td">{{ $city->id }}</td>
-                          
+
                           <td class="table-td">
+
                             @if($city->thumb_image)
-                              <img src="{{ asset('storage/'.$city->thumb_image) }}" 
+
+                              <img src="{{ asset('storage/'.$city->thumb_image) }}"
                                    alt="thumb" class="w-12 h-12 rounded object-cover">
                             @else
                               <span class="text-xs text-slate-400">No Image</span>
@@ -65,9 +67,9 @@
                           </td>
 
                           <td class="table-td">
-                            {{ optional($city->translations->where('language.code', 'en')->first())->name ?? '—' }}
-                          </td>
+                            {{ optional($city->translations->where('language_code', 'en')->first())->name ?? '—' }}
 
+                          </td>
                           <td class="table-td">{{ $city->slug }}</td>
                           <td class="table-td">{{ $city->created_at->format('d M Y') }}</td>
 
@@ -78,14 +80,14 @@
                                       <iconify-icon icon="heroicons:pencil-square"></iconify-icon>
                                     </button>
                                 </a>
-                                <form action="{{ route('cities.delete', $city->id) }}" 
-                                    method="POST" 
+                                <form action="{{ route('cities.delete', $city->id) }}"
+                                    method="POST"
                                     onsubmit="return confirm('Are you sure you want to delete this city?')"
                                     >
                                     @csrf
                                     @method('DELETE')
-                                    <button 
-                                      type="submit" 
+                                    <button
+                                      type="submit"
                                       class="action-btn"
                                       >
                                       <iconify-icon icon="heroicons:trash"></iconify-icon>

@@ -9,7 +9,7 @@ return new class extends Migration {
         Schema::create('city_translations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('city_id')->constrained('cities')->cascadeOnDelete();
-            $table->string('language_code',10)->default('en');
+            $table->string('language_code', 10);
             $table->string('name');
             $table->string('tagline')->nullable();
             $table->text('about')->nullable();

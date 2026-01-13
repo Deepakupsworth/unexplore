@@ -10,6 +10,7 @@ class Country extends Model
         'name',
         'code',
         'currency_code',
+        'language_code',
         'status'
     ];
 }

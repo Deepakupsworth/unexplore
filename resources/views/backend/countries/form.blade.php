@@ -21,31 +21,65 @@
 
                         <div class="grid grid-cols-2 gap-5">
 
+                            {{-- Country Name --}}
                             <div>
-                                <label class="form-label">Country Name</label>
-                                <input class="form-control" name="name" value="{{ old('name', $country->name) }}">
+                                <label class="form-label">
+                                    Country Name <span class="text-red-500">*</span>
+                                </label>
+                                <input class="form-control @error('name') border-red-500 ring-1 ring-red-500 @enderror"
+                                    name="name" value="{{ old('name', $country->name) }}">
+
+                                @error('name')
+                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
 
+                            {{-- Country Code --}}
                             <div>
-                                <label class="form-label">Country Code</label>
-                                <input class="form-control" name="code" value="{{ old('code', $country->code) }}">
+                                <label class="form-label">
+                                    Country Code <span class="text-red-500">*</span>
+                                </label>
+                                <input class="form-control @error('code') border-red-500 ring-1 ring-red-500 @enderror"
+                                    name="code" value="{{ old('code', $country->code) }}">
+
+                                @error('code')
+                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
 
+                            {{-- Currency Code --}}
                             <div>
-                                <label class="form-label">Currency Code</label>
-                                <input class="form-control" name="currency_code"
-                                    value="{{ old('currency_code', $country->currency_code) }}">
+                                <label class="form-label">
+                                    Currency Code <span class="text-red-500">*</span>
+                                </label>
+                                <input
+                                    class="form-control @error('currency_code') border-red-500 ring-1 ring-red-500 @enderror"
+                                    name="currency_code" value="{{ old('currency_code', $country->currency_code) }}">
+
+                                @error('currency_code')
+                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
 
+                            {{-- Status --}}
                             <div>
                                 <label class="form-label">Status</label>
-                                <select name="status" class="form-control">
-                                    <option value="1" {{ $country->status ? 'selected' : '' }}>Active</option>
-                                    <option value="0" {{ !$country->status ? 'selected' : '' }}>Inactive</option>
+                                <select name="status"
+                                    class="form-control @error('status') border-red-500 ring-1 ring-red-500 @enderror">
+
+                                    <option value="1" {{ old('status', $country->status) == 1 ? 'selected' : '' }}>
+                                        Active</option>
+                                    <option value="0" {{ old('status', $country->status) == 0 ? 'selected' : '' }}>
+                                        Inactive</option>
                                 </select>
+
+                                @error('status')
+                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
 
                         </div>
+
 
                         <div class="mt-6 flex gap-3">
                             <button class="btn btn-dark">

@@ -13,15 +13,15 @@
                             </a>
                         </li>
                         <li class="text-slate-400">/</li>
-                        <li class="text-slate-700 font-medium">Events</li>
+                        <li class="text-slate-700 font-medium">Hotels</li>
                     </ul>
                 </div>
 
                 <div class="card">
                     <header class="card-header flex justify-between items-center">
-                        <h4 class="card-title">Events</h4>
-                        <a href="{{ route('events.create') }}" class="btn btn-dark">
-                            + Add Event
+                        <h4 class="card-title">Hotels</h4>
+                        <a href="{{ route('hotels.create') }}" class="btn btn-dark">
+                            + Add Hotel
                         </a>
                     </header>
 
@@ -32,38 +32,46 @@
                                 <thead class="bg-slate-50 dark:bg-slate-800">
                                     <tr>
                                         <th class="table-th">#</th>
-                                        <th class="table-th">Title</th>
+                                        <th class="table-th">Hotel Name</th>
                                         <th class="table-th">City</th>
-                                        <th class="table-th">Dates</th>
+                                        <th class="table-th">Stars</th>
+                                        <th class="table-th">Meal</th>
                                         <th class="table-th">Status</th>
+                                        <th class="table-th">Thumb</th>
                                         <th class="table-th text-right">Action</th>
                                     </tr>
                                 </thead>
 
                                 <tbody class="bg-white dark:bg-slate-800 divide-y divide-slate-100 dark:divide-slate-700">
 
-                                    @forelse($events as $event)
+                                    @forelse($hotels as $hotel)
                                         <tr>
-                                            <td class="table-td">{{ $event->id }}</td>
+                                            <td class="table-td">{{ $hotel->id }}</td>
 
                                             <td class="table-td font-medium text-slate-700 dark:text-white">
-                                                {{ optional($event->translations->first())->title ?? '—' }}
+                                                {{ $hotel->translations->first()->name ?? '—' }}
                                             </td>
 
                                             <td class="table-td">
-                                                {{ $event->city->slug ?? '—' }}
+                                                {{ $hotel->city->slug ?? '—' }}
                                             </td>
 
                                             <td class="table-td">
-                                                @if ($event->start_date)
-                                                    {{ $event->start_date }} → {{ $event->end_date ?? '—' }}
+                                                {{ $hotel->star_rating ? $hotel->star_rating . ' ★' : '—' }}
+                                            </td>
+
+                                            <td class="table-td">
+                                                @if ($hotel->has_meal)
+                                                    <span
+                                                        class="px-2 py-1 rounded bg-green-100 text-green-700 text-xs">Yes</span>
                                                 @else
-                                                    —
+                                                    <span
+                                                        class="px-2 py-1 rounded bg-slate-100 text-slate-600 text-xs">No</span>
                                                 @endif
                                             </td>
 
                                             <td class="table-td">
-                                                @if ($event->status)
+                                                @if ($hotel->status)
                                                     <span
                                                         class="px-2 py-1 rounded bg-green-100 text-green-700 text-xs">Active</span>
                                                 @else
@@ -72,16 +80,25 @@
                                                 @endif
                                             </td>
 
+                                            <td class="table-td">
+                                                @if ($hotel->thumb)
+                                                    <img src="{{ asset('storage/' . $hotel->thumb->image_path) }}"
+                                                        class="w-10 h-10 object-cover rounded border">
+                                                @else
+                                                    —
+                                                @endif
+                                            </td>
+
                                             <td class="table-td text-right">
                                                 <div class="flex justify-end gap-2">
-                                                    <a href="{{ route('events.edit', $event->id) }}" class="action-btn">
+                                                    <a href="{{ route('hotels.edit', $hotel->id) }}" class="action-btn">
                                                         <iconify-icon icon="heroicons:pencil-square"></iconify-icon>
                                                     </a>
 
-                                                    <form method="POST" action="{{ route('events.delete', $event->id) }}">
+                                                    <form method="POST" action="{{ route('hotels.delete', $hotel->id) }}">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button onclick="return confirm('Delete this event?')"
+                                                        <button onclick="return confirm('Delete this hotel?')"
                                                             class="action-btn">
                                                             <iconify-icon icon="heroicons:trash"></iconify-icon>
                                                         </button>
@@ -91,8 +108,8 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="6" class="text-center py-10 text-slate-400">
-                                                No events found
+                                            <td colspan="8" class="text-center py-10 text-slate-400">
+                                                No hotels found
                                             </td>
                                         </tr>
                                     @endforelse
@@ -102,7 +119,7 @@
                         </div>
 
                         <div class="mt-6">
-                            {{ $events->links() }}
+                            {{ $hotels->links() }}
                         </div>
 
                     </div>
