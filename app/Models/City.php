@@ -16,8 +16,20 @@ class City extends Model
         return $this->hasMany(CityTranslation::class);
     }
 
-    public function galleryImages()
+    public function images()
     {
-        return $this->hasMany(CityGalleryImage::class);
+        return $this->morphMany(Image::class, 'imageable');
+    }
+
+    public function thumb()
+    {
+        return $this->morphOne(Image::class, 'imageable')
+            ->where('role', 'thumb');
+    }
+
+    public function gallery()
+    {
+        return $this->morphMany(Image::class, 'imageable')
+            ->where('role', 'gallery');
     }
 }
