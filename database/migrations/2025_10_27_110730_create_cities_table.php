@@ -11,9 +11,17 @@ return new class extends Migration {
             $table->string('slug', 255)->unique();
             $table->string('thumb_image')->nullable();
             $table->string('video_url')->nullable();
-            $table->timestamps();
 
             $table->index('slug');
+
+            $table->unsignedBigInteger('country_id');
+            $table->foreign('country_id')
+            ->references('id')
+            ->on('countries')
+            ->onDelete('cascade');
+            $table->timestamps();
+
+
         });
     }
 

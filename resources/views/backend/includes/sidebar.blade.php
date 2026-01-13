@@ -74,6 +74,14 @@
             </a>
           </li>
           <li class="">
+            <a href="{{ url('/admin/countries') }}" class="navItem">
+              <span class="flex items-center">
+                <iconify-icon class=" nav-icon" icon="heroicons-outline:building-office"></iconify-icon>
+                <span>Country</span>
+              </span>
+            </a>
+          </li>
+          <li class="">
             <a href="{{ url('/admin/cities') }}" class="navItem">
               <span class="flex items-center">
                 <iconify-icon class=" nav-icon" icon="heroicons-outline:building-office"></iconify-icon>

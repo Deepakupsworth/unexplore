@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\App;
 use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\ThingtodoController;
 use App\Http\Controllers\Admin\EventController;
 use App\Http\Controllers\Admin\ProfileController;
@@ -151,6 +152,19 @@ Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function ()
         Route::get('/profile/edit', [AuthController::class, 'edit'])->name('profile.edit');
         Route::post('/profile/update', [AuthController::class, 'update'])->name('profile.update');
     });
+
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::get('/countries', [CountryController::class, 'index'])->name('countries.index');
+        Route::get('/countries/create', [CountryController::class, 'create'])->name('countries.create');
+        Route::post('/countries', [CountryController::class, 'store'])->name('countries.store');
+        Route::get('/countries/{id}/edit', [CountryController::class, 'edit'])->name('countries.edit');
+        Route::put('/countries/{id}', [CountryController::class, 'update'])->name('countries.update');
+        Route::delete('/countries/{id}', [CountryController::class, 'destroy'])->name('countries.destroy');
+
+        // AJAX
+        Route::patch('/countries/{id}/toggle-status', [CountryController::class, 'toggleStatus']);
+    });
+
 });
 
 Route::get('/basic_form', function () {
