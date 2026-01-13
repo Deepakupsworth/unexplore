@@ -9,12 +9,12 @@ return new class extends Migration {
         Schema::create('thing_translations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('thing_id')->constrained('things_to_do')->cascadeOnDelete();
-            $table->foreignId('language_id')->constrained('languages')->cascadeOnDelete();
+            $table->string('language_code', 10);
             $table->string('name');
             $table->text('about')->nullable();
             $table->timestamps();
 
-            $table->unique(['thing_id', 'language_id']);
+            $table->unique(['thing_id', 'language_code']);
         });
     }
 

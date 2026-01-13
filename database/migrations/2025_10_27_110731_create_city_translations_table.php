@@ -9,13 +9,13 @@ return new class extends Migration {
         Schema::create('city_translations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('city_id')->constrained('cities')->cascadeOnDelete();
-            $table->foreignId('language_id')->constrained('languages')->cascadeOnDelete();
+            $table->string('language_code', 10);
             $table->string('name');
             $table->string('tagline')->nullable();
             $table->text('about')->nullable();
             $table->timestamps();
 
-            $table->unique(['city_id', 'language_id']);
+            $table->unique(['city_id', 'language_code']);
         });
     }
 
