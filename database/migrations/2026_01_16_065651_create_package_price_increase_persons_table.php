@@ -20,6 +20,7 @@ return new class extends Migration
 
             $table->unsignedSmallInteger('person_number');
             $table->decimal('additional_price', 10, 2);
+            $table->timestamps();
         });
     }
 

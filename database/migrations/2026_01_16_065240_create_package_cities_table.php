@@ -24,6 +24,7 @@ return new class extends Migration
 
             $table->unsignedSmallInteger('nights');
             $table->unsignedSmallInteger('sort_order')->default(0);
+            $table->timestamps();
         });
 
     }

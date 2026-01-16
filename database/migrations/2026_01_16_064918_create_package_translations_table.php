@@ -25,6 +25,7 @@ return new class extends Migration
             $table->longText('description')->nullable();
 
             $table->unique(['package_id', 'language_code']);
+            $table->timestamps();
         });
 
     }

@@ -23,6 +23,8 @@ use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\Frontend\Blog\BlogController;
 use App\Http\Controllers\Frontend\Checkout\CheckoutController;
 use App\Http\Controllers\Frontend\Package\PackageController;
+use App\Http\Controllers\Admin\PackageController as AdminPackageController;
+
 use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Frontend\ToDoThings\ToDoThingsController;
 use App\Models\Event;
@@ -151,7 +153,7 @@ Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function ()
         | Events Routes
         |--------------------------------------------------------------------------
         */
-        Route::prefix('events')->group(function () {
+    Route::prefix('events')->group(function () {
             Route::get('/', [EventController::class, 'index'])->name('events.index');
             Route::get('/create', [EventController::class, 'form'])->name('events.create');
             Route::get('/{id}/edit', [EventController::class, 'form'])->name('events.edit');
@@ -180,8 +182,8 @@ Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function ()
         Route::post('/countries/import', [CountryController::class, 'import'])->name('admin.countries.import');
     });
 
-    Route::prefix('admin') ->group(function () {
-            Route::prefix('hotels')->group(function () {
+    Route::prefix('admin')->group(function () {
+        Route::prefix('hotels')->group(function () {
 
             Route::get('/', [HotelController::class, 'index'])
                 ->name('hotels.index');
@@ -203,20 +205,38 @@ Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function ()
 
             Route::delete('/gallery/{id}', [HotelController::class, 'deleteGallery'])
                 ->name('hotels.gallery.delete');
-
         });
-
     });
 
     Route::prefix('admin')->group(function () {
         Route::prefix('transports')->group(function () {
-        Route::get('/', [TransportController::class, 'index'])->name('transports.index');
-        Route::get('/create', [TransportController::class, 'form'])->name('transports.create');
-        Route::get('/{id}/edit', [TransportController::class, 'form'])->name('transports.edit');
-        Route::get('/{id}', [TransportController::class, 'show'])->name('transports.show');
-        Route::post('/save', [TransportController::class, 'save'])->name('transports.save');
-        Route::delete('/{id}', [TransportController::class, 'delete'])->name('transports.delete');
+            Route::get('/', [TransportController::class, 'index'])->name('transports.index');
+            Route::get('/create', [TransportController::class, 'form'])->name('transports.create');
+            Route::get('/{id}/edit', [TransportController::class, 'form'])->name('transports.edit');
+            Route::get('/{id}', [TransportController::class, 'show'])->name('transports.show');
+            Route::post('/save', [TransportController::class, 'save'])->name('transports.save');
+            Route::delete('/{id}', [TransportController::class, 'delete'])->name('transports.delete');
+        });
     });
+
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::prefix('packages')->name('packages.')->group(function () {
+
+                Route::get('/', [AdminPackageController::class, 'index'])
+                    ->name('index');
+
+                Route::get('/create', [AdminPackageController::class, 'create'])
+                    ->name('create');
+
+                Route::post('/', [AdminPackageController::class, 'store'])
+                    ->name('store');
+
+                Route::get('/{package}/edit', [AdminPackageController::class, 'edit'])
+                    ->name('edit');
+
+                Route::put('/{package}', [AdminPackageController::class, 'update'])
+                    ->name('update');
+            });
     });
 
 });
@@ -261,15 +281,15 @@ Route::get('/destination-details/{slug?}', [HomeController::class, 'destination_
 
 Route::get('/event-details/{slug?}', [EventController::class, 'event_details'])->name('event.details');
 
-Route::get('/event-listing' ,[EventController::class,'index'])->name('event.listing');
+Route::get('/event-listing', [EventController::class, 'index'])->name('event.listing');
 
 //package routes
 
 Route::get('/package-listing', [PackageController::class, 'index'])->name('package.listing');
 
-Route::get('/package-details', [PackageController::class,'details'])->name('package.details');
+Route::get('/package-details', [PackageController::class, 'details'])->name('package.details');
 
-Route::get('/profile',[FrontendProfileController::class,'index'])->name('profile.view');
+Route::get('/profile', [FrontendProfileController::class, 'index'])->name('profile.view');
 
 // Route::get('/things-to-do-nature', function () {
 //     return view('frontend.things-to-do-nature');
@@ -283,12 +303,12 @@ Route::get('/things-to-do', [ToDoThingsController::class, 'index'])->name('thing
 Route::get('/to-do-things-search', [ToDoThingsController::class, 'search'])->name('to.do.things.search');
 
 // blog routes
-Route::get('/blogs',[BlogController::class,'index'])->name('blogs.view');
-Route::get('/blog-details', [BlogController::class,'detail'])->name('blog.details');
+Route::get('/blogs', [BlogController::class, 'index'])->name('blogs.view');
+Route::get('/blog-details', [BlogController::class, 'detail'])->name('blog.details');
 
 
 // checkout route
-Route::get('/checkout', [CheckoutController::class,'index'])->name('checkout.view');
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.view');
 
 //pages routes
 Route::get('/about-us', [PageController::class, 'about_us'])->name('about.us');

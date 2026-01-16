@@ -25,6 +25,7 @@ return new class extends Migration
             $table->time('end_time')->nullable();
 
             $table->unsignedSmallInteger('sort_order')->default(0);
+            $table->timestamps();
 
             $table->index(['item_type', 'item_id']);
         });

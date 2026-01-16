@@ -23,6 +23,7 @@ return new class extends Migration
 
             $table->enum('price_type', ['fixed', 'percentage']);
             $table->decimal('price_value', 10, 2);
+            $table->timestamps();
         });
 
     }

@@ -23,6 +23,7 @@ return new class extends Migration
             $table->longText('content');
 
             $table->unique(['package_info_id', 'language_code']);
+            $table->timestamps();
         });
     }
 
