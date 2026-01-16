@@ -33,12 +33,52 @@
           </header>
 
           <div class="card-body px-6 pb-6">
+            <form method="GET" class="mb-4">
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
+
+                    {{-- City Name --}}
+                    <div class="fromGroup">
+                        <label class="form-label">City Name</label>
+                        <input type="text"
+                               name="search"
+                               value="{{ request('search') }}"
+                               placeholder="Search city..."
+                               class="form-control">
+                    </div>
+
+                    {{-- Country --}}
+                    <div class="fromGroup">
+                        <label class="form-label">Country</label>
+                        <select name="country_id" class="form-control">
+                            <option value="">All Countries</option>
+                            @foreach($countries as $id => $country)
+                                <option value="{{ $id }}" {{ request('country_id') == $id ? 'selected' : '' }}>
+                                    {{ $country }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="flex justify-end gap-2 mt-4">
+                    <a href="{{ route('cities.index') }}" class="btn btn-outline-secondary">
+                        Reset
+                    </a>
+                    <button class="btn btn-dark">
+                        Search
+                    </button>
+                </div>
+
+                </form>
+
             <div class="overflow-x-auto -mx-6 dashcode-data-table">
               <span class="col-span-8 hidden"></span>
               <span class="col-span-4 hidden"></span>
               <div class="inline-block min-w-full align-middle">
                 <div class="overflow-hidden">
-                  <table class="min-w-full divide-y divide-slate-100 table-fixed dark:divide-slate-700" id="data-table">
+                  <table class="min-w-full divide-y divide-slate-100 table-fixed dark:divide-slate-700">
                     <thead class="border-t border-slate-100 dark:border-slate-800">
                       <tr>
                         <th scope="col" class="table-th">ID</th>

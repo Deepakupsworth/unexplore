@@ -7,6 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="">
   <title>Unxplord saudi - Backend</title>
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <link rel="icon" type="image/png" href="/images/logo/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
@@ -36,14 +37,14 @@
 @include('backend.includes.header')
 
 <!-- content-->
-@yield('content')  
-</div>  
+@yield('content')
+</div>
 <!-- Footer -->
 @include('backend.includes.footer')
-</div>  
+</div>
 </main>
 
-@yield('scripts') 
+@yield('scripts')
 
   <!-- Footer End -->
   <!-- scripts -->

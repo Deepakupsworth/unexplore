@@ -81,6 +81,28 @@
                             </div>
                         @endforeach
 
+                        {{-- CATEGORY TYPE --}}
+                        <hr class="my-6">
+
+                        <div>
+                            <label class="form-label">Category Type <span class="text-red-500">*</span></label>
+
+                            <select name="type" class="form-control" required>
+                                <option value="">Select Type</option>
+
+                                @foreach ($types as $type)
+                                    <option value="{{ $type->value }}"
+                                        {{ old('type', $model->type?->value) === $type->value ? 'selected' : '' }}>
+                                        {{ $type->label() }}
+                                    </option>
+                                @endforeach
+                            </select>
+
+                            @error('type')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+
                         {{-- MEDIA --}}
                         <hr class="my-6">
 
@@ -88,7 +110,8 @@
                             <label class="form-label">Thumb Image</label>
                             <input type="file" name="thumb_image" class="form-control">
                             @if ($model->thumb_image)
-                                <img src="{{ asset('storage/' . $model->thumb_image) }}" class="w-[60px] h-[60px] object-cover rounded border mt-2">
+                                <img src="{{ asset('storage/' . $model->thumb_image) }}"
+                                    class="w-[60px] h-[60px] object-cover rounded border mt-2">
                             @endif
                             @error('thumb_image')
                                 <p class="text-red-500 text-xs">{{ $message }}</p>
@@ -99,7 +122,8 @@
                             <label class="form-label">Thumb Icon</label>
                             <input type="file" name="thumb_icon" class="form-control">
                             @if ($model->thumb_icon)
-                                <img src="{{ asset('storage/' . $model->thumb_icon) }}" class="w-[60px] h-[60px] object-cover rounded border mt-2">
+                                <img src="{{ asset('storage/' . $model->thumb_icon) }}"
+                                    class="w-[60px] h-[60px] object-cover rounded border mt-2">
                             @endif
                             @error('thumb_icon')
                                 <p class="text-red-500 text-xs">{{ $message }}</p>

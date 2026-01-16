@@ -26,6 +26,78 @@
                     </header>
 
                     <div class="card-body px-6 pb-6">
+                        <form method="GET" class="mb-4">
+
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
+
+                                {{-- Hotel Name --}}
+                                <div class="fromGroup">
+                                    <label class="form-label">Hotel Name</label>
+                                    <input type="text"
+                                           name="search"
+                                           value="{{ request('search') }}"
+                                           placeholder="Search hotel..."
+                                           class="form-control">
+                                </div>
+
+                                {{-- City --}}
+                                <div class="fromGroup">
+                                    <label class="form-label">City</label>
+                                    <select name="city_id" class="form-control">
+                                        <option value="">All Cities</option>
+                                        @foreach($cities as $id => $city)
+                                            <option value="{{ $id }}" {{ request('city_id') == $id ? 'selected' : '' }}>
+                                                {{ $city }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                {{-- Stars --}}
+                                <div class="fromGroup">
+                                    <label class="form-label">Stars</label>
+                                    <select name="star" class="form-control">
+                                        <option value="">All</option>
+                                        <option value="3" {{ request('star') == 3 ? 'selected' : '' }}>3 ★</option>
+                                        <option value="4" {{ request('star') == 4 ? 'selected' : '' }}>4 ★</option>
+                                        <option value="5" {{ request('star') == 5 ? 'selected' : '' }}>5 ★</option>
+                                    </select>
+                                </div>
+
+                                {{-- Meal --}}
+                                <div class="fromGroup">
+                                    <label class="form-label">Meal</label>
+                                    <select name="has_meal" class="form-control">
+                                        <option value="">All</option>
+                                        <option value="1" {{ request('has_meal') === '1' ? 'selected' : '' }}>Yes</option>
+                                        <option value="0" {{ request('has_meal') === '0' ? 'selected' : '' }}>No</option>
+                                    </select>
+                                </div>
+
+                                {{-- Status --}}
+                                <div class="fromGroup">
+                                    <label class="form-label">Status</label>
+                                    <select name="status" class="form-control">
+                                        <option value="">All</option>
+                                        <option value="1" {{ request('status') === '1' ? 'selected' : '' }}>Active</option>
+                                        <option value="0" {{ request('status') === '0' ? 'selected' : '' }}>Inactive</option>
+                                    </select>
+                                </div>
+
+                            </div>
+
+                            {{-- Buttons --}}
+                            <div class="flex justify-end gap-2 mt-4">
+                                <a href="{{ route('hotels.index') }}" class="btn btn-outline-secondary">
+                                    Reset
+                                </a>
+                                <button class="btn btn-dark">
+                                    Search
+                                </button>
+                            </div>
+
+                        </form>
+
 
                         <div class="overflow-x-auto">
                             <table class="min-w-full divide-y divide-slate-100 dark:divide-slate-700">
@@ -72,11 +144,19 @@
 
                                             <td class="table-td">
                                                 @if ($hotel->status)
-                                                    <span
-                                                        class="px-2 py-1 rounded bg-green-100 text-green-700 text-xs">Active</span>
+                                                    <span class="badge bg-success-500 text-white">
+                                                        <span class="inline-flex items-center gap-1">
+                                                            <iconify-icon icon="heroicons:check-circle"></iconify-icon>
+                                                            Active
+                                                        </span>
+                                                    </span>
                                                 @else
-                                                    <span
-                                                        class="px-2 py-1 rounded bg-red-100 text-red-700 text-xs">Inactive</span>
+                                                    <span class="badge bg-danger-500 text-white">
+                                                        <span class="inline-flex items-center gap-1">
+                                                            <iconify-icon icon="heroicons:x-circle"></iconify-icon>
+                                                            Inactive
+                                                        </span>
+                                                    </span>
                                                 @endif
                                             </td>
 
@@ -91,6 +171,9 @@
 
                                             <td class="table-td text-right">
                                                 <div class="flex justify-end gap-2">
+                                                    <a href="{{ route('hotels.show', $hotel->id) }}" class="action-btn bg-blue-100 text-blue-700">
+                                                        <iconify-icon icon="heroicons:eye"></iconify-icon>
+                                                    </a>
                                                     <a href="{{ route('hotels.edit', $hotel->id) }}" class="action-btn">
                                                         <iconify-icon icon="heroicons:pencil-square"></iconify-icon>
                                                     </a>

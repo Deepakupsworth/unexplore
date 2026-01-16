@@ -2,25 +2,21 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class ThingToDoTranslation extends Model
 {
     protected $table = 'thing_translations';
-    /** @use HasFactory<\Database\Factories\ThingToDoTranslationFactory> */
-    use HasFactory;
 
-    protected $fillable = ['thing_id', 'language_id', 'name', 'about'];
+    protected $fillable = [
+        'thing_id',
+        'language_code',
+        'name',
+        'about'
+    ];
 
-    public function language()
+    public function thing()
     {
-        return $this->belongsTo(Language::class);
+        return $this->belongsTo(ThingToDo::class, 'thing_id');
     }
-
-    public function thingToDo()
-    {
-        return $this->belongsTo(ThingToDo::class);
-    } 
 }
- 

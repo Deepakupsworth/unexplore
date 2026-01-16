@@ -9,28 +9,77 @@ use App\Models\City;
 use App\Models\Language;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-
+use App\Enums\TransportType;
 class TransportController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $transports = Transport::with([
-            'translations' => fn($q) => $q->where('language_code', 'en'),
-            'city',
-            'thumb'
-        ])->paginate(10);
+        $query = Transport::query()
+            ->with([
+                'translations' => fn($q) => $q->where('language_code', 'en'),
+                'city',
+                'thumb'
+            ]);
 
-        return view('backend.transports.index', compact('transports'));
+        // 🔍 Search by name
+        if ($request->filled('search')) {
+            $query->whereHas('translations', function ($q) use ($request) {
+                $q->where('language_code', 'en')
+                    ->where('name', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        // 🏙 City filter
+        if ($request->filled('city_id')) {
+            $query->where('city_id', $request->city_id);
+        }
+
+        // 🚗 Type filter
+        if ($request->filled('type')) {
+            $query->where('type', $request->type);
+        }
+
+        // 🟢 Status filter
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $transports = $query->latest()->paginate(10)->withQueryString();
+
+        $cities = City::pluck('slug', 'id');
+
+        return view('backend.transports.index', compact('transports', 'cities'));
     }
+
 
     public function form($id = null)
     {
-        $model = Transport::with(['translations', 'gallery', 'thumb'])->find($id) ?? new Transport();
+        $model = Transport::with(['translations', 'gallery', 'thumb'])
+            ->find($id) ?? new Transport();
+
         $cities = City::pluck('slug', 'id');
         $languages = Language::all();
-
-        return view('backend.transports.form', compact('model', 'cities', 'languages'));
+        $types = TransportType::cases();   // ✅ Enum values
+        return view('backend.transports.form', compact(
+            'model',
+            'cities',
+            'languages',
+            'types'
+        ));
     }
+
+    public function show($id)
+    {
+        $transport = Transport::with([
+            'translations',
+            'city',
+            'images',
+            'thumb'
+        ])->findOrFail($id);
+
+        return view('backend.transports.show', compact('transport'));
+    }
+
 
     public function save(Request $request)
     {

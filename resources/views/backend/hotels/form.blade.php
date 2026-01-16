@@ -75,6 +75,48 @@
                                                 @endfor
                                             </select>
                                         </div>
+
+
+                                            {{-- Location --}}
+                                            <div>
+                                                <label class="form-label">Location / Address</label>
+                                                <input type="text" name="location"
+                                                    value="{{ old('location', $model->location) }}" class="form-control"
+                                                    placeholder="Hotel address or area">
+                                            </div>
+
+                                            {{-- Email --}}
+                                            <div>
+                                                <label class="form-label">Email</label>
+                                                <input type="email" name="email"
+                                                    value="{{ old('email', $model->email) }}" class="form-control"
+                                                    placeholder="hotel@example.com">
+                                            </div>
+
+                                            {{-- Phone --}}
+                                            <div>
+                                                <label class="form-label">Phone</label>
+                                                <input type="text" name="phone"
+                                                    value="{{ old('phone', $model->phone) }}" class="form-control"
+                                                    placeholder="+91 98765 43210">
+                                            </div>
+
+                                            {{-- Latitude --}}
+                                            <div>
+                                                <label class="form-label">Latitude</label>
+                                                <input type="text" name="latitude"
+                                                    value="{{ old('latitude', $model->latitude) }}" class="form-control"
+                                                    placeholder="25.5941">
+                                            </div>
+
+                                            {{-- Longitude --}}
+                                            <div>
+                                                <label class="form-label">Longitude</label>
+                                                <input type="text" name="longitude"
+                                                    value="{{ old('longitude', $model->longitude) }}" class="form-control"
+                                                    placeholder="85.1376">
+                                            </div>
+
                                     </div>
 
                                     {{-- Checkboxes --}}
@@ -167,10 +209,22 @@
                                         <input type="file" name="gallery[]" multiple class="form-control">
                                         <div class="grid grid-cols-4 gap-3 mt-3">
                                             @foreach ($model->gallery as $img)
-                                                <img src="{{ asset('storage/' . $img->image_path) }}"
-                                                    class="h-16 w-16 object-cover rounded border">
+                                                <div class="relative" id="img-{{ $img->id }}">
+
+                                                    <img src="{{ asset('storage/' . $img->image_path) }}"
+                                                        class="h-20 w-20 object-cover rounded border">
+
+                                                    {{-- Delete badge --}}
+                                                    <button type="button" onclick="deleteGallery({{ $img->id }})"
+                                                        class="w-5 h-5 inline-flex items-center justify-center bg-danger-500 text-white rounded-full font-Inter text-xs absolute
+                                                        -top-[5px] -right-1">
+                                                        ✕
+                                                    </button>
+
+                                                </div>
                                             @endforeach
                                         </div>
+
                                     </div>
 
                                     <button class="btn btn-dark w-full mt-6">
@@ -198,5 +252,28 @@
                 document.getElementById('lang-' + btn.dataset.lang).classList.remove('hidden')
             }
         })
+
+        function deleteGallery(id) {
+            if (!confirm('Remove this image?')) return;
+
+            const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+            fetch(`/admin/hotels/gallery/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': token,
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('img-' + id).remove();
+                    } else {
+                        alert('Delete failed');
+                    }
+                })
+                .catch((err) => console.log(err, 'Server error'));
+        }
     </script>
 @endsection

@@ -3,12 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Enums\TransportType;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Transport extends Model
 {
     use SoftDeletes;
 
+    protected $casts = [
+        'type' => TransportType::class,
+    ];
     protected $fillable = [
         'city_id',
         'type',

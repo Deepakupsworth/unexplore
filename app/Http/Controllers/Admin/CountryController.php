@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Country;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\CountriesImport;
 
 class CountryController extends Controller
 {
@@ -100,5 +102,17 @@ class CountryController extends Controller
         return response()->json([
             'status' => $country->status
         ]);
+    }
+
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,csv'
+        ]);
+
+        Excel::import(new CountriesImport, $request->file('file'));
+
+        return back()->with('success', 'Countries imported successfully');
     }
 }

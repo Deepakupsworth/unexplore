@@ -2,22 +2,45 @@
 
 namespace App\Models;
 
+use App\Enums\CategoryType;
 use Illuminate\Database\Eloquent\Model;
+
 
 class Category extends Model
 {
-    protected $fillable = ['slug','thumb_image','thumb_icon'];
+    protected $fillable = [
+        'slug',
+        'type',        // 👈 REQUIRED
+        'thumb_image',
+        'thumb_icon',
+    ];
 
-    // All translations
+    protected $casts = [
+        'type' => CategoryType::class,
+    ];
+    /**
+     * All translations
+     */
     public function translations()
     {
         return $this->hasMany(CategoryTranslation::class);
     }
 
-    // English translation
+    /**
+     * English translation (default)
+     */
     public function translation()
     {
         return $this->hasOne(CategoryTranslation::class)
-                    ->where('language_code','en');
+            ->where('language_code', 'en');
+    }
+
+    /**
+     * Scope by category type
+     * Usage: Category::ofType('hotel')->get();
+     */
+    public function scopeOfType($query, string $type)
+    {
+        return $query->where('type', $type);
     }
 }

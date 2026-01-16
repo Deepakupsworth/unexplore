@@ -11,6 +11,67 @@
 
                 <div class="card">
                     <div class="card-body px-6 pb-6">
+                        <form method="GET" class="mb-4">
+
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
+
+                                {{-- Transport Name --}}
+                                <div class="fromGroup">
+                                    <label class="form-label">Transport</label>
+                                    <input type="text"
+                                           name="search"
+                                           value="{{ request('search') }}"
+                                           placeholder="Search transport..."
+                                           class="form-control">
+                                </div>
+
+                                {{-- City --}}
+                                <div class="fromGroup">
+                                    <label class="form-label">City</label>
+                                    <select name="city_id" class="form-control">
+                                        <option value="">All Cities</option>
+                                        @foreach($cities as $id => $city)
+                                            <option value="{{ $id }}" {{ request('city_id') == $id ? 'selected' : '' }}>
+                                                {{ $city }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                {{-- Type --}}
+                                <div class="fromGroup">
+                                    <label class="form-label">Type</label>
+                                    <select name="type" class="form-control">
+                                        <option value="">All</option>
+                                        <option value="car" {{ request('type') == 'car' ? 'selected' : '' }}>Car</option>
+                                        <option value="bus" {{ request('type') == 'bus' ? 'selected' : '' }}>Bus</option>
+                                        <option value="van" {{ request('type') == 'van' ? 'selected' : '' }}>Van</option>
+                                        <option value="bike" {{ request('type') == 'bike' ? 'selected' : '' }}>Bike</option>
+                                    </select>
+                                </div>
+
+                                {{-- Status --}}
+                                <div class="fromGroup">
+                                    <label class="form-label">Status</label>
+                                    <select name="status" class="form-control">
+                                        <option value="">All</option>
+                                        <option value="1" {{ request('status') === '1' ? 'selected' : '' }}>Active</option>
+                                        <option value="0" {{ request('status') === '0' ? 'selected' : '' }}>Inactive</option>
+                                    </select>
+                                </div>
+
+                            </div>
+
+                            <div class="flex justify-end gap-2 mt-4">
+                                <a href="{{ route('transports.index') }}" class="btn btn-outline-secondary">
+                                    Reset
+                                </a>
+                                <button class="btn btn-dark">
+                                    Search
+                                </button>
+                            </div>
+
+                        </form>
 
                         <table class="min-w-full divide-y divide-slate-100">
                             <thead>
@@ -36,10 +97,21 @@
                                         <td class="table-td">{{ $t->capacity }}</td>
                                         <td class="table-td">{{ $t->contact_number }}</td>
                                         <td class="table-td">
-                                            <span
-                                                class="px-2 py-1 text-xs rounded {{ $t->status ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
-                                                {{ $t->status ? 'Active' : 'Inactive' }}
-                                            </span>
+                                            @if ($t->status)
+                                                <span class="badge bg-success-500 text-white">
+                                                    <span class="inline-flex items-center gap-1">
+                                                        <iconify-icon icon="heroicons:check-circle"></iconify-icon>
+                                                        Active
+                                                    </span>
+                                                </span>
+                                            @else
+                                                <span class="badge bg-danger-500 text-white">
+                                                    <span class="inline-flex items-center gap-1">
+                                                        <iconify-icon icon="heroicons:x-circle"></iconify-icon>
+                                                        Inactive
+                                                    </span>
+                                                </span>
+                                            @endif
                                         </td>
                                         <td class="table-td">
                                             @if ($t->thumb)
@@ -49,6 +121,9 @@
                                         </td>
                                         <td class="table-td text-right">
                                             <div class="flex justify-end gap-2">
+                                                <a href="{{ route('transports.show', $t->id) }}" class="action-btn bg-blue-100 text-blue-700">
+                                                    <iconify-icon icon="heroicons:eye"></iconify-icon>
+                                                </a>
                                                 <a href="{{ route('transports.edit', $t->id) }}" class="action-btn">
                                                     <iconify-icon icon="heroicons:pencil-square"></iconify-icon>
                                                 </a>

@@ -26,6 +26,63 @@
                     </header>
 
                     <div class="card-body px-6 pb-6">
+                        <form method="GET" class="mb-4">
+
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
+
+                                {{-- Country Name --}}
+                                <div class="fromGroup">
+                                    <label class="form-label">Country Name</label>
+                                    <input type="text"
+                                           name="search"
+                                           value="{{ request('search') }}"
+                                           placeholder="Search country..."
+                                           class="form-control">
+                                </div>
+
+                                {{-- Code --}}
+                                <div class="fromGroup">
+                                    <label class="form-label">Code</label>
+                                    <input type="text"
+                                           name="code"
+                                           value="{{ request('code') }}"
+                                           placeholder="IN, SA..."
+                                           class="form-control">
+                                </div>
+
+                                {{-- Currency --}}
+                                {{-- <div class="fromGroup">
+                                    <label class="form-label">Currency</label>
+                                    <select name="currency" class="form-control">
+                                        <option value="">All</option>
+                                        <option value="INR" {{ request('currency') == 'INR' ? 'selected' : '' }}>INR</option>
+                                        <option value="SAR" {{ request('currency') == 'SAR' ? 'selected' : '' }}>SAR</option>
+                                        <option value="AED" {{ request('currency') == 'AED' ? 'selected' : '' }}>AED</option>
+                                    </select>
+                                </div> --}}
+
+                                {{-- Status --}}
+                                <div class="fromGroup">
+                                    <label class="form-label">Status</label>
+                                    <select name="status" class="form-control">
+                                        <option value="">All</option>
+                                        <option value="1" {{ request('status') === '1' ? 'selected' : '' }}>Active</option>
+                                        <option value="0" {{ request('status') === '0' ? 'selected' : '' }}>Inactive</option>
+                                    </select>
+                                </div>
+
+                            </div>
+
+                            <div class="flex justify-end gap-2 mt-4">
+                                {{-- <a href="{{ route('countries.index') }}" class="btn btn-outline-secondary">
+                                    Reset
+                                </a> --}}
+                                <button class="btn btn-dark">
+                                    Filter
+                                </button>
+                            </div>
+
+                            </form>
 
                         <div class="overflow-x-auto">
                             <table class="min-w-full divide-y divide-slate-100 dark:divide-slate-700">
@@ -54,11 +111,21 @@
                                             <td class="table-td">{{ $country->currency_code }}</td>
 
                                             <td class="table-td">
-                                                <button data-id="{{ $country->id }}"
-                                                    class="toggleStatus px-2 py-1 rounded text-xs
-                                                {{ $country->status ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
-                                                    {{ $country->status ? 'Active' : 'Inactive' }}
-                                                </button>
+                                                @if ($country->status)
+                                                    <span class="badge bg-success-500 text-white">
+                                                        <span class="inline-flex items-center gap-1">
+                                                            <iconify-icon icon="heroicons:check-circle"></iconify-icon>
+                                                            Active
+                                                        </span>
+                                                    </span>
+                                                @else
+                                                    <span class="badge bg-danger-500 text-white">
+                                                        <span class="inline-flex items-center gap-1">
+                                                            <iconify-icon icon="heroicons:x-circle"></iconify-icon>
+                                                            Inactive
+                                                        </span>
+                                                    </span>
+                                                @endif
                                             </td>
 
                                             <td class="table-td text-right">

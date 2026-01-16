@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Hotel;
 use App\Models\HotelTranslation;
 use App\Models\City;
+use App\Models\Image;
 use App\Models\Language;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -15,16 +16,50 @@ class HotelController extends Controller
     /**
      * List Hotels
      */
-    public function index()
+    public function index(Request $request)
     {
-        $hotels = Hotel::with([
-            'translations' => fn($q) => $q->where('language_code', 'en'),
-            'city',
-            'thumb'
-        ])->paginate(10);
+        $query = Hotel::query()
+            ->with([
+                'translations' => fn($q) => $q->where('language_code', 'en'),
+                'city',
+                'thumb'
+            ]);
 
-        return view('backend.hotels.index', compact('hotels'));
+        // 🔍 Search by hotel name
+        if ($request->filled('search')) {
+            $query->whereHas('translations', function ($q) use ($request) {
+                $q->where('language_code', 'en')
+                  ->where('name', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        // 🏙 Filter by city
+        if ($request->filled('city_id')) {
+            $query->where('city_id', $request->city_id);
+        }
+
+        // ⭐ Filter by star rating
+        if ($request->filled('star')) {
+            $query->where('star_rating', $request->star);
+        }
+
+        // 🍽 Filter by meal
+        if ($request->filled('has_meal')) {
+            $query->where('has_meal', $request->has_meal);
+        }
+
+        // 🟢 Filter by status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $hotels = $query->latest()->paginate(10)->withQueryString();
+
+        $cities = City::pluck('slug', 'id');
+
+        return view('backend.hotels.index', compact('hotels', 'cities'));
     }
+
 
     /**
      * Create / Edit form
@@ -37,6 +72,19 @@ class HotelController extends Controller
 
         return view('backend.hotels.form', compact('model', 'languages', 'cities'));
     }
+
+    public function show($id)
+    {
+        $hotel = Hotel::with([
+            'translations',
+            'city',
+            'images',
+            'thumb'
+        ])->findOrFail($id);
+
+        return view('backend.hotels.show', compact('hotel'));
+    }
+
 
     /**
      * Store / Update Hotel
@@ -63,11 +111,17 @@ class HotelController extends Controller
         $hotel = Hotel::updateOrCreate(
             ['id' => $request->id],
             [
-                'city_id'      => $request->city_id,
+                'city_id'   => $request->city_id,
+                'location'  => $request->location,
+                'latitude'  => $request->latitude,
+                'longitude' => $request->longitude,
+                'email'     => $request->email,
+                'phone'     => $request->phone,
                 'star_rating' => $request->star_rating,
-                'has_meal'    => $request->has_meal ? 1 : 0,
-                'status'      => $request->status ? 1 : 0,
+                'has_meal'  => $request->has_meal ? 1 : 0,
+                'status'    => $request->status ? 1 : 0,
             ]
+
         );
 
         // Save translations
@@ -110,17 +164,14 @@ class HotelController extends Controller
     /**
      * Delete Hotel
      */
-    public function delete($id)
+    public function deleteGallery($id)
     {
-        $hotel = Hotel::findOrFail($id);
+        $image = Image::findOrFail($id);
 
-        // delete all images
-        foreach ($hotel->images as $img) {
-            Storage::disk('public')->delete($img->image_path);
-        }
+        Storage::disk('public')->delete($image->image_path);
+        $image->delete();
 
-        $hotel->delete();
-
-        return redirect()->back()->with('success', 'Hotel deleted');
+        return response()->json(['success' => true]);
     }
+
 }

@@ -14,11 +14,44 @@ use Illuminate\Support\Facades\Storage;
 class EventController extends Controller
 {
     // List
-    public function index()
+    public function index(Request $request)
     {
-        $events = Event::with(['en', 'city', 'thumb'])->paginate(10);
-        return view('backend.events.index', compact('events'));
+        $query = Event::with(['translations', 'city', 'thumb']);
+
+        // 🔍 Search by title (English)
+        if ($request->filled('search')) {
+            $query->whereHas('translations', function ($q) use ($request) {
+                $q->where('language_code', 'en')
+                    ->where('title', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        // 🏙 City
+        if ($request->filled('city_id')) {
+            $query->where('city_id', $request->city_id);
+        }
+
+        // 🟢 Status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // 📅 Date range
+        if ($request->filled('start_date')) {
+            $query->whereDate('start_date', '>=', $request->start_date);
+        }
+
+        if ($request->filled('end_date')) {
+            $query->whereDate('end_date', '<=', $request->end_date);
+        }
+
+        $events = $query->latest()->paginate(10)->withQueryString();
+
+        $cities = \App\Models\City::pluck('slug', 'id');
+
+        return view('backend.events.index', compact('events', 'cities'));
     }
+
 
     // Form
     public function form($id = null)
@@ -29,6 +62,19 @@ class EventController extends Controller
 
         return view('backend.events.form', compact('model', 'languages', 'cities'));
     }
+
+    public function show($id)
+    {
+        $event = Event::with([
+            'translations',
+            'city',
+            'images',
+            'thumb'
+        ])->findOrFail($id);
+
+        return view('backend.events.show', compact('event'));
+    }
+
 
     // Save
     public function save(Request $request)

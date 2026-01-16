@@ -2,122 +2,102 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\CategoryType;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\ThingToDo;
-use App\Models\ThingToDoTranslation;
-use App\Models\ThingGalleryImage;
 use App\Models\Language;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
+use App\Models\City;
+use App\Models\Category;
+use Illuminate\Http\Request;
+use App\Repositories\ThingToDo\ThingToDoRepositoryInterface;
+
 
 class ThingtodoController extends Controller
 {
-    /**
-     * Show all things to do list
-     */
+    private ThingToDoRepositoryInterface $repo;
+
+    public function __construct(ThingToDoRepositoryInterface $repo)
+    {
+        $this->repo = $repo;
+    }
+
     public function index()
     {
-        $thingstodos = ThingToDo::with(['translations' => function($q){
-            $q->whereHas('language', fn($l) => $l->where('code', 'en'));
-        }])->paginate(10); 
+        $thingstodos = $this->repo->paginate(10);
 
-        // print_r($thingstodo); die;
-        return view('backend.thingtodos.index', compact('thingstodos'));
+        // These are ONLY for filters
+        $cities = \App\Models\City::pluck('slug', 'id');
+        $categories = \App\Models\Category::pluck('slug', 'id');
+
+        return view('backend.thingtodos.index', compact(
+            'thingstodos',
+            'cities',
+            'categories'
+        ));
+    }
+
+
+    public function create()
+    {
+        return $this->form();
+    }
+
+    public function show($id)
+    {
+        $thing = $this->repo->find($id);
+
+        return view('backend.thingtodos.show', compact('thing'));
+    }
+
+
+    public function edit($id)
+    {
+        return $this->form($id);
     }
 
     public function form($id = null)
     {
-        $model = ThingToDo::with(['translations', 'galleryImages'])->find($id) ?? new ThingToDo();
+        $model = $id
+            ? $this->repo->find($id)
+            : new ThingToDo();
+
         $languages = Language::all();
 
-        // fetch all cities with plucked id and name in english
-        $cities = \App\Models\City::with(['translations' => function($q){
-            $q->whereHas('language', fn($l) => $l->where('code', 'en'));
-        }])->get()->pluck('translations.0.name', 'id'); 
+        $cities = City::with('translation')
+            ->get()
+            ->pluck('translation.name', 'id');
 
-        $categories = \App\Models\Category::with(['translations' => function($q){
-            $q->whereHas('language', fn($l) => $l->where('code', 'en'));
-        }])->get()->pluck('translations.0.name', 'id'); 
+        $categories = Category::where('type', CategoryType::THING_TO_DO)
+            ->with('translation')
+            ->get();
 
-
-        // print_r($cities); die;
-        return view('backend.thingtodos.form', compact('model', 'languages', 'cities', 'categories'));
+        return view('backend.thingtodos.form', compact(
+            'model',
+            'languages',
+            'cities',
+            'categories'
+        ));
     }
 
     public function save(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'translations.*.name' => 'nullable|string|max:255',
-            'translations.1.name' => 'required|string|max:255', // English required (id=1)
+        $request->validate([
+            'translations.en.name' => 'required|string|max:255',
+            'city_id' => 'required|exists:cities,id',
+            'category_id' => 'nullable|exists:categories,id',
+            'thumb_image' => 'nullable|image|max:2048',
         ]);
 
-        
-        if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
-        }
-//   print_r($request->all()); die;
-        $thingstodo = ThingToDo::updateOrCreate(
-            ['id' => $request->id],
-            [
-                'slug' => $request->slug ?? Str::slug($request->translations[1]['name']),
-                'location' => $request->location,
-                'city_id' => $request->city_id,
-                'category_id' => $request->category_id
-            ]
-        );
+        $this->repo->createOrUpdate($request->all(), $request->id);
 
-        if ($request->hasFile('thumb_image')) {
-            if ($thingstodo->thumb_image) {
-                Storage::delete('public/' . $thingstodo->thumb_image);
-            }
-            $path = $request->file('thumb_image')->store('cities/thumbs', 'public');
-            $thingstodo->update(['image' => $path]);
-        }
-
-        // Save translations
-        foreach ($request->translations as $langId => $data) {
-            if($data['name']){
-                ThingToDoTranslation::updateOrCreate(
-                    ['thing_id' => $thingstodo->id, 'language_id' => $langId],
-                    [
-                        'name' => $data['name'] ?? '',
-                        'about' => $data['about'] ?? '',
-                    ]
-                );
-            }
-        }
-
-        // Save gallery images
-        if ($request->hasFile('gallery_images')) {
-            foreach ($request->file('gallery_images') as $file) {
-                $path = $file->store('thingtodos/gallery', 'public');
-                ThingGalleryImage::create([
-                    'thing_id' => $thingstodo->id,
-                    'image_path' => $path,
-                ]);
-            }
-        }
-
-        return redirect()->route('thingtodos.index')->with('success', 'Thing to do saved successfully!');
-    }
-
-    public function deleteGalleryImage($id)
-    {
-        $image = ThingGalleryImage::findOrFail($id);
-        if ($image->image_path && \Storage::disk('public')->exists($image->image_path)) {
-            \Storage::disk('public')->delete($image->image_path);
-        }
-        $image->delete();
-
-        return response()->json(['success' => true]);
+        return redirect()
+            ->route('thingtodos.index')
+            ->with('success', 'Thing To Do saved successfully');
     }
 
     public function destroy($id)
     {
-        $thingstodo = \App\Models\ThingToDo::findOrFail($id);
-        $thingstodo->delete();
-        return redirect()->back()->with('success', 'Thing to do deleted successfully.');
-    } 
+        $this->repo->delete($id);
+        return back()->with('success', 'Deleted successfully');
+    }
 }

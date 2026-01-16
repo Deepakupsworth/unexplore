@@ -9,26 +9,37 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('hotels', function (Blueprint $table) {
+
             $table->bigIncrements('id');
 
+            // Relations
             $table->unsignedBigInteger('city_id');
 
-            $table->tinyInteger('star_rating')->nullable(); // 1–5
-            $table->boolean('has_meal')->default(0);        // YES / NO
-            $table->boolean('status')->default(1);
+            // Hotel Info
+            $table->string('location')->nullable();      // Area / Address
+            $table->decimal('latitude', 10, 7)->nullable();
+            $table->decimal('longitude', 10, 7)->nullable();
+            $table->string('email')->nullable();         // Contact Email
+            $table->string('phone', 20)->nullable();     // Contact Phone
 
+            // Hotel Features
+            $table->tinyInteger('star_rating')->nullable(); // 1–5
+            $table->boolean('has_meal')->default(0);        // Yes / No
+            $table->boolean('status')->default(1);         // Active / Inactive
+
+            // Timestamps
             $table->timestamps();
+            $table->softDeletes();
 
             // Indexes
             $table->index('city_id');
             $table->index('status');
 
+            // Foreign Key
             $table->foreign('city_id')
                   ->references('id')
                   ->on('cities')
                   ->cascadeOnDelete();
-                  $table->softDeletes(); // deleted_at
-
         });
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\CategoryType;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\CategoryTranslation;
@@ -15,11 +16,22 @@ class CategoryController extends Controller
     /**
      * List categories
      */
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::with('translation')->paginate(10);
+        $query = Category::with('translation');
+
+        // 🔍 Search by category name (English)
+        if ($request->filled('search')) {
+            $query->whereHas('translation', function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        $categories = $query->latest()->paginate(10)->withQueryString();
+
         return view('backend.categories.index', compact('categories'));
     }
+
 
     /**
      * Create / Edit form
@@ -28,63 +40,74 @@ class CategoryController extends Controller
     {
         $model = Category::with('translations')->find($id) ?? new Category();
         $languages = Language::all();
+        $types = CategoryType::cases();
 
-        return view('backend.categories.form', compact('model', 'languages'));
+        return view('backend.categories.form', compact('model', 'languages','types'));
     }
 
     /**
      * Store / Update Category
      */
+
     public function save(Request $request)
     {
-        // English name is mandatory
+        // ✅ Validation
         $request->validate([
-            'translations.en.name' => 'required|string|max:255',
-            'thumb_image' => 'nullable|image|max:2048',
-            'thumb_icon'  => 'nullable|image|max:1024',
+            'type'                  => 'required|string|max:50', // 👈 NEW
+            'translations.en.name'  => 'required|string|max:255',
+            'thumb_image'           => 'nullable|image|max:2048',
+            'thumb_icon'            => 'nullable|image|max:1024',
         ]);
 
-        // Create or Update category
+        /**
+         * Create or Update Category
+         */
         $category = Category::updateOrCreate(
             ['id' => $request->id],
             [
-                'slug' => $request->slug ?: Str::slug($request->translations['en']['name']),
+                'type' => $request->type, // 👈 IMPORTANT
+                'slug' => $request->slug
+                    ?: Str::slug($request->translations['en']['name']),
             ]
         );
 
         /**
-         * Save thumb image
+         * Save Thumb Image
          */
         if ($request->hasFile('thumb_image')) {
             if ($category->thumb_image) {
                 Storage::disk('public')->delete($category->thumb_image);
             }
 
-            $path = $request->file('thumb_image')->store('categories/thumbs', 'public');
+            $path = $request->file('thumb_image')
+                ->store('categories/thumbs', 'public');
+
             $category->update(['thumb_image' => $path]);
         }
 
         /**
-         * Save thumb icon
+         * Save Thumb Icon
          */
         if ($request->hasFile('thumb_icon')) {
             if ($category->thumb_icon) {
                 Storage::disk('public')->delete($category->thumb_icon);
             }
 
-            $path = $request->file('thumb_icon')->store('categories/icons', 'public');
+            $path = $request->file('thumb_icon')
+                ->store('categories/icons', 'public');
+
             $category->update(['thumb_icon' => $path]);
         }
 
         /**
-         * Save translations
+         * Save Translations
          */
         foreach ($request->translations as $langCode => $data) {
 
             $langCode = strtolower($langCode);
             $name = trim($data['name'] ?? '');
 
-            // Remove translation if field is empty
+            // ❌ Remove translation if name empty
             if ($name === '') {
                 CategoryTranslation::where('category_id', $category->id)
                     ->where('language_code', $langCode)
@@ -92,14 +115,14 @@ class CategoryController extends Controller
                 continue;
             }
 
-            // Create or update translation
+            // ✅ Create or Update translation
             CategoryTranslation::updateOrCreate(
                 [
-                    'category_id'   => $category->id,
-                    'language_code'=> $langCode,
+                    'category_id'    => $category->id,
+                    'language_code'  => $langCode,
                 ],
                 [
-                    'name' => $name
+                    'name' => $name,
                 ]
             );
         }

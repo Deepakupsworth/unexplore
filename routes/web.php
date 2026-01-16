@@ -126,13 +126,25 @@ Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function ()
         |--------------------------------------------------------------------------
         */
         Route::prefix('thingtodo')->group(function () {
+
             Route::get('/', [ThingtodoController::class, 'index'])->name('thingtodos.index');
+
             Route::get('/create', [ThingtodoController::class, 'form'])->name('thingtodos.create');
+
             Route::get('/{id}/edit', [ThingtodoController::class, 'form'])->name('thingtodos.edit');
+
+            Route::get('/{id}', [ThingtodoController::class, 'show'])->name('thingtodos.show');
+
             Route::post('/save', [ThingtodoController::class, 'save'])->name('thingtodos.save');
-            Route::delete('/delete/{id}', [ThingtodoController::class, 'destroy'])->name('thingtodos.delete');
-            Route::delete('/gallery/delete/{id}', [ThingtodoController::class, 'deleteGalleryImage'])->name('thingtodos.gallery.delete');
+
+            Route::delete('/gallery/{id}', [ThingtodoController::class, 'deleteGalleryImage'])
+                ->name('thingtodos.gallery.delete');
+
+            Route::delete('/{id}', [ThingtodoController::class, 'destroy'])
+                ->name('thingtodos.delete');
         });
+
+
 
         /*
         |--------------------------------------------------------------------------
@@ -143,6 +155,7 @@ Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function ()
             Route::get('/', [EventController::class, 'index'])->name('events.index');
             Route::get('/create', [EventController::class, 'form'])->name('events.create');
             Route::get('/{id}/edit', [EventController::class, 'form'])->name('events.edit');
+            Route::get('/{id}', [EventController::class, 'show'])->name('events.show');
             Route::post('/save', [EventController::class, 'save'])->name('events.save');
             Route::delete('/delete/{id}', [EventController::class, 'destroy'])->name('events.delete');
             Route::delete('/gallery/delete/{id}', [EventController::class, 'deleteGalleryImage'])->name('events.gallery.delete');
@@ -162,9 +175,9 @@ Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function ()
         Route::get('/countries/{id}/edit', [CountryController::class, 'edit'])->name('countries.edit');
         Route::put('/countries/{id}', [CountryController::class, 'update'])->name('countries.update');
         Route::delete('/countries/{id}', [CountryController::class, 'destroy'])->name('countries.destroy');
-
         // AJAX
         Route::patch('/countries/{id}/toggle-status', [CountryController::class, 'toggleStatus']);
+        Route::post('/countries/import', [CountryController::class, 'import'])->name('admin.countries.import');
     });
 
     Route::prefix('admin') ->group(function () {
@@ -179,11 +192,17 @@ Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function ()
             Route::get('/{id}/edit', [HotelController::class, 'form'])
                 ->name('hotels.edit');
 
+            Route::get('/{id}', [HotelController::class, 'show'])
+                ->name('hotels.show');
+
             Route::post('/save', [HotelController::class, 'save'])
                 ->name('hotels.save');
 
             Route::delete('/{id}', [HotelController::class, 'delete'])
                 ->name('hotels.delete');
+
+            Route::delete('/gallery/{id}', [HotelController::class, 'deleteGallery'])
+                ->name('hotels.gallery.delete');
 
         });
 
@@ -194,6 +213,7 @@ Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function ()
         Route::get('/', [TransportController::class, 'index'])->name('transports.index');
         Route::get('/create', [TransportController::class, 'form'])->name('transports.create');
         Route::get('/{id}/edit', [TransportController::class, 'form'])->name('transports.edit');
+        Route::get('/{id}', [TransportController::class, 'show'])->name('transports.show');
         Route::post('/save', [TransportController::class, 'save'])->name('transports.save');
         Route::delete('/{id}', [TransportController::class, 'delete'])->name('transports.delete');
     });

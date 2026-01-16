@@ -11,11 +11,15 @@ class Hotel extends Model
 
     protected $fillable = [
         'city_id',
+        'location',
+        'latitude' ,
+        'longitude',
+        'email',
+        'phone',
         'star_rating',
         'has_meal',
         'status',
     ];
-
     public function translations()
     {
         return $this->hasMany(HotelTranslation::class);

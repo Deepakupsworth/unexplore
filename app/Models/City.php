@@ -21,6 +21,10 @@ class City extends Model
         return $this->hasMany(CityTranslation::class);
     }
 
+    public function translation()
+    {
+        return $this->hasOne(CityTranslation::class)->where('language_code', 'en');
+    }
     public function images()
     {
         return $this->morphMany(Image::class, 'imageable');
