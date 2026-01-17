@@ -10,7 +10,7 @@ class TransportTranslation extends Model
         'transport_id',
         'language_code',
         'name',
-        'message'
+        'description'
     ];
 
     public function transport()

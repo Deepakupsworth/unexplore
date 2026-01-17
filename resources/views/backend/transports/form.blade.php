@@ -53,17 +53,21 @@
 
                                     {{-- Transport Type --}}
                                     <div>
+
                                         <label class="form-label">Transport Type</label>
                                         <select name="type" class="form-control" required>
                                             <option value="">Select Transport Type</option>
 
                                             @foreach ($types as $type)
                                                 <option value="{{ $type->value }}"
-                                                    {{ old('type', $model->type) == $type->value ? 'selected' : '' }}>
+                                                    {{ old('type', $model->type?->value) == $type->value ? 'selected' : '' }}>
                                                     {{ $type->label() }}
                                                 </option>
                                             @endforeach
                                         </select>
+
+
+
                                     </div>
 
                                 </div>
