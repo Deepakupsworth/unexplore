@@ -83,6 +83,7 @@ class TransportController extends Controller
 
     public function save(Request $request)
     {
+        dd($request->all());
         $request->validate([
             'city_id' => 'required|exists:cities,id',
             'type' => 'required',
@@ -111,7 +112,7 @@ class TransportController extends Controller
                     ],
                     [
                         'name' => $data['name'],
-                        'message' => $data['message'] ?? null
+                        'description' => $data['description'] ?? null
                     ]
                 );
             }

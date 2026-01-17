@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->string('language_code', 10);
 
             $table->string('name');        // Taxi, Sedan Taxi, SUV Taxi
-            $table->text('message')->nullable(); // Optional description
+            $table->text('description')->nullable(); // Optional description
 
             $table->timestamps();
 
