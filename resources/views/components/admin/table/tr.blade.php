@@ -1,3 +1,3 @@
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-700 transition">
+<tr class="even:bg-slate-50 dark:even:bg-slate-700">
     {{ $slot }}
 </tr>

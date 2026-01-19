@@ -24,122 +24,117 @@
         }
     </style>
 
-    <div class="content-wrapper ltr:ml-[248px] rtl:mr-[248px]">
-        <div class="page-content container-fluid">
+    <div class="card">
+        <header class="card-header">
+            <h4 class="card-title">{{ $model->id ? 'Edit Category' : 'Add Category' }}</h4>
+        </header>
 
-            <div class="card">
-                <header class="card-header">
-                    <h4 class="card-title">{{ $model->id ? 'Edit Category' : 'Add Category' }}</h4>
-                </header>
+        <div class="card-body p-6">
 
-                <div class="card-body p-6">
+            <form action="{{ route('categories.save') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <input type="hidden" name="id" value="{{ $model->id }}">
 
-                    <form action="{{ route('categories.save') }}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <input type="hidden" name="id" value="{{ $model->id }}">
-
-                        {{-- LANGUAGE TABS --}}
-                        <div class="flex gap-2 mb-4">
-                            @foreach ($languages as $lang)
-                                @php
-                                    $hasError = $errors->has("translations.$lang->code.name");
-                                @endphp
-                                <button type="button" class="lang-btn {{ $loop->first || $hasError ? 'active' : '' }}"
-                                    data-lang="{{ $lang->code }}">
-                                    {{ strtoupper($lang->code) }}
-                                </button>
-                            @endforeach
-                        </div>
-
-                        {{-- LANGUAGE FIELDS --}}
-                        @foreach ($languages as $lang)
-                            @php
-                                $code = strtolower($lang->code);
-                                $trans = $model->translations->where('language_code', $code)->first();
-                                $hasError = $errors->has("translations.$code.name");
-                            @endphp
-
-                            <div class="lang-section {{ $loop->first || $hasError ? 'active' : '' }}"
-                                id="lang-{{ $code }}">
-
-                                <label class="form-label">
-                                    Name ({{ strtoupper($code) }})
-                                    @if ($code == 'en')
-                                        <span class="text-red-500">*</span>
-                                    @endif
-                                </label>
-
-                                <input name="translations[{{ $code }}][name]"
-                                    class="form-control @error("translations.$code.name") border-red-500 @enderror"
-                                    value="{{ old("translations.$code.name", $trans->name ?? '') }}"
-                                    {{ $code == 'en' ? 'required' : '' }}>
-
-                                @error("translations.$code.name")
-                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                                @enderror
-
-                            </div>
-                        @endforeach
-
-                        {{-- CATEGORY TYPE --}}
-                        <hr class="my-6">
-
-                        <div>
-                            <label class="form-label">Category Type <span class="text-red-500">*</span></label>
-
-                            <select name="type" class="form-control" required>
-                                <option value="">Select Type</option>
-
-                                @foreach ($types as $type)
-                                    <option value="{{ $type->value }}"
-                                        {{ old('type', $model->type?->value) === $type->value ? 'selected' : '' }}>
-                                        {{ $type->label() }}
-                                    </option>
-                                @endforeach
-                            </select>
-
-                            @error('type')
-                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        {{-- MEDIA --}}
-                        <hr class="my-6">
-
-                        <div>
-                            <label class="form-label">Thumb Image</label>
-                            <input type="file" name="thumb_image" class="form-control">
-                            @if ($model->thumb_image)
-                                <img src="{{ asset('storage/' . $model->thumb_image) }}"
-                                    class="w-[60px] h-[60px] object-cover rounded border mt-2">
-                            @endif
-                            @error('thumb_image')
-                                <p class="text-red-500 text-xs">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <div class="mt-4">
-                            <label class="form-label">Thumb Icon</label>
-                            <input type="file" name="thumb_icon" class="form-control">
-                            @if ($model->thumb_icon)
-                                <img src="{{ asset('storage/' . $model->thumb_icon) }}"
-                                    class="w-[60px] h-[60px] object-cover rounded border mt-2">
-                            @endif
-                            @error('thumb_icon')
-                                <p class="text-red-500 text-xs">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <div class="mt-6 flex gap-3">
-                            <button class="btn btn-dark">{{ $model->id ? 'Update' : 'Create' }}</button>
-                            <a href="{{ route('categories.index') }}" class="btn btn-secondary">Cancel</a>
-                        </div>
-
-                    </form>
+                {{-- LANGUAGE TABS --}}
+                <div class="flex gap-2 mb-4">
+                    @foreach ($languages as $lang)
+                        @php
+                            $hasError = $errors->has("translations.$lang->code.name");
+                        @endphp
+                        <button type="button" class="lang-btn {{ $loop->first || $hasError ? 'active' : '' }}"
+                            data-lang="{{ $lang->code }}">
+                            {{ strtoupper($lang->code) }}
+                        </button>
+                    @endforeach
                 </div>
-            </div>
 
+                {{-- LANGUAGE FIELDS --}}
+                @foreach ($languages as $lang)
+                    @php
+                        $code = strtolower($lang->code);
+                        $trans = $model->translations->where('language_code', $code)->first();
+                        $hasError = $errors->has("translations.$code.name");
+                    @endphp
+
+                    <div class="lang-section {{ $loop->first || $hasError ? 'active' : '' }}" id="lang-{{ $code }}">
+
+                        <label class="form-label">
+                            Name ({{ strtoupper($code) }})
+                            @if ($code == 'en')
+                                <span class="text-red-500">*</span>
+                            @endif
+                        </label>
+
+                        <input name="translations[{{ $code }}][name]"
+                            class="form-control @error("translations.$code.name") border-red-500 @enderror"
+                            value="{{ old("translations.$code.name", $trans->name ?? '') }}"
+                            {{ $code == 'en' ? 'required' : '' }}>
+
+                        @error("translations.$code.name")
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+
+                    </div>
+                @endforeach
+
+                {{-- CATEGORY TYPE --}}
+                <hr class="my-6">
+
+                <div>
+                    <label class="form-label">Category Type <span class="text-red-500">*</span></label>
+
+                    <select name="type" class="form-control" required>
+                        <option value="">Select Type</option>
+
+                        @foreach ($types as $type)
+                            <option value="{{ $type->value }}"
+                                {{ old('type', $model->type?->value) === $type->value ? 'selected' : '' }}>
+                                {{ $type->label() }}
+                            </option>
+                        @endforeach
+                    </select>
+
+                    @error('type')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                {{-- MEDIA --}}
+                <hr class="my-6">
+
+                <div>
+                    <label class="form-label">Thumb Image</label>
+                    <input type="file" name="thumb_image" class="form-control">
+                    @if ($model->thumb_image)
+                        <img src="{{ asset('storage/' . $model->thumb_image) }}"
+                            class="w-[60px] h-[60px] object-cover rounded border mt-2">
+                    @endif
+                    @error('thumb_image')
+                        <p class="text-red-500 text-xs">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="mt-4">
+                    <label class="form-label">Thumb Icon</label>
+                    <input type="file" name="thumb_icon" class="form-control">
+                    @if ($model->thumb_icon)
+                        <img src="{{ asset('storage/' . $model->thumb_icon) }}"
+                            class="w-[60px] h-[60px] object-cover rounded border mt-2">
+                    @endif
+                    @error('thumb_icon')
+                        <p class="text-red-500 text-xs">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="mt-6 flex gap-3">
+                    <button class="btn btn-dark">{{ $model->id ? 'Update' : 'Create' }}</button>
+                    <a href="{{ route('categories.index') }}" class="btn btn-secondary">Cancel</a>
+                </div>
+
+            </form>
         </div>
+    </div>
+
     </div>
 
     <script>

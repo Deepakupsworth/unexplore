@@ -2,19 +2,18 @@
 
 @section('content')
 
-
     {{-- Breadcrumb --}}
     <div class="mb-5 flex justify-between items-center">
         <div class="flex gap-2 text-sm">
-            <a href="{{ route('thingtodos.index') }}" class="text-primary-500">
+            <a href="{{ route('cities.index') }}" class="text-primary-500">
                 <iconify-icon icon="heroicons-outline:home" />
             </a>
             <span>/</span>
-            <span class="font-medium">View Thing To Do</span>
+            <span class="font-medium">View City</span>
         </div>
 
-        <a href="{{ route('thingtodos.edit', $thing->id) }}" class="btn btn-dark">
-            Edit
+        <a href="{{ route('cities.edit', $city->id) }}" class="btn btn-dark">
+            Edit City
         </a>
     </div>
 
@@ -23,10 +22,10 @@
         {{-- HEADER --}}
         <div class="px-6 py-4 border-b dark:border-slate-700">
             <h2 class="text-xl font-semibold">
-                {{ $thing->translation?->name }}
+                {{ $city->translation?->name ?? 'City' }}
             </h2>
             <p class="text-sm text-slate-500">
-                {{ $thing->city?->translation?->name }} · {{ $thing->category?->translation?->name }}
+                Slug: {{ $city->slug }}
             </p>
         </div>
 
@@ -39,34 +38,36 @@
                     <div class="card-body grid grid-cols-2 gap-6 p-4">
 
                         <div>
-                            <p class="text-xs text-slate-500">City</p>
+                            <p class="text-xs text-slate-500">City Name (EN)</p>
                             <p class="font-medium">
-                                {{ $thing->city?->translation?->name ?? '—' }}
+                                {{ optional($city->translations->where('language_code', 'en')->first())->name ?? '—' }}
                             </p>
+                        </div>
+
+                        <div>
+                            <p class="text-xs text-slate-500">Slug</p>
+                            <p class="font-medium">{{ $city->slug }}</p>
                         </div>
 
                         <div>
                             <p class="text-xs text-slate-500">Category</p>
                             <p class="font-medium">
-                                {{ $thing->category?->translation?->name ?? '—' }}
+                                {{ $city->category?->translation?->name ?? '—' }}
                             </p>
                         </div>
 
                         <div>
-                            <p class="text-xs text-slate-500">Latitude</p>
-                            <p class="font-medium">{{ $thing->latitude ?? '—' }}</p>
+                            <p class="text-xs text-slate-500">Country</p>
+                            <p class="font-medium">
+                                {{ $city->country?->name ?? '—' }}
+                            </p>
                         </div>
 
-                        <div>
-                            <p class="text-xs text-slate-500">Longitude</p>
-                            <p class="font-medium">{{ $thing->longitude ?? '—' }}</p>
-                        </div>
 
                         <div class="col-span-2">
                             <p class="text-xs text-slate-500">Video URL</p>
-                            @if ($thing->video_url)
-                                <a href="{{ $thing->video_url }}" target="_blank"
-                                    class="text-primary-600 underline text-sm">
+                            @if ($city->video_url)
+                                <a href="{{ $city->video_url }}" target="_blank" class="text-primary-600 underline text-sm">
                                     View Video
                                 </a>
                             @else
@@ -78,16 +79,14 @@
                 </div>
             </div>
 
-            {{-- THUMB + GALLERY --}}
+            {{-- THUMB --}}
             <div class="col-span-12 xl:col-span-6">
                 <div class="card h-full">
                     <div class="card-body p-4">
 
-                        {{-- Thumbnail --}}
                         <div class="h-[260px] bg-slate-100 dark:bg-slate-900 rounded-md overflow-hidden">
-                            @if ($thing->thumb)
-                                <img src="{{ Storage::url($thing->thumb->image_path) }}"
-                                    class="w-full h-full object-cover">
+                            @if ($city->thumb_image)
+                                <img src="{{ asset('storage/' . $city->thumb_image) }}" class="w-full h-full object-cover">
                             @else
                                 <div class="h-full flex items-center justify-center text-slate-400">
                                     No Image
@@ -95,12 +94,11 @@
                             @endif
                         </div>
 
-                        {{-- Gallery --}}
-                        @if ($thing->images && $thing->images->where('role', 'gallery')->count())
+                        @if ($city->gallery && $city->gallery->count())
                             <div class="grid xl:grid-cols-6 lg:grid-cols-3 md:grid-cols-3 grid-cols-2 gap-4 mt-5">
-                                @foreach ($thing->images->where('role', 'gallery') as $img)
+                                @foreach ($city->gallery as $img)
                                     <img src="{{ Storage::url($img->image_path) }}"
-                                        class="rounded-md border w-full h-24 object-cover hover:scale-105 transition">
+                                        class="rounded-md border w-full h-24 object-cover">
                                 @endforeach
                             </div>
                         @endif
@@ -111,17 +109,17 @@
 
         </div>
 
-        {{-- TRANSLATIONS WITH WORKING TABS --}}
+        {{-- TRANSLATIONS --}}
         <div class="card mt-8">
             <div class="card-body p-6">
 
                 <h4 class="text-lg font-semibold mb-4">
-                    Thing To Do Descriptions
+                    City Translations
                 </h4>
 
                 {{-- TAB BUTTONS --}}
                 <div class="flex gap-2 mb-6">
-                    @foreach ($thing->translations as $t)
+                    @foreach ($city->translations as $t)
                         <button type="button"
                             class="lang-tab px-4 py-2 rounded border text-sm font-medium
                                 {{ $loop->first ? 'bg-slate-800 text-white' : 'bg-slate-100 text-slate-700' }}"
@@ -132,16 +130,26 @@
                 </div>
 
                 {{-- TAB CONTENT --}}
-                @foreach ($thing->translations as $t)
+                @foreach ($city->translations as $t)
                     <div class="lang-content {{ $loop->first ? '' : 'hidden' }}" id="lang-{{ $t->language_code }}">
 
                         <div class="space-y-6">
 
                             <div class="bg-white dark:bg-slate-900 rounded-xl shadow p-6">
-                                <p class="text-xs uppercase text-slate-500 mb-1">Name</p>
-                                <h3 class="text-2xl font-semibold">
-                                    {{ $t->name }}
-                                </h3>
+                                <div class="mb-4">
+                                    <p class="text-xs uppercase text-slate-500 mb-1">City Name</p>
+                                    <h3 class="text-2xl font-semibold">
+                                        {{ $t->name }}
+                                    </h3>
+                                </div>
+                                <div>
+                                    <p class="text-xs uppercase text-slate-500 mb-1">Tagline</p>
+                                    @if ($t->tagline)
+                                        <p class="text-sm text-slate-500 mt-2">
+                                            {{ $t->tagline }}
+                                        </p>
+                                    @endif
+                                </div>
                             </div>
 
                             <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-6">
@@ -155,35 +163,12 @@
                     </div>
                 @endforeach
 
+
+
             </div>
         </div>
 
-        {{-- MAP --}}
-        @if ($thing->latitude && $thing->longitude)
-            <div class="card mt-8">
-                <div class="card-body p-6">
-
-                    <header class="flex mb-5 items-center border-b dark:border-slate-700 pb-4">
-                        <div class="flex-1">
-                            <div class="card-title">Location Map</div>
-                        </div>
-                        <div class="text-sm text-slate-500">
-                            {{ $thing->latitude }}, {{ $thing->longitude }}
-                        </div>
-                    </header>
-
-                    <div class="w-full h-[360px] rounded-lg overflow-hidden shadow">
-                        <iframe width="100%" height="100%" style="border:0" loading="lazy"
-                            src="https://www.google.com/maps?q={{ $thing->latitude }},{{ $thing->longitude }}&output=embed">
-                        </iframe>
-                    </div>
-
-                </div>
-            </div>
-        @endif
-
     </div>
-
 
     {{-- TABS JS --}}
     <script>

@@ -1,3 +1,3 @@
-<thead class="bg-slate-50 dark:bg-slate-800 border-t border-slate-100 dark:border-slate-700">
+<thead class="bg-slate-200 dark:bg-slate-700">
     {{ $slot }}
 </thead>

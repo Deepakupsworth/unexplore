@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->index('slug');
 
             $table->unsignedBigInteger('country_id');
+            $table->foreignId('category_id')->nullable()->constrained('categories')->nullOnDelete();
             $table->foreign('country_id')
             ->references('id')
             ->on('countries')

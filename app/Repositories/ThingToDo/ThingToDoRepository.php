@@ -71,6 +71,10 @@ class ThingToDoRepository implements ThingToDoRepositoryInterface
                     'city_id'     => $data['city_id'],
                     'category_id' => $data['category_id'] ?? null,
                     'location'    => $data['location'] ?? null,
+                    'opening_time'=> $data['opening_time'] ?? null,
+                    'closing_time'=> $data['closing_time'] ?? null,
+                    'latitude'    => $data['latitude'] ?? null,
+                    'longitude'   => $data['longitude'] ?? null,
                 ]
             );
 

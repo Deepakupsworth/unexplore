@@ -14,6 +14,10 @@ class ThingToDo extends Model
         'location',
         'city_id',
         'category_id',
+        'opening_time',
+        'closing_time',
+        'latitude',
+        'longitude',
     ];
 
     /* =======================================================

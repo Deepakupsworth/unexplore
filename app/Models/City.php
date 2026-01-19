@@ -13,6 +13,7 @@ class City extends Model
         'country_id',
         'slug',
         'thumb_image',
+        'category_id',
         'video_url',
     ];
 
@@ -41,4 +42,15 @@ class City extends Model
         return $this->morphMany(Image::class, 'imageable')
             ->where('role', 'gallery');
     }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
+    }
+
 }
