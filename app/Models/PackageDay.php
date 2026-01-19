@@ -26,4 +26,10 @@ class PackageDay extends Model
     {
         return $this->hasMany(PackageDayItem::class);
     }
+
+    public function options()
+    {
+        return $this->hasMany(PackageDayItemOption::class);
+    }
+
 }

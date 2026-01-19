@@ -1,25 +1,24 @@
 @extends('backend.layout')
 
 @section('content')
+    {{-- ================= ERROR SHOW ================= --}}
+    @if ($errors->any())
+        <div class="alert alert-danger mb-6">
+            <strong>Please fix the following errors:</strong>
+            <ul class="mt-2 list-disc list-inside">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <style>
-        .tab-btn {
-            padding: .6rem 1rem;
-            border-bottom: 2px solid transparent;
-            cursor: pointer
-        }
-
-        .tab-btn.active {
-            border-color: #1e293b;
-            font-weight: 600;
-            color: #1e293b
-        }
-
-        .tab-pane {
-            display: none
-        }
-
-        .tab-pane.active {
-            display: block
+        .form-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #334155;
+            margin-bottom: 4px
         }
 
         .lang-btn {
@@ -35,11 +34,13 @@
             color: #fff
         }
 
-        .lang-section {
+        .lang-section,
+        .info-lang-section {
             display: none
         }
 
-        .lang-section.active {
+        .lang-section.active,
+        .info-lang-section.active {
             display: block
         }
     </style>
@@ -47,286 +48,406 @@
     <form method="POST" action="{{ route('admin.packages.store') }}">
         @csrf
 
-        @php
-            $tabs = ['basic', 'availability', 'cities', 'itinerary', 'pricing', 'info'];
-        @endphp
+        <div class="bg-white rounded-xl shadow p-6 space-y-10">
+            {{-- ================================================= --}}
+            {{-- BASIC INFO --}}
+            {{-- ================================================= --}}
+            <h3 class="text-lg font-semibold">Basic Information</h3>
 
-        <div class="bg-white rounded-xl shadow">
+            <div class="grid grid-cols-2 gap-4">
 
-            {{-- ================= TAB HEADERS ================= --}}
-            <ul class="flex border-b p-2">
-                @foreach ($tabs as $i => $tab)
-                    <li>
-                        <button type="button" class="tab-btn {{ $i == 0 ? 'active' : '' }}" data-index="{{ $i }}">
-                            {{ ucfirst($tab) }}
-                        </button>
-                    </li>
-                @endforeach
-            </ul>
-
-            <div class="p-6">
-
-                {{-- ================================================= --}}
-                {{-- ================= BASIC ========================== --}}
-                {{-- ================================================= --}}
-                <div class="tab-pane active">
-
-                    <div class="grid grid-cols-2 gap-4 mb-6">
-                        <select name="category_id" class="form-control" required>
-                            <option value="">Select Category</option>
-                            @foreach ($categories as $cat)
-                                <option value="{{ $cat->id }}">{{ $cat->translation->name }}</option>
-                            @endforeach
-                        </select>
-
-                        <select name="package_type" class="form-control">
-                            <option value="fixed">Fixed</option>
-                            <option value="customized">Customized</option>
-                        </select>
-
-                        <input id="days" name="duration_days" class="form-control" placeholder="Duration Days">
-                        <input id="nights" name="duration_nights" class="form-control" placeholder="Duration Nights">
-                        <input name="base_persons" class="form-control" placeholder="Base Persons">
-                        <input name="max_persons" class="form-control" placeholder="Max Persons">
-                    </div>
-
-                    {{-- Language Tabs --}}
-                    <div class="flex gap-2 border-b mb-4 pb-2">
-                        @foreach ($languages as $lang)
-                            <button type="button" class="lang-btn {{ $loop->first ? 'active' : '' }}"
-                                data-lang="{{ strtolower($lang->code) }}">
-                                {{ strtoupper($lang->code) }}
-                            </button>
+                <div>
+                    <label class="form-label">Category *</label>
+                    <select name="category_id" class="form-control" required>
+                        <option value="">Select Category</option>
+                        @foreach ($categories as $cat)
+                            <option value="{{ $cat->id }}">{{ $cat->translation->name }}</option>
                         @endforeach
-                    </div>
-
-                    {{-- Language Sections --}}
-                    @foreach ($languages as $lang)
-                        @php $code=strtolower($lang->code); @endphp
-                        <div class="lang-section {{ $loop->first ? 'active' : '' }}" id="lang-{{ $code }}">
-                            <input name="translations[{{ $code }}][title]" class="form-control mb-3"
-                                placeholder="Title ({{ strtoupper($code) }})" {{ $code == 'en' ? 'required' : '' }}>
-
-                            <input name="translations[{{ $code }}][sub_title]" class="form-control mb-3"
-                                placeholder="Sub title">
-
-                            <textarea name="translations[{{ $code }}][description]" class="form-control h-28" placeholder="Description"></textarea>
-                        </div>
-                    @endforeach
-
+                    </select>
                 </div>
 
-                {{-- ================================================= --}}
-                {{-- ================= AVAILABILITY =================== --}}
-                {{-- ================================================= --}}
-                <div class="tab-pane">
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="form-label">Available From</label>
-                            <input type="date" name="availability[from]" class="form-control">
-                        </div>
-
-                        <div>
-                            <label class="form-label">Available To</label>
-                            <input type="date" name="availability[to]" class="form-control">
-                        </div>
-
-                        <div>
-                            <label class="form-label">Booking Start Date</label>
-                            <input type="date" name="availability[booking_start_date]" value="booking_start_date"
-                                class="form-control">
-                        </div>
-
-                        <div>
-                            <label class="form-label">Booking End Date</label>
-                            <input type="date" name="availability[booking_end_date]" value="booking_end_date"
-                                class="form-control">
-                        </div>
-                    </div>
+                <div>
+                    <label class="form-label">Package Type *</label>
+                    <select name="package_type" class="form-control">
+                        <option value="fixed">Fixed</option>
+                        <option value="customized">Customized</option>
+                    </select>
                 </div>
 
-                {{-- ================================================= --}}
-                {{-- ================= CITIES ========================= --}}
-                {{-- ================================================= --}}
-                <div class="tab-pane">
-                    <div id="citiesContainer"></div>
+                <div>
+                    <label class="form-label">Duration Days *</label>
+                    <input id="duration_days" type="number" name="duration_days" class="form-control" min="1"
+                        required>
                 </div>
 
-                {{-- ================================================= --}}
-                {{-- ================= ITINERARY ====================== --}}
-                {{-- ================================================= --}}
-                <div class="tab-pane">
-                    <div id="itineraryContainer"></div>
+                <div>
+                    <label class="form-label">Duration Nights *</label>
+                    <input id="duration_nights" type="number" name="duration_nights" class="form-control" min="0"
+                        required>
                 </div>
 
-                {{-- ================================================= --}}
-                {{-- ================= PRICING ======================== --}}
-                {{-- ================================================= --}}
-                <div class="tab-pane">
-                    <div class="grid grid-cols-2 gap-4 mb-6">
-
-                        <div>
-                            <label class="form-label">Currency</label>
-                            <input name="pricing[currency]" value="" class="form-control">
-                        </div>
-
-                        <div>
-                            <label class="form-label">Original Price</label>
-                            <input type="number" name="pricing[original_price]" value="" class="form-control">
-                        </div>
-
-                        <div>
-                            <label class="form-label">Discount Price</label>
-                            <input type="number" name="pricing[discount_price]" value="" class="form-control">
-                        </div>
-
-                        <div>
-                            <label class="form-label">Per Person Price</label>
-                            <input type="number" name="pricing[per_person_price]" value="" class="form-control">
-                        </div>
-
-                    </div>
+                <div>
+                    <label class="form-label">Base Persons</label>
+                    <input type="number" name="base_persons" class="form-control" value="2">
                 </div>
 
-                {{-- ================================================= --}}
-                {{-- ================= INFO TAB ====================== --}}
-                {{-- ================================================= --}}
-                <div class="tab-pane" id="info">
-
-                    {{-- Language Tabs --}}
-                    <div class="flex gap-2 border-b mb-4 pb-2">
-                        @foreach ($languages as $lang)
-                            <button type="button" class="lang-btn {{ $loop->first ? 'active' : '' }}"
-                                data-info-lang="{{ strtolower($lang->code) }}">
-                                {{ strtoupper($lang->code) }}
-                            </button>
-                        @endforeach
-                    </div>
-
-                    {{-- Language Sections --}}
-                    @foreach ($languages as $lang)
-                        @php
-                            $code = strtolower($lang->code);
-                        @endphp
-
-                        <div class="info-lang-section {{ $loop->first ? 'active' : '' }}"
-                            id="info-lang-{{ $code }}">
-
-                            @foreach (['cancellation', 'visa', 'season'] as $type)
-                                @php
-                                    $info = $package->exists ? $package->infos->where('type', $type)->first() : null;
-
-                                    $infoT = $info ? $info->translations->where('language_code', $code)->first() : null;
-                                @endphp
-
-                                <div class="mb-6">
-
-                                    {{-- TITLE (REQUIRED BY DB) --}}
-                                    <label class="form-label">
-                                        {{ ucfirst($type) }} Title ({{ strtoupper($code) }})
-                                    </label>
-                                    <input type="text"
-                                        name="infos[{{ $type }}][translations][{{ $code }}][title]"
-                                        class="form-control mb-2"
-                                        value="{{ old("infos.$type.translations.$code.title", $infoT->title ?? '') }}">
-
-                                    {{-- CONTENT --}}
-                                    <label class="form-label">
-                                        {{ ucfirst($type) }} Content
-                                    </label>
-                                    <textarea name="infos[{{ $type }}][translations][{{ $code }}][content]" class="form-control h-24">{{ old("infos.$type.translations.$code.content", $infoT->content ?? '') }}</textarea>
-
-                                </div>
-                            @endforeach
-
-                        </div>
-                    @endforeach
+                <div>
+                    <label class="form-label">Max Persons *</label>
+                    <input type="number" name="max_persons" class="form-control" required>
                 </div>
 
-
-                {{-- ================= BUTTONS ================= --}}
-                <div class="flex justify-between mt-6">
-                    <button type="button" class="btn btn-outline-dark" id="prevBtn">← Prev</button>
-                    <button type="button" class="btn btn-dark" id="nextBtn">Next →</button>
-                    <button type="submit" class="btn btn-success" id="submitBtn" style="display:none">
-                        Create Package
-                    </button>
+                <div>
+                    <label class="form-label">Package Status *</label>
+                    <select name="status" class="form-control" required>
+                        <option value="draft" {{ old('status') == 'draft' ? 'selected' : '' }}>
+                            Draft
+                        </option>
+                        <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>
+                            Active
+                        </option>
+                        <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>
+                            Inactive
+                        </option>
+                    </select>
                 </div>
+
 
             </div>
+
+            {{-- ================================================= --}}
+            {{-- TRANSLATIONS --}}
+            {{-- ================================================= --}}
+            <h3 class="text-lg font-semibold">Package Translations</h3>
+
+            <div class="flex gap-2 border-b pb-2 mb-4">
+                @foreach ($languages as $lang)
+                    <button type="button" class="lang-btn {{ $loop->first ? 'active' : '' }}"
+                        data-lang="{{ strtolower($lang->code) }}">
+                        {{ strtoupper($lang->code) }}
+                    </button>
+                @endforeach
+            </div>
+
+            @foreach ($languages as $lang)
+                @php $code = strtolower($lang->code); @endphp
+
+                <div class="lang-section {{ $loop->first ? 'active' : '' }}" id="lang-{{ $code }}">
+                    <label class="form-label">
+                        Title ({{ strtoupper($code) }}) *
+                    </label>
+
+                    <input class="form-control mb-3" name="translations[{{ $code }}][title]"
+                        value="{{ old("translations.$code.title") }}">
+
+                    <label class="form-label">Sub Title</label>
+                    <input class="form-control mb-3" name="translations[{{ $code }}][sub_title]"
+                        value="{{ old("translations.$code.sub_title") }}">
+
+                    <label class="form-label">Description</label>
+                    <textarea class="form-control h-28" name="translations[{{ $code }}][description]">{{ old("translations.$code.description") }}</textarea>
+                </div>
+            @endforeach
+
+            {{-- ================================================= --}}
+            {{-- AVAILABILITY --}}
+            {{-- ================================================= --}}
+            <h3 class="text-lg font-semibold">Availability</h3>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="form-label">Available From *</label>
+                    <input type="date" name="availability[available_from]" class="form-control" required>
+                </div>
+                <div>
+                    <label class="form-label">Available To *</label>
+                    <input type="date" name="availability[available_to]" class="form-control" required>
+                </div>
+
+                <div>
+                    <label class="form-label">Booking Start Date</label>
+                    <input type="date" name="availability[booking_start_date]" class="form-control">
+                </div>
+
+                <div>
+                    <label class="form-label">Booking End Date</label>
+                    <input type="date" name="availability[booking_end_date]" class="form-control">
+                </div>
+            </div>
+
+
+            {{-- ================================================= --}}
+            {{-- CITIES --}}
+            {{-- ================================================= --}}
+            <h3 class="text-lg font-semibold">Cities & Nights</h3>
+            <div id="citiesContainer"></div>
+
+            {{-- ================================================= --}}
+            {{-- DAYS & ACTIVITIES --}}
+            {{-- ================================================= --}}
+            <h3 class="text-lg font-semibold">Day Wise Itinerary</h3>
+            <div id="daysContainer"></div>
+
+            {{-- ================================================= --}}
+            {{-- PRICING --}}
+            {{-- ================================================= --}}
+            <h3 class="text-lg font-semibold">Pricing</h3>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="form-label">Currency *</label>
+                    <input name="pricing[currency]" value="INR" class="form-control" required>
+                </div>
+                <div>
+                    <label class="form-label">Original Price *</label>
+                    <input type="number" step="0.01" name="pricing[original_price]" class="form-control" required>
+                </div>
+                <div>
+                    <label class="form-label">Discount Price</label>
+                    <input type="number" step="0.01" name="pricing[discount_price]" class="form-control">
+                </div>
+                <div>
+                    <label class="form-label">Per Person Price *</label>
+                    <input type="number" step="0.01" name="pricing[per_person_price]" class="form-control" required>
+                </div>
+            </div>
+
+
+
+            {{-- ================================================= --}}
+            {{-- ADDITIONAL INFO --}}
+            {{-- ================================================= --}}
+            {{-- <h3 class="text-lg font-semibold">Additional Information</h3>
+
+            <div class="flex gap-2 border-b pb-2 mb-4">
+                @foreach ($languages as $lang)
+                    <button type="button" class="lang-btn {{ $loop->first ? 'active' : '' }}"
+                        data-info="{{ $lang->code }}">
+                        {{ strtoupper($lang->code) }}
+                    </button>
+                @endforeach
+            </div>
+
+            @foreach ($languages as $lang)
+                <div class="info-lang-section {{ $loop->first ? 'active' : '' }}" id="info-{{ $lang->code }}">
+                    @foreach (['cancellation', 'visa', 'season'] as $type)
+                        <label class="form-label">{{ ucfirst($type) }} Title</label>
+                        <input class="form-control mb-2"
+                            name="infos[{{ $type }}][translations][{{ $lang->code }}][title]">
+                        <label class="form-label">{{ ucfirst($type) }} Content</label>
+                        <textarea class="form-control h-24 mb-4"
+                            name="infos[{{ $type }}][translations][{{ $lang->code }}][content]"></textarea>
+                    @endforeach
+                </div>
+            @endforeach --}}
+
+            <button class="btn btn-success mt-6">Create Package</button>
+
         </div>
     </form>
 
-    {{-- ================= JS ================= --}}
     <script>
-        const tabs = document.querySelectorAll('.tab-pane');
-        const btns = document.querySelectorAll('.tab-btn');
-        let i = 0;
+        /* ================= DOM REFERENCES ================= */
+        const duration_days = document.getElementById('duration_days');
+        const duration_nights = document.getElementById('duration_nights');
+        const citiesContainer = document.getElementById('citiesContainer');
+        const daysContainer = document.getElementById('daysContainer');
 
-        function showTab(n) {
-            tabs.forEach(t => t.classList.remove('active'));
-            btns.forEach(b => b.classList.remove('active'));
-            tabs[n].classList.add('active');
-            btns[n].classList.add('active');
-            document.getElementById('prevBtn').style.display = n === 0 ? 'none' : 'inline-flex';
-            document.getElementById('nextBtn').style.display = n === tabs.length - 1 ? 'none' : 'inline-flex';
-            document.getElementById('submitBtn').style.display = n === tabs.length - 1 ? 'inline-flex' : 'none';
-            i = n;
+        /* ================= DATA ================= */
+        const cities = @json($cities);
+        const hotels = @json($hotels);
+        const events = @json($events);
+        const todos = @json($todos);
+        const transports = @json($transports);
+
+        const itemsMap = {
+            hotel: hotels,
+            event: events,
+            todo: todos,
+            transport: transports
+        };
+
+        /* ================= RENDER CITIES (SAFE) ================= */
+        function renderCities(n) {
+            n = parseInt(n || 0);
+
+            // preserve existing values
+            const old = {};
+            citiesContainer.querySelectorAll('[name^="cities"]').forEach(el => {
+                old[el.name] = el.value;
+            });
+
+            citiesContainer.innerHTML = '';
+
+            for (let i = 0; i < n; i++) {
+                const row = document.createElement('div');
+                row.className = 'grid grid-cols-3 gap-4 mb-3';
+
+                row.innerHTML = `
+                    <select class="form-control" name="cities[${i}][city_id]">
+                        <option value="">Select City</option>
+                        ${cities.map(c => `<option value="${c.id}">${c.slug}</option>`).join('')}
+                    </select>
+
+                    <input class="form-control"
+                           name="cities[${i}][nights]"
+                           value="${old[`cities[${i}][nights]`] ?? 1}">
+
+                    <input class="form-control"
+                           name="cities[${i}][sort_order]"
+                           value="${old[`cities[${i}][sort_order]`] ?? (i + 1)}">
+                `;
+
+                citiesContainer.appendChild(row);
+
+                // restore selected city
+                if (old[`cities[${i}][city_id]`]) {
+                    row.querySelector('select').value = old[`cities[${i}][city_id]`];
+                }
+            }
         }
-        btns.forEach((b, idx) => b.onclick = () => showTab(idx));
-        document.getElementById('prevBtn').onclick = () => showTab(i - 1);
-        document.getElementById('nextBtn').onclick = () => showTab(i + 1);
-        showTab(0);
 
-        document.querySelectorAll('.lang-btn').forEach(btn => {
+        /* ================= RENDER DAYS (NO DATA LOSS) ================= */
+        function renderDays(days) {
+            days = parseInt(days || 0);
+
+            for (let d = 1; d <= days; d++) {
+
+                if (daysContainer.querySelector(`[data-day-wrapper="${d}"]`)) {
+                    continue; // already exists → don't reset
+                }
+
+                const dayBox = document.createElement('div');
+                dayBox.className = 'border rounded p-4 mb-6';
+                dayBox.dataset.dayWrapper = d;
+
+                dayBox.innerHTML = `
+                    <h4 class="font-semibold mb-2">Day ${d}</h4>
+
+                    <label class="form-label">City</label>
+                    <select class="form-control mb-3" name="days[${d}][city_id]">
+                        <option value="">Select City</option>
+                        ${cities.map(c => `<option value="${c.id}">${c.slug}</option>`).join('')}
+                    </select>
+
+                    <div class="activities" data-day="${d}"></div>
+
+                    <button type="button"
+                            class="btn btn-sm btn-outline-dark add-activity"
+                            data-day="${d}">
+                        + Add Activity
+                    </button>
+                `;
+
+                daysContainer.appendChild(dayBox);
+            }
+
+            // remove extra days if reduced
+            daysContainer.querySelectorAll('[data-day-wrapper]').forEach(box => {
+                if (parseInt(box.dataset.dayWrapper) > days) {
+                    box.remove();
+                }
+            });
+        }
+
+        /* ================= ACTIVITY TEMPLATE ================= */
+        function activityTemplate(day, index) {
+            return `
+            <div class="border p-3 mb-3 activity-row">
+                <label class="form-label">Activity Type</label>
+                <select class="form-control mb-2 activity-type">
+                    <option value="">Select Type</option>
+                    <option value="hotel">Hotel</option>
+                    <option value="event">Event</option>
+                    <option value="todo">To Do</option>
+                    <option value="transport">Transport</option>
+                </select>
+
+                <label class="form-label">Item</label>
+                <select class="form-control mb-2 item-select"
+                        name="days[${day}][items][${index}][item_id]">
+                    <option value="">Select Item</option>
+                </select>
+
+                <input type="hidden"
+                       name="days[${day}][items][${index}][item_type]">
+
+                <label class="form-label">Start Time</label>
+                <input type="time"
+                       class="form-control mb-2"
+                       name="days[${day}][items][${index}][start_time]">
+
+                <label class="form-label">End Time</label>
+                <input type="time"
+                       class="form-control"
+                       name="days[${day}][items][${index}][end_time]">
+            </div>`;
+        }
+
+        /* ================= ADD ACTIVITY ================= */
+        document.addEventListener('click', e => {
+            if (!e.target.classList.contains('add-activity')) return;
+
+            const day = e.target.dataset.day;
+            const box = e.target.previousElementSibling;
+            const index = box.children.length;
+
+            box.insertAdjacentHTML('beforeend', activityTemplate(day, index));
+        });
+
+        /* ================= ACTIVITY TYPE CHANGE ================= */
+        document.addEventListener('change', e => {
+            if (!e.target.classList.contains('activity-type')) return;
+
+            const wrapper = e.target.closest('.activity-row');
+            const type = e.target.value;
+
+            wrapper.querySelector('input[name*="[item_type]"]').value = type;
+
+            const select = wrapper.querySelector('.item-select');
+            select.innerHTML = '<option value="">Select Item</option>';
+
+            (itemsMap[type] || []).forEach(item => {
+                select.insertAdjacentHTML(
+                    'beforeend',
+                    `<option value="${item.id}">${item.name || item.title}</option>`
+                );
+            });
+        });
+
+        /* ================= INPUT EVENTS ================= */
+        duration_days.addEventListener('change', () => {
+            renderDays(duration_days.value);
+        });
+
+        duration_nights.addEventListener('change', () => {
+            renderCities(duration_nights.value);
+        });
+
+        /* ================= LANGUAGE TABS ================= */
+        document.querySelectorAll('[data-lang]').forEach(btn => {
             btn.onclick = () => {
-                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('[data-lang]').forEach(b => b.classList.remove('active'));
                 document.querySelectorAll('.lang-section').forEach(s => s.classList.remove('active'));
                 btn.classList.add('active');
                 document.getElementById('lang-' + btn.dataset.lang).classList.add('active');
             };
         });
 
-        const cities = @json($cities);
+        // document.querySelectorAll('[data-info]').forEach(btn => {
+        //     btn.onclick = () => {
+        //         document.querySelectorAll('[data-info]').forEach(b => b.classList.remove('active'));
+        //         document.querySelectorAll('.info-lang-section').forEach(s => s.classList.remove('active'));
+        //         btn.classList.add('active');
+        //         document.getElementById('info-' + btn.dataset.info).classList.add('active');
+        //     };
+        // });
 
-        function render() {
-            const d = parseInt(days.value || 0);
-            const n = parseInt(nights.value || 0);
-            citiesContainer.innerHTML = '';
-            itineraryContainer.innerHTML = '';
-
-            for (let i = 0; i < n; i++) {
-                citiesContainer.innerHTML += `
-<div class="grid grid-cols-3 gap-4 mb-3">
-<select name="cities[${i}][city_id]" class="form-control">
-<option value="">City</option>
-${cities.map(c=>`<option value="${c.id}">${c.slug}</option>`).join('')}
-</select>
-<div>
-    <label class="form-label">Nights</label>
-        <input type="" name="cities[${i}][nights]" value="1" class="form-control">
-</div>
-<div>
-    <label class="form-label">Order</label>
-    <input type="" name="cities[${i}][sort_order]" value="${i+1}" class="form-control">
-    </div>
-</div>`;
-            }
-
-            for (let dno = 1; dno <= d; dno++) {
-                itineraryContainer.innerHTML += `
-<div class="border p-4 mb-4">
-<h6>Day ${dno}</h6>
-<select name="itinerary[${dno}][city_id]" class="form-control mb-3">
-<option value="">City</option>
-${cities.map(c=>`<option value="${c.id}">${c.slug}</option>`).join('')}
-</select>
-<input type="hidden" name="itinerary[${dno}][items][0][item_type]" value="hotel">
-<input type="hidden" name="itinerary[${dno}][items][0][item_id]" value="1">
-</div>`;
-            }
-        }
-        days.onchange = render;
-        nights.onchange = render;
+        /* ================= INITIAL LOAD ================= */
+        document.addEventListener('DOMContentLoaded', () => {
+            if (duration_nights.value) renderCities(duration_nights.value);
+            if (duration_days.value) renderDays(duration_days.value);
+        });
     </script>
+
+
 @endsection

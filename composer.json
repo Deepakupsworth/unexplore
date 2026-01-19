@@ -29,7 +29,8 @@
         "files": [
                     "app/Helpers/ImageHelper.php",
                     "app/Helpers/CurrencyHelper.php",
-                    "app/Helpers/TimeHelper.php"
+                    "app/Helpers/TimeHelper.php",
+                    "app/Helpers/UiHelper.php"
                 ]
     },
     "autoload-dev": {

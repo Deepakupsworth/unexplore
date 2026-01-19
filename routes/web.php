@@ -157,7 +157,7 @@ Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function ()
         | Events Routes
         |--------------------------------------------------------------------------
         */
-    Route::prefix('events')->group(function () {
+        Route::prefix('events')->group(function () {
             Route::get('/', [EventController::class, 'index'])->name('events.index');
             Route::get('/create', [EventController::class, 'form'])->name('events.create');
             Route::get('/{id}/edit', [EventController::class, 'form'])->name('events.edit');
@@ -226,23 +226,32 @@ Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function ()
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::prefix('packages')->name('packages.')->group(function () {
 
-                Route::get('/', [AdminPackageController::class, 'index'])
-                    ->name('index');
+            Route::get('/', [AdminPackageController::class, 'index'])
+                ->name('index');
 
-                Route::get('/create', [AdminPackageController::class, 'create'])
-                    ->name('create');
+            Route::get('/create', [AdminPackageController::class, 'create'])
+                ->name('create');
 
-                Route::post('/', [AdminPackageController::class, 'store'])
-                    ->name('store');
+            Route::post('/', [AdminPackageController::class, 'store'])
+                ->name('store');
 
-                Route::get('/{package}/edit', [AdminPackageController::class, 'edit'])
-                    ->name('edit');
+            Route::get('/{package}/edit', [AdminPackageController::class, 'edit'])
+                ->name('edit');
 
-                Route::put('/{package}', [AdminPackageController::class, 'update'])
-                    ->name('update');
-            });
+
+            Route::get('/{package}/show', [AdminPackageController::class, 'show'])
+                ->name('show');
+
+
+            Route::put('/{package}', [AdminPackageController::class, 'update'])
+                ->name('update');
+
+            Route::post(
+                '/package-day-item-options',
+                [AdminPackageController::class, 'packageDayOptionsStore']
+            )->name('package-day-options');
+        });
     });
-
 });
 
 Route::get('/basic_form', function () {

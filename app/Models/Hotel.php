@@ -47,4 +47,5 @@ class Hotel extends Model
     {
         return $this->belongsTo(City::class);
     }
+
 }

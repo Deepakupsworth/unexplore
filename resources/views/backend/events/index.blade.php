@@ -135,8 +135,8 @@
                                 </td>
 
 
-                                <td class="table-td text-right">
-                                    <div class="flex justify-end gap-2">
+                                <td class="table-td">
+                                    <div class="flex justify-end gap-2 items-center">
                                         <a href="{{ route('events.show', $event->id) }}"
                                             class="action-btn bg-blue-100 text-blue-700">
                                             <iconify-icon icon="heroicons:eye"></iconify-icon>

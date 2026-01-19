@@ -2,32 +2,43 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\CategoryType;
 use App\Http\Controllers\Controller;
-use App\Models\Package;
-use App\Models\Category;
-use App\Models\City;
-use App\Models\Language;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
+/* MODELS */
+use App\Models\Package;
+use App\Models\Category;
+use App\Models\City;
+use App\Models\Language;
+use App\Models\Hotel;
+use App\Models\Event;
+use App\Models\PackageDayItemOption;
+use App\Models\ThingToDo;
+use App\Models\Transport;
+
 class PackageController extends Controller
 {
     /* ================= LIST ================= */
-
     public function index()
     {
-        $packages = Package::with('translation')->latest()->paginate(20);
+        $packages = Package::with([
+            'translations',
+            'category.translation',
+        ])->latest()->paginate(20);
+
         return view('backend.packages.index', compact('packages'));
     }
 
-    /* ================= CREATE / EDIT ================= */
-
+    /* ================= CREATE ================= */
     public function create()
     {
-        return $this->form(new Package());
+        return $this->createForm();
     }
 
+    /* ================= EDIT ================= */
     public function edit(Package $package)
     {
         $package->load([
@@ -36,221 +47,291 @@ class PackageController extends Controller
             'cities',
             'days.items',
             'price',
-            'priceIncreasePersons',
-            'childPrices',
-            'infos.translations'
+            'infos.translations',
         ]);
-        return view('backend.packages.form', [
-            'package'    => $package,
-            'categories' => Category::with('translation')->get(),
-            'languages'  => Language::all(),
-            'cities'     => City::with('translation')->get(),
-        ]);
+
+        return $this->editForm($package);
     }
 
+    // public function show(Package $package)
+    // {
+    //     $lang = app()->getLocale();
 
-    private function form(Package $package)
+    //     $package->load([
+    //         'translations',
+    //         'category.translation',
+    //         'availabilities',
+    //         'cities.city',
+    //         'days.items',
+    //         'price',
+    //         'infos.translations',
+    //     ]);
+
+    //     return view('backend.packages.show', [
+    //         'package' => $package,
+
+    //         // 🔥 ITEMS FOR MODAL
+    //         'hotels' => \App\Models\Hotel::with(['translations' => function ($q) use ($lang) {
+    //             $q->where('language_code', $lang);
+    //         }])->get()->map(fn($h) => [
+    //             'id' => $h->id,
+    //             'name' => $h->translations->first()->name ?? 'Hotel #' . $h->id,
+    //         ]),
+
+    //         'events' => \App\Models\Event::with(['translations' => function ($q) use ($lang) {
+    //             $q->where('language_code', $lang);
+    //         }])->get()->map(fn($e) => [
+    //             'id' => $e->id,
+    //             'name' => $e->translations->first()->title ?? 'Event #' . $e->id,
+    //         ]),
+
+    //         'todos' => \App\Models\ThingToDo::with(['translations' => function ($q) use ($lang) {
+    //             $q->where('language_code', $lang);
+    //         }])->get()->map(fn($t) => [
+    //             'id' => $t->id,
+    //             'name' => $t->translations->first()->title ?? 'Todo #' . $t->id,
+    //         ]),
+    //     ]);
+    // }
+    public function show(Package $package)
     {
-        return view('backend.packages.form', [
-            'package'    => $package,
-            'categories' => Category::with('translation')->get(),
-            'languages'  => Language::all(),
-            'cities'     => City::all(),
+        $lang = app()->getLocale();
+
+        $package->load([
+            'translations',
+            'category.translation',
+            'availabilities',
+            'cities.city',
+            'days.items',
+            'days.options',          // 🔥 IMPORTANT
+            'price',
+            'infos.translations',
+        ]);
+
+        return view('backend.packages.show', [
+            'package' => $package,
+
+            // 🔥 ITEMS FOR MODAL
+            'hotels' => \App\Models\Hotel::with(['translations' => function ($q) use ($lang) {
+                $q->where('language_code', $lang);
+            }])->get()->map(fn($h) => [
+                'id' => $h->id,
+                'name' => $h->translations->first()->name ?? 'Hotel #' . $h->id,
+            ]),
+
+            'events' => \App\Models\Event::with(['translations' => function ($q) use ($lang) {
+                $q->where('language_code', $lang);
+            }])->get()->map(fn($e) => [
+                'id' => $e->id,
+                'name' => $e->translations->first()->title ?? 'Event #' . $e->id,
+            ]),
+
+            'todos' => \App\Models\ThingToDo::with(['translations' => function ($q) use ($lang) {
+                $q->where('language_code', $lang);
+            }])->get()->map(fn($t) => [
+                'id' => $t->id,
+                'name' => $t->translations->first()->title ?? 'Todo #' . $t->id,
+            ]),
         ]);
     }
+
+
+
+    /* ================= CREATE FORM ================= */
+    private function createForm()
+    {
+        return view('backend.packages.form', $this->commonFormData());
+    }
+
+    /* ================= EDIT FORM ================= */
+    private function editForm(Package $package)
+    {
+
+        return view('backend.packages.edit', array_merge(
+            $this->commonFormData(),
+            ['package' => $package]
+        ));
+    }
+
+    /* ================= COMMON FORM DATA ================= */
+    private function commonFormData(): array
+    {
+        // Normalize language once
+        $lang = strtolower(app()->getLocale() ?? 'en');
+
+        // Reusable translation filter (case-insensitive)
+        $translationFilter = fn($q) =>
+        $q->whereRaw('LOWER(language_code) = ?', [$lang]);
+
+        return [
+            'categories' => Category::where('type', CategoryType::PACKAGE)
+                ->with('translation')
+                ->get(),
+
+            'languages' => Language::select('id', 'code')->get(),
+
+            'cities' => City::select('id', 'slug')->get(),
+
+            'hotels' => Hotel::with([
+                'translations' => $translationFilter
+            ])->get()->map(fn($h) => [
+                'id'   => $h->id,
+                'name' => optional($h->translations->first())->name
+                    ?? 'Hotel #' . $h->id,
+            ]),
+
+            'events' => Event::with([
+                'translations' => $translationFilter
+            ])->get()->map(fn($e) => [
+                'id'   => $e->id,
+                'name' => optional($e->translations->first())->title
+                    ?? 'Event #' . $e->id,
+            ]),
+
+            'todos' => ThingToDo::with([
+                'translations' => $translationFilter
+            ])->get()->map(fn($t) => [
+                'id'   => $t->id,
+                'name' => optional($t->translations->first())->title
+                    ?? 'Todo #' . $t->id,
+            ]),
+
+            'transports' => Transport::with([
+                'translations' => $translationFilter
+            ])->get()->map(fn($t) => [
+                'id'   => $t->id,
+                'name' => optional($t->translations->first())->title
+                    ?? 'Transport #' . $t->id,
+            ]),
+        ];
+    }
+
 
     /* ================= STORE ================= */
-
     public function store(Request $request)
     {
         return $this->persist($request, new Package());
     }
 
     /* ================= UPDATE ================= */
-
     public function update(Request $request, Package $package)
     {
         return $this->persist($request, $package);
     }
 
-    /* ================= CORE SAVE LOGIC ================= */
-
+    /* ================= SAVE LOGIC ================= */
     private function persist(Request $request, Package $package)
     {
         $request->validate([
-            'category_id' => 'required',
-            'package_type' => 'required',
-            'translations.en.title' => 'required',
+            'category_id'     => 'required|exists:categories,id',
+            'package_type'    => 'required|in:fixed,customized',
+            'duration_days'   => 'required|integer|min:1',
+            'duration_nights' => 'required|integer|min:0',
+            'max_persons'     => 'required|integer|min:1',
+
             'availability.available_from' => 'required|date',
-            'availability.available_to'   => 'required|date',
+            'availability.available_to'   => 'required|date|after_or_equal:availability.available_from',
+
+            'pricing.currency'         => 'required|string|size:3',
+            'pricing.original_price'   => 'required|numeric|min:0',
+            'pricing.per_person_price' => 'required|numeric|min:0',
         ]);
 
         DB::transaction(function () use ($request, $package) {
 
-            /* ================= PACKAGE ================= */
-
+            /* ===== PACKAGE ===== */
             $package->fill([
                 'category_id'     => $request->category_id,
                 'package_type'    => $request->package_type,
                 'duration_days'   => $request->duration_days,
                 'duration_nights' => $request->duration_nights,
-                'base_persons'    => $request->base_persons,
+                'base_persons'    => $request->base_persons ?? 2,
                 'max_persons'     => $request->max_persons,
-                'status'          => $request->status ?? 'active',
+                'status'          => $request->status ?? 'draft',
             ]);
 
             if (!$package->exists) {
-                $package->slug = Str::slug($request->translations['en']['title']) . '-' . time();
+                $package->slug = Str::slug(
+                    collect($request->translations)->first()['title']
+                ) . '-' . time();
             }
 
             $package->save();
 
-            /* ================= TRANSLATIONS ================= */
-
+            /* ===== TRANSLATIONS ===== */
             $package->translations()->delete();
-
-            foreach ($request->translations as $lang => $data) {
-                if (!empty($data['title'])) {
+            foreach ($request->translations as $lang => $tr) {
+                if (!empty($tr['title'])) {
                     $package->translations()->create([
-                        'language_code' => $lang,
-                        'title'         => $data['title'],
-                        'sub_title'     => $data['sub_title'] ?? null,
-                        'description'   => $data['description'] ?? null,
+                        'language_code' => strtolower($lang),
+                        'title'         => $tr['title'],
+                        'sub_title'     => $tr['sub_title'] ?? null,
+                        'description'   => $tr['description'] ?? null,
                     ]);
                 }
             }
 
-            /* ================= AVAILABILITY ================= */
-
+            /* ===== AVAILABILITY ===== */
             $package->availabilities()->delete();
+            $package->availabilities()->create($request->availability);
 
-            if (
-                !empty($request->availability['available_from'])
-                && !empty($request->availability['available_to'])
-            ) {
-
-                $package->availabilities()->create([
-                    'available_from'     => $request->availability['available_from'],
-                    'available_to'       => $request->availability['available_to'],
-                    'booking_start_date' => $request->availability['booking_start_date'] ?? null,
-                    'booking_end_date'   => $request->availability['booking_end_date'] ?? null,
-                ]);
-            }
-
-            /* ================= CITIES ================= */
-
+            /* ===== CITIES ===== */
             $package->cities()->delete();
-
-            foreach ($request->cities ?? [] as $city) {
-
-                // 🔒 skip empty rows
-                if (empty($city['city_id'])) {
-                    continue;
-                }
+            foreach ($request->cities ?? [] as $row) {
+                if (empty($row['city_id'])) continue;
 
                 $package->cities()->create([
-                    'city_id'    => $city['city_id'],
-                    'nights'     => $city['nights'] ?? 0,
-                    'sort_order' => $city['sort_order'] ?? 0,
+                    'city_id'    => $row['city_id'],
+                    'nights'     => $row['nights'] ?? 1,
+                    'sort_order' => $row['sort_order'] ?? 0,
                 ]);
             }
 
-            /* ================= ITINERARY ================= */
-
+            /* ===== DAYS + ITEMS ===== */
             $package->days()->delete();
+            foreach ($request->days ?? [] as $dayNo => $day) {
+                if (empty($day['city_id'])) continue;
 
-            foreach ($request->itinerary ?? [] as $dayNumber => $dayData) {
-
-                // 🔒 skip if city not selected
-                if (empty($dayData['city_id'])) {
-                    continue;
-                }
-
-                $day = $package->days()->create([
-                    'day_number' => $dayNumber,
-                    'city_id'    => $dayData['city_id'],
+                $dayModel = $package->days()->create([
+                    'day_number' => $dayNo,
+                    'city_id'    => $day['city_id'],
                 ]);
 
-                foreach ($dayData['items'] ?? [] as $item) {
+                foreach ($day['items'] ?? [] as $item) {
+                    if (empty($item['item_type']) || empty($item['item_id'])) continue;
 
-                    // 🔒 skip invalid item
-                    if (empty($item['item_type']) || empty($item['item_id'])) {
-                        continue;
-                    }
-
-                    $day->items()->create([
-                        'item_type' => $item['item_type'],
-                        'item_id'   => $item['item_id'],
+                    $dayModel->items()->create([
+                        'item_type'  => $item['item_type'],
+                        'item_id'    => $item['item_id'],
                         'start_time' => $item['start_time'] ?? null,
-                        'end_time'  => $item['end_time'] ?? null,
+                        'end_time'   => $item['end_time'] ?? null,
                         'sort_order' => $item['sort_order'] ?? 0,
                     ]);
                 }
             }
 
-            /* ================= PRICING ================= */
-
+            /* ===== PRICING ===== */
             $package->price()->delete();
-            $package->priceIncreasePersons()->delete();
-            $package->childPrices()->delete();
+            $package->price()->create($request->pricing);
 
-            if (
-                $request->has('pricing')
-                && !empty($request->pricing['original_price'])
-                && !empty($request->pricing['per_person_price'])
-            ) {
-
-                $package->price()->create([
-                    'currency'         => $request->pricing['currency'] ?? 'INR',
-                    'original_price'   => $request->pricing['original_price'],
-                    'discount_price'   => $request->pricing['discount_price'] ?? null,
-                    'per_person_price' => $request->pricing['per_person_price'],
-                ]);
-
-                foreach ($request->pricing['extra_persons'] ?? [] as $row) {
-                    if (empty($row['person_number']) || empty($row['additional_price'])) {
-                        continue;
-                    }
-                    $package->priceIncreasePersons()->create($row);
-                }
-
-                foreach ($request->pricing['child_prices'] ?? [] as $row) {
-                    if (
-                        empty($row['min_age']) ||
-                        empty($row['max_age']) ||
-                        empty($row['price_value'])
-                    ) {
-                        continue;
-                    }
-                    $package->childPrices()->create($row);
-                }
-            }
-
-            /* ================= INFO ================= */
-
+            /* ===== ADDITIONAL INFO ===== */
             $package->infos()->delete();
-
-            foreach ($request->infos ?? [] as $type => $infoData) {
-
-                $hasContent = collect($infoData['translations'] ?? [])
+            foreach ($request->infos ?? [] as $type => $info) {
+                $hasContent = collect($info['translations'] ?? [])
                     ->whereNotNull('content')
                     ->where('content', '!=', '')
                     ->count();
 
-                if (!$hasContent) {
-                    continue;
-                }
+                if (!$hasContent) continue;
 
-                $info = $package->infos()->create([
-                    'type' => $type,
-                ]);
+                $infoModel = $package->infos()->create(['type' => $type]);
 
-                foreach ($infoData['translations'] ?? [] as $lang => $content) {
-                    if (!empty($content['content'])) {
-                        $info->translations()->create([
-                            'language_code' => $lang,
-                            'title'         => $content['title'],
-                            'content'       => $content['content'],
+                foreach ($info['translations'] as $lang => $tr) {
+                    if (!empty($tr['content'])) {
+                        $infoModel->translations()->create([
+                            'language_code' => strtolower($lang),
+                            'title'         => $tr['title'],
+                            'content'       => $tr['content'],
                         ]);
                     }
                 }
@@ -258,7 +339,33 @@ class PackageController extends Controller
         });
 
         return redirect()
-            ->route('admin.packages.edit', $package)
+            ->route('admin.packages.index')
             ->with('success', 'Package saved successfully');
+    }
+
+
+    public function packageDayOptionsStore(Request $request)
+    {
+        $request->validate([
+            'package_day_id' => 'required|exists:package_days,id',
+            'item_type'      => 'required|in:hotel,event,todo',
+            'item_id'        => 'required|integer',
+            'extra_price'    => 'nullable|numeric|min:0',
+            'is_default'     => 'nullable|boolean',
+            'sort_order'     => 'nullable|integer|min:0',
+        ]);
+
+        PackageDayItemOption::create([
+            'package_day_id' => $request->package_day_id,
+            'item_type'      => $request->item_type,
+            'item_id'        => $request->item_id,
+            'extra_price'    => $request->extra_price ?? 0,
+            'is_default'     => $request->boolean('is_default'),
+            'sort_order'     => $request->sort_order ?? 0,
+        ]);
+
+        return response()->json([
+            'message' => 'Optional item added successfully'
+        ]);
     }
 }

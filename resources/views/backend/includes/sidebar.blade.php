@@ -200,6 +200,14 @@
                     </span>
                 </x-sidebar-link>
             </li>
+            <li>
+                <x-sidebar-link href="{{ url('/admin/packages') }}">
+                    <span class="flex items-center">
+                        <iconify-icon class="nav-icon" icon="heroicons-outline:calendar"></iconify-icon>
+                        <span>Package</span>
+                    </span>
+                </x-sidebar-link>
+            </li>
 
             <li class="sidebar-menu-title">SETTINGS</li>
 
@@ -211,6 +219,7 @@
                     </span>
                 </x-sidebar-link>
             </li>
+
         </ul>
 
 

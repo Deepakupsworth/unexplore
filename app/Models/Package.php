@@ -68,4 +68,9 @@ class Package extends Model
     {
         return $this->hasMany(PackageInfo::class);
     }
+    public function category()
+    {
+        return $this->belongsTo(Category::class)
+            ->where('type', 'package');
+    }
 }
