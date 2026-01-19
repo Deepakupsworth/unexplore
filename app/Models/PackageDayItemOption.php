@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 
 class PackageDayItemOption extends Model
 {
+    use HasFactory;
     protected $fillable = [
         'package_day_id',
         'item_type',

@@ -38,8 +38,13 @@ class DatabaseSeeder extends Seeder
     {
 
         $this->call([
-            HotelSeeder::class,
+            // HotelSeeder::class,
+            // ThingsToDoSeeder::class,
+            //EventsSeeder::class,
+            TransportSeeder::class
         ]);
+
+       
         // // Languages
         // $languages = Language::insertOrIgnore([
         //     ['code' => 'en', 'name' => 'English', 'created_at' => now(), 'updated_at' => now()],

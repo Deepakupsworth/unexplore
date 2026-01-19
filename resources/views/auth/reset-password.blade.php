@@ -136,7 +136,7 @@
               <!-- END: Social Log In Area -->
             </div>
             <div class="md:max-w-[345px] mx-auto font-normal text-slate-500 dark:text-slate-400 mt-12 uppercase text-sm">
-                  
+
             <a href="{{ url('/login')}}" class="text-slate-900 dark:text-white font-medium hover:underline">
               Back to Login
               </a>

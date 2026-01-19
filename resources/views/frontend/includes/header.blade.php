@@ -83,12 +83,14 @@
 						</div>
 					</li>
 					<li class="nav-item dropdown">
-						<a class="nav-link" href="#" id="thingsToDoDropdown" role="button" data-bs-toggle="dropdown"
+					<!-- id="thingsToDoDropdown" role="button" data-bs-toggle="dropdown" -->
+						<a class="nav-link" href="{{route('things.to.do')}}" 
 							aria-expanded="false">
-							<span>Things to do</span>
-							<i class="fa-solid fa-angle-down"></i>
+							<span>Things to do </span>
+							<!-- <i class="fa-solid fa-angle-down"></i> -->
 						</a>
-						<div class="dropdown-menu nav-menu-dropdown" aria-labelledby="thingsToDoDropdown">
+						<?php /*** 
+						 <div class="dropdown-menu nav-menu-dropdown" aria-labelledby="thingsToDoDropdown">
 							<div class="row">
 								<!-- Left column: Links -->
 								<div class="col-lg-7">
@@ -151,6 +153,7 @@
 								</div>
 							</div>
 						</div>
+						***/ ?>
 					</li>
 					<li class="nav-item dropdown">
 						<a class="nav-link" href="#" id="eventsDropdown" role="button" data-bs-toggle="dropdown"
@@ -370,6 +373,7 @@
 						Book Now
 						<i class="fa-solid fa-angles-right"></i>
 					</a> -->
+					@if(!empty(@auth()->user()->id))
 					<!-- When user is logged in -->
 					<div class="dropdown">
 						<button class="btn btn-outline-light dropdown-toggle rounded-pill gap-2" type="button"
@@ -391,6 +395,7 @@
 
 						</ul>
 					</div>
+					@endif
 				</div>
 			</nav>
 		</div>
@@ -430,7 +435,7 @@
 							</div>
 						</div>
 						<div class="accordion-item mt-3">
-							<button href="#" class="accordion-button collapsed" data-bs-toggle="collapse"
+							<button href="{{route('things.to.do')}}" class="accordion-button collapsed" data-bs-toggle="collapse"
 								data-bs-target="#collapseNavTwo" aria-expanded="true" aria-controls="collapseNavTwo">
 								Things to do
 							</button>
@@ -535,6 +540,7 @@
 					</a> -->
 				</div>
 				<!-- When user is logged in -->
+				@if(!empty(@auth()->user()->id))
 				<div class="navbar__buttons d-flex flex-column gap-2 mt-3">
 					<a href="#" class="text-white d-flex gap-2 align-items-center text-decoration-none">
 						<i class="fa-solid fa-circle-user"></i>
@@ -552,6 +558,7 @@
 						</form>
 
 				</div>
+				@endif
 			</nav>
 		</div>
 	</div>

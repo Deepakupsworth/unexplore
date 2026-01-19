@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\CategoryType;
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\City;
 use App\Models\CityTranslation;
@@ -17,33 +19,33 @@ class CityController extends Controller
 {
     // List cities
     public function index(Request $request)
-{
-    $query = City::with([
-        'translations' => fn ($q) => $q->where('language_code', 'en'),
-        'images'
-    ]);
+    {
+        $query = City::with([
+            'translations' => fn($q) => $q->where('language_code', 'en'),
+            'images'
+        ]);
 
-    // 🔍 Search by city name
-    if ($request->filled('search')) {
-        $query->whereHas('translations', function ($q) use ($request) {
-            $q->where('language_code', 'en')
-              ->where('name', 'like', '%' . $request->search . '%');
-        });
+        // 🔍 Search by city name
+        if ($request->filled('search')) {
+            $query->whereHas('translations', function ($q) use ($request) {
+                $q->where('language_code', 'en')
+                    ->where('name', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        // 🌍 Country filter
+        if ($request->filled('country_id')) {
+            $query->where('country_id', $request->country_id);
+        }
+
+        // Execute query
+        $cities = $query->latest()->paginate(10)->withQueryString();
+
+        // For dropdown
+        $countries = \App\Models\Country::pluck('name', 'id');
+
+        return view('backend.cities.index', compact('cities', 'countries'));
     }
-
-    // 🌍 Country filter
-    if ($request->filled('country_id')) {
-        $query->where('country_id', $request->country_id);
-    }
-
-    // Execute query
-    $cities = $query->latest()->paginate(10)->withQueryString();
-
-    // For dropdown
-    $countries = \App\Models\Country::pluck('name','id');
-
-    return view('backend.cities.index', compact('cities', 'countries'));
-}
 
 
     // Create / Edit form
@@ -52,8 +54,12 @@ class CityController extends Controller
         $model = City::with(['translations', 'images'])->find($id) ?? new City();
         $languages = Language::all();
         $countries = Country::pluck('name', 'id');
+        $categories = Category::where('type', CategoryType::CITY)
+            ->with('translation')
+            ->get();
 
-        return view('backend.cities.form', compact('model', 'languages', 'countries'));
+
+        return view('backend.cities.form', compact('model', 'languages', 'countries', 'categories'));
     }
 
     // Store / Update
@@ -70,6 +76,7 @@ class CityController extends Controller
         // Validation
         $validator = Validator::make($request->all(), [
             'country_id' => 'required|exists:countries,id',
+            'category_id' => 'nullable|exists:categories,id',
             'translations.en.name' => 'required|string|max:255',
             'translations.*.name' => 'nullable|string|max:255',
         ]);
@@ -83,6 +90,7 @@ class CityController extends Controller
             ['id' => $request->id],
             [
                 'country_id' => $request->country_id,
+                'category_id' => $request->category_id,
                 'slug' => $request->slug ?? Str::slug($request->translations['en']['name']),
                 'video_url' => $request->video_url,
             ]
@@ -125,6 +133,20 @@ class CityController extends Controller
 
         return redirect()->route('cities.index')->with('success', 'City saved successfully!');
     }
+
+    public function show($id)
+    {
+        $city = City::with([
+            'translations',
+            'translation',        // default EN
+            'category.translation',
+            'country',            // if relation exists
+            'images',             // gallery images
+        ])->findOrFail($id);
+
+        return view('backend.cities.show', compact('city'));
+    }
+
 
     // Delete image (polymorphic)
     public function deleteImage($id)

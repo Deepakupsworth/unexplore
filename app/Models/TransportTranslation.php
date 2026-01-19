@@ -3,14 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 
 class TransportTranslation extends Model
 {
+    use HasFactory;
     protected $fillable = [
         'transport_id',
         'language_code',
         'name',
-        'message'
+        'description'
     ];
 
     public function transport()

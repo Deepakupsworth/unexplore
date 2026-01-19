@@ -17,6 +17,18 @@ class Package extends Model
         'max_persons',
     ];
 
+    public function images()
+    {
+        return $this->morphMany(Image::class, 'imageable');
+    }
+
+    public function image($type = 'thumb')
+    {
+        return $this->morphOne(Image::class, 'imageable')
+            ->where('type', $type);
+    }
+
+
     /* ================= TRANSLATIONS ================= */
     public function translations()
     {

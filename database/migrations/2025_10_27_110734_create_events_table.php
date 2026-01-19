@@ -23,6 +23,7 @@ return new class extends Migration {
             $table->time('opening_time')->nullable();
             $table->time('closing_time')->nullable();
 
+
             // City (SAFE)
             $table->foreignId('city_id')
                   ->nullable()
@@ -42,7 +43,8 @@ return new class extends Migration {
 
             // 🎥 ONE video URL
             $table->string('video_url')->nullable();
-
+            $table->string('url')->nullable();
+            $table->foreignId('category_id')->nullable()->constrained('categories')->nullOnDelete();
             // 🔥 CRITICAL
             $table->softDeletes();
 

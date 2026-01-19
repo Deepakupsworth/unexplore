@@ -1,4 +1,4 @@
-@extends('backend.signinlayout')
+@extends('auth.layout')
 @section('title', __('Register'))
 
 @section('content')

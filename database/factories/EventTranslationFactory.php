@@ -2,16 +2,20 @@
 
 namespace Database\Factories;
 
+use App\Models\EventTranslation;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class EventTranslationFactory extends Factory
 {
+    protected $model = EventTranslation::class;
+
     public function definition(): array
     {
         return [
-            'language_id' => \App\Models\Language::inRandomOrder()->first()->id ?? 1,
-            'name' => $this->faker->sentence(4),
-            'about' => $this->faker->paragraph(5),
+            'title'       => $this->faker->sentence(3),
+            'sub_title'   => $this->faker->sentence(5),
+            'url'         => $this->faker->slug,
+            'description' => $this->faker->paragraph(4),
         ];
     }
 }

@@ -102,8 +102,12 @@ Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function ()
             Route::get('/', [CityController::class, 'index'])->name('cities.index');
             Route::get('/create', [CityController::class, 'form'])->name('cities.create');
             Route::get('/{id}/edit', [CityController::class, 'form'])->name('cities.edit');
+
+            Route::get('/{id}', [CityController::class, 'show'])
+                ->name('cities.show');
             Route::post('/save', [CityController::class, 'save'])->name('cities.save');
             Route::delete('/delete/{id}', [CityController::class, 'destroy'])->name('cities.delete');
+
             Route::delete('/gallery/delete/{id}', [CityController::class, 'deleteGalleryImage'])->name('cities.image.delete');
         });
 
