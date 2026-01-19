@@ -70,21 +70,31 @@
                                 <p class="p-large fw-600 mb-1">Profile</p>
                                 <p class="text-light2">Update your avatar and personal information</p>
                             </div>
+                            <form  method="POST" action="{{ route('user.profile.update') }}" enctype="multipart/form-data">
+
                             <div class="user-profile__details-body white-bg p-3">
+                                        @csrf    
                                 <div class="user-profile__details-form user-profile__box p-3 white-bg">
                                     <p class="fw-600 mb-1">Personal Information</p>
                                     <p class="text-light2 p-small">Update your personal details and contact information
                                     </p>
 
                                     <div class="mt-4">
-                                        <form>
+                                        
                                             <div class="row">
                                                 <div class="col-sm-6">
-                                                    <label for="userDetailFullName" class="form-label">
-                                                        Full Name
+                                                    <label for="userDetailFirstName" class="form-label">
+                                                        First Name
                                                     </label>
-                                                    <input type="text" class="form-control" id="userDetailFullName"
-                                                        aria-describedby="fullname" value="John Doe">
+                                                    <input type="text" class="form-control" id="userDetailFirstName"
+                                                        aria-describedby="firstName" name="first_name" value="{{ $user->first_name }}">
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <label for="userDetailLastName" class="form-label">
+                                                        Last Name
+                                                    </label>
+                                                    <input type="text" class="form-control" id="userDetailLastName"
+                                                        aria-describedby="lastName" name="last_name" value="{{ $user->last_name }}">
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <label for="userDetailEmail" class="form-label">
@@ -95,7 +105,7 @@
                                                             <i class="fa-solid fa-envelope"></i>
                                                         </span>
                                                         <input id="userDetailEmail" type="text" class="form-control"
-                                                            aria-label="Email" value="johndoe@gmail.com">
+                                                            aria-label="Email" name="email" value="{{ $user->last_name }}" readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -107,7 +117,7 @@
 
                                                         <div class="input-group phone-input">
                                                             <!-- Country selector -->
-                                                            <button
+                                                            <!-- <button
                                                                 class="btn btn-outline-secondary form-dropdown-toggle d-flex align-items-center gap-1"
                                                                 type="button" data-bs-toggle="dropdown"
                                                                 aria-expanded="false">
@@ -142,17 +152,17 @@
                                                                         +1 United States
                                                                     </a>
                                                                 </li>
-                                                            </ul>
+                                                            </ul> -->
 
                                                             <!-- Phone number input -->
-                                                            <input type="tel" class="form-control border-start-0"
-                                                                id="phone" placeholder="+1 (212) 555-9876">
+                                                            <input type="phone" class="form-control border-start-0"
+                                                                id="phone" name="phone" placeholder="+1 (212) 555-9876" value="{{$user->phone ?? ''}}">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <div>
+                                            <!-- <div>
                                                 <label for="userDetailAddress" class="form-label">
                                                     Address
                                                 </label>
@@ -163,9 +173,9 @@
                                                     <input type="text" class="form-control" aria-label="Address"
                                                         id="userDetailAddress" placeholder="Saudi, Riyadh">
                                                 </div>
-                                            </div>
+                                            </div> -->
 
-                                            <div class="row mb-3">
+                                            <!-- <div class="row mb-3">
                                                 <div class="col-sm-6">
                                                     <label for="userDetailFullName" class="form-label">
                                                         Timezone
@@ -188,9 +198,9 @@
                                                         <option value="English">English</option>
                                                     </select>
                                                 </div>
-                                            </div>
+                                            </div> -->
 
-                                            <div>
+                                            <!-- <div>
                                                 <label for="userDetailBio" class="form-label">
                                                     Bio
                                                 </label>
@@ -199,9 +209,10 @@
                                                 <small class="text-light2 p-micro">Brief description for your profile.
                                                     Max
                                                     280 characters.</small>
-                                            </div>
-                                        </form>
+                                            </div> -->
+                                  
                                     </div>
+
                                 </div>
                                 <div class="user-profile__details-avatar user-profile__box p-3 white-bg">
                                     <p class="p-large fw-600 mb-1">Profile Picture</p>
@@ -209,13 +220,18 @@
 
                                     <div>
                                         <!-- If user image is there -->
-                                        <!-- <div class="user-profile__avatar my-4">
-                                            <img src="../assets/user.jpeg" alt="User" class="rounded-circle">
-                                        </div> -->
-                                        <!-- If user image is not there, will show user initials -->
+                                        <div class="user-profile__avatar my-4">
+                                        <img
+                                                src="{{ $profileImage
+                                                    ? asset('storage/'.$profileImage->image_path)
+                                                    : asset('frontend/assets/user.jpeg') }}"
+                                                alt="User"
+                                                class="rounded-circle">                                           
+                                        </div>
+                                        <!-- If user image is not there, will show user initials
                                         <div class="user-profile__initials flex-center rounded-circle my-4">
                                             <h6>NS</h6>
-                                        </div>
+                                        </div> -->
                                     </div>
 
                                     <div>
@@ -225,7 +241,7 @@
                                             <!-- Upload button triggers file input -->
                                             <div id="uploadBtn"
                                                 class="d-flex align-items-center justify-content-center user-profile__upload-btn">
-                                                <input type="file" id="uploadPhoto" accept="image/*">
+                                                <input type="file" id="uploadPhoto" name="profile_photo" accept="image/*">
                                                 <i class="fa-solid fa-arrow-up-from-bracket"></i>
                                                 Upload new photo
                                             </div>
@@ -241,9 +257,13 @@
                                         <span class="text-light2 p-micro">JPG, PNG or GIF. Max size 2MB. Recommended
                                             400×400px.</span>
 
+                                            <input type="submit" name="submit" value="Update Profile">
+
                                     </div>
                                 </div>
+                           
                             </div>
+                            </form>
                         </div>
                     </div>
 

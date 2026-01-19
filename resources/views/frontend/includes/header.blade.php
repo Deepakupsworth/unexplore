@@ -375,11 +375,20 @@
 						<button class="btn btn-outline-light dropdown-toggle rounded-pill gap-2" type="button"
 							id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
 							<i class="fa-solid fa-circle-user"></i>
-							John Doe
+							{{Auth()?->user()->first_name}}
 						</button>
 						<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
 							<li><a class="dropdown-item" href="/profile">My Profile</a></li>
-							<li><a class="dropdown-item" href="#">Logout</a></li>
+							
+							<li>
+							<form method="POST" action="/logout">
+								@csrf
+								<button type="submit" class="dropdown-item">
+									Logout
+								</button>
+							</form>
+						</li>
+
 						</ul>
 					</div>
 				</div>
@@ -529,12 +538,19 @@
 				<div class="navbar__buttons d-flex flex-column gap-2 mt-3">
 					<a href="#" class="text-white d-flex gap-2 align-items-center text-decoration-none">
 						<i class="fa-solid fa-circle-user"></i>
-						John Doe
+						{{Auth()?->user()->first_name}}
 					</a>
-					<a href="#" class="text-white d-flex gap-2 align-items-center text-decoration-none">
-						<i class="fa-solid fa-right-from-bracket"></i>
-						Logout
-					</a>
+					<a href="#"
+						class="text-white d-flex gap-2 align-items-center text-decoration-none"
+						onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+							<i class="fa-solid fa-right-from-bracket"></i>
+							Logout
+						</a>
+
+						<form id="logout-form" method="POST" action="{{ route('logout') }}" class="d-none">
+							@csrf
+						</form>
+
 				</div>
 			</nav>
 		</div>

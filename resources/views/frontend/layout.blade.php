@@ -26,10 +26,10 @@
 <body>
   <!-- HEADER -->
 @php
-    $whiteHeaderPages = ['package-details', 'package-listing', 'profile', 'to-do-things-search', 'about-us', 'blog-details', 'blogs','checkout', 'contact-us'];
+    $whiteHeaderPages = ['package-details', 'package-listing','user.profile.index','profile', 'to-do-things-search', 'about-us', 'blog-details', 'blogs','checkout', 'contact-us'];
 @endphp
 
-<div id="header" class="{{ request()->is($whiteHeaderPages) ? 'white-header-static' : '' }}">
+<div id="header" class="{{ request()->is($whiteHeaderPages) ? 'white-header-static' : '' }} ">
 @include('frontend.includes.header')
   </div>
 
