@@ -41,7 +41,8 @@ class DatabaseSeeder extends Seeder
             // HotelSeeder::class,
             // ThingsToDoSeeder::class,
             //EventsSeeder::class,
-            TransportSeeder::class
+            //TransportSeeder::class
+            PackageSeeder::class
         ]);
 
        

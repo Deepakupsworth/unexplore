@@ -1,11 +1,13 @@
 <?php
 
 namespace App\Models;
-
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Package extends Model
-{
+
+class Package extends Model{
+    use HasFactory;
+
     protected $fillable = [
         'category_id',
         'slug',
@@ -22,10 +24,13 @@ class Package extends Model
         return $this->morphMany(Image::class, 'imageable');
     }
 
-    public function image($type = 'thumb')
+    
+    
+
+    public function thumb()
     {
         return $this->morphOne(Image::class, 'imageable')
-            ->where('type', $type);
+            ->where('role', 'thumb');
     }
 
 
