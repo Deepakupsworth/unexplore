@@ -80,9 +80,7 @@ Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function ()
         ->name('admin.dashboard');
 });
 
-// Route::get('/profile', function () {
-//     return view('backend.pages.profile');
-// });
+
 
 Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function () {
     // Profile Routes
@@ -253,6 +251,16 @@ Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function ()
         });
     });
 });
+
+
+Route::middleware('auth')->prefix('user')->group(function () {
+    Route::get('/profile', [FrontendProfileController::class, 'index'])
+        ->name('user.profile.index');
+
+    Route::post('/profile', [FrontendProfileController::class, 'update'])
+        ->name('user.profile.update');
+});
+
 
 Route::get('/basic_form', function () {
     return view('backend.pages.basicform');

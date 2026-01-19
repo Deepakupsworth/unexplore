@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
+use App\Models\Image;
 
 class User extends Authenticatable
 {
@@ -25,6 +26,7 @@ class User extends Authenticatable
         'first_name',
         'last_name',
         'email',
+        'phone',
         'role',
         'password',
         'terms_accepted',
@@ -70,6 +72,17 @@ class User extends Authenticatable
             $message->to($this->email)
                     ->subject('Reset Password Notification');
         });
+    }
+
+    public function images()
+    {
+        return $this->morphMany(Image::class, 'imageable');
+    }
+
+    public function profileImage()
+    {
+        return $this->morphOne(Image::class, 'imageable')
+                    ->where('role', 'thumb');
     }
 
 }

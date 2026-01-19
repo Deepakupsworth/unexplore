@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 
 class PackageDayItem extends Model
 {
+    use HasFactory;
     protected $fillable = [
         'package_day_id',
         'item_type',   // hotel | transport | event | todo
@@ -13,6 +16,10 @@ class PackageDayItem extends Model
         'start_time',
         'end_time',
         'sort_order',
+    ];
+    protected $casts = [
+        'start_time' => 'datetime:H:i',
+        'end_time'   => 'datetime:H:i',
     ];
 
     public function day()

@@ -83,12 +83,14 @@
 						</div>
 					</li>
 					<li class="nav-item dropdown">
-						<a class="nav-link" href="#" id="thingsToDoDropdown" role="button" data-bs-toggle="dropdown"
+					<!-- id="thingsToDoDropdown" role="button" data-bs-toggle="dropdown" -->
+						<a class="nav-link" href="{{route('things.to.do')}}" 
 							aria-expanded="false">
-							<span>Things to do</span>
-							<i class="fa-solid fa-angle-down"></i>
+							<span>Things to do </span>
+							<!-- <i class="fa-solid fa-angle-down"></i> -->
 						</a>
-						<div class="dropdown-menu nav-menu-dropdown" aria-labelledby="thingsToDoDropdown">
+						<?php /*** 
+						 <div class="dropdown-menu nav-menu-dropdown" aria-labelledby="thingsToDoDropdown">
 							<div class="row">
 								<!-- Left column: Links -->
 								<div class="col-lg-7">
@@ -151,6 +153,7 @@
 								</div>
 							</div>
 						</div>
+						***/ ?>
 					</li>
 					<li class="nav-item dropdown">
 						<a class="nav-link" href="#" id="eventsDropdown" role="button" data-bs-toggle="dropdown"
@@ -370,18 +373,29 @@
 						Book Now
 						<i class="fa-solid fa-angles-right"></i>
 					</a> -->
+					@if(!empty(@auth()->user()->id))
 					<!-- When user is logged in -->
 					<div class="dropdown">
 						<button class="btn btn-outline-light dropdown-toggle rounded-pill gap-2" type="button"
 							id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
 							<i class="fa-solid fa-circle-user"></i>
-							John Doe
+							{{Auth()?->user()->first_name}}
 						</button>
 						<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
 							<li><a class="dropdown-item" href="/profile">My Profile</a></li>
-							<li><a class="dropdown-item" href="#">Logout</a></li>
+							
+							<li>
+							<form method="POST" action="/logout">
+								@csrf
+								<button type="submit" class="dropdown-item">
+									Logout
+								</button>
+							</form>
+						</li>
+
 						</ul>
 					</div>
+					@endif
 				</div>
 			</nav>
 		</div>
@@ -421,7 +435,7 @@
 							</div>
 						</div>
 						<div class="accordion-item mt-3">
-							<button href="#" class="accordion-button collapsed" data-bs-toggle="collapse"
+							<button href="{{route('things.to.do')}}" class="accordion-button collapsed" data-bs-toggle="collapse"
 								data-bs-target="#collapseNavTwo" aria-expanded="true" aria-controls="collapseNavTwo">
 								Things to do
 							</button>
@@ -526,16 +540,25 @@
 					</a> -->
 				</div>
 				<!-- When user is logged in -->
+				@if(!empty(@auth()->user()->id))
 				<div class="navbar__buttons d-flex flex-column gap-2 mt-3">
 					<a href="#" class="text-white d-flex gap-2 align-items-center text-decoration-none">
 						<i class="fa-solid fa-circle-user"></i>
-						John Doe
+						{{Auth()?->user()->first_name}}
 					</a>
-					<a href="#" class="text-white d-flex gap-2 align-items-center text-decoration-none">
-						<i class="fa-solid fa-right-from-bracket"></i>
-						Logout
-					</a>
+					<a href="#"
+						class="text-white d-flex gap-2 align-items-center text-decoration-none"
+						onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+							<i class="fa-solid fa-right-from-bracket"></i>
+							Logout
+						</a>
+
+						<form id="logout-form" method="POST" action="{{ route('logout') }}" class="d-none">
+							@csrf
+						</form>
+
 				</div>
+				@endif
 			</nav>
 		</div>
 	</div>

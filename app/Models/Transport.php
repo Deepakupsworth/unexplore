@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Enums\TransportType;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 
 class Transport extends Model
 {
-    use SoftDeletes;
+    use HasFactory,SoftDeletes;
 
     protected $casts = [
         'type' => TransportType::class,
@@ -24,6 +26,14 @@ class Transport extends Model
     public function translations()
     {
         return $this->hasMany(TransportTranslation::class);
+    }
+
+    public function translation($lang = null)
+    {
+        $lang = $lang ?? app()->getLocale();
+
+        return $this->hasOne(TransportTranslation::class)
+            ->where('language_code', $lang);
     }
 
     public function city()

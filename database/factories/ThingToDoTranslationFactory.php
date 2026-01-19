@@ -2,17 +2,18 @@
 
 namespace Database\Factories;
 
+use App\Models\ThingToDoTranslation;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class ThingToDoTranslationFactory extends Factory
+class ThingTranslationFactory extends Factory
 {
-    public function definition(): array
+    protected $model = ThingToDoTranslation::class;
+
+    public function definition()
     {
         return [
-            'language_id' => \App\Models\Language::inRandomOrder()->first()->id ?? 1,
-            'name' => $this->faker->sentence(3),
+            'name'  => $this->faker->sentence(3),
             'about' => $this->faker->paragraph(4),
         ];
     }
 }
-
