@@ -35,6 +35,13 @@ class Category extends Model
             ->where('language_code', 'en');
     }
 
+    public function translationData()
+    {
+        $lang = current_lang() ?? 'en';
+        return $this->hasOne(CategoryTranslation::class)
+            ->where('language_code', $lang);
+    }
+
     /**
      * Scope by category type
      * Usage: Category::ofType('hotel')->get();
@@ -42,5 +49,10 @@ class Category extends Model
     public function scopeOfType($query, string $type)
     {
         return $query->where('type', $type);
+    }
+
+    public function things()
+    {
+        return $this->hasMany(ThingToDo::class);
     }
 }

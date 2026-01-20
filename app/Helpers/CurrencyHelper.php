@@ -1,6 +1,17 @@
 <?php
 
 use App\Models\Currency;
+use Illuminate\Support\Facades\App;
+use App\Models\ThingToDo;
+
+
+
+if (!function_exists('current_lang')) {
+    function current_lang()
+    {
+        return App::getLocale(); // en, de, ar
+    }
+}
 
 if (!function_exists('currency_convert')) {
 

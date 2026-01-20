@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Frontend\Event;
 
 use App\Http\Controllers\Controller;
 
-abstract class EventController extends Controller
+class EventController extends Controller
 {
     public function index(){
         return view('frontend.event-listing');

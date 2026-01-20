@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\HotelController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\TransportController;
 use App\Http\Controllers\Frontend\Profile\ProfileController as FrontendProfileController;
+use App\Http\Controllers\Frontend\Event\EventController as FrontendEventController;
 
 use App\Http\Controllers\DemoJsonController;
 use App\Http\Controllers\HomeController;
@@ -79,6 +80,11 @@ Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function ()
     Route::get('/admin/dashboard', fn() => view('backend.admin.dashboard'))
         ->name('admin.dashboard');
 });
+
+Route::get('/event-details/{slug?}', [FrontendEventController::class, 'event_details'])->name('event.details');
+
+Route::get('/events', [FrontendEventController::class, 'index'])->name('event.listing');
+
 
 
 
@@ -300,9 +306,6 @@ Route::get('/destination-details/{slug?}', [HomeController::class, 'destination_
 
 // event routes
 
-Route::get('/event-details/{slug?}', [EventController::class, 'event_details'])->name('event.details');
-
-Route::get('/event-listing', [EventController::class, 'index'])->name('event.listing');
 
 //package routes
 
@@ -315,11 +318,12 @@ Route::get('/profile', [FrontendProfileController::class, 'index'])->name('profi
 // Route::get('/things-to-do-nature', function () {
 //     return view('frontend.things-to-do-nature');
 // })->name('things-to-do-nature');
-
-Route::get('/things-to-do-nature/{slug?}', [HomeController::class, 'things_to_do_nature'])->name('things-to-do.nature');
-
 // routes for to do things
 Route::get('/things-to-do', [ToDoThingsController::class, 'index'])->name('things.to.do');
+Route::get('/things-to-do/{slug?}', [ToDoThingsController::class, 'show'])->name('things-to-do.nature');
+Route::get('/to-do-things-filter', [ToDoThingsController::class, 'filter'])->name('to.do.things.filter');
+
+
 
 Route::get('/to-do-things-search', [ToDoThingsController::class, 'search'])->name('to.do.things.search');
 
