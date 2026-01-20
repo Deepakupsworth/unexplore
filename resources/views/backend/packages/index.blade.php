@@ -1,20 +1,19 @@
 @extends('backend.layout')
 
 @section('content')
-
     {{-- ================= HEADER ================= --}}
     <div class="mb-6 flex items-center justify-between">
         <h4 class="text-xl font-semibold text-slate-800">
             Packages
         </h4>
 
-        <a href="{{ route('admin.packages.create') }}"
-           class="btn btn-dark">
+        <a href="{{ route('admin.packages.create') }}" class="btn btn-dark">
             + Create Package
         </a>
     </div>
 
     {{-- ================= TABLE ================= --}}
+
     <div class="card">
         <div class="card-body p-0 overflow-x-auto">
 
@@ -22,6 +21,7 @@
                 <thead class="bg-slate-200 dark:bg-slate-700">
                     <tr class="text-left text-slate-600">
                         <th class="table-th">#</th>
+                        <th scope="col" class="table-th">Thumb</th>
                         <th class="table-th">Title</th>
                         <th class="table-th">Category</th>
                         <th class="table-th">Type</th>
@@ -33,13 +33,20 @@
 
                 <tbody class="bg-white divide-y divide-slate-100 dark:bg-slate-800 dark:divide-slate-700">
                     @forelse($packages as $index => $package)
-
                         <tr class="even:bg-slate-50 dark:even:bg-slate-700">
                             {{-- Row Number --}}
                             <td class="table-td">
                                 {{ $packages->firstItem() + $index }}
                             </td>
 
+                            <td class="table-td">
+                                @if ($package->thumb)
+                                    <img src="{{ asset('storage/' . $package->thumb->image_path) }}"
+                                        class="w-12 h-12 rounded object-cover">
+                                @else
+                                    <span class="text-xs text-slate-400">No Image</span>
+                                @endif
+                            </td>
                             {{-- Title --}}
                             <td class="table-td">
                                 {{ $package->translation->title ?? '—' }}
@@ -68,16 +75,17 @@
                                         <span class="inline-flex px-2 py-1 text-xs font-medium rounded bg-green-100 text-green-700">
                                             Active
                                         </span>
-                                        @break
+                                    @break
 
                                     @case('inactive')
                                         <span class="inline-flex px-2 py-1 text-xs font-medium rounded bg-red-100 text-red-700">
                                             Inactive
                                         </span>
-                                        @break
+                                    @break
 
                                     @default
-                                        <span class="inline-flex px-2 py-1 text-xs font-medium rounded bg-yellow-100 text-yellow-700">
+                                        <span
+                                            class="inline-flex px-2 py-1 text-xs font-medium rounded bg-yellow-100 text-yellow-700">
                                             Draft
                                         </span>
                                 @endswitch
@@ -95,23 +103,21 @@
                             </td>
                         </tr>
 
-                    @empty
-                        <tr>
-                            <td colspan="7"
-                                class="text-center py-10 text-slate-400">
-                                No packages found.
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                        @empty
+                            <tr>
+                                <td colspan="7" class="text-center py-10 text-slate-400">
+                                    No packages found.
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
 
+            </div>
         </div>
-    </div>
 
-    {{-- ================= PAGINATION ================= --}}
-    <div class="mt-4">
-        {{ $packages->links() }}
-    </div>
-
-@endsection
+        {{-- ================= PAGINATION ================= --}}
+        <div class="mt-4">
+            {{ $packages->links() }}
+        </div>
+    @endsection

@@ -18,6 +18,7 @@ use App\Models\Event;
 use App\Models\PackageDayItemOption;
 use App\Models\ThingToDo;
 use App\Models\Transport;
+use Illuminate\Support\Facades\Storage;
 
 class PackageController extends Controller
 {
@@ -27,6 +28,7 @@ class PackageController extends Controller
         $packages = Package::with([
             'translations',
             'category.translation',
+            'thumb',
         ])->latest()->paginate(20);
 
         return view('backend.packages.index', compact('packages'));
@@ -48,8 +50,9 @@ class PackageController extends Controller
             'days.items',
             'price',
             'infos.translations',
+            'thumb',
+            'gallery',
         ]);
-
         return $this->editForm($package);
     }
 
@@ -106,6 +109,8 @@ class PackageController extends Controller
             'days.options',          // 🔥 IMPORTANT
             'price',
             'infos.translations',
+            'thumb',
+            'gallery'
         ]);
 
         return view('backend.packages.show', [
@@ -235,6 +240,11 @@ class PackageController extends Controller
             'pricing.currency'         => 'required|string|size:3',
             'pricing.original_price'   => 'required|numeric|min:0',
             'pricing.per_person_price' => 'required|numeric|min:0',
+
+            // MEDIA
+            'thumb'       => 'nullable|image|max:2048',
+            'gallery'     => 'nullable|array',
+            'gallery.*'   => 'image|max:2048',
         ]);
 
         DB::transaction(function () use ($request, $package) {
@@ -315,8 +325,37 @@ class PackageController extends Controller
             $package->price()->create($request->pricing);
 
             /* ===== ADDITIONAL INFO ===== */
+            // $package->infos()->delete();
+            // foreach ($request->infos ?? [] as $type => $info) {
+            //     $hasContent = collect($info['translations'] ?? [])
+            //         ->whereNotNull('content')
+            //         ->where('content', '!=', '')
+            //         ->count();
+
+            //     if (!$hasContent) continue;
+
+            //     $infoModel = $package->infos()->create(['type' => $type]);
+
+            //     foreach ($info['translations'] as $lang => $tr) {
+            //         if (!empty($tr['content'])) {
+            //             $infoModel->translations()->create([
+            //                 'language_code' => strtolower($lang),
+            //                 'title'         => $tr['title'],
+            //                 'content'       => $tr['content'],
+            //             ]);
+            //         }
+            //     }
+            // }
+
+            /* ===== ADDITIONAL INFO (FIXED) ===== */
             $package->infos()->delete();
-            foreach ($request->infos ?? [] as $type => $info) {
+
+            foreach ($request->infos ?? [] as $info) {
+
+                // type is mandatory
+                if (empty($info['type'])) continue;
+
+                // check at least one content exists
                 $hasContent = collect($info['translations'] ?? [])
                     ->whereNotNull('content')
                     ->where('content', '!=', '')
@@ -324,16 +363,36 @@ class PackageController extends Controller
 
                 if (!$hasContent) continue;
 
-                $infoModel = $package->infos()->create(['type' => $type]);
+                $infoModel = $package->infos()->create([
+                    'type' => $info['type']
+                ]);
 
-                foreach ($info['translations'] as $lang => $tr) {
+                foreach ($info['translations'] ?? [] as $lang => $tr) {
                     if (!empty($tr['content'])) {
                         $infoModel->translations()->create([
                             'language_code' => strtolower($lang),
-                            'title'         => $tr['title'],
+                            'title'         => $tr['title'] ?? null,
                             'content'       => $tr['content'],
                         ]);
                     }
+                }
+            }
+
+
+            /* ================= MEDIA ================= */
+            // Thumb
+            if ($request->hasFile('thumb')) {
+                if ($package->thumb) {
+                    Storage::disk('public')->delete($package->thumb->image_path);
+                    $package->thumb()->delete();
+                }
+                storeImage($package, $request->thumb, 'package/thumbs', 'thumb', 'en', true);
+            }
+
+            // Gallery
+            if ($request->hasFile('gallery')) {
+                foreach ($request->gallery as $img) {
+                    storeImage($package, $img, 'package/gallery', 'gallery');
                 }
             }
         });
@@ -342,6 +401,7 @@ class PackageController extends Controller
             ->route('admin.packages.index')
             ->with('success', 'Package saved successfully');
     }
+
 
 
     public function packageDayOptionsStore(Request $request)

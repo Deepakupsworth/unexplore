@@ -385,7 +385,7 @@
                                             <li><span>5 Activities</span></li>
                                             <li><span>Selected Meals</span></li>
                                         </ul>
-    
+
                                         <!-- Price Box -->
                                         <div class="exclusive-offers__carousel-price-box">
                                             <div class="d-flex justify-content-between align-items-center">
@@ -428,7 +428,7 @@
                                             <li><span>5 Activities</span></li>
                                             <li><span>Selected Meals</span></li>
                                         </ul>
-    
+
                                         <!-- Price Box -->
                                         <div class="exclusive-offers__carousel-price-box">
                                             <div class="d-flex justify-content-between align-items-center">
@@ -471,7 +471,7 @@
                                             <li><span>5 Activities</span></li>
                                             <li><span>Selected Meals</span></li>
                                         </ul>
-    
+
                                         <!-- Price Box -->
                                         <div class="exclusive-offers__carousel-price-box">
                                             <div class="d-flex justify-content-between align-items-center">
@@ -514,7 +514,7 @@
                                             <li><span>5 Activities</span></li>
                                             <li><span>Selected Meals</span></li>
                                         </ul>
-    
+
                                         <!-- Price Box -->
                                         <div class="exclusive-offers__carousel-price-box">
                                             <div class="d-flex justify-content-between align-items-center">
@@ -557,7 +557,7 @@
                                             <li><span>5 Activities</span></li>
                                             <li><span>Selected Meals</span></li>
                                         </ul>
-    
+
                                         <!-- Price Box -->
                                         <div class="exclusive-offers__carousel-price-box">
                                             <div class="d-flex justify-content-between align-items-center">
@@ -600,7 +600,7 @@
                                             <li><span>5 Activities</span></li>
                                             <li><span>Selected Meals</span></li>
                                         </ul>
-    
+
                                         <!-- Price Box -->
                                         <div class="exclusive-offers__carousel-price-box">
                                             <div class="d-flex justify-content-between align-items-center">
@@ -643,7 +643,7 @@
                                             <li><span>5 Activities</span></li>
                                             <li><span>Selected Meals</span></li>
                                         </ul>
-    
+
                                         <!-- Price Box -->
                                         <div class="exclusive-offers__carousel-price-box">
                                             <div class="d-flex justify-content-between align-items-center">
@@ -686,7 +686,7 @@
                                             <li><span>5 Activities</span></li>
                                             <li><span>Selected Meals</span></li>
                                         </ul>
-    
+
                                         <!-- Price Box -->
                                         <div class="exclusive-offers__carousel-price-box">
                                             <div class="d-flex justify-content-between align-items-center">
@@ -729,7 +729,7 @@
                                             <li><span>5 Activities</span></li>
                                             <li><span>Selected Meals</span></li>
                                         </ul>
-    
+
                                         <!-- Price Box -->
                                         <div class="exclusive-offers__carousel-price-box">
                                             <div class="d-flex justify-content-between align-items-center">
@@ -772,7 +772,7 @@
                                             <li><span>5 Activities</span></li>
                                             <li><span>Selected Meals</span></li>
                                         </ul>
-    
+
                                         <!-- Price Box -->
                                         <div class="exclusive-offers__carousel-price-box">
                                             <div class="d-flex justify-content-between align-items-center">

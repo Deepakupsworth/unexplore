@@ -45,7 +45,7 @@
         }
     </style>
 
-    <form method="POST" action="{{ route('admin.packages.store') }}">
+    <form method="POST" action="{{ route('admin.packages.store') }}" enctype="multipart/form-data">
         @csrf
 
         <div class="bg-white rounded-xl shadow p-6 space-y-10">
@@ -225,7 +225,7 @@
                         {{ strtoupper($lang->code) }}
                     </button>
                 @endforeach
-            </div>
+            </div> --}}
 
             @foreach ($languages as $lang)
                 <div class="info-lang-section {{ $loop->first ? 'active' : '' }}" id="info-{{ $lang->code }}">
@@ -238,9 +238,36 @@
                             name="infos[{{ $type }}][translations][{{ $lang->code }}][content]"></textarea>
                     @endforeach
                 </div>
-            @endforeach --}}
+            @endforeach
 
+            <div>
+                <label>Thumbnail</label>
+                <input type="file" class="form-control @error('thumb') error-input @enderror" name="thumb">
+                @error('thumb')
+                    <p class="error-text">{{ $message }}</p>
+                @enderror
+
+            </div>
+
+            <div>
+                <label>Gallery</label>
+                <input type="file" class="form-control @error('gallery.*') error-input @enderror" name="gallery[]"
+                    multiple>
+                @error('gallery.*')
+                    <p class="error-text">{{ $message }}</p>
+                @enderror
+            </div>
+
+
+            {{-- 🔥 ADDITIONAL INFO SECTION --}}
+            @include('backend.packages.partials.additional-info.index', [
+                'package' => null,
+                'languages' => $languages,
+            ])
+
+           <div>
             <button class="btn btn-success mt-6">Create Package</button>
+           </div>
 
         </div>
     </form>

@@ -20,6 +20,7 @@
             'blogs',
             'checkout',
             'contact-us',
+            'packages'
         ];
     @endphp
 

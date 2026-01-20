@@ -205,7 +205,7 @@
 
 
         {{-- ================= PRICING ================= --}}
-        <section class="{{ $card }}">
+        {{-- <section class="{{ $card }}">
             <h3 class="text-lg font-semibold mb-6 border-b pb-3">Pricing</h3>
 
             <div class="grid grid-cols-2 gap-6 text-sm">
@@ -235,8 +235,15 @@
                     </p>
                 </div>
             </div>
-        </section>
+        </section> --}}
+
+        {{-- ================= PRICING ================= --}}
+        @include('backend.packages.partials.pricing', ['card' => $card])
+
+        {{-- ================= MODALS & SCRIPTS ================= --}}
+
         @include('backend.packages.partials.add-option-modal')
         @include('backend.packages.partials.package-options-js')
+        @include('backend.packages.partials.package-pricing-js')
     </div>
 @endsection

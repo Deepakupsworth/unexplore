@@ -1,11 +1,13 @@
 <?php
 
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 
-class Package extends Model{
+class Package extends Model
+{
     use HasFactory;
 
     protected $fillable = [
@@ -23,16 +25,6 @@ class Package extends Model{
     {
         return $this->morphMany(Image::class, 'imageable');
     }
-
-    
-    
-
-    public function thumb()
-    {
-        return $this->morphOne(Image::class, 'imageable')
-            ->where('role', 'thumb');
-    }
-
 
     /* ================= TRANSLATIONS ================= */
     public function translations()
@@ -89,5 +81,57 @@ class Package extends Model{
     {
         return $this->belongsTo(Category::class)
             ->where('type', 'package');
+    }
+
+
+    public function thumb()
+    {
+        return $this->morphOne(Image::class, 'imageable')->where('role', 'thumb');
+    }
+
+    public function gallery()
+    {
+        return $this->morphMany(Image::class, 'imageable')->where('role', 'gallery');
+    }
+
+
+    public function scopeOrderByPrice($query, $direction = 'asc')
+    {
+        return $query->orderBy(
+            Package::select('per_person_price')
+                ->join('package_prices', 'packages.id', '=', 'package_prices.package_id')
+                ->whereColumn('package_prices.package_id', 'packages.id'),
+            $direction
+        );
+    }
+
+    public function subtitle()
+    {
+        if ($this->days->isEmpty()) {
+            return '';
+        }
+
+        return $this->days
+            ->groupBy('city_id')
+            ->map(function ($days, $cityId) {
+                $cityName = optional($days->first()->city)->name;
+                $nights   = $days->count();
+                $daysCnt  = $nights + 1;
+
+                return "{$nights}N {$cityName} • {$daysCnt}D";
+            })
+            ->values()
+            ->join(' ');
+    }
+
+    public function getTitleAttribute()
+    {
+        return $this->translations
+            ->firstWhere('language_code', app()->getLocale())
+            ?->title
+            ?? $this->translations
+            ->firstWhere('language_code', config('app.fallback_locale'))
+            ?->title
+            ?? '';
     }
 }

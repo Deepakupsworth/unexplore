@@ -15,19 +15,20 @@ use App\Http\Controllers\Admin\EventController;
 use App\Http\Controllers\Admin\HotelController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\TransportController;
-use App\Http\Controllers\Frontend\Profile\ProfileController as FrontendProfileController;
 
 use App\Http\Controllers\DemoJsonController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\Frontend\Blog\BlogController;
 use App\Http\Controllers\Frontend\Checkout\CheckoutController;
-use App\Http\Controllers\Frontend\Package\PackageController;
 use App\Http\Controllers\Admin\PackageController as AdminPackageController;
-
+use App\Http\Controllers\Admin\PackagePricingController;
+use App\Http\Controllers\Frontend\Package\PackageController as FrontendPackageController;
 use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Frontend\ToDoThings\ToDoThingsController;
 use App\Models\Event;
+use App\Http\Controllers\Frontend\Profile\ProfileController as FrontendProfileController;
+
 
 // routes/web.php
 Route::get('/lang/{locale}', function ($locale) {
@@ -248,6 +249,18 @@ Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function ()
                 '/package-day-item-options',
                 [AdminPackageController::class, 'packageDayOptionsStore']
             )->name('package-day-options');
+
+            // show price edit form
+            Route::get(
+                '/packages/{package}/pricing',
+                [PackagePricingController::class, 'edit']
+            )->name('pricing.edit');
+
+            // save / update pricing
+            Route::post(
+                '/packages/{package}/pricing',
+                [PackagePricingController::class, 'update']
+            )->name('pricing.update');
         });
     });
 });
@@ -306,9 +319,9 @@ Route::get('/event-listing', [EventController::class, 'index'])->name('event.lis
 
 //package routes
 
-Route::get('/package-listing', [PackageController::class, 'index'])->name('package.listing');
+Route::get('/package-listing', [FrontendPackageController::class, 'list'])->name('package.listing');
 
-Route::get('/package-details', [PackageController::class, 'details'])->name('package.details');
+// Route::get('/package-details', [PackageController::class, 'details'])->name('package.details');
 
 Route::get('/profile', [FrontendProfileController::class, 'index'])->name('profile.view');
 
@@ -337,6 +350,15 @@ Route::get('/contact-us', [PageController::class, 'contact_us'])->name('contact.
 
 //Route::post('/contact-submit', [AuthController::class, 'send'])->name('contact.send');
 Route::match(['get', 'post'], '/contact-submit', [AuthController::class, 'send'])->name('contact.send');
+
+
+
+Route::get('/packages', [FrontendPackageController::class, 'index'])
+    ->name('packages.index');
+
+Route::get('/packages/ajax', [FrontendPackageController::class, 'ajax'])
+    ->name('packages.ajax');
+
 
 //json file route
 Route::get('/saudi-packages', [DemoJsonController::class, 'index']);

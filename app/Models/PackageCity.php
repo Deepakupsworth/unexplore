@@ -25,4 +25,10 @@ class PackageCity extends Model
     {
         return $this->belongsTo(City::class);
     }
+
+
+    public function translations()
+    {
+        return $this->hasMany(PackageTranslation::class);
+    }
 }
