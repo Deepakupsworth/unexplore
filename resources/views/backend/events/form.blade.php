@@ -178,19 +178,7 @@
                             @endif
                         </div>
 
-                        <div>
-                            <label>Gallery</label>
-                            <input type="file" class="form-control @error('gallery.*') error-input @enderror"
-                                name="gallery[]" multiple>
-                            @error('gallery.*')
-                                <p class="error-text">{{ $message }}</p>
-                            @enderror
-                            <div class="grid grid-cols-4 gap-3 mt-3">
-                                @foreach ($model->gallery as $img)
-                                    <img src="{{ asset('storage/' . $img->image_path) }}" class="h-16 w-16 rounded">
-                                @endforeach
-                            </div>
-                        </div>
+                        <x-admin.form.gallery :model="$model" deleteRoute="{{ route('gallery.delete', ':id') }}" />
 
                         <div>
                             <label>Video URL</label>

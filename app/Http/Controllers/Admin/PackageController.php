@@ -224,19 +224,18 @@ class PackageController extends Controller
                     ?? 'Event #' . $e->id,
             ]),
 
-            'todos' => ThingToDo::with([
-                'translations' => $translationFilter
-            ])->get()->map(fn($t) => [
+            'todos' => ThingToDo::with('translation')->get()->map(fn($t) => [
                 'id'   => $t->id,
-                'name' => optional($t->translations->first())->title
+                'name' => optional($t->translation)->name
                     ?? 'Todo #' . $t->id,
             ]),
+
 
             'transports' => Transport::with([
                 'translations' => $translationFilter
             ])->get()->map(fn($t) => [
                 'id'   => $t->id,
-                'name' => optional($t->translations->first())->title
+                'name' => optional($t->translations->first())->name
                     ?? 'Transport #' . $t->id,
             ]),
         ];
@@ -274,7 +273,7 @@ class PackageController extends Controller
 
             'thumb'     => 'nullable|image|max:2048',
             'gallery'   => 'nullable|array',
-            'gallery.*' => 'image|max:2048',
+            // 'gallery.*' => 'image|max:2048',
         ]);
 
         DB::beginTransaction();

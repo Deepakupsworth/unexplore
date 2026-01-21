@@ -184,26 +184,7 @@
 
                         {{-- Gallery --}}
                         <div>
-                            <label class="form-label">Gallery</label>
-                            <input type="file" name="gallery[]" multiple class="form-control">
-                            <div class="grid grid-cols-4 gap-3 mt-3">
-                                @foreach ($model->gallery as $img)
-                                    <div class="relative" id="img-{{ $img->id }}">
-
-                                        <img src="{{ asset('storage/' . $img->image_path) }}"
-                                            class="h-20 w-20 object-cover rounded border">
-
-                                        {{-- Delete badge --}}
-                                        <button type="button" onclick="deleteGallery({{ $img->id }})"
-                                            class="w-5 h-5 inline-flex items-center justify-center bg-danger-500 text-white rounded-full font-Inter text-xs absolute
-                                                        -top-[5px] -right-1">
-                                            ✕
-                                        </button>
-
-                                    </div>
-                                @endforeach
-                            </div>
-
+                            <x-admin.form.gallery :model="$model" deleteRoute="{{ route('hotels.gallery.delete', ':id') }}" />
                         </div>
 
                         <button class="btn btn-dark w-full mt-6">
@@ -230,27 +211,27 @@
             }
         })
 
-        function deleteGallery(id) {
-            if (!confirm('Remove this image?')) return;
+        // function deleteGallery(id) {
+        //     if (!confirm('Remove this image?')) return;
 
-            const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        //     const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
-            fetch(`/admin/hotels/gallery/${id}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': token,
-                        'Accept': 'application/json'
-                    }
-                })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success) {
-                        document.getElementById('img-' + id).remove();
-                    } else {
-                        alert('Delete failed');
-                    }
-                })
-                .catch((err) => console.log(err, 'Server error'));
-        }
+        //     fetch(`/admin/hotels/gallery/${id}`, {
+        //             method: 'DELETE',
+        //             headers: {
+        //                 'X-CSRF-TOKEN': token,
+        //                 'Accept': 'application/json'
+        //             }
+        //         })
+        //         .then(res => res.json())
+        //         .then(data => {
+        //             if (data.success) {
+        //                 document.getElementById('img-' + id).remove();
+        //             } else {
+        //                 alert('Delete failed');
+        //             }
+        //         })
+        //         .catch((err) => console.log(err, 'Server error'));
+        // }
     </script>
 @endsection

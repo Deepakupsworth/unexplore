@@ -84,12 +84,12 @@
 					</li>
 					<li class="nav-item dropdown">
 					<!-- id="thingsToDoDropdown" role="button" data-bs-toggle="dropdown" -->
-						<a class="nav-link" href="{{route('things.to.do')}}" 
+						<a class="nav-link" href="{{route('things.to.do')}}"
 							aria-expanded="false">
 							<span>Things to do </span>
 							<!-- <i class="fa-solid fa-angle-down"></i> -->
 						</a>
-						<?php /*** 
+						<?php /***
 						 <div class="dropdown-menu nav-menu-dropdown" aria-labelledby="thingsToDoDropdown">
 							<div class="row">
 								<!-- Left column: Links -->
@@ -218,7 +218,7 @@
 											elit, sed do eiusmod
 											tempor incididunt...</p>
 										<img src="frontend/assets//about-saudi.png" alt="Saudi" class="img-fluid about-image">
-										<img src="frontend/assets/nav-dropdown-side.png" alt="Image"  
+										<img src="frontend/assets/nav-dropdown-side.png" alt="Image"
 											class="nav-menu__right-side-img">
 									</div>
 								</div>
@@ -383,7 +383,7 @@
 						</button>
 						<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
 							<li><a class="dropdown-item" href="/profile">My Profile</a></li>
-							
+
 							<li>
 							<form method="POST" action="/logout">
 								@csrf

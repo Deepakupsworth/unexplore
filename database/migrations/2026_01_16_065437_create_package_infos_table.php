@@ -18,7 +18,7 @@ return new class extends Migration
                   ->constrained()
                   ->cascadeOnDelete();
 
-            $table->enum('type', ['cancellation', 'visa', 'season']);
+            $table->string('type');
 
             $table->timestamps();
         });

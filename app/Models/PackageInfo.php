@@ -19,6 +19,11 @@ class PackageInfo extends Model
         return $this->belongsTo(Package::class);
     }
 
+    public function translation()
+    {
+        return $this->hasOne(PackageInfoTranslation::class)
+            ->where('language_code', app()->getLocale());
+    }
     public function translations()
     {
         return $this->hasMany(PackageInfoTranslation::class);

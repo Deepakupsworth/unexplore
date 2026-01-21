@@ -192,20 +192,7 @@
                                 class="w-20 h-20 mt-3 rounded-lg border object-cover">
                         @endif
                     </div>
-
-                    <div>
-                        <label class="form-label">Gallery Images</label>
-                        <input type="file" name="gallery_images[]" multiple class="form-control">
-
-                        @if ($model->gallery->count())
-                            <div class="flex gap-3 mt-3 flex-wrap">
-                                @foreach ($model->gallery as $img)
-                                    <img src="{{ asset('storage/' . $img->image_path) }}"
-                                        class="w-20 h-20 rounded-lg border object-cover">
-                                @endforeach
-                            </div>
-                        @endif
-                    </div>
+                    <x-admin.form.gallery :model="$model" deleteRoute="{{ route('gallery.delete', ':id') }}" />
                 </div>
 
                 {{-- SUBMIT --}}

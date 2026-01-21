@@ -19,7 +19,7 @@ class ThingToDoRepository implements ThingToDoRepositoryInterface
             'translations',
             'city.translations',
             'category.translations',
-            'images'
+            'gallery'
         ]);
 
         // 🔍 Search by English name
@@ -53,7 +53,7 @@ class ThingToDoRepository implements ThingToDoRepositoryInterface
 
     public function find(int $id): ?ThingToDo
     {
-        return ThingToDo::with(['translations', 'images'])->find($id);
+        return ThingToDo::with(['translations', 'gallery'])->find($id);
     }
 
     public function createOrUpdate(array $data, ?int $id = null): ThingToDo
@@ -114,18 +114,9 @@ class ThingToDoRepository implements ThingToDoRepositoryInterface
             }
 
             /* ===================== GALLERY ===================== */
-            if (!empty($data['gallery_images'])) {
-                foreach ($data['gallery_images'] as $index => $file) {
-                    storeImage(
-                        model: $thing,
-                        file: $file,
-                        folder: 'thingtodos/gallery',
-                        role: 'gallery',
-                        language: null,
-                        isPrimary: $index === 0,
-                        sortOrder: $index
-                    );
-                }
+
+            foreach ($data['gallery'] as  $file) {
+                storeImage($thing, $file, 'thingtodos/gallery', 'gallery');
             }
 
             return $thing;

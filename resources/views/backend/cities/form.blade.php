@@ -35,10 +35,8 @@
         }
     </style>
 
-
     <div class="card">
         <div class="card-body p-4">
-
             <form action="{{ route('cities.save') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="id" value="{{ $model->id }}">
@@ -135,30 +133,8 @@
                         <img src="{{ asset('storage/' . $model->thumb_image) }}" class="w-20 h-20 mt-2 rounded">
                     @endif
                 </div>
-
                 {{-- Gallery --}}
-                {{-- Gallery --}}
-                <div class="input-area mt-4">
-                    <label class="form-label">Gallery Images</label>
-                    <input type="file" name="gallery_images[]" multiple class="form-control">
-
-                    @if ($model->gallery->count())
-                        <div class="flex gap-3 mt-3 flex-wrap">
-                            @foreach ($model->gallery as $img)
-                                <div class="relative w-16 h-16 border rounded overflow-hidden">
-                                    <img src="{{ asset('storage/' . $img->image_path) }}"
-                                        class="w-full h-full object-cover">
-
-                                    <button type="button" data-url="{{ route('cities.image.delete', $img->id) }}"
-                                        class="delete-image absolute top-0 right-0 bg-red-500 text-white text-xs px-1 rounded">
-                                        ✕
-                                    </button>
-                                </div>
-                            @endforeach
-                        </div>
-                    @endif
-                </div>
-
+                <x-admin.form.gallery :model="$model" deleteRoute="{{ route('gallery.delete', ':id') }}" />
 
                 <button class="btn btn-dark mt-6">
                     {{ $model->id ? 'Update City' : 'Create City' }}
@@ -168,7 +144,6 @@
 
         </div>
     </div>
-
 
     <script>
         document.querySelectorAll('.lang-btn').forEach(btn => {

@@ -240,6 +240,8 @@
         {{-- ================= PRICING ================= --}}
         @include('backend.packages.partials.pricing', ['card' => $card])
 
+
+
         {{-- ================= MODALS & SCRIPTS ================= --}}
 
         @include('backend.packages.partials.add-option-modal')

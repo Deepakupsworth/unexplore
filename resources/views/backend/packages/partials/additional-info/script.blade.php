@@ -4,6 +4,7 @@
 
     /* ================= CKEDITOR INIT ================= */
     function initEditors(context = document) {
+        console.log(document,'document');
         context.querySelectorAll('.editor:not(.editor-loaded)').forEach(el => {
             ClassicEditor
                 .create(el)
@@ -61,8 +62,10 @@
         box.insertAdjacentHTML('beforeend', template);
 
         // 🔥 THIS IS THE KEY FIX
+        // if (existing === null) {
+        //     initEditors(box);
+        // }
         // initEditors(box);
-
         infoIndex++;
     }
 

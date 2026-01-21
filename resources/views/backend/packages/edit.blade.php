@@ -102,13 +102,13 @@
                 <div>
                     <label class="form-label">Package Status *</label>
                     <select name="status" class="form-control" required>
-                        <option value="draft" {{ old('status',$package->status) == 'draft' ? 'selected' : '' }}>
+                        <option value="draft" {{ old('status', $package->status) == 'draft' ? 'selected' : '' }}>
                             Draft
                         </option>
-                        <option value="active" {{ old('status',$package->status) == 'active' ? 'selected' : '' }}>
+                        <option value="active" {{ old('status', $package->status) == 'active' ? 'selected' : '' }}>
                             Active
                         </option>
-                        <option value="inactive" {{ old('status',$package->status) == 'inactive' ? 'selected' : '' }}>
+                        <option value="inactive" {{ old('status', $package->status) == 'inactive' ? 'selected' : '' }}>
                             Inactive
                         </option>
                     </select>
@@ -255,10 +255,10 @@
             @endforeach --}}
 
 
-           @include('backend.packages.partials.additional-info.index', [
-    'package' => $package,      // 🔥 edit ke liye IMPORTANT
-    'languages' => $languages
-])
+            @include('backend.packages.partials.additional-info.index', [
+                'package' => $package, // 🔥 edit ke liye IMPORTANT
+                'languages' => $languages,
+            ])
 
 
 
@@ -278,39 +278,9 @@
                 @error('thumb')
                     <p class="error-text">{{ $message }}</p>
                 @enderror
-
-                <p class="text-sm text-gray-500 mt-1">
-                    Leave empty to keep existing thumbnail
-                </p>
             </div>
 
-            {{-- ================= GALLERY ================= --}}
-            <div class="mt-4">
-                <label class="form-label">Gallery Images</label>
-
-                {{-- Existing Gallery Preview --}}
-                @if ($package->gallery->count())
-                    <div class="flex gap-2 flex-wrap mb-2">
-                        @foreach ($package->gallery as $img)
-                            <img src="{{ asset('storage/' . $img->image_path) }}"
-                                class="h-16 w-16 object-cover rounded border">
-                        @endforeach
-                    </div>
-                @endif
-
-
-                <input type="file" name="gallery[]" multiple
-                    class="form-control @error('gallery.*') error-input @enderror">
-
-                @error('gallery.*')
-                    <p class="error-text">{{ $message }}</p>
-                @enderror
-
-                <p class="text-sm text-gray-500 mt-1">
-                    Uploading new images will replace existing gallery
-                </p>
-            </div>
-
+            <x-admin.form.gallery :model="$package" deleteRoute="{{ route('gallery.delete', ':id') }}" />
 
             <button class="btn btn-success mt-6">Update Package</button>
 
@@ -366,8 +336,8 @@
                     <option value="">Select City</option>
                     ${cities.map(c =>
                         `<option value="${c.id}" ${c.id == row.city_id ? 'selected' : ''}>
-                                                        ${c.slug}
-                                                    </option>`
+                                                            ${c.slug}
+                                                        </option>`
                     ).join('')}
                 </select>
 
@@ -404,8 +374,8 @@
                 <option value="">Activity Type</option>
                 ${['hotel','event','todo','transport'].map(t =>
                     `<option value="${t}" ${item.item_type === t ? 'selected' : ''}>
-                                                    ${t.charAt(0).toUpperCase()+t.slice(1)}
-                                                </option>`
+                                                        ${t.charAt(0).toUpperCase()+t.slice(1)}
+                                                    </option>`
                 ).join('')}
             </select>
 
@@ -460,8 +430,8 @@
                     <option value="">Select City</option>
                     ${cities.map(c =>
                         `<option value="${c.id}" ${c.id == dayData.city_id ? 'selected' : ''}>
-                                                        ${c.slug}
-                                                    </option>`
+                                                            ${c.slug}
+                                                        </option>`
                     ).join('')}
                 </select>
 

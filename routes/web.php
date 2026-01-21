@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\ThingtodoController;
 use App\Http\Controllers\Admin\EventController;
 use App\Http\Controllers\Admin\HotelController;
+use App\Http\Controllers\Admin\ImageController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\TransportController;
 use App\Http\Controllers\Frontend\Event\EventController as FrontendEventController;
@@ -118,6 +119,10 @@ Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function ()
             Route::delete('/gallery/delete/{id}', [CityController::class, 'deleteGalleryImage'])->name('cities.image.delete');
         });
 
+        Route::prefix('gallery')->group(function () {
+            Route::delete('/delete/{id}', [ImageController::class, 'destroy'])->name('gallery.delete');
+        });
+
         /*
         |--------------------------------------------------------------------------
         | Categories Routes
@@ -154,7 +159,6 @@ Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function ()
             Route::delete('/{id}', [ThingtodoController::class, 'destroy'])
                 ->name('thingtodos.delete');
         });
-
 
 
         /*

@@ -135,18 +135,7 @@
                                     class="mt-3 w-28 rounded border">
                             @endif
                         </div>
-
-                        <div>
-                            <label class="form-label">Gallery</label>
-                            <input type="file" name="gallery[]" multiple class="form-control">
-
-                            <div class="grid grid-cols-4 gap-3 mt-3">
-                                @foreach ($model->gallery as $img)
-                                    <img src="{{ asset('storage/' . $img->image_path) }}"
-                                        class="h-16 w-16 object-cover rounded border">
-                                @endforeach
-                            </div>
-                        </div>
+                        <x-admin.form.gallery :model="$model" deleteRoute="{{ route('gallery.delete', ':id') }}" />
 
                         <button class="btn btn-dark w-full">
                             {{ $model->id ? 'Update Transport' : 'Create Transport' }}
