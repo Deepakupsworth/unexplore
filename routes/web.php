@@ -333,7 +333,7 @@ Route::get('/profile', [FrontendProfileController::class, 'index'])->name('profi
 // })->name('things-to-do-nature');
 // routes for to do things
 Route::get('/things-to-do', [ToDoThingsController::class, 'index'])->name('things.to.do');
-Route::get('/things-to-do/{slug?}', [ToDoThingsController::class, 'show'])->name('things-to-do.nature');
+Route::get('/things-to-do/{slug?}', [ToDoThingsController::class, 'show'])->name('things-to-do.show');
 Route::get('/to-do-things-filter', [ToDoThingsController::class, 'filter'])->name('to.do.things.filter');
 
 

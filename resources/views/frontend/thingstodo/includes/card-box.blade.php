@@ -17,7 +17,7 @@ $categoryName = $thing->category?->translationData?->name;
             | {{$categoryName}}</button>
         <div class="d-flex justify-content-between mt-3">
             <h5 class="fw-bold">{{ $t?->name }}</h5>
-            <a href="{{ route('to.do.things.search', ['slug' => $thing->slug]) }}" class="p-large">
+            <a href="{{ route('things-to-do.show', ['slug' => $thing->slug]) }}" class="p-large">
                 <i class="fa-solid fa-arrow-right-long primary-text"></i>
             </a>
         </div>
