@@ -20,7 +20,7 @@
             'blogs',
             'checkout',
             'contact-us',
-            'packages'
+            'packages',
             'things-to-do',
         ];
     @endphp
