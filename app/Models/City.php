@@ -26,6 +26,15 @@ class City extends Model
     {
         return $this->hasOne(CityTranslation::class)->where('language_code', 'en');
     }
+
+    public function translationData()
+    {
+        $lang = current_lang() ?? 'en';
+        return $this->hasOne(CityTranslation::class)
+            ->where('language_code', $lang);
+        
+    }
+
     public function images()
     {
         return $this->morphMany(Image::class, 'imageable');
@@ -51,6 +60,11 @@ class City extends Model
     public function country()
     {
         return $this->belongsTo(Country::class);
+    }
+
+    public function things()
+    {
+        return $this->hasMany(ThingToDo::class);
     }
 
 }

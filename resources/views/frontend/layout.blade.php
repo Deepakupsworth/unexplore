@@ -21,6 +21,7 @@
             'checkout',
             'contact-us',
             'packages'
+            'things-to-do',
         ];
     @endphp
 

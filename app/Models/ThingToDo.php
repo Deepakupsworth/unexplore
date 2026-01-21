@@ -35,8 +35,9 @@ class ThingToDo extends Model
 
     public function translation()
     {
+        $lang = current_lang() ?? 'en';
         return $this->hasOne(ThingToDoTranslation::class, 'thing_id')
-            ->where('language_code', 'en');
+            ->where('language_code', $lang);
     }
 
     /* =======================================================

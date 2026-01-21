@@ -38,11 +38,12 @@ class DatabaseSeeder extends Seeder
     {
 
         $this->call([
+            //CitySeeder::class
             // HotelSeeder::class,
             // ThingsToDoSeeder::class,
             //EventsSeeder::class,
             //TransportSeeder::class
-            PackageSeeder::class
+            //PackageSeeder::class
         ]);
 
        
