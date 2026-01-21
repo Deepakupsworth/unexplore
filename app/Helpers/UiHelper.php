@@ -21,15 +21,22 @@ if (! function_exists('ui_badge')) {
 
 if (! function_exists('status_badge')) {
 
-    function status_badge(string $status): string
+    function status_badge(string|int $status): string
     {
+        // Normalize status
+        $normalized = match (true) {
+            $status === 1 || $status === '1' || $status === 'active'   => 'active',
+            $status === 0 || $status === '0' || $status === 'inactive' => 'inactive',
+            default => 'draft',
+        };
+
         return ui_badge(
-            ucfirst($status),
-            match ($status) {
+            ucfirst($normalized),
+            match ($normalized) {
                 'active'   => 'success',
                 'inactive' => 'danger',
                 'draft'    => 'gray',
-                default    => 'info'
+                default    => 'info',
             }
         );
     }

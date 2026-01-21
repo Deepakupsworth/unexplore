@@ -55,9 +55,7 @@
 
                         <div>
                             <p class="text-xs text-slate-500">Status</p>
-                            <span class="badge {{ $hotel->status ? 'bg-success-500' : 'bg-danger-500' }} text-white">
-                                {{ $hotel->status ? 'Active' : 'Inactive' }}
-                            </span>
+                            {!! status_badge($hotel->status) !!}
                         </div>
                         <div>
                             <p class="text-xs text-slate-500">City</p>

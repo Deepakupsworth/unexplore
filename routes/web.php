@@ -321,7 +321,7 @@ Route::get('/event-listing', [EventController::class, 'index'])->name('event.lis
 
 Route::get('/package-listing', [FrontendPackageController::class, 'list'])->name('package.listing');
 
-// Route::get('/package-details', [PackageController::class, 'details'])->name('package.details');
+Route::get('/package-details', [FrontendPackageController::class, 'details'])->name('package.details');
 
 Route::get('/profile', [FrontendProfileController::class, 'index'])->name('profile.view');
 
@@ -359,7 +359,8 @@ Route::get('/packages', [FrontendPackageController::class, 'index'])
 Route::get('/packages/ajax', [FrontendPackageController::class, 'ajax'])
     ->name('packages.ajax');
 
-
+Route::get('/{slug}', [FrontendPackageController::class, 'show'])
+    ->name('packages.show');
 //json file route
 Route::get('/saudi-packages', [DemoJsonController::class, 'index']);
 Route::get('/packege-details-json', [DemoJsonController::class, 'packege_details_page']);

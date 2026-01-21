@@ -49,6 +49,7 @@ window.addExtraPersonRow = function () {
     `);
 
     extraPersonIndex++;
+    toggleSaveButton();
 };
 
 /* ================= ADD CHILD PRICE (CARD) ================= */
@@ -107,13 +108,29 @@ window.addChildPriceRow = function () {
     `);
 
     childPriceIndex++;
+    toggleSaveButton();
 };
 
 /* ================= REMOVE ROW ================= */
 document.addEventListener('click', function (e) {
     if (e.target.classList.contains('remove-row')) {
         e.target.closest('.price-row').remove();
+        toggleSaveButton();
     }
 });
 
+function toggleSaveButton() {
+    const extraRows = document.querySelectorAll('#extraPersonBox .price-row').length;
+    const childRows = document.querySelectorAll('#childPriceBox .price-row').length;
+
+    const saveBtn = document.getElementById('savePricingBtn');
+
+    if (extraRows > 0 || childRows > 0) {
+        saveBtn.classList.remove('hidden');
+    } else {
+        saveBtn.classList.add('hidden');
+    }
+}
+
 </script>
+

@@ -18,7 +18,7 @@
     <!-- END: BreadCrumb -->
 
     <div class="card">
-        <header class="card-header noborder flex justify-between items-center">
+        <header class="card-header flex justify-between items-center">
             <h4 class="card-title">Cities</h4>
             <a href="{{ route('cities.create') }}" class="btn btn-dark text-white text-sm px-4 py-2 rounded">
                 + Add City
@@ -63,14 +63,14 @@
 
             </form>
 
-            <div class="overflow-x-auto -mx-6 dashcode-data-table">
+            <div class="overflow-x-auto -mx-6">
                 <span class="col-span-8 hidden"></span>
                 <span class="col-span-4 hidden"></span>
                 <div class="inline-block min-w-full align-middle">
                     <div class="overflow-hidden">
                         <table class="min-w-full divide-y divide-slate-100 table-fixed dark:divide-slate-700">
-                            <thead class="border-t border-slate-100 dark:border-slate-800">
-                                <tr>
+                            <thead class="bg-slate-200 dark:bg-slate-700">
+                                <tr class="text-left text-slate-600">
                                     <th scope="col" class="table-th">ID</th>
                                     <th scope="col" class="table-th">Thumb</th>
                                     <th scope="col" class="table-th">Name (EN)</th>

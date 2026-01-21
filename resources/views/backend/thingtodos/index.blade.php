@@ -129,7 +129,7 @@
                             </x-admin.table.td>
 
                             {{-- ACTION --}}
-                            <x-admin.table.td class="text-right">
+                            <x-admin.table.td>
                                 <x-admin.action-buttons :view="route('thingtodos.show', $thing->id)" :edit="route('thingtodos.edit', $thing->id)" :delete="route('thingtodos.delete', $thing->id)" />
                             </x-admin.table.td>
                         </x-admin.table.tr>

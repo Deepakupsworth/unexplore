@@ -151,11 +151,11 @@
 
         {{-- ================= ACTIONS ================= --}}
         <div class="mt-6 flex gap-3">
-            <button type="button"
+            {{-- <button type="button"
                     class="btn btn-outline-dark"
                     onclick="enablePricingEdit()">
                 Edit Pricing
-            </button>
+            </button> --}}
 
             <button class="btn btn-success hidden"
                     id="savePricingBtn">

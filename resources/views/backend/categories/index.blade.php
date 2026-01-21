@@ -27,7 +27,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
 
                     {{-- Name --}}
-                    <div class="fromGroup md:col-span-2">
+                    <div class="fromGroup">
                         <label class="form-label">Category Name</label>
                         <input type="text" name="search" value="{{ request('search') }}"
                             placeholder="Search category..." class="form-control">
@@ -51,9 +51,9 @@
                 <x-admin.table.thead>
                     <x-admin.table.tr>
                         <x-admin.table.th>#</x-admin.table.th>
-                        <x-admin.table.th>Name</x-admin.table.th>
                         <x-admin.table.th>Thumb</x-admin.table.th>
                         <x-admin.table.th>Icon</x-admin.table.th>
+                        <x-admin.table.th>Name</x-admin.table.th>
                         <x-admin.table.th class="text-right">Action</x-admin.table.th>
                     </x-admin.table.tr>
                 </x-admin.table.thead>
@@ -65,11 +65,6 @@
                         <x-admin.table.tr>
 
                             <x-admin.table.td>{{ $key + 1 }}</x-admin.table.td>
-
-                            <x-admin.table.td class="font-medium">
-                                {{ $cat->translation?->name ?? '—' }}
-                            </x-admin.table.td>
-
                             <x-admin.table.td>
                                 @if ($cat->thumb_image)
                                     <img src="{{ asset('storage/' . $cat->thumb_image) }}"
@@ -78,7 +73,6 @@
                                     —
                                 @endif
                             </x-admin.table.td>
-
                             <x-admin.table.td>
                                 @if ($cat->thumb_icon)
                                     <img src="{{ asset('storage/' . $cat->thumb_icon) }}"
@@ -86,6 +80,10 @@
                                 @else
                                     —
                                 @endif
+                            </x-admin.table.td>
+
+                            <x-admin.table.td class="font-medium">
+                                {{ $cat->translation?->name ?? '—' }}
                             </x-admin.table.td>
 
                             <x-admin.table.td class="text-right">

@@ -47,9 +47,7 @@
                         </div>
                         <div>
                             <p class="text-xs text-slate-500 mb-2">Status</p>
-                            <span class="badge {{ $transport->status ? 'bg-success-500' : 'bg-danger-500' }} text-white">
-                                {{ $transport->status ? 'Active' : 'Inactive' }}
-                            </span>
+                            {!! status_badge($transport->status) !!}
                         </div>
                     </div>
                 </div>

@@ -80,12 +80,15 @@
                 </div>
 
             </form>
+        </div>
 
-            <div class="overflow-x-auto">
+        <div class="card">
+            <div class="card-body p-0 overflow-x-auto">
                 <table class="min-w-full divide-y divide-slate-100 dark:divide-slate-700">
-                    <thead class="bg-slate-50 dark:bg-slate-800">
-                        <tr>
+                    <thead class="bg-slate-200 dark:bg-slate-700">
+                        <tr class="text-left text-slate-600">
                             <th class="table-th">#</th>
+                            <th scope="col" class="table-th">Thumb</th>
                             <th class="table-th">Title</th>
                             <th class="table-th">City</th>
                             <th class="table-th">Dates</th>
@@ -99,6 +102,14 @@
                         @forelse($events as $event)
                             <tr>
                                 <td class="table-td">{{ $event->id }}</td>
+                                <td class="table-td">
+                                    @if ($event->thumb)
+                                    <img src="{{ asset('storage/' . $event->thumb->image_path) }}"
+                                        class="w-10 h-10 rounded object-cover border">
+                                @else
+                                    —
+                                @endif
+                                </td>
 
                                 <td class="table-td font-medium text-slate-700 dark:text-white">
                                     {{ optional($event->translations->first())->title ?? '—' }}
@@ -117,26 +128,12 @@
                                 </td>
 
                                 <td class="table-td">
-                                    @if ($event->status)
-                                        <span class="badge bg-success-500 text-white">
-                                            <span class="inline-flex items-center gap-1">
-                                                <iconify-icon icon="heroicons:check-circle"></iconify-icon>
-                                                Active
-                                            </span>
-                                        </span>
-                                    @else
-                                        <span class="badge bg-danger-500 text-white">
-                                            <span class="inline-flex items-center gap-1">
-                                                <iconify-icon icon="heroicons:x-circle"></iconify-icon>
-                                                Inactive
-                                            </span>
-                                        </span>
-                                    @endif
+                                    {!! status_badge($event->status) !!}
                                 </td>
 
 
                                 <td class="table-td">
-                                    <div class="flex justify-end gap-2 items-center">
+                                    <div class="flex  gap-2 items-center">
                                         <a href="{{ route('events.show', $event->id) }}"
                                             class="action-btn bg-blue-100 text-blue-700">
                                             <iconify-icon icon="heroicons:eye"></iconify-icon>
@@ -165,12 +162,10 @@
 
                     </tbody>
                 </table>
+                <div class="mt-6">
+                    {{ $events->links() }}
+                </div>
             </div>
-
-            <div class="mt-6">
-                {{ $events->links() }}
-            </div>
-
         </div>
     </div>
 @endsection

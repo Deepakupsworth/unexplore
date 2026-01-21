@@ -215,31 +215,6 @@
 
             {{-- ================================================= --}}
             {{-- ADDITIONAL INFO --}}
-            {{-- ================================================= --}}
-            {{-- <h3 class="text-lg font-semibold">Additional Information</h3>
-
-            <div class="flex gap-2 border-b pb-2 mb-4">
-                @foreach ($languages as $lang)
-                    <button type="button" class="lang-btn {{ $loop->first ? 'active' : '' }}"
-                        data-info="{{ $lang->code }}">
-                        {{ strtoupper($lang->code) }}
-                    </button>
-                @endforeach
-            </div> --}}
-
-            @foreach ($languages as $lang)
-                <div class="info-lang-section {{ $loop->first ? 'active' : '' }}" id="info-{{ $lang->code }}">
-                    @foreach (['cancellation', 'visa', 'season'] as $type)
-                        <label class="form-label">{{ ucfirst($type) }} Title</label>
-                        <input class="form-control mb-2"
-                            name="infos[{{ $type }}][translations][{{ $lang->code }}][title]">
-                        <label class="form-label">{{ ucfirst($type) }} Content</label>
-                        <textarea class="form-control h-24 mb-4"
-                            name="infos[{{ $type }}][translations][{{ $lang->code }}][content]"></textarea>
-                    @endforeach
-                </div>
-            @endforeach
-
             <div>
                 <label>Thumbnail</label>
                 <input type="file" class="form-control @error('thumb') error-input @enderror" name="thumb">

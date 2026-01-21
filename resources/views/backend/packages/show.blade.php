@@ -14,7 +14,7 @@
         </div>
 
         <div class="flex gap-3">
-            <a href="{{ route('admin.packages.edit', $package) }}" class="btn btn-primary">
+            <a href="{{ route('admin.packages.edit', $package) }}" class="btn btn-dark">
                 Edit Package
             </a>
             <a href="{{ route('admin.packages.index') }}" class="btn btn-outline-dark">

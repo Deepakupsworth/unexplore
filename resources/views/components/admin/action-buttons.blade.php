@@ -1,4 +1,4 @@
-<div class="flex justify-end gap-2">
+<div class="flex gap-2">
 
     {{-- VIEW --}}
     @if(isset($view))

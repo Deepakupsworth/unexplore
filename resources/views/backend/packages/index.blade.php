@@ -2,20 +2,64 @@
 
 @section('content')
     {{-- ================= HEADER ================= --}}
-    <div class="mb-6 flex items-center justify-between">
-        <h4 class="text-xl font-semibold text-slate-800">
-            Packages
-        </h4>
 
-        <a href="{{ route('admin.packages.create') }}" class="btn btn-dark">
-            + Create Package
-        </a>
+    <div class="mb-5">
+        <ul class="flex items-center gap-2 text-sm">
+            <li class="text-primary-500">
+                <a href="{{ url('/admin/dashboard') }}">
+                    <iconify-icon icon="heroicons-outline:home"></iconify-icon>
+                </a>
+            </li>
+            <li class="text-slate-400">/</li>
+            <li class="text-slate-700 font-medium">Transport</li>
+        </ul>
     </div>
 
     {{-- ================= TABLE ================= --}}
 
     <div class="card">
+        <header class="card-header flex justify-between items-center">
+            <h4 class="card-title">Packages</h4>
+            <a href="{{ route('admin.packages.create') }}" class="btn btn-dark">
+                + Create Package
+            </a>
+        </header>
         <div class="card-body p-0 overflow-x-auto">
+            {{-- ================= FILTERS ================= --}}
+            <form method="GET" class="mb-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
+
+                    {{-- 🔍 Search --}}
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Search title..."
+                        class="form-control">
+
+                    {{-- 📦 Package Type --}}
+                    <select name="package_type" class="form-control">
+                        <option value="">All Types</option>
+                        <option value="fixed" @selected(request('package_type') == 'fixed')>Fixed</option>
+                        <option value="customized" @selected(request('package_type') == 'customized')>Customized</option>
+                    </select>
+
+                    {{-- ⚡ Status --}}
+                    <select name="status" class="form-control">
+                        <option value="">All Status</option>
+                        <option value="active" @selected(request('status') == 'active')>Active</option>
+                        <option value="inactive" @selected(request('status') == 'inactive')>Inactive</option>
+                        <option value="draft" @selected(request('status') == 'draft')>Draft</option>
+                    </select>
+                </div>
+
+                {{-- 🎯 Actions --}}
+
+                <div class="flex justify-end gap-2 mt-4">
+                    <a href="{{ route('admin.packages.index') }}" class="btn btn-outline-secondary">
+                        Reset
+                    </a>
+                    <button class="btn btn-dark">
+                        Search
+                    </button>
+                </div>
+            </form>
 
             <table class="min-w-full border-collapse text-sm">
                 <thead class="bg-slate-200 dark:bg-slate-700">
@@ -70,29 +114,11 @@
 
                             {{-- Status --}}
                             <td class="table-td">
-                                @switch($package->status)
-                                    @case('active')
-                                        <span class="inline-flex px-2 py-1 text-xs font-medium rounded bg-green-100 text-green-700">
-                                            Active
-                                        </span>
-                                    @break
-
-                                    @case('inactive')
-                                        <span class="inline-flex px-2 py-1 text-xs font-medium rounded bg-red-100 text-red-700">
-                                            Inactive
-                                        </span>
-                                    @break
-
-                                    @default
-                                        <span
-                                            class="inline-flex px-2 py-1 text-xs font-medium rounded bg-yellow-100 text-yellow-700">
-                                            Draft
-                                        </span>
-                                @endswitch
+                                {!! status_badge($package->status) !!}
                             </td>
 
                             {{-- Actions --}}
-                            <td class="table-td flex justify-end gap-2 items-center">
+                            <td class="table-td flex  gap-2 items-center">
                                 <a href="{{ route('admin.packages.show', $package->id) }}"
                                     class="action-btn bg-blue-100 text-blue-700">
                                     <iconify-icon icon="heroicons:eye"></iconify-icon>
@@ -103,21 +129,21 @@
                             </td>
                         </tr>
 
-                        @empty
-                            <tr>
-                                <td colspan="7" class="text-center py-10 text-slate-400">
-                                    No packages found.
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+                    @empty
+                        <tr>
+                            <td colspan="7" class="text-center py-10 text-slate-400">
+                                No packages found.
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
 
-            </div>
         </div>
+    </div>
 
-        {{-- ================= PAGINATION ================= --}}
-        <div class="mt-4">
-            {{ $packages->links() }}
-        </div>
-    @endsection
+    {{-- ================= PAGINATION ================= --}}
+    <div class="mt-4">
+        {{ $packages->links() }}
+    </div>
+@endsection

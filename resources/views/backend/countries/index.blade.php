@@ -21,8 +21,8 @@
             </a>
         </header>
 
-        <div class="card-body px-6 pb-6">
-            <form method="GET" class="mb-4">
+        <div class="card-body">
+            <form method="GET" class="mb-4 p-6 py-2">
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
 
@@ -76,8 +76,8 @@
 
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-slate-100 dark:divide-slate-700">
-                    <thead class="bg-slate-50 dark:bg-slate-800">
-                        <tr>
+                    <thead class="bg-slate-200 dark:bg-slate-700">
+                        <tr class="text-left text-slate-600">
                             <th class="table-th">#</th>
                             <th class="table-th">Name</th>
                             <th class="table-th">Code</th>
@@ -101,25 +101,11 @@
                                 <td class="table-td">{{ $country->currency_code }}</td>
 
                                 <td class="table-td">
-                                    @if ($country->status)
-                                        <span class="badge bg-success-500 text-white">
-                                            <span class="inline-flex items-center gap-1">
-                                                <iconify-icon icon="heroicons:check-circle"></iconify-icon>
-                                                Active
-                                            </span>
-                                        </span>
-                                    @else
-                                        <span class="badge bg-danger-500 text-white">
-                                            <span class="inline-flex items-center gap-1">
-                                                <iconify-icon icon="heroicons:x-circle"></iconify-icon>
-                                                Inactive
-                                            </span>
-                                        </span>
-                                    @endif
+                                    {!! status_badge($country->status) !!}
                                 </td>
 
                                 <td class="table-td text-right">
-                                    <div class="flex justify-end gap-2">
+                                    <div class="flex gap-2">
                                         <a href="{{ route('admin.countries.edit', $country->id) }}" class="action-btn">
                                             <iconify-icon icon="heroicons:pencil-square"></iconify-icon>
                                         </a>

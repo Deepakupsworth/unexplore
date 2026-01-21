@@ -21,8 +21,8 @@
             </a>
         </header>
 
-        <div class="card-body px-6 pb-6">
-            <form method="GET" class="mb-4">
+        <div class="card-body">
+            <form method="GET" class="mb-4 p-6 py-3">
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
 
@@ -90,19 +90,17 @@
                 </div>
 
             </form>
-
-
             <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-slate-100 dark:divide-slate-700">
-                    <thead class="bg-slate-50 dark:bg-slate-800">
-                        <tr>
+                <table class="min-w-full border-collapse text-sm">
+                    <thead class="bg-slate-200 dark:bg-slate-700">
+                        <tr class="text-left text-slate-600">
                             <th class="table-th">#</th>
+                            <th class="table-th">Thumb</th>
                             <th class="table-th">Hotel Name</th>
                             <th class="table-th">City</th>
                             <th class="table-th">Stars</th>
                             <th class="table-th">Meal</th>
                             <th class="table-th">Status</th>
-                            <th class="table-th">Thumb</th>
                             <th class="table-th text-right">Action</th>
                         </tr>
                     </thead>
@@ -112,6 +110,14 @@
                         @forelse($hotels as $hotel)
                             <tr>
                                 <td class="table-td">{{ $hotel->id }}</td>
+                                <td class="table-td">
+                                    @if ($hotel->thumb)
+                                        <img src="{{ asset('storage/' . $hotel->thumb->image_path) }}"
+                                            class="w-10 h-10 object-cover rounded border">
+                                    @else
+                                        —
+                                    @endif
+                                </td>
 
                                 <td class="table-td font-medium text-slate-700 dark:text-white">
                                     {{ $hotel->translations->first()->name ?? '—' }}
@@ -134,34 +140,10 @@
                                 </td>
 
                                 <td class="table-td">
-                                    @if ($hotel->status)
-                                        <span class="badge bg-success-500 text-white">
-                                            <span class="inline-flex items-center gap-1">
-                                                <iconify-icon icon="heroicons:check-circle"></iconify-icon>
-                                                Active
-                                            </span>
-                                        </span>
-                                    @else
-                                        <span class="badge bg-danger-500 text-white">
-                                            <span class="inline-flex items-center gap-1">
-                                                <iconify-icon icon="heroicons:x-circle"></iconify-icon>
-                                                Inactive
-                                            </span>
-                                        </span>
-                                    @endif
+                                    {!! status_badge($hotel->status) !!}
                                 </td>
-
                                 <td class="table-td">
-                                    @if ($hotel->thumb)
-                                        <img src="{{ asset('storage/' . $hotel->thumb->image_path) }}"
-                                            class="w-10 h-10 object-cover rounded border">
-                                    @else
-                                        —
-                                    @endif
-                                </td>
-
-                                <td class="table-td text-right">
-                                    <div class="flex justify-end gap-2">
+                                    <div class="flex gap-2">
                                         <a href="{{ route('hotels.show', $hotel->id) }}"
                                             class="action-btn bg-blue-100 text-blue-700">
                                             <iconify-icon icon="heroicons:eye"></iconify-icon>
@@ -195,7 +177,6 @@
             <div class="mt-6">
                 {{ $hotels->links() }}
             </div>
-
         </div>
     </div>
 @endsection

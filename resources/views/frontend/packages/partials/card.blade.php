@@ -1,3 +1,5 @@
+<a href="{{ route('packages.show', $package->slug) }}"
+    class="text-decoration-none text-dark">
 <div class="exclusive-offers__carousel-item">
 
     <div class="exclusive-offers__carousel-item-img">
@@ -57,3 +59,4 @@
 
     </div>
 </div>
+</a>

@@ -97,6 +97,22 @@
                     <label class="form-label">Max Persons *</label>
                     <input class="form-control" name="max_persons" value="{{ old('max_persons', $package->max_persons) }}">
                 </div>
+
+
+                <div>
+                    <label class="form-label">Package Status *</label>
+                    <select name="status" class="form-control" required>
+                        <option value="draft" {{ old('status',$package->status) == 'draft' ? 'selected' : '' }}>
+                            Draft
+                        </option>
+                        <option value="active" {{ old('status',$package->status) == 'active' ? 'selected' : '' }}>
+                            Active
+                        </option>
+                        <option value="inactive" {{ old('status',$package->status) == 'inactive' ? 'selected' : '' }}>
+                            Inactive
+                        </option>
+                    </select>
+                </div>
             </div>
 
             {{-- ================= TRANSLATIONS ================= --}}

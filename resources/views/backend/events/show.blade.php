@@ -80,9 +80,7 @@
 
                         <div>
                             <p class="text-xs text-slate-500">Status</p>
-                            <span class="badge {{ $event->status ? 'bg-success-500' : 'bg-danger-500' }} text-white">
-                                {{ $event->status ? 'Active' : 'Inactive' }}
-                            </span>
+                            {!! status_badge($event->status) !!}
                         </div>
 
                         <div>

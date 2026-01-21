@@ -227,4 +227,22 @@ class PackageController extends Controller
         // ✅ IMPORTANT: ONLY LIST PARTIAL
         return view('frontend.packages.partials.list', compact('packages'));
     }
+
+
+    public function show(string $slug)
+    {
+        $package = Package::with([
+            'translations',
+            'cities.city',
+            'price',
+            'thumb',              // banner images
+            'days.city',
+            'days.items.transport',
+            'days.items.hotel',
+            'days.items.event',
+            'days.items.todo',
+        ])->where('slug', $slug)->firstOrFail();
+
+        return view('frontend.packages.show', compact('package'));
+    }
 }
