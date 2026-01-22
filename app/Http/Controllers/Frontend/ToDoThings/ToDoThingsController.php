@@ -12,83 +12,6 @@ use Illuminate\Http\Request;
  class ToDoThingsController extends Controller
 {
 
-   
-
-    // public function index(Request $request)
-    // {
-    //     $lang = current_lang();
-
-
-    //     $cities = City::whereHas('things', function ($q) {
-    //         $q->whereNotNull('id'); // ensures at least one thing
-    //     })
-    //     ->with([
-    //         'translationData'
-    //     ])
-    //     ->withCount('things')
-    //     ->having('things_count', '>', 0)
-    //     ->orderByDesc('things_count')
-    //     ->get();
-
-    //     /* 🏷 Categories (type = thing_to_do) */
-    //     $categories = Category::where('type', 'thing_to_do')->
-    //     whereHas('things', function ($q) 
-    //     {
-    //         $q->whereNotNull('id'); // ensures at least one thing
-    //     })
-    //     ->with([
-    //         'translationData',
-    //         'things' => fn ($q) => $q->select('id', 'category_id')
-    //     ])
-    //     ->withCount('things')
-    //     ->having('things_count', '>', 0)
-    //     ->orderBy('things_count', 'desc')
-    //     ->get();
-
-       
-    //     $query = ThingToDo::with(['translation', 'thumb','city.translationData','category.translationData']);
-
-    //     /* 🔎 SEARCH (CURRENT LANGUAGE ONLY) */
-    //     if ($request->filled('search')) {
-    //         $search = $request->search;
-
-    //         $query->where(function ($q) use ($search, $lang) {
-    //             $q->where('location', 'LIKE', "%{$search}%")
-    //             ->orWhereHas('translation', function ($t) use ($search, $lang) {
-    //                 $t->where('language_code', $lang)
-    //                     ->where('name', 'LIKE', "%{$search}%");
-    //             });
-    //         });
-    //     }
-
-    //     /* 🏷 MULTIPLE CATEGORIES */
-    //     if ($request->has('categories') && is_array($request->categories)) {
-    //         $query->whereIn('category_id', $request->categories);
-    //     }
-
-    //     /* 🏙 MULTIPLE CITIES */
-    //     if ($request->has('cities') && is_array($request->cities)) {
-    //         $query->whereIn('city_id', $request->cities);
-    //     }
-    //  /* 🔄 SORTING */
-    //     match ($request->sort) {
-    //         'newest' => $query->latest(),
-    //         default  => $query->orderBy('id', 'desc'),
-    //     };
-
-    //     $things = $query
-    //         ->paginate(12)
-    //         ->withQueryString();
-        
-    //     /* AJAX RESPONSE */
-    //     if ($request->ajax()) {
-    //         return view('frontend.thingstodo.partials.list', compact('things'))->render();
-    //     }
-
-    //     return view('frontend.thingstodo.index',compact('things','cities','categories'));
-        
-    // }
-
     public function index(Request $request)
     {
         $lang = current_lang();
@@ -162,10 +85,18 @@ use Illuminate\Http\Request;
             $query->whereIn('city_id', $request->cities);
         }
 
-        match ($request->sort) {
-            'newest' => $query->latest(),
-            default  => $query->orderByDesc('id'),
-        };
+      
+
+        if ($request->filled('sort')) {
+
+            match ($request->sort) {
+                'popular'     => $query->orderBy('id', 'desc'),
+                'newest'      => $query->orderBy('created_at', 'desc'),
+                // 'price_low'   => $query->orderBy('price', 'asc'),
+                // 'price_high'  => $query->orderBy('price', 'desc'),
+                default       => $query->orderByDesc('id'),
+            };
+        }
 
         return $query;
     }
@@ -187,5 +118,40 @@ use Illuminate\Http\Request;
         ])->where('slug', $slug)->firstOrFail();
 
         return view('frontend.thingstodo.show', compact('thing'));
+    }
+
+
+    public function categoriesWisePackageCounts()
+    {
+        $language = current_lang();
+
+        $categories = Category::query()
+            ->where('type', 'thing_to_do')
+            ->where('status', 'active')
+            ->with([
+                'translation',
+                'things.packageDayItems.packageDay.package'
+            ])
+            ->get()
+            ->map(function ($category) {
+
+                $category->package_count = $category->things
+                    ->flatMap(function ($thing) {
+                        return $thing->packageDayItems
+                            ->filter(fn ($pdi) =>
+                                optional($pdi->packageDay->package)->status === 'active'
+                            )
+                            ->pluck('packageDay.package.id');
+                    })
+                    ->unique()
+                    ->count();
+
+                return $category;
+            })
+            ->sortByDesc('package_count')
+            ->values();
+
+            return view('frontend.thingstodo.things-to-do');
+
     }
 }

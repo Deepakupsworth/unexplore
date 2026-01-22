@@ -389,7 +389,7 @@
               <button class="btn btn-primary rounded-pill btn-sm gap-1"><i class="fa-solid fa-location-dot"></i> {{ $event['city'] }} | {{ $event['category'] }}</button>
               <div class="d-flex justify-content-between mt-3">
                 <h5 class="fw-bold">{{ $event['title'] }} </h5>
-                <a href="{{ route('event.details') }}" class="p-large">
+                <a href="{{ route('event.show') }}" class="p-large">
                   <i class="fa-solid fa-arrow-right-long primary-text"></i>
                 </a>
               </div>

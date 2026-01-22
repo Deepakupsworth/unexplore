@@ -2,20 +2,93 @@
 
 namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
+use App\Models\Event;
+use App\Models\ThingToDo;
+use App\Models\Package;
+use Illuminate\Support\Facades\Cache;
+
 
  class PageController extends Controller
-    {
-        public function index()
-        {
-            return view('frontend.home');
-        }
-        public function about_us()
-        {
-            return view('frontend.about-us');
-        }
+  {
+    private $language;
 
-        public function contact_us()
-        {
-            return view('frontend.contact-us');
-        }
+    public function __construct()
+    {
+        $this->language = current_lang();
     }
+
+    public function index()
+{
+    $language = $this->language; // e.g. en, de, ar
+
+    $homeData = Cache::remember(
+        "home_page_data_{$language}",
+        now()->addMinutes(30), // cache time (adjust if needed)
+        function () use ($language) {
+
+            $things = ThingToDo::query()
+                ->with([
+                    'translation' => fn ($q) =>
+                        $q->where('language_code', $language),
+                    'thumb'
+                ])
+                ->withCount([
+                    'packageDayItems as package_count' => function ($q) {
+                        $q->whereHas('packageDay.package', function ($q2) {
+                            $q2->where('status', 'active');
+                        });
+                    }
+                ])
+                ->orderByDesc('package_count')
+                ->get();
+
+            $events = Event::with([
+                    'translation',
+                    'thumb',
+                    'city.translationData',
+                    'category.translationData',
+                ])
+                ->where('status', 'active')
+                ->latest()
+                ->take(12)
+                ->get();
+
+            $packages = Package::query()
+                ->with([
+                    'translations',
+                    'cities.city',
+                    'price',
+                    'days.items.transport',
+                    'days.items.hotel'
+                ])
+                ->where('status', 'active')
+                ->latest()
+                ->take(12)
+                ->get();
+
+            return compact('things', 'events', 'packages');
+        }
+    );
+
+    //return view('frontend.home');
+
+
+    return view('frontend.home', [
+        'things'   => $homeData['things'],
+        'events'   => $homeData['events'],
+        'packages' => $homeData['packages'],
+    ]);
+}
+
+
+    
+    public function about_us()
+    {
+        return view('frontend.about-us');
+    }
+
+    public function contact_us()
+    {
+        return view('frontend.contact-us');
+    }
+}

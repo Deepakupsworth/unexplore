@@ -82,11 +82,13 @@ Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function ()
         ->name('admin.dashboard');
 });
 
-Route::get('/event-details/{slug?}', [FrontendEventController::class, 'event_details'])->name('event.details');
+
+
 
 Route::get('/events', [FrontendEventController::class, 'index'])->name('event.listing');
+Route::get('/events/{slug?}', [FrontendEventController::class, 'show'])->name('event.show');
 
-
+Route::get('/events/filter', [FrontendEventController::class, 'filter'])->name('events.filter');
 
 
 Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function () {

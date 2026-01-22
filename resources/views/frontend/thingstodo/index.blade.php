@@ -5,7 +5,7 @@
     <section class="package-listing__banner">
         <div class="container">
             <div class="package-listing__banner-content text-center">
-                <h1 class="package-listing__banner-heading h2">Explore Packages</h1>
+                <h1 class="package-listing__banner-heading h2">Explore To Do Thing</h1>
                 <p>Discover the full range of amazing things to see and do across Saudi.</p>
             </div>
         </div>
@@ -133,14 +133,14 @@
                                         </button>
                                     </p>
 
-                                    <div class="input-group mb-3 package-listing__search-bar">
+                                    <!-- <div class="input-group mb-3 package-listing__search-bar">
                                         <input type="text" class="form-control"
                                             placeholder="Browse Package, Locations"
                                             aria-label="Browse Package, Location">
                                         <button class="btn" type="button">
                                             <i class="fa-solid fa-magnifying-glass"></i>
                                         </button>
-                                    </div>
+                                    </div> -->
 
                                     <div id="collapseDestination" class="accordion-collapse collapse show"
                                         data-bs-parent="#destinationAccordion">
@@ -230,19 +230,23 @@
                 </div>
                 <div class="package-listing__results">
                     <div class="package-listing__results-header gap-2">
-                        <div class="package-listing__results-applied-fil success">
-                            <p class="p-small">Nature</p>
+                        @foreach($categories as $category)
+                        <a href="{{route('things.to.do')}}?categories[]={{$category->id}}" style="text-decoration: none;">
+                        <div class="package-listing__results-applied-fil {{ in_array($category->id, (array) request('categories')) ? 'success' : '' }} ">
+                            <p class="p-small"> {{ $category->translationData?->name }}</p>
                         </div>
-                        <div class="package-listing__results-applied-fil">
+                        </a>
+                        @endforeach
+                        <!-- <div class="package-listing__results-applied-fil">
                             <p class="p-small">Entertainment</p>
                         </div>
                         <div class="package-listing__results-applied-fil">
                             <p class="p-small">Culture & History</p>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="package-listing__results-applied-list">
                         <div class="d-flex gap-2">
-                            <div class="package-listing__results-applied-fil success">
+                            <!-- <div class="package-listing__results-applied-fil success">
                                 <p class="p-small">Customizable</p>
                                 <button class="package-listing__results-del-button"><i
                                         class="fa-solid fa-xmark"></i></button>
@@ -251,21 +255,32 @@
                                 <p class="p-small">Clear All</p>
                                 <button class="package-listing__results-del-button"><i
                                         class="fa-solid fa-trash-can"></i></button>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="dropdown package-listing__results-sort-dropdown">
-                            <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                <span class="label">Sort by:</span> <span
-                                    class="package-listing__results-sort-option fw-600">Popular</span>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Popular</a></li>
-                                <li><a class="dropdown-item" href="#">Newest</a></li>
-                                <li><a class="dropdown-item" href="#">Price: Low to High</a></li>
-                                <li><a class="dropdown-item" href="#">Price: High to Low</a></li>
-                            </ul>
-                        </div>
+    <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <span class="label">Sort by:</span>
+        <span class="package-listing__results-sort-option fw-600" id="currentSortLabel">
+            Popular
+        </span>
+    </button>
+
+    <ul class="dropdown-menu">
+        <li>
+            <a class="dropdown-item" href="#" data-sort="popular">Popular</a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="#" data-sort="newest">Newest</a>
+        </li>
+        <!-- <li>
+            <a class="dropdown-item" href="#" data-sort="price_low">Price: Low to High</a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="#" data-sort="price_high">Price: High to Low</a>
+        </li> -->
+    </ul>
+</div>
+
                     </div>
                     <div class="package-listing__results-list">
                         <div class="row gy-4 gx-3" id="thingsList">
@@ -284,54 +299,127 @@
   @endsection
   @push('scripts')
   <script>
-    let typingTimer;
+    //   let typingTimer;
 
-        function applyFilters() {
+    //     function applyFilters() {
 
-            const search = document.querySelector(
-                'input[placeholder*="Browse"]'
-            )?.value || '';
+    //         const search = document.querySelector(
+    //             'input[placeholder*="Browse"]'
+    //         )?.value || '';
 
-            const cities = [...document.querySelectorAll('input[name="cities[]"]:checked')]
-                .map(el => el.value);
+    //         const cities = [...document.querySelectorAll('input[name="cities[]"]:checked')]
+    //             .map(el => el.value);
 
-            const categories = [...document.querySelectorAll('input[name="categories[]"]:checked')]
-                .map(el => el.value);
+    //         const categories = [...document.querySelectorAll('input[name="categories[]"]:checked')]
+    //             .map(el => el.value);
 
-            const params = new URLSearchParams();
+    //         const params = new URLSearchParams();
 
-            if (search.length >= 3) {
-                params.append('search', search);
-            }
+    //         if (search.length >= 3) {
+    //             params.append('search', search);
+    //         }
 
-            cities.forEach(id => params.append('cities[]', id));
-            categories.forEach(id => params.append('categories[]', id));
+    //         cities.forEach(id => params.append('cities[]', id));
+    //         categories.forEach(id => params.append('categories[]', id));
 
-            fetch(`{{ route('to.do.things.filter') }}?${params.toString()}`, {
-            headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-            })
-            .then(res => res.text())
-            .then(html => {
-                document.getElementById('thingsList').innerHTML = html;
-            });
+    //         fetch(`{{ route('to.do.things.filter') }}?${params.toString()}`, {
+    //         headers: {
+    //                 'X-Requested-With': 'XMLHttpRequest'
+    //             }
+    //         })
+    //         .then(res => res.text())
+    //         .then(html => {
+    //             document.getElementById('thingsList').innerHTML = html;
+    //         });
+    //     }
+
+    //     /* 🔎 Search after 3 chars (debounced) */
+    //     document.querySelectorAll('input[type="text"]').forEach(input => {
+    //         input.addEventListener('keyup', () => {
+    //             clearTimeout(typingTimer);
+    //             if (input.value.length >= 3 || input.value.length === 0) {
+    //                 typingTimer = setTimeout(applyFilters, 400);
+    //             }
+    //         });
+    //     });
+
+    //     /* ☑ Checkbox filters */
+    //     document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    //         cb.addEventListener('change', applyFilters);
+    //     });
+
+   
+let typingTimer;
+let currentSort = null;
+
+function applyFilters() {
+
+const search =
+    document.querySelector('input[placeholder*="Browse"]')?.value || '';
+
+const cities = [...document.querySelectorAll('input[name="cities[]"]:checked')]
+    .map(el => el.value);
+
+const categories = [...document.querySelectorAll('input[name="categories[]"]:checked')]
+    .map(el => el.value);
+
+const params = new URLSearchParams();
+
+if (search.length >= 3) {
+    params.set('search', search);
+}
+
+cities.forEach(id => params.append('cities[]', id));
+categories.forEach(id => params.append('categories[]', id));
+
+/* ✅ Apply sort ONLY if user selected */
+if (currentSort) {
+    params.set('sort', currentSort);
+}
+
+/* Update browser URL */
+const newUrl =
+    `${window.location.pathname}${params.toString() ? '?' + params.toString() : ''}`;
+window.history.pushState({}, '', newUrl);
+
+/* AJAX call */
+fetch(`{{ route('to.do.things.filter') }}?${params.toString()}`, {
+    headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+    }
+})
+.then(res => res.text())
+.then(html => {
+    document.getElementById('thingsList').innerHTML = html;
+});
+}
+
+/* 🔎 Search (debounced, min 3 chars) */
+document.querySelectorAll('input[type="text"]').forEach(input => {
+    input.addEventListener('keyup', () => {
+        clearTimeout(typingTimer);
+        if (input.value.length >= 3 || input.value.length === 0) {
+            typingTimer = setTimeout(applyFilters, 400);
         }
+    });
+});
 
-        /* 🔎 Search after 3 chars (debounced) */
-        document.querySelectorAll('input[type="text"]').forEach(input => {
-            input.addEventListener('keyup', () => {
-                clearTimeout(typingTimer);
-                if (input.value.length >= 3 || input.value.length === 0) {
-                    typingTimer = setTimeout(applyFilters, 400);
-                }
-            });
-        });
+/* ☑ Checkbox filters */
+document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener('change', applyFilters);
+});
+document.querySelectorAll('.dropdown-item[data-sort]').forEach(item => {
+    item.addEventListener('click', e => {
+        e.preventDefault();
 
-        /* ☑ Checkbox filters */
-        document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-            cb.addEventListener('change', applyFilters);
-        });
+        currentSort = item.dataset.sort;
+
+        document.getElementById('currentSortLabel').textContent = item.textContent;
+
+        applyFilters();
+    });
+});
+
 
     </script>
 

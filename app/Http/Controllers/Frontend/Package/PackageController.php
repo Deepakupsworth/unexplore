@@ -117,6 +117,35 @@ class PackageController extends Controller
                 fn($q) =>
                 $q->whereIn('package_type', $request->package_type)
             )
+            // ?todo_category=ID
+            // /packages?todo_id=12
+            // /packages?event_id=8
+            // <a href="{{ route('packages.index', ['event_id' => $event->id]) }}">
+            // <a href="{{ route('packages.index', ['todo_id' => $todo->id]) }}">
+            // <a href="{{ route('packages.index', ['todo_category' => $category->id]) }}">
+
+
+            //this is filter to do category
+            ->when($request->todo_category, function ($q) use ($request) {
+                $q->whereHas('days.items', function ($item) use ($request) {
+                    $item->where('item_type', 'todo')
+                         ->whereHas('todo', function ($todo) use ($request) {
+                             $todo->where('category_id', $request->todo_category);
+                         });
+                });
+            })
+            ->when($request->todo_id, function ($q) use ($request) {
+                $q->whereHas('days.items', function ($item) use ($request) {
+                    $item->where('item_type', 'todo')
+                         ->where('item_id', $request->todo_id);
+                });
+            })
+            ->when($request->event_id, function ($q) use ($request) {
+                $q->whereHas('days.items', function ($item) use ($request) {
+                    $item->where('item_type', 'event')
+                         ->where('item_id', $request->event_id);
+                });
+            })
 
             ->latest()
             ->paginate(20)

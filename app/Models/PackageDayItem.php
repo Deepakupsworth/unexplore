@@ -63,4 +63,9 @@ class PackageDayItem extends Model
             default     => null,
         };
     }
+
+    public function packageDay()
+    {
+        return $this->belongsTo(PackageDay::class);
+    }
 }
