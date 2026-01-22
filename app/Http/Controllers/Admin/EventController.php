@@ -101,19 +101,24 @@ class EventController extends Controller
      ========================= */
     public function save(Request $request)
     {
+        // Normalize time
         $request->merge([
-            'opening_time' => TimeHelper::to24Hour($request->opening_time),
-            'closing_time' => TimeHelper::to24Hour($request->closing_time),
+            'opening_time' => $request->opening_time
+                ? TimeHelper::to24Hour($request->opening_time)
+                : null,
+            'closing_time' => $request->closing_time
+                ? TimeHelper::to24Hour($request->closing_time)
+                : null,
         ]);
 
         $validated = $request->validate([
             // TRANSLATIONS
-            'translations.en.title' => 'required|string|max:255',
-            'translations.en.url'   => 'required|string|max:255',
-            'translations.*.title'  => 'nullable|string|max:255',
-            'translations.*.sub_title' => 'nullable|string|max:255',
-            'translations.*.description' => 'nullable|string',
-            'translations.*.url' => 'nullable|string|max:255',
+            'translations.en.title'       => 'required|string|max:255',
+            'translations.en.url'         => 'required|string|max:255',
+            'translations.*.title'        => 'nullable|string|max:255',
+            'translations.*.sub_title'    => 'nullable|string|max:255',
+            'translations.*.description'  => 'nullable|string',
+            'translations.*.url'          => 'nullable|string|max:255',
 
             // BASIC
             'city_id'     => 'required|exists:cities,id',
@@ -145,53 +150,59 @@ class EventController extends Controller
         DB::beginTransaction();
 
         try {
-            /* EVENT */
-            $event = Event::updateOrCreate(
-                ['id' => $request->id],
-                [
-                    'slug'         => $request->slug
-                        ?? Str::slug($validated['translations']['en']['title']),
-                    'start_date'   => $validated['start_date'] ?? null,
-                    'end_date'     => $validated['end_date'] ?? null,
-                    'opening_days' => $validated['opening_days'] ?? null,
-                    'opening_time' => $validated['opening_time'] ?? null,
-                    'closing_time' => $validated['closing_time'] ?? null,
-                    'city_id'      => $validated['city_id'],
-                    'category_id'  => $validated['category_id'],
-                    'capacity'     => $validated['capacity'] ?? null,
-                    'location'     => $validated['location'] ?? null,
-                    'latitude'     => $validated['latitude'] ?? null,
-                    'longitude'    => $validated['longitude'] ?? null,
-                    'video_url'    => $validated['video_url'] ?? null,
-                    'status'       => $validated['status'],
-                ]
-            );
 
-            /* TRANSLATIONS */
+            /** ---------------- EVENT DATA ---------------- */
+            $eventData = [
+                'slug'         => Str::slug($validated['translations']['en']['title']),
+                'start_date'   => $validated['start_date'] ?? null,
+                'end_date'     => $validated['end_date'] ?? null,
+                'opening_days' => $validated['opening_days'] ?? null,
+                'opening_time' => $validated['opening_time'] ?? null,
+                'closing_time' => $validated['closing_time'] ?? null,
+                'city_id'      => $validated['city_id'],
+                'category_id'  => $validated['category_id'],
+                'capacity'     => $validated['capacity'] ?? null,
+                'location'     => $validated['location'] ?? null,
+                'latitude'     => $validated['latitude'] ?? null,
+                'longitude'    => $validated['longitude'] ?? null,
+                'video_url'    => $validated['video_url'] ?? null,
+                'url'          => $validated['url'] ?? null,
+                'status'       => $validated['status'],
+            ];
+
+            /** ---------------- CREATE / UPDATE ---------------- */
+            if ($request->filled('id')) {
+                $event = Event::findOrFail($request->id);
+                $event->update($eventData);
+            } else {
+                $event = Event::create($eventData);
+            }
+
+            /** ---------------- TRANSLATIONS ---------------- */
             foreach ($validated['translations'] as $lang => $data) {
                 if (!empty($data['title'])) {
                     EventTranslation::updateOrCreate(
                         [
-                            'event_id' => $event->id,
+                            'event_id'      => $event->id,
                             'language_code' => strtolower($lang),
                         ],
                         [
-                            'title' => $data['title'],
-                            'sub_title' => $data['sub_title'] ?? null,
+                            'title'       => $data['title'],
+                            'sub_title'   => $data['sub_title'] ?? null,
                             'description' => $data['description'] ?? null,
-                            'url' => $data['url'] ?? null,
+                            'url'         => $data['url'] ?? null,
                         ]
                     );
                 }
             }
 
-            /* THUMB */
+            /** ---------------- THUMB ---------------- */
             if ($request->hasFile('thumb')) {
                 optional($event->thumb)->delete();
                 storeImage($event, $request->thumb, 'events/thumbs', 'thumb', 'en', true);
             }
 
-            /* GALLERY */
+            /** ---------------- GALLERY ---------------- */
             if ($request->hasFile('gallery')) {
                 foreach ($request->gallery as $img) {
                     storeImage($event, $img, 'events/gallery', 'gallery');
@@ -203,13 +214,14 @@ class EventController extends Controller
             return redirect()
                 ->route('events.index')
                 ->with('success', 'Event saved successfully');
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
 
             DB::rollBack();
 
             Log::error('Event save failed', [
                 'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
+                'file'  => $e->getFile(),
+                'line'  => $e->getLine(),
             ]);
 
             return back()
@@ -217,6 +229,7 @@ class EventController extends Controller
                 ->with('error', 'Something went wrong. Please try again.');
         }
     }
+
 
     /* =========================
      |  DELETE

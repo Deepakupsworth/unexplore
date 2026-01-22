@@ -75,4 +75,11 @@ class ThingToDo extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+     // OLD HISTORY SAFE
+     public function packageDayItems()
+     {
+         return $this->hasMany(PackageDayItem::class, 'item_id')
+             ->where('item_type', 'todo');
+     }
 }

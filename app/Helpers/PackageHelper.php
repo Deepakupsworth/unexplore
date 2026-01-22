@@ -49,9 +49,9 @@ function packageListingUl($days)
         $html .= '<li><span>' . $eventCount . ' Activities</span></li>';
     }
 
-    if ($todoCount) {
-        $html .= '<li><span>Selected Meals</span></li>';
-    }
+    // if ($todoCount) {
+    //     $html .= '<li><span>Selected Meals</span></li>';
+    // }
 
     $html .= '</ul>';
 

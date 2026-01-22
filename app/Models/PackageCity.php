@@ -27,6 +27,7 @@ class PackageCity extends Model
     }
 
 
+
     public function translations()
     {
         return $this->hasMany(PackageTranslation::class);

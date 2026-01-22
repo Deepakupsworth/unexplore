@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 class DestinationController extends Controller
 {
 
+
+
 public function destination_details(Request $request)
 {
    // GET se slug lena
@@ -34,5 +36,5 @@ public function destination_details(Request $request)
    }
 
    return view('frontend.destination-details', compact('destination'));
-} 
+}
 }

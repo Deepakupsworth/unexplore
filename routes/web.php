@@ -30,6 +30,9 @@ use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Frontend\ToDoThings\ToDoThingsController;
 use App\Models\Event;
 use App\Http\Controllers\Frontend\Profile\ProfileController as FrontendProfileController;
+use App\Http\Controllers\Frontend\Destination\DestinationController AS FrontendDestinationController;
+
+
 
 
 // routes/web.php
@@ -51,6 +54,8 @@ Route::get('/signup', function () {
     return view('backend.pages.signup');
 })->name('sign_up');
 
+
+
 Route::middleware([RedirectIfAuthenticated::class])->group(function () {
     // Auth Routes
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
@@ -69,6 +74,16 @@ Route::middleware([RedirectIfAuthenticated::class])->group(function () {
     Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
 });
 
+
+
+Route::prefix('destinations')->group(function () {
+    Route::get('/', [FrontendDestinationController::class, 'index'])
+        ->name('destinations.index');
+
+    Route::get('{slug}', [FrontendDestinationController::class, 'show'])
+        ->name('destinations.show');
+});
+
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // User Dashboard
@@ -83,11 +98,10 @@ Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function ()
         ->name('admin.dashboard');
 });
 
-Route::get('/event-details/{slug?}', [FrontendEventController::class, 'event_details'])->name('event.details');
-
 Route::get('/events', [FrontendEventController::class, 'index'])->name('event.listing');
+Route::get('/events/{slug?}', [FrontendEventController::class, 'show'])->name('event.show');
 
-
+Route::get('/events/filter', [FrontendEventController::class, 'filter'])->name('events.filter');
 
 
 Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function () {
@@ -337,7 +351,7 @@ Route::get('/profile', [FrontendProfileController::class, 'index'])->name('profi
 // })->name('things-to-do-nature');
 // routes for to do things
 Route::get('/things-to-do', [ToDoThingsController::class, 'index'])->name('things.to.do');
-Route::get('/things-to-do/{slug?}', [ToDoThingsController::class, 'show'])->name('things-to-do.nature');
+Route::get('/things-to-do/{slug?}', [ToDoThingsController::class, 'show'])->name('things-to-do.show');
 Route::get('/to-do-things-filter', [ToDoThingsController::class, 'filter'])->name('to.do.things.filter');
 
 

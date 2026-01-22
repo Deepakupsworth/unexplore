@@ -1,9 +1,9 @@
 <header class="navbar navbar-expand-lg ">
 	<div class="container">
 		<a class="navbar-brand d-flex align-items-center" href="/">
-			<img src="frontend/assets/logo-white.png" alt="Unxplord Saudi" class="header__logo" />
+			<img src="{{ asset('frontend/assets/logo-white.png')}}" alt="Unxplord Saudi" class="header__logo" />
 
-			<img src="frontend/assets/logo.png" alt="Unxplord Saudi" class="header__logo-default" />
+			<img src="{{ asset('frontend/assets/logo.png')}}" alt="Unxplord Saudi" class="header__logo-default" />
 		</a>
 		<button class="navbar-toggler text-white ms-auto" type="button" data-bs-toggle="collapse"
 			data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

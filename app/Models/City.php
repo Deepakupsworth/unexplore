@@ -67,4 +67,9 @@ class City extends Model
         return $this->hasMany(ThingToDo::class);
     }
 
+    public function events()
+    {
+        return $this->hasMany(Event::class);
+    }
+
 }

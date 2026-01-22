@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Event extends Model
 {
-    use SoftDeletes,HasFactory;
+    use SoftDeletes, HasFactory;
 
     protected $fillable = [
         'slug',
@@ -51,6 +51,17 @@ class Event extends Model
         return $this->hasMany(EventTranslation::class);
     }
 
+    //translation
+    public function translation()
+    {
+        $lang = current_lang() ?? 'en';
+
+        return $this->hasOne(EventTranslation::class, 'event_id')
+            ->whereIn('language_code', [$lang, 'en'])
+            ->orderByRaw("language_code = '{$lang}' desc");
+    }
+
+
     // English shortcut
     public function en()
     {
@@ -76,5 +87,12 @@ class Event extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    // OLD HISTORY SAFE
+    public function packageDayItems()
+    {
+        return $this->hasMany(PackageDayItem::class, 'item_id')
+            ->where('item_type', 'event');
     }
 }

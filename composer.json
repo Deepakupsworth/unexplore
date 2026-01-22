@@ -31,7 +31,8 @@
                     "app/Helpers/CurrencyHelper.php",
                     "app/Helpers/TimeHelper.php",
                     "app/Helpers/UiHelper.php",
-                    "app/Helpers/PackageHelper.php"
+                    "app/Helpers/PackageHelper.php",
+                    "app/Helpers/DateHelper.php"
                 ]
     },
     "autoload-dev": {

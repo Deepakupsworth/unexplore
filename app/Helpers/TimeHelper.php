@@ -48,4 +48,36 @@ class TimeHelper
             return null;
         }
     }
+
+    /**
+     * Start time to end time only
+     * Example: 03:00 PM to 06:00 PM
+     */
+
+
+    /**
+     * Start time to end time only
+     * Example: 03:00 PM to 06:00 PM
+     */
+    public static function range(?string $startTime, ?string $endTime): ?string
+    {
+        if (!$startTime || !$endTime) {
+            return null;
+        }
+
+        try {
+            // Normalize time (handle H:i:s → H:i)
+            $start = strlen($startTime) === 8
+                ? Carbon::createFromFormat('H:i:s', $startTime)->format('H:i')
+                : $startTime;
+
+            $end = strlen($endTime) === 8
+                ? Carbon::createFromFormat('H:i:s', $endTime)->format('H:i')
+                : $endTime;
+
+            return self::toAmPm($start) . ' to ' . self::toAmPm($end);
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
 }

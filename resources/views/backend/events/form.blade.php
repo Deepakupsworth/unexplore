@@ -43,7 +43,6 @@
                 {{-- TRANSLATIONS --}}
                 <div class="card">
                     <div class="card-body p-6 space-y-4">
-
                         <div class="flex gap-2">
                             @foreach ($languages as $lang)
                                 <button type="button" class="lang-btn {{ $loop->first ? 'active' : '' }}"
@@ -138,7 +137,7 @@
                     <div class="card-body p-6">
                         <h5 class="font-semibold mb-4">Date & Timing</h5>
                         <div class="grid grid-cols-2 gap-4">
-                            <x-admin.form.input label="Start Date" name="start_date" :value="old('start_date', $model->start_date)" />
+                            <x-admin.form.input type="date" label="Start Date" name="start_date" :value="old('start_date', $model->start_date)" />
                             <x-admin.form.input type="date" label="End Date" name="end_date" :value="old('end_date', $model->end_date)" />
                             <x-admin.form.input type="time" label="Opening Time" name="opening_time" :value="old('opening_time', $model->opening_time)" />
                             <x-admin.form.input type="time" label="Closing Time" name="closing_time" :value="old('closing_time', $model->closing_time)" />
