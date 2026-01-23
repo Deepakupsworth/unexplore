@@ -1,144 +1,34 @@
 @extends('frontend.layout')
 @section('content')
-
+{{-- @dd($cities) --}}
     <!-- 1. DESTINATION BANNER SECTION  -->
     <section class="hero-banner dest-banner">
-        <video class="hero-banner__video" autoplay muted loop playsinline poster="../assets/hero-banner-bg.png">
-            <source src="../assets/videos/seekers-entry-video.mp4" type="video/mp4">
+        <video class="hero-banner__video" autoplay muted loop playsinline poster="{{ asset('frontend/assets/hero-banner-bg.png')}}">
+            <source src="{{ asset('frontend/assets/videos/seekers-entry-video.mp4')}}" type="video/mp4">
             Your browser does not support the video tag.
         </video>
         <!-- <img class="hero-banner__image" src="../assets/hero-banner-bg.png" alt="Banner"> -->
         <div class="container-fluid">
             <div class="dest-banner__carousel swiper">
                 <div class="swiper-wrapper">
+                    @foreach($cities as $cites)
                     <div class="dest-banner__carousel-item swiper-slide">
                         <div class="position-relative">
-                            <img src="../assets/destination-banner-item.png" alt="Destination">
-                            <button class="btn btn-outline-light dest__explore-btn">
+                            <img src="{{ asset('storage/' . $cites->thumb_image) }}" alt="Destination">
+                            <a href="{{ route('destinations.show',$cites->slug) }}" class="btn btn-outline-light dest__explore-btn">
                                 Explore
                                 <i class="fa-solid fa-arrow-right-long"></i>
-                            </button>
+                            </a>
                         </div>
                         <div class="dest-banner__carousel-item-content">
                             <p class="p-small">NATURE, BEACHES, ADVENTURE</p>
                             <div class="d-flex justify-content-between mt-1">
-                                <h6 class="dest-banner__carousel-item-title">Al Jubail</h6>
-                                <a href="#">Packages (20)</a>
+                                <h6 class="dest-banner__carousel-item-title">{{ $cites->translation->name }}</h6>
+                                <a href="{{ route('packages.index') }}">Packages ({{$cites->package_count}})</a>
                             </div>
                         </div>
                     </div>
-                    <div class="dest-banner__carousel-item swiper-slide">
-                        <div class="position-relative">
-                            <img src="../assets/destination-banner-item.png" alt="Destination">
-                            <button class="btn btn-outline-light dest__explore-btn">
-                                Explore
-                                <i class="fa-solid fa-arrow-right-long"></i>
-                            </button>
-                        </div>
-                        <div class="dest-banner__carousel-item-content">
-                            <p class="p-small">NATURE, BEACHES, ADVENTURE</p>
-                            <div class="d-flex justify-content-between mt-1">
-                                <h6 class="dest-banner__carousel-item-title">Al Jubail</h6>
-                                <a href="#">Packages (20)</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="dest-banner__carousel-item swiper-slide">
-                        <div class="position-relative">
-                            <img src="../assets/destination-banner-item.png" alt="Destination">
-                            <button class="btn btn-outline-light dest__explore-btn">
-                                Explore
-                                <i class="fa-solid fa-arrow-right-long"></i>
-                            </button>
-                        </div>
-                        <div class="dest-banner__carousel-item-content">
-                            <p class="p-small">NATURE, BEACHES, ADVENTURE</p>
-                            <div class="d-flex justify-content-between mt-1">
-                                <h6 class="dest-banner__carousel-item-title">Al Jubail</h6>
-                                <a href="#">Packages (20)</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="dest-banner__carousel-item swiper-slide">
-                        <div class="position-relative">
-                            <img src="../assets/destination-banner-item.png" alt="Destination">
-                            <button class="btn btn-outline-light dest__explore-btn">
-                                Explore
-                                <i class="fa-solid fa-arrow-right-long"></i>
-                            </button>
-                        </div>
-                        <div class="dest-banner__carousel-item-content">
-                            <p class="p-small">NATURE, BEACHES, ADVENTURE</p>
-                            <div class="d-flex justify-content-between mt-1">
-                                <h6 class="dest-banner__carousel-item-title">Al Jubail</h6>
-                                <a href="#">Packages (20)</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="dest-banner__carousel-item swiper-slide">
-                        <div class="position-relative">
-                            <img src="../assets/destination-banner-item.png" alt="Destination">
-                            <button class="btn btn-outline-light dest__explore-btn">
-                                Explore
-                                <i class="fa-solid fa-arrow-right-long"></i>
-                            </button>
-                        </div>
-                        <div class="dest-banner__carousel-item-content">
-                            <p class="p-small">NATURE, BEACHES, ADVENTURE</p>
-                            <div class="d-flex justify-content-between mt-1">
-                                <h6 class="dest-banner__carousel-item-title">Al Jubail</h6>
-                                <a href="#">Packages (20)</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="dest-banner__carousel-item swiper-slide">
-                        <div class="position-relative">
-                            <img src="../assets/destination-banner-item.png" alt="Destination">
-                            <button class="btn btn-outline-light dest__explore-btn">
-                                Explore
-                                <i class="fa-solid fa-arrow-right-long"></i>
-                            </button>
-                        </div>
-                        <div class="dest-banner__carousel-item-content">
-                            <p class="p-small">NATURE, BEACHES, ADVENTURE</p>
-                            <div class="d-flex justify-content-between mt-1">
-                                <h6 class="dest-banner__carousel-item-title">Al Jubail</h6>
-                                <a href="#">Packages (20)</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="dest-banner__carousel-item swiper-slide">
-                        <div class="position-relative">
-                            <img src="../assets/destination-banner-item.png" alt="Destination">
-                            <button class="btn btn-outline-light dest__explore-btn">
-                                Explore
-                                <i class="fa-solid fa-arrow-right-long"></i>
-                            </button>
-                        </div>
-                        <div class="dest-banner__carousel-item-content">
-                            <p class="p-small">NATURE, BEACHES, ADVENTURE</p>
-                            <div class="d-flex justify-content-between mt-1">
-                                <h6 class="dest-banner__carousel-item-title">Al Jubail</h6>
-                                <a href="#">Packages (20)</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="dest-banner__carousel-item swiper-slide">
-                        <div class="position-relative">
-                            <img src="../assets/destination-banner-item.png" alt="Destination">
-                            <button class="btn btn-outline-light dest__explore-btn">
-                                Explore
-                                <i class="fa-solid fa-arrow-right-long"></i>
-                            </button>
-                        </div>
-                        <div class="dest-banner__carousel-item-content">
-                            <p class="p-small">NATURE, BEACHES, ADVENTURE</p>
-                            <div class="d-flex justify-content-between mt-1">
-                                <h6 class="dest-banner__carousel-item-title">Al Jubail</h6>
-                                <a href="#">Packages (20)</a>
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -154,114 +44,27 @@
                 </div>
             </div>
             <div class="row gy-xl-5 gy-lg-3 gy-3 gx-4 explore-destinations__items">
+                @foreach($cities as $cites)
                 <div class="col-md-6 col-lg-4">
                     <div class="explore-destinations__item">
                         <div class="position-relative explore-destinations__item-image">
-                            <img src="../assets/destination-banner-item.png" alt="Destination">
-                            <button class="btn btn-outline-light dest__explore-btn">
+                            <img src="{{ asset('storage/' . $cites->thumb_image) }}" alt="Destination">
+                            <a href="{{ route('destinations.show',$cites->slug) }}" class="btn btn-outline-light dest__explore-btn">
                                 Explore
                                 <i class="fa-solid fa-arrow-right-long"></i>
-                            </button>
+                            </a>
                         </div>
                         <div class="explore-destinations__item-content">
                             <div>
-                                <p class="explore-destinations__item-title mb-2">Culture & History</p>
-                                <h5 class="explore-destinations__item-description">AlUla</h5>
+                                <p class="explore-destinations__item-title mb-2">{{ $cites->translation->tagline }}</p>
+                                <h5 class="explore-destinations__item-description">{{ $cites->translation->name }}</h5>
                             </div>
-                            <button class="btn btn-outline-primary rounded-pill">Packages (20) <i class="fa-solid fa-angles-right"></i></button>
+                            {{-- destinations.show --}}
+                            <a href="{{ route('packages.index') }}" class="btn btn-outline-primary rounded-pill">Packages ({{$cites->package_count}}) <i class="fa-solid fa-angles-right"></i></a>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 col-lg-4">
-                    <div class="explore-destinations__item">
-                        <div class="position-relative explore-destinations__item-image">
-                            <img src="../assets/destination-banner-item.png" alt="Destination">
-                            <button class="btn btn-outline-light dest__explore-btn">
-                                Explore
-                                <i class="fa-solid fa-arrow-right-long"></i>
-                            </button>
-                        </div>
-                        <div class="explore-destinations__item-content">
-                            <div>
-                                <p class="explore-destinations__item-title mb-2">Culture & History</p>
-                                <h5 class="explore-destinations__item-description">AlUla</h5>
-                            </div>
-                            <button class="btn btn-outline-primary rounded-pill">Packages (20) <i class="fa-solid fa-angles-right"></i></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                    <div class="explore-destinations__item">
-                        <div class="position-relative explore-destinations__item-image">
-                            <img src="../assets/destination-banner-item.png" alt="Destination">
-                            <button class="btn btn-outline-light dest__explore-btn">
-                                Explore
-                                <i class="fa-solid fa-arrow-right-long"></i>
-                            </button>
-                        </div>
-                        <div class="explore-destinations__item-content">
-                            <div>
-                                <p class="explore-destinations__item-title mb-2">Culture & History</p>
-                                <h5 class="explore-destinations__item-description">AlUla</h5>
-                            </div>
-                            <button class="btn btn-outline-primary rounded-pill">Packages (20) <i class="fa-solid fa-angles-right"></i></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                    <div class="explore-destinations__item">
-                        <div class="position-relative explore-destinations__item-image">
-                            <img src="../assets/destination-banner-item.png" alt="Destination">
-                            <button class="btn btn-outline-light dest__explore-btn">
-                                Explore
-                                <i class="fa-solid fa-arrow-right-long"></i>
-                            </button>
-                        </div>
-                        <div class="explore-destinations__item-content">
-                            <div>
-                                <p class="explore-destinations__item-title mb-2">Culture & History</p>
-                                <h5 class="explore-destinations__item-description">AlUla</h5>
-                            </div>
-                            <button class="btn btn-outline-primary rounded-pill">Packages (20) <i class="fa-solid fa-angles-right"></i></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                    <div class="explore-destinations__item">
-                        <div class="position-relative explore-destinations__item-image">
-                            <img src="../assets/destination-banner-item.png" alt="Destination">
-                            <button class="btn btn-outline-light dest__explore-btn">
-                                Explore
-                                <i class="fa-solid fa-arrow-right-long"></i>
-                            </button>
-                        </div>
-                        <div class="explore-destinations__item-content">
-                            <div>
-                                <p class="explore-destinations__item-title mb-2">Culture & History</p>
-                                <h5 class="explore-destinations__item-description">AlUla</h5>
-                            </div>
-                            <button class="btn btn-outline-primary rounded-pill">Packages (20) <i class="fa-solid fa-angles-right"></i></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                    <div class="explore-destinations__item">
-                        <div class="position-relative explore-destinations__item-image">
-                            <img src="../assets/destination-banner-item.png" alt="Destination">
-                            <button class="btn btn-outline-light dest__explore-btn">
-                                Explore
-                                <i class="fa-solid fa-arrow-right-long"></i>
-                            </button>
-                        </div>
-                        <div class="explore-destinations__item-content">
-                            <div>
-                                <p class="explore-destinations__item-title mb-2">Culture & History</p>
-                                <h5 class="explore-destinations__item-description">AlUla</h5>
-                            </div>
-                            <button class="btn btn-outline-primary rounded-pill">Packages (20) <i class="fa-solid fa-angles-right"></i></button>
-                        </div>
-                    </div>
-                </div>
+            @endforeach
             </div>
         </div>
     </section>

@@ -73,14 +73,14 @@
                             <form  method="POST" action="{{ route('user.profile.update') }}" enctype="multipart/form-data">
 
                             <div class="user-profile__details-body white-bg p-3">
-                                        @csrf    
+                                        @csrf
                                 <div class="user-profile__details-form user-profile__box p-3 white-bg">
                                     <p class="fw-600 mb-1">Personal Information</p>
                                     <p class="text-light2 p-small">Update your personal details and contact information
                                     </p>
 
                                     <div class="mt-4">
-                                        
+
                                             <div class="row">
                                                 <div class="col-sm-6">
                                                     <label for="userDetailFirstName" class="form-label">
@@ -210,7 +210,7 @@
                                                     Max
                                                     280 characters.</small>
                                             </div> -->
-                                  
+
                                     </div>
 
                                 </div>
@@ -226,7 +226,7 @@
                                                     ? asset('storage/'.$profileImage->image_path)
                                                     : asset('frontend/assets/user.jpeg') }}"
                                                 alt="User"
-                                                class="rounded-circle">                                           
+                                                class="rounded-circle">
                                         </div>
                                         <!-- If user image is not there, will show user initials
                                         <div class="user-profile__initials flex-center rounded-circle my-4">
@@ -261,7 +261,7 @@
 
                                     </div>
                                 </div>
-                           
+
                             </div>
                             </form>
                         </div>

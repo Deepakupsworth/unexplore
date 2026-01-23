@@ -28,7 +28,7 @@
         </button>
         <div class="d-flex justify-content-between mt-3">
             <h5 class="fw-bold">{{ $event->translation->title }}</h5>
-            <a href="#" class="p-large">
+            <a href="{{route('event.show',$event->slug)}}" class="p-large">
                 <i class="fa-solid fa-arrow-right-long primary-text"></i>
             </a>
         </div>

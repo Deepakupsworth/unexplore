@@ -22,7 +22,7 @@ class PageController extends Controller
     public function index()
     {
         $language = $this->language; // e.g. en, de, ar
-        Cache::forget("home_page_data_{$language}");
+        // Cache::forget("home_page_data_{$language}");
 
         $homeData = Cache::remember(
             "home_page_data_{$language}",
@@ -80,8 +80,7 @@ class PageController extends Controller
             }
         );
 
-        //return view('frontend.home');
-
+        // dd($homeData);
 
         return view('frontend.home', [
             'things'   => $homeData['things'],

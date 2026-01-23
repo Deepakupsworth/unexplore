@@ -1,6 +1,6 @@
 @extends('frontend.layout')
 @section('content')
-
+{{-- @dd($things) --}}
     <!-- 1. TO DO THING SEARCH: BANNER -->
     <section class="package-listing__banner">
         <div class="container">
@@ -78,7 +78,7 @@
                             </div>
                         </div>
                         <hr>
-                                                
+
                             <div class="package-listing__filter-item accordion" id="categoryAccordion">
                                 <div class="accordion-item">
                                     <p class="accordion-header p-large package-listing__filter-title">
@@ -174,7 +174,7 @@
                             </div>
 
                         <hr>
-                       
+
                         <!-- <div class="package-listing__filter-item accordion" id="packagesAccordion">
                             <div class="accordion-item">
                                 <p class="accordion-header p-large package-listing__filter-title">
@@ -284,18 +284,18 @@
                     </div>
                     <div class="package-listing__results-list">
                         <div class="row gy-4 gx-3" id="thingsList">
-                        
+
                         @include('frontend.thingstodo.partials.list', ['things' => $things])
 
-                       
+
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
         </div>
     </section>
-  
+
   @endsection
   @push('scripts')
   <script>
@@ -348,7 +348,7 @@
     //         cb.addEventListener('change', applyFilters);
     //     });
 
-   
+
 let typingTimer;
 let currentSort = null;
 

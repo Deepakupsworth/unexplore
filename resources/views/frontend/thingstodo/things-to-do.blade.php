@@ -55,7 +55,7 @@
                     <div class="discover-category__item">
                         <img src="{{ asset(ltrim($discover['image'], '/')) }}" alt="Category" class="img-fluid">
                         <div class="badge carousel-badge"><i class="fa-solid fa-location-dot"></i> {{ $discover['city_name'] }}</div>
-                        <div class="discover-category__item-content"> 
+                        <div class="discover-category__item-content">
                             <p class="p-large discover-category__item-title">{{ $discover['title'] }} </p>
                             <button class="btn btn-outline-light">Related packages ({{ $discover['package_count'] }}) <i
                                     class="fa-solid fa-angles-right"></i></button>
@@ -94,7 +94,7 @@
                 <div class="stories-insight__carousel swiper">
                     <div class="swiper-wrapper">
                     @if(count($section2))
-                    @foreach($section2 as $stories)      
+                    @foreach($section2 as $stories)
                     <div class="stories-insight__carousel-item swiper-slide">
                             <a href=""> <img src="{{ asset(ltrim($stories['city_image'], '/')) }}" alt="Story Image" class="img-fluid"> </a>
                             <div class="stories-insight__carousel-item-content">
@@ -104,9 +104,9 @@
                         </div>
                         @endforeach
                         @endif
-                        
-                    </div> 
-                   
+
+                    </div>
+
                     <div class="stories-insight__carousel-navigation custom__carousel-navigation">
                         <div class="swiper-button-prev stories-insight__carousel-navigation-prev">
                             <i class="fa-solid fa-arrow-left"></i>
@@ -150,7 +150,7 @@
                             <div class="attractions-must-visit__city">{{ $visit['city'] }} </div>
                         </div>
                         @endforeach
-                        @endif 
+                        @endif
                         <div class="stories-insight__carousel-item swiper-slide">
                             <img src="{{ asset('frontend/assets/things_to_do/edge_of_the_world_in_riyadh.jpg') }}" alt="Story Image" class="img-fluid">
                             <div class="stories-insight__carousel-item-content">
@@ -227,7 +227,7 @@
                     </div>
                 @endforeach
                 @endif
-                    
+
                 </div>
                 <div class="custom__carousel-pagination"></div>
             </div>
@@ -255,7 +255,7 @@
                 <div class="swiper-wrapper">
                 @if(count($section5))
                 @foreach($section5 as $offers)
-                    <div class="exclusive-offers__carousel-item swiper-slide"> 
+                    <div class="exclusive-offers__carousel-item swiper-slide">
                         <div class="exclusive-offers__carousel-item-img">
                             <img src="{{ asset(ltrim($offers['image'], '/')) }}" alt="Exclusive Offer" class="img-fluid">
                             <div class="badge carousel-badge"><i class="fa-solid fa-location-dot"></i>  {{ $offers['city_name'] }} </div>
@@ -279,7 +279,7 @@
                                     <p class="text-muted">Only for now</p>
                                     <div class="d-flex align-items-center gap-1 text-muted">
                                         <img src="{{ asset('frontend/assets/icons/riyal.svg') }}" alt="Riyal">
-                                        <p class="fw-bold text-dark">{{ $offers['price_per_person'] }}</p> /Person 
+                                        <p class="fw-bold text-dark">{{ $offers['price_per_person'] }}</p> /Person
                                     </div>
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center">
@@ -294,7 +294,7 @@
                         </div>
                     </div>
                     @endforeach
-                    @endif 
+                    @endif
                 </div>
                 <div class="custom__carousel-pagination"></div>
             </div>

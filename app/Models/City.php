@@ -32,7 +32,6 @@ class City extends Model
         $lang = current_lang() ?? 'en';
         return $this->hasOne(CityTranslation::class)
             ->where('language_code', $lang);
-        
     }
 
     public function images()
@@ -72,4 +71,8 @@ class City extends Model
         return $this->hasMany(Event::class);
     }
 
+    public function packageCities()
+    {
+        return $this->hasMany(PackageCity::class);
+    }
 }

@@ -9,12 +9,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Hotel extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'city_id',
         'location',
-        'latitude' ,
+        'latitude',
         'longitude',
         'email',
         'phone',
@@ -22,6 +22,13 @@ class Hotel extends Model
         'has_meal',
         'status',
     ];
+
+    public function translation()
+    {
+        return $this->hasOne(HotelTranslation::class)
+            ->where('language_code', current_lang());
+    }
+
     public function translations()
     {
         return $this->hasMany(HotelTranslation::class);
@@ -36,18 +43,17 @@ class Hotel extends Model
     public function thumb()
     {
         return $this->morphOne(Image::class, 'imageable')
-                    ->where('role', 'thumb');
+            ->where('role', 'thumb');
     }
 
     public function gallery()
     {
         return $this->morphMany(Image::class, 'imageable')
-                    ->where('role', 'gallery');
+            ->where('role', 'gallery');
     }
 
     public function city()
     {
         return $this->belongsTo(City::class);
     }
-
 }

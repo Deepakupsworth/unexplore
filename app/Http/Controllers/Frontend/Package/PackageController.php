@@ -52,33 +52,33 @@ class PackageController extends Controller
                 $q->where(function ($qq) use ($request) {
                     $qq->whereHas(
                         'translations',
-                        fn ($t) =>
-                            $t->where('title', 'like', "%{$request->search}%")
+                        fn($t) =>
+                        $t->where('title', 'like', "%{$request->search}%")
                     )
-                    ->orWhereHas(
-                        'cities.city.translations',
-                        fn ($ct) =>
+                        ->orWhereHas(
+                            'cities.city.translations',
+                            fn($ct) =>
                             $ct->where('name', 'like', "%{$request->search}%")
-                    );
+                        );
                 });
             })
 
             // ✈️ FLIGHT FILTER
             ->when(
                 $request->flight === 'with',
-                fn ($q) =>
-                    $q->whereHas(
-                        'days.items.transport',
-                        fn ($t) => $t->where('type', 'flight')
-                    )
+                fn($q) =>
+                $q->whereHas(
+                    'days.items.transport',
+                    fn($t) => $t->where('type', 'flight')
+                )
             )
             ->when(
                 $request->flight === 'without',
-                fn ($q) =>
-                    $q->whereDoesntHave(
-                        'days.items.transport',
-                        fn ($t) => $t->where('type', 'flight')
-                    )
+                fn($q) =>
+                $q->whereDoesntHave(
+                    'days.items.transport',
+                    fn($t) => $t->where('type', 'flight')
+                )
             )
 
             // 💰 PRICE FILTER (PER PERSON ONLY)
@@ -90,8 +90,8 @@ class PackageController extends Controller
 
                     $q->whereHas(
                         'price',
-                        fn ($p) =>
-                            $p->whereBetween('per_person_price', [$min, $max])
+                        fn($p) =>
+                        $p->whereBetween('per_person_price', [$min, $max])
                     );
                 }
             )
@@ -99,28 +99,28 @@ class PackageController extends Controller
             // ⭐ HOTEL RATING
             ->when(
                 $request->rating,
-                fn ($q) =>
-                    $q->whereHas(
-                        'days.items.hotel',
-                        fn ($h) => $h->whereIn('star_rating', $request->rating)
-                    )
+                fn($q) =>
+                $q->whereHas(
+                    'days.items.hotel',
+                    fn($h) => $h->whereIn('star_rating', $request->rating)
+                )
             )
 
             // 🌍 CITY FILTER
             ->when(
                 $request->cities,
-                fn ($q) =>
-                    $q->whereHas(
-                        'cities',
-                        fn ($c) => $c->whereIn('city_id', $request->cities)
-                    )
+                fn($q) =>
+                $q->whereHas(
+                    'cities',
+                    fn($c) => $c->whereIn('city_id', $request->cities)
+                )
             )
 
             // 📦 PACKAGE TYPE
             ->when(
                 $request->package_type,
-                fn ($q) =>
-                    $q->whereIn('package_type', $request->package_type)
+                fn($q) =>
+                $q->whereIn('package_type', $request->package_type)
             )
             // ?todo_category=ID
             // /packages?todo_id=12
@@ -134,21 +134,21 @@ class PackageController extends Controller
             ->when($request->todo_category, function ($q) use ($request) {
                 $q->whereHas('days.items', function ($item) use ($request) {
                     $item->where('item_type', 'todo')
-                         ->whereHas('todo', function ($todo) use ($request) {
-                             $todo->where('category_id', $request->todo_category);
-                         });
+                        ->whereHas('todo', function ($todo) use ($request) {
+                            $todo->where('category_id', $request->todo_category);
+                        });
                 });
             })
             ->when($request->todo_id, function ($q) use ($request) {
                 $q->whereHas('days.items', function ($item) use ($request) {
                     $item->where('item_type', 'todo')
-                         ->where('item_id', $request->todo_id);
+                        ->where('item_id', $request->todo_id);
                 });
             })
             ->when($request->event_id, function ($q) use ($request) {
                 $q->whereHas('days.items', function ($item) use ($request) {
                     $item->where('item_type', 'event')
-                         ->where('item_id', $request->event_id);
+                        ->where('item_id', $request->event_id);
                 });
             })
 
@@ -195,25 +195,25 @@ class PackageController extends Controller
                 $q->where(function ($qq) use ($request) {
                     $qq->whereHas(
                         'translations',
-                        fn ($t) =>
-                            $t->where('title', 'like', "%{$request->search}%")
+                        fn($t) =>
+                        $t->where('title', 'like', "%{$request->search}%")
                     )
-                    ->orWhereHas(
-                        'cities.city.translations',
-                        fn ($ct) =>
+                        ->orWhereHas(
+                            'cities.city.translations',
+                            fn($ct) =>
                             $ct->where('name', 'like', "%{$request->search}%")
-                    );
+                        );
                 });
             })
 
             // ✈️ FLIGHT
             ->when(
                 $request->flight === 'with',
-                fn ($q) =>
-                    $q->whereHas(
-                        'days.items.transport',
-                        fn ($t) => $t->where('type', 'flight')
-                    )
+                fn($q) =>
+                $q->whereHas(
+                    'days.items.transport',
+                    fn($t) => $t->where('type', 'flight')
+                )
             )
 
             // 💰 PRICE FILTER (PER PERSON)
@@ -225,8 +225,8 @@ class PackageController extends Controller
 
                     $q->whereHas(
                         'price',
-                        fn ($p) =>
-                            $p->whereBetween('per_person_price', [$min, $max])
+                        fn($p) =>
+                        $p->whereBetween('per_person_price', [$min, $max])
                     );
                 }
             )
@@ -234,28 +234,28 @@ class PackageController extends Controller
             // ⭐ HOTEL
             ->when(
                 $request->rating,
-                fn ($q) =>
-                    $q->whereHas(
-                        'days.items.hotel',
-                        fn ($h) => $h->whereIn('star_rating', $request->rating)
-                    )
+                fn($q) =>
+                $q->whereHas(
+                    'days.items.hotel',
+                    fn($h) => $h->whereIn('star_rating', $request->rating)
+                )
             )
 
             // 🌍 CITY
             ->when(
                 $request->cities,
-                fn ($q) =>
-                    $q->whereHas(
-                        'cities',
-                        fn ($c) => $c->whereIn('city_id', $request->cities)
-                    )
+                fn($q) =>
+                $q->whereHas(
+                    'cities',
+                    fn($c) => $c->whereIn('city_id', $request->cities)
+                )
             )
 
             // 📦 TYPE
             ->when(
                 $request->package_type,
-                fn ($q) =>
-                    $q->whereIn('package_type', $request->package_type)
+                fn($q) =>
+                $q->whereIn('package_type', $request->package_type)
             )
 
             ->latest()
@@ -281,22 +281,49 @@ class PackageController extends Controller
      */
     public function show(string $slug)
     {
+        $language = current_lang();
+
         $package = Package::with([
-            'translations',
-            'infos.translation',
-            'cities.city.translations',
+            // ✅ Package main translation
+            'translation' => fn($q) =>
+            $q->where('language_code', $language),
+
+            // ✅ Infos translation
+            'infos.translation' => fn($q) =>
+            $q->where('language_code', $language),
+
+            // ✅ Cities + City translation
+            'cities.city.translation' => fn($q) =>
+            $q->where('language_code', $language),
+
+            // ✅ Price & media
             'price',
             'thumb',
-            'days.city',
-            'days.items.transport',
-            'days.items.hotel.translations',
+            'gallery',
+
+            // ✅ Days + City
+            'days.city.translation' => fn($q) =>
+            $q->where('language_code', $language),
+
+            // ✅ Day items
+            'days.items.transport.translation' => fn($q) =>
+            $q->where('language_code', $language),
+
+            'days.items.hotel.translation' => fn($q) =>
+            $q->where('language_code', $language),
             'days.items.hotel.thumb',
-            'days.items.event',
-            'days.items.todo',
-            'gallery', // 🔥 ADD THIS if gallery table exists
-        ])->where('slug', $slug)->firstOrFail();
+
+            'days.items.event.translation' => fn($q) =>
+            $q->where('language_code', $language),
+            'days.items.event.thumb',
+
+            'days.items.todo.translation' => fn($q) =>
+            $q->where('language_code', $language),
+            'days.items.todo.thumb',
+        ])
+            ->where('slug', $slug)
+            ->firstOrFail();
 
         return view('frontend.packages.show', compact('package'));
     }
-
 }
