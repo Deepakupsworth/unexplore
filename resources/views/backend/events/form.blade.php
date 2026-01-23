@@ -28,8 +28,6 @@
         }
     </style>
 
-
-
     {{-- Breadcrumb --}}
     <form action="{{ route('events.save') }}" method="POST" enctype="multipart/form-data">
         @csrf
@@ -39,6 +37,15 @@
 
             {{-- LEFT --}}
             <div class="xl:col-span-8 col-span-12 space-y-6">
+                @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
                 {{-- TRANSLATIONS --}}
                 <div class="card">

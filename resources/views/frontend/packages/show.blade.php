@@ -22,7 +22,6 @@
         $startDate = Carbon::parse($package->start_date); // MUST EXIST
         $endDate = $startDate->copy()->addDays($package->duration_nights);
     @endphp
-    {{-- @dd($package->thumb->image_path) --}}
     <section>
         <div class="container">
             <div class="gallery-wrapper swiper">
@@ -187,16 +186,6 @@
                                                                             data-bs-parent="#hotelAccordion">
                                                                             <div class="accordion-body">
                                                                                 @php
-                                                                                    $hotelTranslation = $item->hotel->translations
-                                                                                        ->where(
-                                                                                            'language_code',
-                                                                                            app()->getLocale(),
-                                                                                        )
-                                                                                        ->first();
-
-                                                                                    $hotelName =
-                                                                                        $hotelTranslation->name ??
-                                                                                        'Hotel';
 
                                                                                     $hotelImage = $item->hotel->thumb
                                                                                         ? asset(
@@ -226,13 +215,11 @@
 
                                                                                         </div>
                                                                                         <p class="fw-600 my-1">
-                                                                                            {{ $hotelName }}</p>
+                                                                                            {{ $item->hotel->translation->name }}</p>
                                                                                         <p class="p-small text-light2">
                                                                                             <i
                                                                                                 class="fa-solid fa-location-dot p-small"></i>
-                                                                                            {{ $startDate->format('d F') }}
-                                                                                            –
-                                                                                            {{ $endDate->format('d F') }}
+                                                                                                        {{ $item->hotel->location}}
 
                                                                                         </p>
                                                                                     </div>
@@ -244,7 +231,7 @@
                                                             @endforeach
 
                                                             @foreach ($day->items->where('item_type', 'todo') as $item)
-                                                                {{-- @dd($item) --}}
+
                                                                 <div class="accordion accordion-flush" id="todoAccordion">
                                                                     <div
                                                                         class="accordion-item border rounded mb-3 pkg-details__accordion-item">
@@ -292,7 +279,7 @@
 
 
                                                                                     <div>
-                                                                                        {{-- {{ dd($item->todo->opeaning_time, $item->todo->closing_time) }} --}}
+
 
                                                                                         <p class="fw-600 my-1">
                                                                                             {{ $item->todo->translation->name }}
@@ -301,7 +288,7 @@
                                                                                             <i
                                                                                                 class="fa-solid fa-location-dot p-small"></i>
 
-                                                                                                {{-- {{ \App\Helpers\TimeHelper::range($item->todo->opeaning_time, $item->todo->closing_time) }} --}}
+                                                                                                {{ \App\Helpers\TimeHelper::range($item->todo->opening_time, $item->todo->closing_time) }}
 
 
                                                                                         </p>
@@ -313,6 +300,74 @@
                                                                 </div>
                                                             @endforeach
 
+
+
+                                                            @foreach ($day->items->where('item_type', 'event') as $item)
+                                                                    {{-- @dd($item) --}}
+                                                                <div class="accordion accordion-flush" id="eventAccordion">
+                                                                    <div
+                                                                        class="accordion-item border rounded mb-3 pkg-details__accordion-item">
+                                                                        <div class="accordion-header">
+                                                                            <div
+                                                                                class="d-flex justify-content-between align-items-center gap-3">
+                                                                                <div
+                                                                                    class="d-flex align-items-center gap-2">
+                                                                                    <div class="accordion-icon"
+                                                                                        data-bs-toggle="collapse"
+                                                                                        data-bs-target="#eventlCollapse"
+                                                                                        aria-expanded="true"
+                                                                                        aria-controls="eventlCollapse">
+                                                                                        <i
+                                                                                            class="fa-solid fa-chevron-down"></i>
+                                                                                    </div>
+                                                                                    <p class="p-small fw-600">Events
+                                                                                    </p>
+                                                                                </div>
+                                                                                {{-- <div class="vertical-divider"></div> --}}
+                                                                                {{-- <p class="p-small">2 Nights</p> --}}
+                                                                                {{-- <div class="vertical-divider"></div>
+                                                                                <p class="p-small">In Riyadh</p> --}}
+                                                                            </div>
+                                                                            <div
+                                                                                class="d-flex gap-2 pkg-details__accordion-actions">
+                                                                                <button class="btn btn-primary btn-sm">
+                                                                                    <i class="fa-solid fa-pencil"></i>
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div id="eventCollapse"
+                                                                            class="accordion-collapse collapse show"
+                                                                            aria-labelledby="headingOne"
+                                                                            data-bs-parent="#eventAccordion">
+                                                                            <div class="accordion-body">
+
+
+                                                                                <div
+                                                                                    class="d-flex align-items-center gap-3">
+                                                                                    <img src="{{ asset('storage/' . $item->event->thumb->image_path) }}"
+                                                                                        alt="Transfer"
+                                                                                        class="img-fluid pkg-details__tr-ht-img">
+
+                                                                                    <div>
+
+                                                                                        <p class="fw-600 my-1">
+                                                                                            {{ $item->event->translation->title }}
+                                                                                        </p>
+                                                                                        <p class="p-small text-light2">
+                                                                                            <i
+                                                                                                class="fa-solid fa-location-dot p-small"></i>
+                                                                                                {{-- {{$item->event->day}} --}}
+                                                                                                {{\App\Helpers\DateHelper::format($item->event->start_date)}} <br/>
+                                                                                                {{ \App\Helpers\TimeHelper::range($item->event->opening_time, $item->event->closing_time) }}
+                                                                                        </p>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            @endforeach
 
                                                         </div>
                                                     </div>

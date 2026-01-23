@@ -32,20 +32,7 @@
 															class="fa-solid fa-angles-right primary-text flex-v-center"></i>
 													</a></li>
 												<li>
-												<li><a href="#" class="">
-														Geography of Saudi
-														<i
-															class="fa-solid fa-angles-right primary-text flex-v-center"></i>
-													</a></li>
-												<li><a href="#">History of Saudi <i
-															class="fa-solid fa-angles-right primary-text flex-v-center"></i></a>
-												</li>
-												<li><a href="#">Saudi's climate <i
-															class="fa-solid fa-angles-right primary-text flex-v-center"></i></a>
-												</li>
-												<li><a href="#">Towns & cities in Saudi <i
-															class="fa-solid fa-angles-right primary-text flex-v-center"></i></a>
-												</li>
+
 												<li><a href="#">Riyadh <i
 															class="fa-solid fa-angles-right primary-text flex-v-center"></i></a>
 												</li>
@@ -84,57 +71,26 @@
 					</li>
 					<li class="nav-item dropdown">
 					<!-- id="thingsToDoDropdown" role="button" data-bs-toggle="dropdown" -->
-						<a class="nav-link" href="{{route('things.to.do')}}"
+						{{-- <a class="nav-link" href="{{route('things.to.do')}}" --}}
+                        <a class="nav-link" href="#" id="thingsToDoDropdown" role="button" data-bs-toggle="dropdown"
 							aria-expanded="false">
 							<span>Things to do </span>
-							<!-- <i class="fa-solid fa-angle-down"></i> -->
+							 <i class="fa-solid fa-angle-down"></i>
 						</a>
-						<?php /***
-						 <div class="dropdown-menu nav-menu-dropdown" aria-labelledby="thingsToDoDropdown">
+
+                        <div class="dropdown-menu nav-menu-dropdown" aria-labelledby="thingsToDoDropdown">
 							<div class="row">
 								<!-- Left column: Links -->
 								<div class="col-lg-7">
 									<div class="nav-menu__left">
-										<p class="fw-bold p-large nav-menu__heading">Explore Events</p>
+										<p class="fw-bold p-large nav-menu__heading">Explore Things to do</p>
 										<div class="sub-menu-section">
-											<ul class="list-unstyled">
-												<li><a href="#" class="">
-														About Saudi
-														<i
-															class="fa-solid fa-angles-right primary-text flex-v-center"></i>
-													</a></li>
-												<li>
-												<li><a href="#" class="">
-														Geography of Saudi
-														<i
-															class="fa-solid fa-angles-right primary-text flex-v-center"></i>
-													</a></li>
-												<li><a href="#">History of Saudi <i
+                                            <ul class="list-unstyled">
+                                                @foreach(header_todos() as $todo)
+												<li><a href="{{ route('things-to-do.show', $todo->slug) }}">{{ $todo->translation?->name }} <i
 															class="fa-solid fa-angles-right primary-text flex-v-center"></i></a>
 												</li>
-												<li><a href="#">Saudi's climate <i
-															class="fa-solid fa-angles-right primary-text flex-v-center"></i></a>
-												</li>
-												<li><a href="#">Towns & cities in Saudi <i
-															class="fa-solid fa-angles-right primary-text flex-v-center"></i></a>
-												</li>
-												<li><a href="#">Riyadh <i
-															class="fa-solid fa-angles-right primary-text flex-v-center"></i></a>
-												</li>
-											</ul>
-											<ul class="list-unstyled">
-												<li><a href="#">Traditions in Saudi <i
-															class="fa-solid fa-angles-right primary-text flex-v-center"></i></a>
-												</li>
-												<li><a href="#">Sports in Saudi <i
-															class="fa-solid fa-angles-right primary-text flex-v-center"></i></a>
-												</li>
-												<li><a href="#">Thc local cuisine of Saudi <i
-															class="fa-solid fa-angles-right primary-text flex-v-center"></i></a>
-												</li>
-												<li><a href="#">Wildlife <i
-															class="fa-solid fa-angles-right primary-text flex-v-center"></i></a>
-												</li>
+                                                @endforeach
 											</ul>
 										</div>
 									</div>
@@ -146,14 +102,14 @@
 										<p class="text-muted small">Lorem ipsum dolor sit amet, consectetur adipiscing
 											elit, sed do eiusmod
 											tempor incididunt...</p>
-										<img src="frontend/assets//about-saudi.png" alt="Saudi" class="img-fluid about-image">
+										<img src="frontend/assets/about-saudi.png" alt="Saudi" class="img-fluid about-image">
 										<img src="frontend/assets/nav-dropdown-side.png" alt="Image"
 											class="nav-menu__right-side-img">
 									</div>
 								</div>
 							</div>
 						</div>
-						***/ ?>
+
 					</li>
 					<li class="nav-item dropdown">
 						<a class="nav-link" href="#" id="eventsDropdown" role="button" data-bs-toggle="dropdown"
@@ -168,44 +124,12 @@
 									<div class="nav-menu__left">
 										<p class="fw-bold p-large nav-menu__heading">Explore Events</p>
 										<div class="sub-menu-section">
-											<ul class="list-unstyled">
-												<li><a href="#" class="">
-														About Saudi
-														<i
-															class="fa-solid fa-angles-right primary-text flex-v-center"></i>
-													</a></li>
-												<li>
-												<li><a href="#" class="">
-														Geography of Saudi
-														<i
-															class="fa-solid fa-angles-right primary-text flex-v-center"></i>
-													</a></li>
-												<li><a href="#">History of Saudi <i
+                                            <ul class="list-unstyled">
+                                                @foreach(header_events() as $event)
+												<li><a href="{{ route('event.show', $event->slug) }}">{{ $event->translation?->title }} <i
 															class="fa-solid fa-angles-right primary-text flex-v-center"></i></a>
 												</li>
-												<li><a href="#">Saudi's climate <i
-															class="fa-solid fa-angles-right primary-text flex-v-center"></i></a>
-												</li>
-												<li><a href="#">Towns & cities in Saudi <i
-															class="fa-solid fa-angles-right primary-text flex-v-center"></i></a>
-												</li>
-												<li><a href="#">Riyadh <i
-															class="fa-solid fa-angles-right primary-text flex-v-center"></i></a>
-												</li>
-											</ul>
-											<ul class="list-unstyled">
-												<li><a href="#">Traditions in Saudi <i
-															class="fa-solid fa-angles-right primary-text flex-v-center"></i></a>
-												</li>
-												<li><a href="#">Sports in Saudi <i
-															class="fa-solid fa-angles-right primary-text flex-v-center"></i></a>
-												</li>
-												<li><a href="#">Thc local cuisine of Saudi <i
-															class="fa-solid fa-angles-right primary-text flex-v-center"></i></a>
-												</li>
-												<li><a href="#">Wildlife <i
-															class="fa-solid fa-angles-right primary-text flex-v-center"></i></a>
-												</li>
+                                                @endforeach
 											</ul>
 										</div>
 									</div>
