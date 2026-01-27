@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Frontend\Package;
 
 use App\Http\Controllers\Controller;
 use App\Models\City;
+use App\Models\Event;
+use App\Models\Hotel;
 use App\Models\Package;
+use App\Models\ThingToDo;
 use App\Services\Frontend\Package\PackageService;
 use Illuminate\Http\Request;
 use App\Support\PriceCalculator;
@@ -279,51 +282,61 @@ class PackageController extends Controller
      * PACKAGE DETAILS PAGE
      * =========================
      */
-    public function show(string $slug)
-    {
-        $language = current_lang();
 
-        $package = Package::with([
-            // ✅ Package main translation
-            'translation' => fn($q) =>
-            $q->where('language_code', $language),
 
-            // ✅ Infos translation
-            'infos.translation' => fn($q) =>
-            $q->where('language_code', $language),
+     public function show(string $slug)
+     {
+         $language = current_lang();
 
-            // ✅ Cities + City translation
-            'cities.city.translation' => fn($q) =>
-            $q->where('language_code', $language),
+         $package = Package::with([
+             'days.items.hotel.translation' => fn($q) => $q->where('language_code', $language),
+             'days.items.hotel.thumb',
 
-            // ✅ Price & media
-            'price',
-            'thumb',
-            'gallery',
+             'days.items.todo.translation' => fn($q) => $q->where('language_code', $language),
+             'days.items.todo.thumb',
 
-            // ✅ Days + City
-            'days.city.translation' => fn($q) =>
-            $q->where('language_code', $language),
+             'days.items.event.translation' => fn($q) => $q->where('language_code', $language),
+             'days.items.event.thumb',
+         ])->where('slug', $slug)->firstOrFail();
 
-            // ✅ Day items
-            'days.items.transport.translation' => fn($q) =>
-            $q->where('language_code', $language),
+         // ✅ LOAD SESSION FOR THIS PACKAGE ONLY
+         $sessionItems = session("package_day_items.{$package->id}", []);
 
-            'days.items.hotel.translation' => fn($q) =>
-            $q->where('language_code', $language),
-            'days.items.hotel.thumb',
+         // ✅ MASTER LIST (POPUP)
+         $allHotels = Hotel::with(['translation', 'thumb'])->get();
+         $allTodos  = ThingToDo::with(['translation', 'thumb'])->get();
+         $allEvents = Event::with(['translation', 'thumb'])->get();
 
-            'days.items.event.translation' => fn($q) =>
-            $q->where('language_code', $language),
-            'days.items.event.thumb',
+         return view('frontend.packages.show', compact(
+             'package',
+             'sessionItems',
+             'allHotels',
+             'allTodos',
+             'allEvents'
+         ));
+     }
 
-            'days.items.todo.translation' => fn($q) =>
-            $q->where('language_code', $language),
-            'days.items.todo.thumb',
-        ])
-            ->where('slug', $slug)
-            ->firstOrFail();
 
-        return view('frontend.packages.show', compact('package'));
-    }
+     public function saveToSession(Request $request)
+     {
+         $request->validate([
+             'day_id'    => 'required|integer',
+             'item_type' => 'required|in:hotel,todo,event',
+             'items'     => 'array'
+         ]);
+
+         $packageId = $request->package_id; // ✅ REQUIRED
+         $dayId     = $request->day_id;
+         $type      = $request->item_type;
+         $itemIds   = $request->items ?? [];
+
+         // ✅ SAVE SESSION WITH PACKAGE ID
+         $sessionKey = "package_day_items.$packageId.$dayId.$type";
+         session([$sessionKey => $itemIds]);
+
+         return response()->json([
+             'status' => true
+         ]);
+     }
+
 }

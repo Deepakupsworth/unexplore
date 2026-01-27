@@ -25,12 +25,13 @@ use App\Http\Controllers\Frontend\Blog\BlogController;
 use App\Http\Controllers\Frontend\Checkout\CheckoutController;
 use App\Http\Controllers\Admin\PackageController as AdminPackageController;
 use App\Http\Controllers\Admin\PackagePricingController;
+use App\Http\Controllers\Frontend\Address\AddressController;
 use App\Http\Controllers\Frontend\Package\PackageController as FrontendPackageController;
 use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Frontend\ToDoThings\ToDoThingsController;
 use App\Models\Event;
 use App\Http\Controllers\Frontend\Profile\ProfileController as FrontendProfileController;
-use App\Http\Controllers\Frontend\Destination\DestinationController AS FrontendDestinationController;
+use App\Http\Controllers\Frontend\Destination\DestinationController as FrontendDestinationController;
 
 
 
@@ -345,6 +346,11 @@ Route::get('/package-listing', [FrontendPackageController::class, 'list'])->name
 Route::get('/package-details', [FrontendPackageController::class, 'details'])->name('package.details');
 
 Route::get('/profile', [FrontendProfileController::class, 'index'])->name('profile.view');
+
+Route::post(
+    '/package/day-items/session',
+    [FrontendPackageController::class, 'saveToSession']
+)->name('package.day.items.session');
 
 // Route::get('/things-to-do-nature', function () {
 //     return view('frontend.things-to-do-nature');

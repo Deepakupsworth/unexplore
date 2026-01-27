@@ -55,8 +55,8 @@ class CategoryController extends Controller
         $request->validate([
             'type'                  => 'required|string|max:50', // 👈 NEW
             'translations.en.name'  => 'required|string|max:255',
-            'thumb_image'           => 'nullable|image|max:2048',
-            'thumb_icon'            => 'nullable|image|max:1024',
+            // 'thumb_image'           => 'nullable|image|max:2048',
+            // 'thumb_icon'            => 'nullable|image|max:1024',
         ]);
 
         /**
