@@ -22,6 +22,7 @@
             'contact-us',
             'packages',
             'things-to-do',
+            'account',
         ];
     @endphp
 

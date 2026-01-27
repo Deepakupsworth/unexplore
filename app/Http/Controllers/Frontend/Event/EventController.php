@@ -53,6 +53,7 @@ class EventController extends Controller
     /* AJAX filter */
     public function filter(Request $request)
     {
+      
         $lang = current_lang();
 
         $events = $this->applyFilters(
@@ -98,12 +99,14 @@ class EventController extends Controller
             $query->whereIn('city_id', $request->cities);
         }
 
-        /* ↕ Sort (ONLY if selected) */
         if ($request->filled('sort')) {
+
             match ($request->sort) {
-                'popular' => $query->orderBy('id', 'desc'),
-                'newest'  => $query->orderBy('created_at', 'desc'),
-                default   => null, // ❌ no fallback sorting
+                'popular'     => $query->orderBy('id', 'desc'),
+                'newest'      => $query->orderBy('created_at', 'desc'),
+                // 'price_low'   => $query->orderBy('price', 'asc'),
+                // 'price_high'  => $query->orderBy('price', 'desc'),
+                default       => $query->orderByDesc('id'),
             };
         }
 
