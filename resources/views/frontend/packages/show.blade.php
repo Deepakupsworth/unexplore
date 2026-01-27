@@ -377,7 +377,7 @@
                                                                                     <i class="fa-solid fa-pencil"></i>
                                                                                 </button>
 
-                                                                            </div>
+                                                                            </div>:
                                                                         </div>
 
                                                                         <div id="eventCollapse{{ $day->id }}"
