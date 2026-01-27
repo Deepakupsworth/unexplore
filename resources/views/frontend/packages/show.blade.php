@@ -134,246 +134,199 @@
                                         </div>
                                         <div class="pkg-details__day-plan-right">
                                             <div class="tab-content">
+
                                                 @foreach ($package->days as $day)
                                                     <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}"
-                                                        id="day{{ $day->day_number }}">
+                                                         id="day{{ $day->day_number }}">
+
+                                                        {{-- Day Header --}}
                                                         <div class="pkg-details__day-plan-header pkg-details__common-block">
-                                                            <!-- <div class="badge"> Macca</div> -->
                                                             <p class="badge primary-bg">Day {{ $day->day_number }}</p>
                                                             <p class="fw-600">
-                                                                {{ $day->city?->translations?->first()?->name }}</p>
+                                                                {{ $day->city?->translations?->first()?->name }}
+                                                            </p>
                                                         </div>
 
-                                                        <div
-                                                            class="pkg-details__day-plan-content pkg-details__common-block">
+                                                        <div class="pkg-details__day-plan-content pkg-details__common-block">
 
-                                                            @foreach ($day->items->where('item_type', 'hotel') as $item)
-                                                                {{-- @dd($item) --}}
-                                                                <div class="accordion accordion-flush" id="hotelAccordion">
-                                                                    <div
-                                                                        class="accordion-item border rounded mb-3 pkg-details__accordion-item">
-                                                                        <div class="accordion-header">
-                                                                            <div
-                                                                                class="d-flex justify-content-between align-items-center gap-3">
-                                                                                <div
-                                                                                    class="d-flex align-items-center gap-2">
-                                                                                    <div class="accordion-icon"
-                                                                                        data-bs-toggle="collapse"
-                                                                                        data-bs-target="#hotelCollapse"
-                                                                                        aria-expanded="true"
-                                                                                        aria-controls="hotelCollapse">
-                                                                                        <i
-                                                                                            class="fa-solid fa-chevron-down"></i>
-                                                                                    </div>
-                                                                                    <p class="p-small fw-600">HOTEL</p>
+                                                            {{-- ================= HOTEL ================= --}}
+                                                            @php
+                                                                $hotels = $day->items->where('item_type', 'hotel');
+                                                            @endphp
+
+                                                            @if($hotels->count())
+                                                            <div class="accordion accordion-flush mb-3" id="hotelAccordion{{ $day->id }}">
+                                                                <div class="accordion-item border rounded pkg-details__accordion-item">
+
+                                                                    <div class="accordion-header">
+                                                                        <div class="d-flex justify-content-between align-items-center">
+                                                                            <div class="d-flex align-items-center gap-2">
+                                                                                <div class="accordion-icon"
+                                                                                     data-bs-toggle="collapse"
+                                                                                     data-bs-target="#hotelCollapse{{ $day->id }}">
+                                                                                    <i class="fa-solid fa-chevron-down"></i>
                                                                                 </div>
-                                                                                {{-- <div class="vertical-divider"></div> --}}
-                                                                                {{-- <p class="p-small">2 Nights</p> --}}
-                                                                                {{-- <div class="vertical-divider"></div>
-                                                                                <p class="p-small">In Riyadh</p> --}}
-                                                                            </div>
-                                                                            <div
-                                                                                class="d-flex gap-2 pkg-details__accordion-actions">
-                                                                                <button class="btn btn-primary btn-sm">
-                                                                                    <i class="fa-solid fa-pencil"></i>
-                                                                                </button>
-                                                                            </div>
-                                                                        </div>
-
-                                                                        <div id="hotelCollapse"
-                                                                            class="accordion-collapse collapse show"
-                                                                            aria-labelledby="headingOne"
-                                                                            data-bs-parent="#hotelAccordion">
-                                                                            <div class="accordion-body">
-                                                                                @php
-
-                                                                                    $hotelImage = $item->hotel->thumb
-                                                                                        ? asset(
-                                                                                            'storage/' .
-                                                                                                $item->hotel->thumb
-                                                                                                    ->image_path,
-                                                                                        )
-                                                                                        : asset(
-                                                                                            'frontend/assets/hotel-placeholder.jpg',
-                                                                                        );
-                                                                                @endphp
-                                                                                {{-- @dd($item->hotel) --}}
-                                                                                <div
-                                                                                    class="d-flex align-items-center gap-3">
-                                                                                    <img src="{{ $hotelImage }}"
-                                                                                        alt="Transfer"
-                                                                                        class="img-fluid pkg-details__tr-ht-img">
-
-                                                                                    <div>
-                                                                                        <div
-                                                                                            class="pkg-details__star-ratings">
-
-                                                                                            @for ($i = 1; $i <= 5; $i++)
-                                                                                                <i
-                                                                                                    class="fa-solid fa-star {{ $i <= $item->hotel->star_rating ? 'active' : 'text-muted' }}"></i>
-                                                                                            @endfor
-
-                                                                                        </div>
-                                                                                        <p class="fw-600 my-1">
-                                                                                            {{ $item->hotel->translation->name }}</p>
-                                                                                        <p class="p-small text-light2">
-                                                                                            <i
-                                                                                                class="fa-solid fa-location-dot p-small"></i>
-                                                                                                        {{ $item->hotel->location}}
-
-                                                                                        </p>
-                                                                                    </div>
-                                                                                </div>
+                                                                                <p class="p-small fw-600">Hotel</p>
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                </div>
-                                                            @endforeach
 
-                                                            @foreach ($day->items->where('item_type', 'todo') as $item)
+                                                                    <div id="hotelCollapse{{ $day->id }}"
+                                                                         class="accordion-collapse collapse show"
+                                                                         data-bs-parent="#hotelAccordion{{ $day->id }}">
 
-                                                                <div class="accordion accordion-flush" id="todoAccordion">
-                                                                    <div
-                                                                        class="accordion-item border rounded mb-3 pkg-details__accordion-item">
-                                                                        <div class="accordion-header">
-                                                                            <div
-                                                                                class="d-flex justify-content-between align-items-center gap-3">
-                                                                                <div
-                                                                                    class="d-flex align-items-center gap-2">
-                                                                                    <div class="accordion-icon"
-                                                                                        data-bs-toggle="collapse"
-                                                                                        data-bs-target="#hotelCollapse"
-                                                                                        aria-expanded="true"
-                                                                                        aria-controls="hotelCollapse">
-                                                                                        <i
-                                                                                            class="fa-solid fa-chevron-down"></i>
-                                                                                    </div>
-                                                                                    <p class="p-small fw-600">ToDo Thing
-                                                                                    </p>
-                                                                                </div>
-                                                                                {{-- <div class="vertical-divider"></div> --}}
-                                                                                {{-- <p class="p-small">2 Nights</p> --}}
-                                                                                {{-- <div class="vertical-divider"></div>
-                                                                                <p class="p-small">In Riyadh</p> --}}
-                                                                            </div>
-                                                                            <div
-                                                                                class="d-flex gap-2 pkg-details__accordion-actions">
-                                                                                <button class="btn btn-primary btn-sm">
-                                                                                    <i class="fa-solid fa-pencil"></i>
-                                                                                </button>
-                                                                            </div>
-                                                                        </div>
+                                                                        <div class="accordion-body">
+                                                                            @foreach ($hotels as $item)
+                                                                                @php
+                                                                                    $hotelImage = $item->hotel->thumb
+                                                                                        ? asset('storage/' . $item->hotel->thumb->image_path)
+                                                                                        : asset('frontend/assets/hotel-placeholder.jpg');
+                                                                                @endphp
 
-                                                                        <div id="hotelCollapse"
-                                                                            class="accordion-collapse collapse show"
-                                                                            aria-labelledby="headingOne"
-                                                                            data-bs-parent="#todoAccordion">
-                                                                            <div class="accordion-body">
-
-
-                                                                                <div
-                                                                                    class="d-flex align-items-center gap-3">
-                                                                                    <img src="{{ asset('storage/' . $item->todo->thumb->image_path) }}"
-                                                                                        alt="Transfer"
-                                                                                        class="img-fluid pkg-details__tr-ht-img">
-
+                                                                                <div class="d-flex align-items-center gap-3 mb-3">
+                                                                                    <img src="{{ $hotelImage }}"
+                                                                                         class="img-fluid pkg-details__tr-ht-img">
 
                                                                                     <div>
+                                                                                        <div class="pkg-details__star-ratings">
+                                                                                            @for ($i = 1; $i <= 5; $i++)
+                                                                                                <i class="fa-solid fa-star {{ $i <= $item->hotel->star_rating ? 'active' : 'text-muted' }}"></i>
+                                                                                            @endfor
+                                                                                        </div>
 
+                                                                                        <p class="fw-600 my-1">
+                                                                                            {{ $item->hotel->translation->name }}
+                                                                                        </p>
 
+                                                                                        <p class="p-small text-light2">
+                                                                                            <i class="fa-solid fa-location-dot"></i>
+                                                                                            {{ $item->hotel->location }}
+                                                                                        </p>
+                                                                                    </div>
+                                                                                </div>
+                                                                            @endforeach
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                            @endif
+
+                                                            {{-- ================= TODO ================= --}}
+                                                            @php
+                                                                $todos = $day->items->where('item_type', 'todo');
+                                                            @endphp
+
+                                                            @if($todos->count())
+                                                            <div class="accordion accordion-flush mb-3" id="todoAccordion{{ $day->id }}">
+                                                                <div class="accordion-item border rounded pkg-details__accordion-item">
+
+                                                                    <div class="accordion-header">
+                                                                        <div class="d-flex justify-content-between align-items-center">
+                                                                            <div class="d-flex align-items-center gap-2">
+                                                                                <div class="accordion-icon"
+                                                                                     data-bs-toggle="collapse"
+                                                                                     data-bs-target="#todoCollapse{{ $day->id }}">
+                                                                                    <i class="fa-solid fa-chevron-down"></i>
+                                                                                </div>
+                                                                                <p class="p-small fw-600">ToDo Thing</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div id="todoCollapse{{ $day->id }}"
+                                                                         class="accordion-collapse collapse show"
+                                                                         data-bs-parent="#todoAccordion{{ $day->id }}">
+
+                                                                        <div class="accordion-body">
+                                                                            @foreach ($todos as $item)
+                                                                                <div class="d-flex align-items-center gap-3 mb-3">
+                                                                                    <img src="{{ asset('storage/' . $item->todo->thumb->image_path) }}"
+                                                                                         class="img-fluid pkg-details__tr-ht-img">
+
+                                                                                    <div>
                                                                                         <p class="fw-600 my-1">
                                                                                             {{ $item->todo->translation->name }}
                                                                                         </p>
+
                                                                                         <p class="p-small text-light2">
-                                                                                            <i
-                                                                                                class="fa-solid fa-location-dot p-small"></i>
-
-                                                                                                {{ \App\Helpers\TimeHelper::range($item->todo->opening_time, $item->todo->closing_time) }}
-
-
+                                                                                            <i class="fa-solid fa-clock"></i>
+                                                                                            {{ \App\Helpers\TimeHelper::range(
+                                                                                                $item->todo->opening_time,
+                                                                                                $item->todo->closing_time
+                                                                                            ) }}
                                                                                         </p>
                                                                                     </div>
                                                                                 </div>
+                                                                            @endforeach
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                            @endif
+
+                                                            {{-- ================= EVENT ================= --}}
+                                                            @php
+                                                                $events = $day->items->where('item_type', 'event');
+                                                            @endphp
+
+                                                            @if($events->count())
+                                                            <div class="accordion accordion-flush mb-3" id="eventAccordion{{ $day->id }}">
+                                                                <div class="accordion-item border rounded pkg-details__accordion-item">
+
+                                                                    <div class="accordion-header">
+                                                                        <div class="d-flex justify-content-between align-items-center">
+                                                                            <div class="d-flex align-items-center gap-2">
+                                                                                <div class="accordion-icon"
+                                                                                     data-bs-toggle="collapse"
+                                                                                     data-bs-target="#eventCollapse{{ $day->id }}">
+                                                                                    <i class="fa-solid fa-chevron-down"></i>
+                                                                                </div>
+                                                                                <p class="p-small fw-600">Events</p>
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                </div>
-                                                            @endforeach
 
+                                                                    <div id="eventCollapse{{ $day->id }}"
+                                                                         class="accordion-collapse collapse show"
+                                                                         data-bs-parent="#eventAccordion{{ $day->id }}">
 
-
-                                                            @foreach ($day->items->where('item_type', 'event') as $item)
-                                                                    {{-- @dd($item) --}}
-                                                                <div class="accordion accordion-flush" id="eventAccordion">
-                                                                    <div
-                                                                        class="accordion-item border rounded mb-3 pkg-details__accordion-item">
-                                                                        <div class="accordion-header">
-                                                                            <div
-                                                                                class="d-flex justify-content-between align-items-center gap-3">
-                                                                                <div
-                                                                                    class="d-flex align-items-center gap-2">
-                                                                                    <div class="accordion-icon"
-                                                                                        data-bs-toggle="collapse"
-                                                                                        data-bs-target="#eventlCollapse"
-                                                                                        aria-expanded="true"
-                                                                                        aria-controls="eventlCollapse">
-                                                                                        <i
-                                                                                            class="fa-solid fa-chevron-down"></i>
-                                                                                    </div>
-                                                                                    <p class="p-small fw-600">Events
-                                                                                    </p>
-                                                                                </div>
-                                                                                {{-- <div class="vertical-divider"></div> --}}
-                                                                                {{-- <p class="p-small">2 Nights</p> --}}
-                                                                                {{-- <div class="vertical-divider"></div>
-                                                                                <p class="p-small">In Riyadh</p> --}}
-                                                                            </div>
-                                                                            <div
-                                                                                class="d-flex gap-2 pkg-details__accordion-actions">
-                                                                                <button class="btn btn-primary btn-sm">
-                                                                                    <i class="fa-solid fa-pencil"></i>
-                                                                                </button>
-                                                                            </div>
-                                                                        </div>
-
-                                                                        <div id="eventCollapse"
-                                                                            class="accordion-collapse collapse show"
-                                                                            aria-labelledby="headingOne"
-                                                                            data-bs-parent="#eventAccordion">
-                                                                            <div class="accordion-body">
-
-
-                                                                                <div
-                                                                                    class="d-flex align-items-center gap-3">
+                                                                        <div class="accordion-body">
+                                                                            @foreach ($events as $item)
+                                                                                <div class="d-flex align-items-center gap-3 mb-3">
                                                                                     <img src="{{ asset('storage/' . $item->event->thumb->image_path) }}"
-                                                                                        alt="Transfer"
-                                                                                        class="img-fluid pkg-details__tr-ht-img">
+                                                                                         class="img-fluid pkg-details__tr-ht-img">
 
                                                                                     <div>
-
                                                                                         <p class="fw-600 my-1">
                                                                                             {{ $item->event->translation->title }}
                                                                                         </p>
+
                                                                                         <p class="p-small text-light2">
-                                                                                            <i
-                                                                                                class="fa-solid fa-location-dot p-small"></i>
-                                                                                                {{-- {{$item->event->day}} --}}
-                                                                                                {{\App\Helpers\DateHelper::format($item->event->start_date)}} <br/>
-                                                                                                {{ \App\Helpers\TimeHelper::range($item->event->opening_time, $item->event->closing_time) }}
+                                                                                            {{ \App\Helpers\DateHelper::format($item->event->start_date) }} <br>
+                                                                                            {{ \App\Helpers\TimeHelper::range(
+                                                                                                $item->event->opening_time,
+                                                                                                $item->event->closing_time
+                                                                                            ) }}
                                                                                         </p>
                                                                                     </div>
                                                                                 </div>
-                                                                            </div>
+                                                                            @endforeach
                                                                         </div>
                                                                     </div>
+
                                                                 </div>
-                                                            @endforeach
+                                                            </div>
+                                                            @endif
 
                                                         </div>
                                                     </div>
                                                 @endforeach
+
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
 

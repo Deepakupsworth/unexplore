@@ -390,7 +390,7 @@ Route::get('/packages', [FrontendPackageController::class, 'index'])
 Route::get('/packages/ajax', [FrontendPackageController::class, 'ajax'])
     ->name('packages.ajax');
 
-Route::get('/{slug}', [FrontendPackageController::class, 'show'])
+Route::get('packages/{slug}', [FrontendPackageController::class, 'show'])
     ->name('packages.show');
 //json file route
 Route::get('/saudi-packages', [DemoJsonController::class, 'index']);
