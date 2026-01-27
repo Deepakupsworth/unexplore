@@ -1,52 +1,56 @@
 <?php
-
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Coupon extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
-        'created_by',
-        'creator_type',
         'code',
+        'title',
         'discount_type',
         'discount_value',
-        'is_global',
-        'total_usage_limit',
-        'per_user_limit',
-        'used_count',
-        'start_date',
-        'end_date',
+        'max_discount',
+        'applies_to',
+        'starts_at',
+        'ends_at',
+        'usage_limit',
+        'usage_per_user',
         'is_active',
     ];
 
     protected $casts = [
-        'is_global' => 'boolean',
+        'starts_at' => 'date',
+        'ends_at'   => 'date',
         'is_active' => 'boolean',
-        'start_date' => 'datetime',
-        'end_date' => 'datetime',
     ];
 
-    /**
-     * Coupon applies to many packages
-     */
-    public function packages()
+    /* ================= Relations ================= */
+
+    public function categories()
     {
-        return $this->belongsToMany(
-            Package::class,
-            'coupon_packages'
-        )->withTimestamps();
+        return $this->belongsToMany(Category::class, 'coupon_categories');
     }
 
-    /**
-     * Coupon creator (admin user)
-     */
-    public function creator()
+    public function packages()
     {
-        return $this->belongsTo(User::class, 'created_by');
+        return $this->belongsToMany(Package::class, 'coupon_packages');
+    }
+
+    public function usages()
+    {
+        return $this->hasMany(CouponUsage::class);
+    }
+
+    /* ================= UI One-Line Text ================= */
+
+    public function getDiscountTextAttribute()
+    {
+        if ($this->discount_type === 'percentage') {
+            return "{$this->discount_value}% OFF" .
+                ($this->max_discount ? " up to ₹{$this->max_discount}" : '');
+        }
+
+        return "Flat ₹{$this->discount_value} OFF";
     }
 }

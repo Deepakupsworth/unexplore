@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\HotelController;
 use App\Http\Controllers\Admin\ImageController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\TransportController;
+use App\Http\Controllers\Admin\AdminCouponController;
 use App\Http\Controllers\Frontend\Event\EventController as FrontendEventController;
 
 use App\Http\Controllers\DemoJsonController;
@@ -25,13 +26,14 @@ use App\Http\Controllers\Frontend\Blog\BlogController;
 use App\Http\Controllers\Frontend\Checkout\CheckoutController;
 use App\Http\Controllers\Admin\PackageController as AdminPackageController;
 use App\Http\Controllers\Admin\PackagePricingController;
-use App\Http\Controllers\Frontend\Address\AddressController;
 use App\Http\Controllers\Frontend\Package\PackageController as FrontendPackageController;
 use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Frontend\ToDoThings\ToDoThingsController;
 use App\Models\Event;
 use App\Http\Controllers\Frontend\Profile\ProfileController as FrontendProfileController;
-use App\Http\Controllers\Frontend\Destination\DestinationController as FrontendDestinationController;
+use App\Http\Controllers\Frontend\Destination\DestinationController AS FrontendDestinationController;
+use App\Http\Controllers\Frontend\{TravellerController,AddressController,AccountController};
+
 
 
 
@@ -77,6 +79,39 @@ Route::middleware([RedirectIfAuthenticated::class])->group(function () {
 
 
 
+
+
+
+Route::middleware(['auth', 'user'])->group(function () {
+
+    Route::get('/account', [AccountController::class, 'index'])
+        ->name('account');
+
+    Route::get('/account/load', [AccountController::class, 'loadTab'])
+        ->name('account.load');
+
+        Route::post('/account/addresses', [AddressController::class, 'store']);
+        Route::get('/account/addresses/{id}', [AddressController::class, 'show']);
+        Route::put('/account/addresses/{id}', [AddressController::class, 'update']);
+        Route::delete('/account/addresses/{id}', [AddressController::class, 'destroy']);
+
+        // optional
+        Route::post('/account/addresses/{id}/restore', [AddressController::class, 'restore']);
+
+
+        //travellers
+        Route::get('/account/tab/travellers', [TravellerController::class, 'index']);
+
+    Route::post('/account/travellers', [TravellerController::class, 'store']);
+    Route::get('/account/travellers/{id}', [TravellerController::class, 'show']);
+    Route::post('/account/travellers/{id}', [TravellerController::class, 'update']);
+    Route::delete('/account/travellers/{id}', [TravellerController::class, 'destroy']);
+    Route::get('/travellers/{traveller}', [TravellerController::class, 'show'])
+        ->name('travellers.show');
+});
+
+
+
 Route::prefix('destinations')->group(function () {
     Route::get('/', [FrontendDestinationController::class, 'index'])
         ->name('destinations.index');
@@ -102,20 +137,17 @@ Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function ()
 Route::get('/events', [FrontendEventController::class, 'index'])->name('event.listing');
 Route::get('/events/{slug?}', [FrontendEventController::class, 'show'])->name('event.show');
 
-Route::get('/events/filter', [FrontendEventController::class, 'filter'])->name('events.filter');
+Route::get('/events-filter', [FrontendEventController::class, 'filter'])->name('events.filter');
 
 
-Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function () {
-    // Profile Routes
-    // Route::get('/admin/profile', fn() => view('backend.pages.profile'));
-    // Route::get('/admin/profile/edit', fn() => view('backend.pages.Profile_edit'));
-    // Route::get('/admin/profile', [AuthController::class, 'profile'])->name('admin.profile');
-    // Route::get('/admin/profile/edit', [AuthController::class, 'editProfile'])->name('admin.profile.edit');
-    // Route::post('/admin/profile/update', [AuthController::class, 'updateProfile'])->name('admin.profile.update');
-    // Route::get('/admin/category/view', [AuthController::class, 'updateProfile'])->name('admin.category.view');
+Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::prefix('admin')->group(function () {
 
+
+        Route::resource('coupon', AdminCouponController::class);
+        Route::post('coupon/{coupon}/status', [AdminCouponController::class, 'status'])
+            ->name('coupon.status');
         /*
         |--------------------------------------------------------------------------
         | Cities Routes
@@ -297,6 +329,16 @@ Route::middleware('auth')->prefix('user')->group(function () {
 
     Route::post('/profile', [FrontendProfileController::class, 'update'])
         ->name('user.profile.update');
+
+        Route::post('/profile/update', [FrontendProfileController::class, 'update'])
+    ->name('user.profile.update');
+
+Route::post('/profile/image/upload', [FrontendProfileController::class, 'uploadProfileImage'])
+    ->name('profile.image.upload');
+
+Route::post('/profile/image/delete', [FrontendProfileController::class, 'deleteProfileImage'])
+    ->name('profile.image.delete');
+
 });
 
 
@@ -307,24 +349,6 @@ Route::get('/basic_form', function () {
 Route::get('/basic_table', function () {
     return view('backend.pages.basic_table');
 })->name('table.view');
-
-// Route::get('/categories', function () {
-//     return view('backend.pages.categories');
-// })->name('categories.view');
-
-// Route::get('/admin/category', function () {
-//     return view('backend.category.viewcategory');
-// })->name('category.viewcategory');
-
-// Route::get('/admin/addcategory', function () {
-//     return view('backend.category.addcategory');
-// })->name('category.addcategory');
-
-
-// Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
-
-// Route::get('/categories/{id}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
-// Route::post('/categories/{id}/update', [CategoryController::class, 'update'])->name('categories.update');
 
 
 
