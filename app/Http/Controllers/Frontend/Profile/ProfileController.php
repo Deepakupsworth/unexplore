@@ -26,9 +26,9 @@ use Illuminate\Support\Facades\Storage;
                 'phone'  => 'required|string|max:20',
                 'profile_photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             ]);
-    
+
             $user = Auth::user();
-    
+
             /* =========================
                UPDATE BASIC INFO
             ========================== */
@@ -37,19 +37,19 @@ use Illuminate\Support\Facades\Storage;
                 'last_name'    => $request->last_name,
                 'phone' => $request->phone,
             ]);
-    
+
             /* =========================
                SAVE PROFILE PHOTO (THUMB)
                SAME STYLE AS HOTEL LOGIC
             ========================== */
             if ($request->hasFile('profile_photo')) {
-    
+
                 // Delete old thumb
                 if ($user->profileImage) {
                     Storage::disk('public')->delete($user->profileImage->image_path);
                     $user->profileImage()->delete();
                 }
-    
+
                 // Store new thumb using helper
                 storeImage(
                     $user,                          // imageable model
@@ -60,8 +60,8 @@ use Illuminate\Support\Facades\Storage;
                     true                            // is_primary
                 );
             }
-    
+
             return back()->with('success', 'Profile updated successfully.');
         }
-    
+
     }

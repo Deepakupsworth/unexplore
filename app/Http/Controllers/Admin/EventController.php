@@ -138,8 +138,8 @@ class EventController extends Controller
             'longitude' => 'nullable|numeric|between:-180,180',
 
             // MEDIA
-            'thumb'     => 'nullable|image|max:2048',
-            'gallery.*' => 'nullable|image|max:2048',
+            // 'thumb'     => 'nullable|image|max:2048',
+            // 'gallery.*' => 'nullable|image|max:2048',
 
             // META
             'video_url' => 'nullable|url',

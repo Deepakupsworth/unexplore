@@ -85,7 +85,7 @@ class ThingtodoController extends Controller
             'translations.en.name' => 'required|string|max:255',
             'city_id' => 'required|exists:cities,id',
             'category_id' => 'nullable|exists:categories,id',
-            'thumb_image' => 'nullable|image|max:2048',
+            // 'thumb_image' => 'nullable|image|max:2048',
         ]);
 
         $this->repo->createOrUpdate($request->all(), $request->id);
