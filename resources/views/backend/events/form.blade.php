@@ -38,14 +38,14 @@
             {{-- LEFT --}}
             <div class="xl:col-span-8 col-span-12 space-y-6">
                 @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul class="mb-0">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
+                    <div class="alert alert-danger">
+                        <ul class="mb-0">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
 
                 {{-- TRANSLATIONS --}}
                 <div class="card">
@@ -69,8 +69,8 @@
                                 <div class="space-y-4">
 
                                     {{-- TITLE --}}
-                                    <div>
-                                        <label>Title ({{ strtoupper($code) }}) *</label>
+                                    <div class="fromGroup">
+                                        <label class="form-label">Title ({{ strtoupper($code) }}) *</label>
                                         <input class="form-control @error("translations.$code.title") error-input @enderror"
                                             name="translations[{{ $code }}][title]"
                                             value="{{ old("translations.$code.title", $trans->title ?? '') }}"
@@ -82,7 +82,7 @@
 
                                     {{-- SUB TITLE --}}
                                     <div>
-                                        <label>Sub Title</label>
+                                        <label class="form-label">Sub Title</label>
                                         <input
                                             class="form-control @error("translations.$code.sub_title") error-input @enderror"
                                             name="translations[{{ $code }}][sub_title]"
@@ -94,7 +94,7 @@
 
                                     {{-- DESCRIPTION --}}
                                     <div>
-                                        <label>Description</label>
+                                        <label class="form-label">Description</label>
                                         <textarea class="form-control @error("translations.$code.description") error-input @enderror" rows="4"
                                             name="translations[{{ $code }}][description]">{{ old("translations.$code.description", $trans->description ?? '') }}</textarea>
                                         @error("translations.$code.description")
@@ -104,7 +104,7 @@
 
                                     {{-- SEO URL --}}
                                     <div>
-                                        <label>SEO URL *</label>
+                                        <label class="form-label">SEO URL *</label>
                                         <input class="form-control @error("translations.$code.url") error-input @enderror"
                                             name="translations[{{ $code }}][url]"
                                             value="{{ old("translations.$code.url", $trans->url ?? '') }}">
@@ -173,8 +173,8 @@
                 <div class="card">
                     <div class="card-body p-6 space-y-4">
 
-                        <div>
-                            <label>Thumbnail</label>
+                        <div class="fromGroup">
+                            <label class="form-label">Thumbnail</label>
                             <input type="file" class="form-control @error('thumb') error-input @enderror" name="thumb">
                             @error('thumb')
                                 <p class="error-text">{{ $message }}</p>
@@ -187,7 +187,7 @@
                         <x-admin.form.gallery :model="$model" deleteRoute="{{ route('gallery.delete', ':id') }}" />
 
                         <div>
-                            <label>Video URL</label>
+                            <label class="form-label">Video URL</label>
                             <input class="form-control @error('video_url') error-input @enderror" name="video_url"
                                 value="{{ old('video_url', $model->video_url) }}">
                             @error('video_url')
@@ -196,7 +196,7 @@
                         </div>
 
                         <div>
-                            <label>Ticket URL</label>
+                            <label class="form-label">Ticket URL</label>
                             <input class="form-control @error('url') error-input @enderror" name="url"
                                 value="{{ old('url', $model->url) }}">
                             @error('url')
@@ -205,7 +205,7 @@
                         </div>
 
                         <div>
-                            <label>Status</label>
+                            <label class="form-label">Status</label>
                             <select name="status" class="form-control @error('status') error-input @enderror">
                                 <option value="1" {{ old('status', $model->status) == 1 ? 'selected' : '' }}>
                                     Active</option>

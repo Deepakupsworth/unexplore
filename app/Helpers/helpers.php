@@ -1,47 +1,51 @@
 <?php
 
+use App\Enums\CategoryType;
+use App\Models\Category;
 use App\Models\Event;
 use App\Models\ThingToDo;
+use Illuminate\Support\Facades\Cache;
 
-if (!function_exists('header_events')) {
-    function header_events()
+if (!function_exists('header_event_categories')) {
+    function header_event_categories()
     {
         $language = current_lang();
-
+        // Cache::forget("header_event_categories_{$language}");
         return cache()->remember(
-            "header_events_{$language}",
+            "header_event_categories_{$language}",
             now()->addMinutes(30),
-            function () use ($language) {
-                return Event::with([
-                    'translation' => fn($q) =>
-                    $q->where('language_code', $language),
-                    'thumb'
-                ])
-                    ->where('status', 1)
+            function () {
+                return Category::withCount([
+                        'events' => fn ($q) =>
+                            $q->where('status', 1)
+                    ])
+                    ->with('translationData')
+                    ->ofType(CategoryType::EVENT->value)   // 👈 event category
+                    ->has('events')                 // 👈 empty avoid
                     ->latest()
-                    ->take(5)
+                    ->limit(5)
                     ->get();
             }
         );
     }
 }
 
+
 if (!function_exists('header_todos')) {
     function header_todos()
     {
         $language = current_lang();
+        // Cache::forget("header_todos_{$language}");
 
         return cache()->remember(
             "header_todos_{$language}",
             now()->addMinutes(30),
-            function () use ($language) {
-                return ThingToDo::with([
-                    'translation' => fn($q) =>
-                    $q->where('language_code', $language),
-                    'thumb'
-                ])
+            function () {
+                return Category::withCount('things')
+                    ->with('translationData')
+                    ->where('type', CategoryType::THING_TO_DO)
                     ->latest()
-                    ->take(5)
+                    ->limit(5)
                     ->get();
             }
         );

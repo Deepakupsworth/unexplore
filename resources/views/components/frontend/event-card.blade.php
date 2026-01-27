@@ -2,7 +2,7 @@
 
 <div class="upcoming-event__carousel-item swiper-slide">
     <div class="upcoming-event__carousel-item-img">
-        <img src="{{ asset('storage/' . $event->thumb->image_path) }}" alt="Event" class="img-fluid">
+        <img src="{{ asset('storage/' . $event?->thumb?->image_path) }}" alt="Event" class="img-fluid">
         <div class="upcoming-event__carousel-item-dates">
             <p>
                 @if ($event->start_date)

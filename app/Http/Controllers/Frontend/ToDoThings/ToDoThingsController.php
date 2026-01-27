@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend\ToDoThings;
 
+use App\Enums\CategoryType;
 use App\Http\Controllers\Controller;
 use App\Models\ThingToDo;
 use App\Models\Category;
@@ -130,6 +131,22 @@ class ToDoThingsController extends Controller
             ->where('slug', $slug)
             ->firstOrFail();
 
+        $things = ThingToDo::query()
+            ->with([
+                'translation' => fn($q) =>
+                $q->where('language_code', $language),
+                'thumb'
+            ])
+            ->withCount([
+                'packageDayItems as package_count' => function ($q) {
+                    $q->whereHas('packageDay.package', function ($q2) {
+                        $q2->where('status', 'active');
+                    });
+                }
+            ])
+            ->orderByDesc('package_count')
+            ->get();
+
         // ✅ Categories → Packages → Cities (from PACKAGE CATEGORY)
         $categories = Category::query()
             ->where('type', 'thing_to_do')
@@ -205,7 +222,7 @@ class ToDoThingsController extends Controller
             ->get();
 
 
-        return view('frontend.thingstodo.show', compact('thing', 'categories', 'events', 'packages'));
+        return view('frontend.thingstodo.things-to-do', compact('things','thing', 'categories', 'events', 'packages'));
     }
 
 
@@ -241,5 +258,44 @@ class ToDoThingsController extends Controller
             ->values();
 
         return view('frontend.thingstodo.things-to-do');
+    }
+
+    public function category()
+    {
+        $language = current_lang();
+
+        $categories = Category::withCount('things')
+            ->with('translationData')
+            ->where('type', CategoryType::THING_TO_DO)
+            ->latest()
+            ->take(5)
+            ->get();
+
+        $events = Event::with([
+            'translation',
+            'thumb',
+            'city.translation',
+            'category.translation',
+        ])
+            ->where('status', 1)
+            ->latest()
+            ->take(12)
+            ->get();
+
+        $packages = Package::query()
+            ->with([
+                'translation' => fn($q) =>
+                $q->where('language_code', $language),
+                'cities.city',
+                'price',
+                'days.items.transport',
+                'days.items.hotel'
+            ])
+            ->where('status', 'active')
+            ->latest()
+            ->take(12)
+            ->get();
+
+        return view('frontend.thingstodo.category', compact('categories', 'events', 'packages'));
     }
 }

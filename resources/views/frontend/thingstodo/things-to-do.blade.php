@@ -1,197 +1,272 @@
 @extends('frontend.layout')
 @section('content')
-@php
-    $jsonPath = app_path('demojson.json');
-
-    $jsonData = [];
-    if (file_exists($jsonPath)) {
-        $jsonData = json_decode(file_get_contents($jsonPath), true);
-    }
-
-    $Things_to_do = $jsonData['Things_to_do'] ?? [];
-    $section1 = $Things_to_do['section1'] ?? [];
-    $section2 = $Things_to_do['section2'] ?? [];
-    $section3 = $Things_to_do['section3'] ?? [];
-    $section4 = $Things_to_do['section4'] ?? [];
-    $section5 = $Things_to_do['section5'] ?? [];
-@endphp
-
-    <!-- 1. THINGS TO DO: BANNER  -->
-    <section class="hero-banner things-to-do__banner hero-banner-fullscreen">
-        <video class="hero-banner__video" autoplay muted loop playsinline poster="{{ asset('frontend/assets/hero-banner-bg.png') }}">
+    <!-- 1. THING TO DO NATURE: BANNER SECTION  -->
+    <section class="hero-banner hero-banner-fullscreen">
+        <video class="hero-banner__video" autoplay muted loop playsinline poster="../assets/hero-banner-bg.png">
             <source src="{{ asset('frontend/assets/videos/seekers-entry-video.mp4') }}" type="video/mp4">
             Your browser does not support the video tag.
         </video>
         <!-- <img class="hero-banner__image" src="../assets/hero-banner-bg.png" alt="Banner"> -->
         <div class="container">
             <div class="dest-details-banner__content">
-                <h1 class="text-white">Things to Do in <br> <strong>Saudi Arabia</strong></h1>
+                <h1 class="text-white"><strong>{{ $thing->translation->name }}</strong></h1>
                 <img src="{{ asset('frontend/assets/hero-banner-vision.png') }}" alt="Vision 2030"
                     class="dest-details-banner__vision d-none-sm d-none-md">
+                <div class="dest-details-banner__btn-group">
+                    <button class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#galleryModal">See
+                        Images</button>
+                </div>
             </div>
         </div>
     </section>
-
-    <!-- 2. THINGS TO DO: DISCOVER CATEGORIES -->
-    <section class="section-padding">
+    {{-- @dd($thing) --}}
+    <!-- 2. THING TO DO NATURE: DESCRIPTION -->
+    <section class="section-padding things-to-do-nature__details">
         <div class="container">
-            <div class="section__header">
-                <div class="section__header-content">
-                    <h2 class="section__heading">Discover Categories</h2>
-                    <p class="section__description">Embark on unforgettable journeys and explore the hidden gems across
-                        the heart of Saudi Arabia</p>
-                </div>
-                <div class="section__header-CTA">
-                    <a href="#" class="btn btn-primary rounded-pill">
-                        Grab it now
-                        <i class="fa-solid fa-angles-right"></i>
-                    </a>
-                </div>
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="section__header mb-5">
+                        <div class="section__header-content">
+                            <h2 class="section__heading"> {{ $thing->translation->name }}</h2>
+                            <p class="section__description">
+                                {!! $thing->translation->about !!}
+                            </p>
+
+                        </div>
+                    </div>
+                    {{-- <div class="section__header mb-5">
+            <div class="section__header-content">
+              <h4 class="section__heading primary-text">Nature and Beauty</h4>
+              <p class="section__description">Steeped in heritage yet bursting with modern flair, Jeddah effortlessly
+                blends its captivating past with a dynamic present. Explore the UNESCO-listed streets of Al Balad, where
+                centuries-old architecture tells stories of trade, tradition, and culture. Indulge in world-class
+                shopping experiences at the Mall of Arabia and the prestigious Red Sea Mall, home to international
+                brands and vibrant local boutiques.</p>
             </div>
-            <div class="row mt-4 gy-3">
-            @if(count($section1))
-            @foreach($section1 as $discover)
-                <div class="col-md-6 col-lg-3 col-xl-3">
-                    <div class="discover-category__item">
-                        <img src="{{ asset(ltrim($discover['image'], '/')) }}" alt="Category" class="img-fluid">
-                        <div class="badge carousel-badge"><i class="fa-solid fa-location-dot"></i> {{ $discover['city_name'] }}</div>
-                        <div class="discover-category__item-content">
-                            <p class="p-large discover-category__item-title">{{ $discover['title'] }} </p>
-                            <button class="btn btn-outline-light">Related packages ({{ $discover['package_count'] }}) <i
-                                    class="fa-solid fa-angles-right"></i></button>
+          </div> --}}
+
+                </div>
+                <div class="col-lg-4">
+                    <div class="event-map__info-card rounded-5 mb-3">
+                        <h6 class="fw-600 p-large mb-2">Information</h6>
+
+                        <div class="event-map__info-card-row flex-v-center rounded-4 gap-1 mb-3">
+                            <div class="icon primary-text flex-center"><i class="fa-solid fa-location-dot"></i></div>
+                            <div>
+                                <p class="text-light2 p-small">Location:</p>
+                                <p class="p-large fw-600">{{ $thing->location }}</p>
+                            </div>
+                        </div>
+
+                        <div class="event-map__info-card-row flex-v-center rounded-4 gap-1 mb-3">
+                            <div class="icon primary-text flex-center"><i class="fa-solid fa-cake-candles"></i></div>
+                            <div>
+                                <p class="text-light2 p-small">Ages:</p>
+                                <p class="p-large fw-600">All</p>
+                            </div>
+                        </div>
+
+                        <div class="event-map__info-card-row flex-v-center rounded-4 gap-1">
+                            <div class="icon primary-text flex-center"><i class="fa-regular fa-clock"></i></div>
+                            <div>
+                                <p class="text-light2 p-small">Time:</p>
+                                <p class="p-large fw-600">Sun:  {{ \App\Helpers\TimeHelper::range($thing->opening_time, $thing->closing_time) }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="event-map__card position-relative">
+
+                            @php
+                                    $lat = $thing->latitude;
+                                    $lng = $thing->longitude;
+                            @endphp
+                        <!-- use uploaded image path as src -->
+
+                        {{-- Google Map --}}
+                        <iframe
+                            width="100%"
+                            height="350"
+                            style="border:0;"
+                            loading="lazy"
+                            allowfullscreen
+                            referrerpolicy="no-referrer-when-downgrade"
+                            src="https://www.google.com/maps?q={{ $lat }},{{ $lng }}&hl=en&z=14&output=embed">
+                        </iframe>
+
+                        {{-- Get Directions --}}
+                        <a
+                            href="https://www.google.com/maps/dir/?api=1&destination={{ $lat }},{{ $lng }}"
+                            target="_blank"
+                            class="event-map__card-btn btn btn-primary rounded-pill py-2 px-3"
+                        >
+                            Get Directions
+                        </a>
+                    </div>
+                    <div class="event-map__info-card">
+                        <p class="fw-500">Share</p>
+                        <div class="d-flex gap-3 mt-2">
+                            <a href="#" class="social-icon">
+                                <img src="{{ asset('frontend/assets/icons/instagram.svg') }}" alt="">
+                            </a>
+                            <a href="#" class="social-icon">
+                                <img src="{{ asset('frontend/assets/icons/facebook.svg') }}" alt="">
+                            </a>
+                            <a href="#" class="social-icon">
+                                <img src="{{ asset('frontend/assets/icons/x.svg') }}" alt="">
+                            </a>
+                            <a href="#" class="social-icon">
+                                <img src="{{ asset('frontend/assets/icons/share.svg') }}" alt="">
+                            </a>
                         </div>
                     </div>
                 </div>
-                @endforeach
-                @endif
-
             </div>
         </div>
     </section>
 
-    <!-- 3. THINGS TO DO: STORIES & INSIGHT -->
-    <section>
-        <div class="stories-insight__head">
-            <div class="container">
-                <div class="section__header">
+    <!-- 3. THING TO DO NATURE: CONTENT -->
+    <section class="py-3 things-to-do-nature__about">
+        <div class="container">
+            <div class="things-to-do-nature__about-content">
+                <div class="row gy-3">
+                    <div class="col-lg-5">
+                        <div class="things-to-do-nature__about-img-wrapper">
+                            <img class="img-fluid things-to-do-nature__about-img" src="../assets/thing-to-do.png"
+                                alt="">
+                            <img class="things-to-do-nature__about-img-strip" src="../assets/vertical-strip.png"
+                                alt="">
+                        </div>
+                    </div>
+                    <div class="col-lg-7">
+                        <div class="things-to-do-nature__about-text">
+                            <div class="section__header">
+                                <div class="section__header-content gap-3">
+                                    <h3 class="section__heading">About Al-Didhan Reserve</h3>
+                                    <ul>
+                                        <li>Steeped in heritage yet bursting with modern flair, Jeddah effortlessly blends
+                                            its captivating
+                                            past with a dynamic present. </li>
+                                        <li>Breathe in the refreshing sea breeze along the iconic Jeddah Corniche, or dive
+                                            beneath the waves
+                                            into crystal-clear waters to explore some of the Red Sea’s most vibrant coral
+                                            reefs. </li>
+                                        <li>Explore the UNESCO-listed streets of Al Balad, where centuries-old architecture
+                                            tells stories of
+                                            trade, tradition, and culture.</li>
+                                        <li>Indulge in world-class shopping experiences at the Mall of Arabia and the
+                                            prestigious Red Sea
+                                            Mall, home to international brands and vibrant local boutiques.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. THING TO DO NATURE: CONTENT -->
+    <section class="py-3 things-to-do-nature__about">
+        <div class="container">
+            <div class="things-to-do-nature__about-content">
+                <div class="row">
+                    <div class="col-lg-7">
+                        <div class="things-to-do-nature__about-text">
+                            <div class="section__header">
+                                <div class="section__header-content gap-3">
+                                    <h3 class="section__heading">About Al-Didhan Reserve</h3>
+                                    <ul>
+                                        <li>Steeped in heritage yet bursting with modern flair, Jeddah effortlessly blends
+                                            its captivating
+                                            past with a dynamic present. </li>
+                                        <li>Breathe in the refreshing sea breeze along the iconic Jeddah Corniche, or dive
+                                            beneath the waves
+                                            into crystal-clear waters to explore some of the Red Sea’s most vibrant coral
+                                            reefs. </li>
+                                        <li>Explore the UNESCO-listed streets of Al Balad, where centuries-old architecture
+                                            tells stories of
+                                            trade, tradition, and culture.</li>
+                                        <li>Indulge in world-class shopping experiences at the Mall of Arabia and the
+                                            prestigious Red Sea
+                                            Mall, home to international brands and vibrant local boutiques.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="things-to-do-nature__about-img-wrapper">
+                            <img class="img-fluid things-to-do-nature__about-img" src="../assets/thing-to-do.png"
+                                alt="">
+                            <img class="things-to-do-nature__about-img-strip right" src="../assets/vertical-strip.png"
+                                alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. THING TO DO NATURE: NATURE ADVENTURE -->
+    <section class="section-padding-md">
+        <div class="container">
+            <div class="things-to-do-nature__adventure-wrapper">
+                <div class="section__header flex-column align-items-start gap-4">
                     <div class="section__header-content">
-                        <h2 class="section__heading">Stories and Insights</h2>
-                        <p class="section__description">Embark on unforgettable journeys and explore the hidden gems
+                        <h2 class="section__heading text-white">Take on your own nature adventure</h2>
+                        <p class="section__description text-white">Embark on unforgettable journeys and explore the hidden
+                            gems
                             across the heart of Saudi Arabia</p>
                     </div>
                     <div class="section__header-CTA">
-                        <a href="#" class="btn btn-primary rounded-pill">
-                            View All
+                        <a href="#" class="btn btn-primary rounded-pill btn-lg">
+                            Plan your adventure
                             <i class="fa-solid fa-angles-right"></i>
                         </a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="stories-insight__content">
-            <div class="stories-insight__content-bg"></div>
-            <div class="container">
-                <div class="stories-insight__carousel swiper">
-                    <div class="swiper-wrapper">
-                    @if(count($section2))
-                    @foreach($section2 as $stories)
-                    <div class="stories-insight__carousel-item swiper-slide">
-                            <a href=""> <img src="{{ asset(ltrim($stories['city_image'], '/')) }}" alt="Story Image" class="img-fluid"> </a>
-                            <div class="stories-insight__carousel-item-content">
-                                <p class="text-light2">{{ $stories['sub_title'] }} </p>
-                                <p class="p-large text-black stories-insight__carousel-title"> {{ $stories['title'] }}</p>
-                            </div>
-                        </div>
-                        @endforeach
-                        @endif
-
-                    </div>
-
-                    <div class="stories-insight__carousel-navigation custom__carousel-navigation">
-                        <div class="swiper-button-prev stories-insight__carousel-navigation-prev">
-                            <i class="fa-solid fa-arrow-left"></i>
-                        </div>
-                        <div class="swiper-button-next stories-insight__carousel-navigation-next">
-                            <i class="fa-solid fa-arrow-right"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </section>
 
-    <!-- 4. THINGS TO DO: ATTRACTIONS MUST VISIT -->
-    <section>
+    <!-- 6. THING TO DO NATURE: SIMILAR TO DO THINGS -->
+    <section class="dis-adventure section-padding-md">
         <div class="container">
             <div class="section__header">
                 <div class="section__header-content">
-                    <h2 class="section__heading">Attractions Must Visit</h2>
+                    <h2 class="section__heading">To Do Things</h2>
                     <p class="section__description">Embark on unforgettable journeys and explore the hidden gems across
-                        the heart of Saudi Arabia</p>
+                        the heart
+                        of Saudi Arabia</p>
                 </div>
                 <div class="section__header-CTA">
                     <a href="#" class="btn btn-primary rounded-pill">
-                        Grab it now
+                        View All
                         <i class="fa-solid fa-angles-right"></i>
                     </a>
                 </div>
             </div>
-            <div class="stories-insight__content attractions-must-visit__content mt-4">
-                <div class="stories-insight__carousel swiper">
-                    <div class="swiper-wrapper">
-                    @if(count($section3))
-                    @foreach($section3 as $visit)
-                        <div class="stories-insight__carousel-item swiper-slide">
-                            <img src="{{ asset(ltrim($visit['city_image'], '/')) }}" alt="Story Image" class="img-fluid">
-                            <div class="stories-insight__carousel-item-content">
-                                <p class="text-light2">{{ $visit['sub_title'] }} </p>
-                                <p class="p-large text-black stories-insight__carousel-title">{{ $visit['title'] }}  </p>
-                            </div>
-                            <div class="attractions-must-visit__city">{{ $visit['city'] }} </div>
-                        </div>
-                        @endforeach
-                        @endif
-                        <div class="stories-insight__carousel-item swiper-slide">
-                            <img src="{{ asset('frontend/assets/things_to_do/edge_of_the_world_in_riyadh.jpg') }}" alt="Story Image" class="img-fluid">
-                            <div class="stories-insight__carousel-item-content">
-                                <p class="text-light2">Culture & History, Art Gallery</p>
-                                <p class="p-large text-black stories-insight__carousel-title">5 Must-Do Experiences in
-                                    Riyadh</p>
-                            </div>
-                            <div class="attractions-must-visit__city">Riyadh</div>
-                        </div>
-                        <div class="stories-insight__carousel-item swiper-slide">
-                            <img src="{{ asset('frontend/assets/things_to_do/hegra_(madain-saleh)_alula.jpg') }}" alt="Story Image" class="img-fluid">
-                            <div class="stories-insight__carousel-item-content">
-                                <p class="text-light2">Culture & History, Art Gallery</p>
-                                <p class="p-large text-black stories-insight__carousel-title">5 Must-Do Experiences in
-                                    Alula</p>
-                            </div>
-                            <div class="attractions-must-visit__city">Alula</div>
-                        </div>
-                    </div>
-                    <div class="stories-insight__carousel-navigation custom__carousel-navigation">
-                        <div class="swiper-button-prev stories-insight__carousel-navigation-prev">
-                            <i class="fa-solid fa-arrow-left"></i>
-                        </div>
-                        <div class="swiper-button-next stories-insight__carousel-navigation-next">
-                            <i class="fa-solid fa-arrow-right"></i>
-                        </div>
-                    </div>
+            <div class="dis-adventure__carousel swiper">
+                <div class="swiper-wrapper">
+
+                    @foreach ($things as $thing)
+                    <x-frontend.thing-card :thing="$thing" />
+                    @endforeach
                 </div>
+                <div class="custom__carousel-pagination"></div>
             </div>
         </div>
     </section>
 
-    <!-- 5. UPCOMING EVENT -->
-    <section class="upcoming-event section-padding pt-0">
+    <!-- 7. THING TO DO NATURE: RELATED PACKAGES -->
+    <section class="upcoming-event section-padding-md">
         <div class="container">
             <div class="section__header">
                 <div class="section__header-content">
-                    <h2 class="section__heading">Upcoming Events</h2>
+                    <h2 class="section__heading">Related Packages</h2>
                     <p class="section__description">Embark on unforgettable journeys and explore the hidden gems across
-                        the heart
-                        of Saudi Arabia</p>
+                        the heart of Saudi Arabia</p>
                 </div>
                 <div class="section__header-CTA">
                     <a href="#" class="btn btn-primary rounded-pill">
@@ -202,103 +277,120 @@
             </div>
             <div class="upcoming-event__carousel swiper">
                 <div class="upcoming-event__carousel-wrapper swiper-wrapper">
-                @if(count($section4))
-                @foreach($section4 as $upcomingeevent)
-                    <div class="upcoming-event__carousel-item swiper-slide">
-                        <div class="upcoming-event__carousel-item-img">
-                            <img src="{{ asset(ltrim($upcomingeevent['image'], '/')) }}" alt="Event" class="img-fluid">
-                            <div class="upcoming-event__carousel-item-dates">
-                                <p>{{ $upcomingeevent['start_date'] }}</p>
-                                <div class="vertical-divider"></div>
-                                <p>{{ $upcomingeevent['end_date'] }}</p>
-                            </div>
-                        </div>
-                        <div class="upcoming-event__carousel-item-info">
-                            <button class="btn btn-primary rounded-pill btn-sm gap-1"><i
-                                    class="fa-solid fa-location-dot"></i> {{ $upcomingeevent['location'] }}
-                                | {{ $upcomingeevent['category'] }}</button>
-                            <div class="d-flex justify-content-between mt-3">
-                                <h5 class="fw-bold">{{ $upcomingeevent['title'] }}</h5>
-                                <a href="#" class="p-large">
-                                    <i class="fa-solid fa-arrow-right-long primary-text"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-                @endif
-
-                </div>
-                <div class="custom__carousel-pagination"></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 6. EXCLUSIVE OFFERS -->
-    <section class="exclusive-offers section-padding pt-0">
-        <div class="container">
-            <div class="section__header">
-                <div class="section__header-content">
-                    <h2 class="section__heading">Discover exclusive offers</h2>
-                    <p class="section__description">Embark on unforgettable journeys and explore the hidden gems across
-                        the heart
-                        of Saudi Arabia</p>
-                </div>
-                <div class="section__header-CTA">
-                    <a href="#" class="btn btn-primary rounded-pill">
-                        View All
-                        <i class="fa-solid fa-angles-right"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="exclusive-offers__carousel swiper">
-                <div class="swiper-wrapper">
-                @if(count($section5))
-                @foreach($section5 as $offers)
+                    @foreach ($packages as $package)
                     <div class="exclusive-offers__carousel-item swiper-slide">
-                        <div class="exclusive-offers__carousel-item-img">
-                            <img src="{{ asset(ltrim($offers['image'], '/')) }}" alt="Exclusive Offer" class="img-fluid">
-                            <div class="badge carousel-badge"><i class="fa-solid fa-location-dot"></i>  {{ $offers['city_name'] }} </div>
-                        </div>
-                        <div class="exclusive-offers__carousel-item-info">
-                            <div class="d-flex justify-content-between mb-1">
-                                <h6 class="fw-bold"> {{ $offers['title'] }} </h6>
-                                <span class="badge carousel-badge-outline rounded-pill">{{ $offers['package_days'] }}</span>
-                            </div>
-                            <p class="text-muted small mb-2">{{ $offers['city_days'] }}</p>
-                            <hr>
-                            <ul class="exclusive-offers__carousel-features-list">
-                            @foreach($offers['details_points'] as $feature)
-                                <li>{{ $feature }}</li>
-                            @endforeach
-                            </ul>
-
-                            <!-- Price Box -->
-                            <div class="exclusive-offers__carousel-price-box">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <p class="text-muted">Only for now</p>
-                                    <div class="d-flex align-items-center gap-1 text-muted">
-                                        <img src="{{ asset('frontend/assets/icons/riyal.svg') }}" alt="Riyal">
-                                        <p class="fw-bold text-dark">{{ $offers['price_per_person'] }}</p> /Person
-                                    </div>
-                                </div>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="d-flex align-items-center gap-1 text-muted">
-                                        <img class="opacity-50" src="{{ asset('frontend/assets/icons/riyal.svg') }}" alt="Riyal">
-                                        {{ $offers['offer_price'] }}
-                                    </div>
-                                    <p class="text-muted small">Total Price: <img class="opacity-50"
-                                            src="{{ asset('frontend/assets/icons/riyal.svg') }}" alt="Riyal"> {{ $offers['total_price'] }}</p>
-                                </div>
-                            </div>
-                        </div>
+                        <x-frontend.package-card :package="$package" />
                     </div>
                     @endforeach
-                    @endif
                 </div>
                 <div class="custom__carousel-pagination"></div>
             </div>
         </div>
     </section>
 
-   @endsection
+    <div class="modal fade gallery-modal" id="galleryModal" tabindex="-1" data-bs-backdrop="static"
+        data-bs-keyboard="false" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content bg-transparent border-0">
+
+                <!-- Close Button -->
+                <button type="button" class="btn-close gallery-close" data-bs-dismiss="modal"></button>
+
+                <div class="pkg-details__banner gallery-modal-parent-carousel-wrapper swiper m-0 p-0">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <img src="{{ asset('frontend/assets/package-details-banner.png')}}" alt="Package Details Banner 1"
+                                class="img-fluid w-100">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src=".{{ asset('frontend/assets/package-banner.png')}}" alt="Package Details Banner 1"
+                                class="img-fluid w-100">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="{{ asset('frontend/assets/about-saudi.png')}}" alt="Package Details Banner 1" class="img-fluid w-100">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="{{ asset('frontend/assets/adventure1.png')}}" alt="Package Details Banner 1" class="img-fluid w-100">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="{{ asset('frontend/assets/destination-banner-item.png')}}" alt="Package Details Banner 1"
+                                class="img-fluid w-100">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="{{ asset('frontend/assets/exclusive-offer.png')}}" alt="Package Details Banner 1"
+                                class="img-fluid w-100">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="{{ asset('frontend/assets/explore-destination1.png')}}" alt="Package Details Banner 1"
+                                class="img-fluid w-100">
+                        </div>
+                    </div>
+                    <div class="gallery-swiper-pagination"></div>
+                </div>
+                <div class="position-relative mt-4 gallery-modal-carousel-container">
+                    <div class="gallery-modal-carousel-wrapper swiper">
+                        <div class="swiper-wrapper">
+                            <div class="pkg-details__banner-carousel-item swiper-slide">
+                                <img src="{{ asset('frontend/assets/package-details-banner.png')}}" alt="Package Details Banner 1"
+                                    class="img-fluid w-100">
+                            </div>
+                            <div class="pkg-details__banner-carousel-item swiper-slide">
+                                <img src="{{ asset('frontend/assets/package-banner.png')}}" alt="Package Details Banner 2"
+                                    class="img-fluid w-100">
+                            </div>
+                            <div class="pkg-details__banner-carousel-item swiper-slide">
+                                <img src="{{ asset('frontend/assets/about-saudi.png')}}" alt="Package Details Banner 3"
+                                    class="img-fluid w-100">
+                            </div>
+                            <div class="pkg-details__banner-carousel-item swiper-slide">
+                                <img src=".{{ asset('frontend/assets/adventure1.png')}}" alt="Package Details Banner 3"
+                                    class="img-fluid w-100">
+                            </div>
+                            <div class="pkg-details__banner-carousel-item swiper-slide">
+                                <img src="{{ asset('frontend/assets/destination-banner-item.png')}}" alt="Package Details Banner 3"
+                                    class="img-fluid w-100">
+                            </div>
+                            <div class="pkg-details__banner-carousel-item swiper-slide">
+                                <img src="{{ asset('frontend/assets/exclusive-offer.png')}}" alt="Package Details Banner 3"
+                                    class="img-fluid w-100">
+                            </div>
+                            <div class="pkg-details__banner-carousel-item swiper-slide">
+                                <img src="{{ asset('frontend/assets/explore-destination1.png')}}" alt="Package Details Banner 3"
+                                    class="img-fluid w-100">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-button-next gallery-carousel__next">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                    <div class="swiper-button-prev gallery-carousel__prev">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </div>
+                </div>
+
+                <!-- Main Image -->
+                <!-- <div class="gallery-main">
+              <img id="galleryMainImg" src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200"
+                class="img-fluid">
+            </div> -->
+
+                <!-- Thumbnails + Arrows -->
+                <!-- <div class="gallery-thumbs-wrapper">
+
+              <button class="gallery-arrow" id="prevImg">&#10094;</button>
+
+              <div class="gallery-thumbs">
+                <img class="thumb active" src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=300">
+                <img class="thumb" src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=300">
+                <img class="thumb" src="https://images.unsplash.com/photo-1519681393784-d120267933ba?w=300">
+                <img class="thumb" src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=300">
+                <img class="thumb" src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=300">
+              </div>
+
+              <button class="gallery-arrow" id="nextImg">&#10095;</button>
+            </div> -->
+
+            </div>
+        </div>
+    </div>
+@endsection

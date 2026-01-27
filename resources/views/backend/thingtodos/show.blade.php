@@ -62,6 +62,11 @@
                             <p class="font-medium">{{ $thing->longitude ?? '—' }}</p>
                         </div>
 
+                        <div>
+                            <p class="text-xs text-slate-500">Location</p>
+                            <p class="font-medium">{{ $thing->location ?? '—' }}</p>
+                        </div>
+
                         <div class="col-span-2">
                             <p class="text-xs text-slate-500">Video URL</p>
                             @if ($thing->video_url)

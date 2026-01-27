@@ -1,5 +1,6 @@
 @extends('frontend.layout')
 @section('content')
+
     <!-- 1. THINGS TO DO: BANNER  -->
     <section class="hero-banner things-to-do__banner hero-banner-fullscreen">
         <video class="hero-banner__video" autoplay muted loop playsinline poster="../assets/hero-banner-bg.png">
@@ -35,23 +36,21 @@
             <div class="row mt-4 gy-3">
                 @foreach ($categories as $cate)
                     <div class="col-md-6 col-lg-3 col-xl-3">
-                        {{-- @dd($cate) --}}
                         <div class="discover-category__item">
                             <img src="{{asset('storage/' . $cate->thumb_image)}}" alt="Category"
                                 class="img-fluid">
-                            <div class="badge carousel-badge">
+                            {{-- <div class="badge carousel-badge">
                                 <i class="fa-solid fa-location-dot"></i> Abha
-                            </div>
+                            </div> --}}
+                            <div></div>
                             <div class="discover-category__item-content">
                                 <p class="p-large discover-category__item-title">{{ $cate->translation->name }}</p>
-                                <button class="btn btn-outline-light">Related packages ({{ $cate->package_count }}) <i
-                                        class="fa-solid fa-angles-right"></i></button>
+                                <a href="{{route('things.to.do')}}" class="btn btn-outline-light rounded">Related To Do Things ({{ $cate->things_count }}) <i
+                                        class="fa-solid fa-angles-right"></i></a>
                             </div>
                         </div>
                     </div>
                 @endforeach
-
-
             </div>
         </div>
     </section>

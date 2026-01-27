@@ -387,7 +387,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="user-profile__box p-3 bg-transparent flex-shrink-0">
+                            <div class="user-profile__box p-3 bg-transparent shrink-0">
                                 <div class="section__header align-items-center gap-4 mb-3">
                                     <div class="section__header-content">
                                         <p class="section__heading p-large fw-600">

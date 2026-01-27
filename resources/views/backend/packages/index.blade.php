@@ -30,8 +30,11 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
 
                     {{-- 🔍 Search --}}
-                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Search title..."
+                    <div class="fromGroup">
+                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Search title..."
                         class="form-control">
+                    </div>
+
 
                     {{-- 📦 Package Type --}}
                     <select name="package_type" class="form-control">
@@ -97,7 +100,7 @@
                             </td>
 
                             {{-- Category --}}
-                            <td class="table-td3">
+                            <td class="table-td">
                                 {{ $package->category?->translation?->name ?? '—' }}
                             </td>
 

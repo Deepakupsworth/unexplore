@@ -109,36 +109,38 @@
                 @endforeach
 
                 {{-- BASIC INFO --}}
-                <div class="bg-slate-50 border rounded-xl p-5 mb-6">
+                <div class="card rounded-xl p-5 mb-6">
                     <h5 class="font-semibold text-slate-700 mb-4">Basic Information</h5>
+                    <div class="card-body">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="form-label">City *</label>
+                                <select name="city_id" class="form-control" required>
+                                    <option value="">Select City</option>
+                                    @foreach ($cities as $id => $name)
+                                        <option value="{{ $id }}"
+                                            {{ old('city_id', $model->city_id) == $id ? 'selected' : '' }}>
+                                            {{ $name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
 
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="form-label">City *</label>
-                            <select name="city_id" class="form-control" required>
-                                <option value="">Select City</option>
-                                @foreach ($cities as $id => $name)
-                                    <option value="{{ $id }}"
-                                        {{ old('city_id', $model->city_id) == $id ? 'selected' : '' }}>
-                                        {{ $name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div>
-                            <label class="form-label">Category *</label>
-                            <select name="category_id" class="form-control" required>
-                                <option value="">Select Category</option>
-                                @foreach ($categories as $category)
-                                    <option value="{{ $category->id }}"
-                                        {{ old('category_id', $model->category_id) == $category->id ? 'selected' : '' }}>
-                                        {{ $category->translation?->name }}
-                                    </option>
-                                @endforeach
-                            </select>
+                            <div>
+                                <label class="form-label">Category *</label>
+                                <select name="category_id" class="form-control" required>
+                                    <option value="">Select Category</option>
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category->id }}"
+                                            {{ old('category_id', $model->category_id) == $category->id ? 'selected' : '' }}>
+                                            {{ $category->translation?->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                     </div>
+
                 </div>
 
                 {{-- LOCATION --}}
@@ -156,6 +158,12 @@
                             <label class="form-label">Longitude</label>
                             <input type="text" name="longitude" value="{{ old('longitude', $model->longitude) }}"
                                 class="form-control" placeholder="85.1376">
+                        </div>
+
+                        <div>
+                            <label class="form-label">Address</label>
+                            <input type="text" name="location" value="{{ old('location', $model->location) }}"
+                                class="form-control" placeholder="At-Turaif, Riyadh">
                         </div>
                     </div>
                 </div>

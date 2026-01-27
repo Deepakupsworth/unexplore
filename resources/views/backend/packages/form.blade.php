@@ -45,207 +45,207 @@
         }
     </style>
 
-    <form method="POST" action="{{ route('admin.packages.store') }}" enctype="multipart/form-data">
-        @csrf
+    <div class="card">
+        <div class="card-body p-6 space-y-10">
+            <form method="POST" action="{{ route('admin.packages.store') }}" enctype="multipart/form-data">
+                @csrf
+                    {{-- ================================================= --}}
+                    {{-- BASIC INFO --}}
+                    {{-- ================================================= --}}
+                    <h3 class="text-lg font-semibold">Basic Information</h3>
 
-        <div class="bg-white rounded-xl shadow p-6 space-y-10">
-            {{-- ================================================= --}}
-            {{-- BASIC INFO --}}
-            {{-- ================================================= --}}
-            <h3 class="text-lg font-semibold">Basic Information</h3>
+                    <div class="grid grid-cols-2 gap-4 mb-4">
 
-            <div class="grid grid-cols-2 gap-4">
+                        <div class="fromGroup">
+                            <label class="form-label">Category *</label>
+                            <select name="category_id" class="form-control" required>
+                                <option value="">Select Category</option>
+                                @foreach ($categories as $cat)
+                                    <option value="{{ $cat->id }}">{{ $cat->translation->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
 
-                <div>
-                    <label class="form-label">Category *</label>
-                    <select name="category_id" class="form-control" required>
-                        <option value="">Select Category</option>
-                        @foreach ($categories as $cat)
-                            <option value="{{ $cat->id }}">{{ $cat->translation->name }}</option>
+                        <div class="fromGroup">
+                            <label class="form-label">Package Type *</label>
+                            <select name="package_type" class="form-control">
+                                <option value="fixed">Fixed</option>
+                                <option value="customized">Customized</option>
+                            </select>
+                        </div>
+
+                        <div class="fromGroup">
+                            <label class="form-label">Duration Days *</label>
+                            <input id="duration_days" type="number" name="duration_days" class="form-control" min="1"
+                                required>
+                        </div>
+
+                        <div class="fromGroup">
+                            <label class="form-label">Duration Nights *</label>
+                            <input id="duration_nights" type="number" name="duration_nights" class="form-control" min="0"
+                                required>
+                        </div>
+
+                        <div class="fromGroup">
+                            <label class="form-label">Base Persons</label>
+                            <input type="number" name="base_persons" class="form-control" value="2">
+                        </div>
+
+                        <div class="fromGroup">
+                            <label class="form-label">Max Persons *</label>
+                            <input type="number" name="max_persons" class="form-control" required>
+                        </div>
+
+                        <div class="fromGroup">
+                            <label class="form-label">Package Status *</label>
+                            <select name="status" class="form-control" required>
+                                <option value="draft" {{ old('status') == 'draft' ? 'selected' : '' }}>
+                                    Draft
+                                </option>
+                                <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>
+                                    Active
+                                </option>
+                                <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>
+                                    Inactive
+                                </option>
+                            </select>
+                        </div>
+
+
+                    </div>
+
+                    {{-- ================================================= --}}
+                    {{-- TRANSLATIONS --}}
+                    {{-- ================================================= --}}
+                    <h3 class="text-lg font-semibold">Package Translations</h3>
+
+                    <div class="flex gap-2 border-b pb-2 mb-4 mt-4">
+                        @foreach ($languages as $lang)
+                            <button type="button" class="lang-btn {{ $loop->first ? 'active' : '' }}"
+                                data-lang="{{ strtolower($lang->code) }}">
+                                {{ strtoupper($lang->code) }}
+                            </button>
                         @endforeach
-                    </select>
-                </div>
+                    </div>
 
-                <div>
-                    <label class="form-label">Package Type *</label>
-                    <select name="package_type" class="form-control">
-                        <option value="fixed">Fixed</option>
-                        <option value="customized">Customized</option>
-                    </select>
-                </div>
+                    @foreach ($languages as $lang)
+                        @php $code = strtolower($lang->code); @endphp
 
-                <div>
-                    <label class="form-label">Duration Days *</label>
-                    <input id="duration_days" type="number" name="duration_days" class="form-control" min="1"
-                        required>
-                </div>
+                        <div class="lang-section {{ $loop->first ? 'active' : '' }}" id="lang-{{ $code }}">
+                            <label class="form-label">
+                                Title ({{ strtoupper($code) }}) *
+                            </label>
 
-                <div>
-                    <label class="form-label">Duration Nights *</label>
-                    <input id="duration_nights" type="number" name="duration_nights" class="form-control" min="0"
-                        required>
-                </div>
+                            <input class="form-control mb-3" name="translations[{{ $code }}][title]"
+                                value="{{ old("translations.$code.title") }}">
 
-                <div>
-                    <label class="form-label">Base Persons</label>
-                    <input type="number" name="base_persons" class="form-control" value="2">
-                </div>
+                            <label class="form-label">Sub Title</label>
+                            <input class="form-control mb-3" name="translations[{{ $code }}][sub_title]"
+                                value="{{ old("translations.$code.sub_title") }}">
 
-                <div>
-                    <label class="form-label">Max Persons *</label>
-                    <input type="number" name="max_persons" class="form-control" required>
-                </div>
+                            <label class="form-label">Description</label>
+                            <textarea class="form-control h-28" name="translations[{{ $code }}][description]">{{ old("translations.$code.description") }}</textarea>
+                        </div>
+                    @endforeach
 
-                <div>
-                    <label class="form-label">Package Status *</label>
-                    <select name="status" class="form-control" required>
-                        <option value="draft" {{ old('status') == 'draft' ? 'selected' : '' }}>
-                            Draft
-                        </option>
-                        <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>
-                            Active
-                        </option>
-                        <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>
-                            Inactive
-                        </option>
-                    </select>
-                </div>
+                    {{-- ================================================= --}}
+                    {{-- AVAILABILITY --}}
+                    {{-- ================================================= --}}
+                    <h3 class="text-lg font-semibold mt-4">Availability</h3>
 
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="form-label">Available From *</label>
+                            <input type="date" name="availability[available_from]" class="form-control" required>
+                        </div>
+                        <div>
+                            <label class="form-label">Available To *</label>
+                            <input type="date" name="availability[available_to]" class="form-control" required>
+                        </div>
 
-            </div>
+                        <div>
+                            <label class="form-label">Booking Start Date</label>
+                            <input type="date" name="availability[booking_start_date]" class="form-control">
+                        </div>
 
-            {{-- ================================================= --}}
-            {{-- TRANSLATIONS --}}
-            {{-- ================================================= --}}
-            <h3 class="text-lg font-semibold">Package Translations</h3>
-
-            <div class="flex gap-2 border-b pb-2 mb-4">
-                @foreach ($languages as $lang)
-                    <button type="button" class="lang-btn {{ $loop->first ? 'active' : '' }}"
-                        data-lang="{{ strtolower($lang->code) }}">
-                        {{ strtoupper($lang->code) }}
-                    </button>
-                @endforeach
-            </div>
-
-            @foreach ($languages as $lang)
-                @php $code = strtolower($lang->code); @endphp
-
-                <div class="lang-section {{ $loop->first ? 'active' : '' }}" id="lang-{{ $code }}">
-                    <label class="form-label">
-                        Title ({{ strtoupper($code) }}) *
-                    </label>
-
-                    <input class="form-control mb-3" name="translations[{{ $code }}][title]"
-                        value="{{ old("translations.$code.title") }}">
-
-                    <label class="form-label">Sub Title</label>
-                    <input class="form-control mb-3" name="translations[{{ $code }}][sub_title]"
-                        value="{{ old("translations.$code.sub_title") }}">
-
-                    <label class="form-label">Description</label>
-                    <textarea class="form-control h-28" name="translations[{{ $code }}][description]">{{ old("translations.$code.description") }}</textarea>
-                </div>
-            @endforeach
-
-            {{-- ================================================= --}}
-            {{-- AVAILABILITY --}}
-            {{-- ================================================= --}}
-            <h3 class="text-lg font-semibold">Availability</h3>
-
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="form-label">Available From *</label>
-                    <input type="date" name="availability[available_from]" class="form-control" required>
-                </div>
-                <div>
-                    <label class="form-label">Available To *</label>
-                    <input type="date" name="availability[available_to]" class="form-control" required>
-                </div>
-
-                <div>
-                    <label class="form-label">Booking Start Date</label>
-                    <input type="date" name="availability[booking_start_date]" class="form-control">
-                </div>
-
-                <div>
-                    <label class="form-label">Booking End Date</label>
-                    <input type="date" name="availability[booking_end_date]" class="form-control">
-                </div>
-            </div>
+                        <div>
+                            <label class="form-label">Booking End Date</label>
+                            <input type="date" name="availability[booking_end_date]" class="form-control">
+                        </div>
+                    </div>
 
 
-            {{-- ================================================= --}}
-            {{-- CITIES --}}
-            {{-- ================================================= --}}
-            <h3 class="text-lg font-semibold">Cities & Nights</h3>
-            <div id="citiesContainer"></div>
+                    {{-- ================================================= --}}
+                    {{-- CITIES --}}
+                    {{-- ================================================= --}}
+                    <h3 class="text-lg font-semibold">Cities & Nights</h3>
+                    <div id="citiesContainer" class="mb-2"></div>
 
-            {{-- ================================================= --}}
-            {{-- DAYS & ACTIVITIES --}}
-            {{-- ================================================= --}}
-            <h3 class="text-lg font-semibold">Day Wise Itinerary</h3>
-            <div id="daysContainer"></div>
+                    {{-- ================================================= --}}
+                    {{-- DAYS & ACTIVITIES --}}
+                    {{-- ================================================= --}}
+                    <h3 class="text-lg font-semibold">Day Wise Itinerary</h3>
+                    <div id="daysContainer" class="mb-2"></div>
 
-            {{-- ================================================= --}}
-            {{-- PRICING --}}
-            {{-- ================================================= --}}
-            <h3 class="text-lg font-semibold">Pricing</h3>
+                    {{-- ================================================= --}}
+                    {{-- PRICING --}}
+                    {{-- ================================================= --}}
+                    <h3 class="text-lg font-semibold mb-2">Pricing</h3>
 
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="form-label">Currency *</label>
-                    <input name="pricing[currency]" value="INR" class="form-control" required>
-                </div>
-                <div>
-                    <label class="form-label">Original Price *</label>
-                    <input type="number" step="0.01" name="pricing[original_price]" class="form-control" required>
-                </div>
-                <div>
-                    <label class="form-label">Discount Price</label>
-                    <input type="number" step="0.01" name="pricing[discount_price]" class="form-control">
-                </div>
-                <div>
-                    <label class="form-label">Per Person Price *</label>
-                    <input type="number" step="0.01" name="pricing[per_person_price]" class="form-control" required>
-                </div>
-            </div>
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div class="fromGroup">
+                            <label class="form-label">Currency *</label>
+                            <input name="pricing[currency]" value="INR" class="form-control" required>
+                        </div>
+                        <div class="fromGroup">
+                            <label class="form-label">Original Price *</label>
+                            <input type="number" step="0.01" name="pricing[original_price]" class="form-control" required>
+                        </div>
+                        <div class="fromGroup">
+                            <label class="form-label">Discount Price</label>
+                            <input type="number" step="0.01" name="pricing[discount_price]" class="form-control">
+                        </div>
+                        <div class="fromGroup">
+                            <label class="form-label">Per Person Price *</label>
+                            <input type="number" step="0.01" name="pricing[per_person_price]" class="form-control" required>
+                        </div>
+                    </div>
 
 
 
-            {{-- ================================================= --}}
-            {{-- ADDITIONAL INFO --}}
-            <div>
-                <label>Thumbnail</label>
-                <input type="file" class="form-control @error('thumb') error-input @enderror" name="thumb">
-                @error('thumb')
-                    <p class="error-text">{{ $message }}</p>
-                @enderror
+                    {{-- ================================================= --}}
+                    {{-- ADDITIONAL INFO --}}
+                    <div class="fromGroup mb-4">
+                        <label class="form-label">Thumbnail</label>
+                        <input type="file" class="form-control @error('thumb') error-input @enderror" name="thumb">
+                        @error('thumb')
+                            <p class="error-text">{{ $message }}</p>
+                        @enderror
 
-            </div>
+                    </div>
 
-            <div>
-                <label>Gallery</label>
-                <input type="file" class="form-control @error('gallery.*') error-input @enderror" name="gallery[]"
-                    multiple>
-                @error('gallery.*')
-                    <p class="error-text">{{ $message }}</p>
-                @enderror
-            </div>
+                    <div class="fromGroup mb-4">
+                        <label class="form-label">Gallery</label>
+                        <input type="file" class="form-control @error('gallery.*') error-input @enderror" name="gallery[]"
+                            multiple>
+                        @error('gallery.*')
+                            <p class="error-text">{{ $message }}</p>
+                        @enderror
+                    </div>
 
 
-            {{-- 🔥 ADDITIONAL INFO SECTION --}}
-            @include('backend.packages.partials.additional-info.index', [
-                'package' => null,
-                'languages' => $languages,
-            ])
+                    {{-- 🔥 ADDITIONAL INFO SECTION --}}
+                    @include('backend.packages.partials.additional-info.index', [
+                        'package' => null,
+                        'languages' => $languages,
+                    ])
 
-           <div>
-            <button class="btn btn-success mt-6">Create Package</button>
-           </div>
-
+                   <div>
+                    <button class="btn btn-success mt-6">Create Package</button>
+                   </div>
+            </form>
         </div>
-    </form>
+    </div>
 
     <script>
         /* ================= DOM REFERENCES ================= */

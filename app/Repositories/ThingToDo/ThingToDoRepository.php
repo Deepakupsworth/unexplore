@@ -26,7 +26,7 @@ class ThingToDoRepository implements ThingToDoRepositoryInterface
         if ($request->filled('search')) {
             $query->whereHas('translations', function ($q) use ($request) {
                 $q->where('language_code', 'en')
-                  ->where('name', 'like', '%' . $request->search . '%');
+                    ->where('name', 'like', '%' . $request->search . '%');
             });
         }
 
@@ -42,12 +42,12 @@ class ThingToDoRepository implements ThingToDoRepositoryInterface
 
         // 📍 Location filter
         if ($request->filled('location')) {
-            $query->where('location','like','%'.$request->location.'%');
+            $query->where('location', 'like', '%' . $request->location . '%');
         }
 
         return $query->latest()
-                     ->paginate($perPage)
-                     ->withQueryString();
+            ->paginate($perPage)
+            ->withQueryString();
     }
 
 
@@ -71,8 +71,8 @@ class ThingToDoRepository implements ThingToDoRepositoryInterface
                     'city_id'     => $data['city_id'],
                     'category_id' => $data['category_id'] ?? null,
                     'location'    => $data['location'] ?? null,
-                    'opening_time'=> $data['opening_time'] ?? null,
-                    'closing_time'=> $data['closing_time'] ?? null,
+                    'opening_time' => $data['opening_time'] ?? null,
+                    'closing_time' => $data['closing_time'] ?? null,
                     'latitude'    => $data['latitude'] ?? null,
                     'longitude'   => $data['longitude'] ?? null,
                 ]
@@ -115,9 +115,13 @@ class ThingToDoRepository implements ThingToDoRepositoryInterface
 
             /* ===================== GALLERY ===================== */
 
-            foreach ($data['gallery'] as  $file) {
-                storeImage($thing, $file, 'thingtodos/gallery', 'gallery');
+            /* ===================== GALLERY ===================== */
+            if (!empty($data['gallery']) && is_array($data['gallery'])) {
+                foreach ($data['gallery'] as $file) {
+                    storeImage($thing, $file, 'thingtodos/gallery', 'gallery');
+                }
             }
+
 
             return $thing;
         });
