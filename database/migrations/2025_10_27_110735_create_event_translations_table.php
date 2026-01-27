@@ -9,12 +9,15 @@ return new class extends Migration {
         Schema::create('event_translations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('event_id')->constrained('events')->cascadeOnDelete();
-            $table->foreignId('language_id')->constrained('languages')->cascadeOnDelete();
-            $table->string('name');
-            $table->text('about')->nullable();
+            $table->string('language_code', 10);
+            $table->string('title');
+            $table->string('sub_title');
+            $table->string('url');
+
+            $table->text('description')->nullable();
             $table->timestamps();
 
-            $table->unique(['event_id', 'language_id']);
+            $table->unique(['event_id', 'language_code']);
         });
     }
 

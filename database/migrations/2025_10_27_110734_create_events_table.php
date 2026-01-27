@@ -5,25 +5,59 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-    public function up(): void {
+
+    public function up(): void
+    {
         Schema::create('events', function (Blueprint $table) {
             $table->id();
+
+            // SEO
             $table->string('slug', 255)->unique();
-            $table->string('image')->nullable();
+
+            // Event schedule
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
-            $table->string('opening_days')->nullable();
+
+            // Opening info
+            $table->string('opening_days')->nullable(); // Mon–Fri
             $table->time('opening_time')->nullable();
             $table->time('closing_time')->nullable();
-            $table->foreignId('city_id')->constrained('cities')->cascadeOnDelete();
+
+
+            // City (SAFE)
+            $table->foreignId('city_id')
+                  ->nullable()
+                  ->constrained()
+                  ->nullOnDelete();
+
+            // Capacity (NEW)
+            $table->integer('capacity')->nullable(); // max people
+
+            // Status (NEW)
+            $table->boolean('status')->default(1);
+
+             // 📍 Location
+            $table->string('location')->nullable();
+            $table->decimal('latitude', 10, 7)->nullable();
+            $table->decimal('longitude', 10, 7)->nullable();
+
+            // 🎥 ONE video URL
+            $table->string('video_url')->nullable();
+            $table->string('url')->nullable();
+            $table->foreignId('category_id')->nullable()->constrained('categories')->nullOnDelete();
+            // 🔥 CRITICAL
+            $table->softDeletes();
+
             $table->timestamps();
 
             $table->index('slug');
+            $table->index('city_id');
+            $table->index('status');
         });
     }
 
-    public function down(): void {
+    public function down(): void
+    {
         Schema::dropIfExists('events');
     }
 };
-

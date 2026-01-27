@@ -12,6 +12,10 @@ return new class extends Migration {
             $table->string('image')->nullable();
             $table->string('location')->nullable();
             $table->foreignId('city_id')->constrained('cities')->cascadeOnDelete();
+            $table->time('opening_time')->nullable();
+            $table->time('closing_time')->nullable();
+            $table->decimal('latitude', 10, 7)->nullable();
+            $table->decimal('longitude', 10, 7)->nullable();
             $table->foreignId('category_id')->nullable()->constrained('categories')->nullOnDelete();
             $table->timestamps();
 

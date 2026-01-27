@@ -2,23 +2,24 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 
 class EventTranslation extends Model
 {
-    /** @use HasFactory<\Database\Factories\EventTranslationFactory> */
     use HasFactory;
-
-    protected $fillable = ['event_id', 'language_id', 'name', 'about'];
-
-    public function language()
-    {
-        return $this->belongsTo(Language::class);
-    }
+    protected $fillable = [
+        'event_id',
+        'language_code',
+        'title',
+        'sub_title',
+        'url',
+        'description'
+    ];
 
     public function event()
     {
         return $this->belongsTo(Event::class);
-    } 
+    }
 }

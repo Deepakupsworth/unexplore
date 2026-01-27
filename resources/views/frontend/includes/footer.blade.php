@@ -1,5 +1,5 @@
 <div class="footer-top-image">
-  <img src="frontend/assets/footer-top.png" alt="Footer">
+  <img src="{{ asset('frontend/assets/footer-top.png')}}" alt="Footer">
 </div>
 <footer class="bg-white">
   <div class="footer-top">
@@ -7,7 +7,7 @@
       <div class="row align-items-start">
         <!-- Logo -->
         <div class="col-md-12 col-lg-2 mb-4">
-          <img src="frontend/assets/logo.png" alt="Unxplord Saudi" class="footer__logo">
+          <img src="{{ asset('frontend/assets/logo.png')}}" alt="Unxplord Saudi" class="footer__logo">
         </div>
         <!-- Links columns -->
         <div class="col-md-12 col-lg-7">
@@ -46,13 +46,13 @@
         <div class="col-md-6 col-lg-3 mb-4">
           <div class="footer-icons-section">
             <a href="#" class="footer-icon">
-              <img src="frontend/assets/icons/instagram.svg" alt="instagram">
+              <img src="{{ asset('frontend/assets/icons/instagram.svg')}}" alt="instagram">
             </a>
             <a href="#" class="footer-icon">
-              <img src="frontend/assets/icons/facebook.svg" alt="facebook">
+              <img src="{{ asset('frontend/assets/icons/facebook.svg')}}" alt="facebook">
             </a>
             <a href="#" class="footer-icon">
-              <img src="frontend/assets/icons/x.svg" alt="x">
+              <img src="{{ asset('frontend/assets/icons/x.svg')}}" alt="x">
             </a>
           </div>
           <div class="footer-newsletter-section">

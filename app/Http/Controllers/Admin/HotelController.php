@@ -1,0 +1,177 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\Hotel;
+use App\Models\HotelTranslation;
+use App\Models\City;
+use App\Models\Image;
+use App\Models\Language;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
+class HotelController extends Controller
+{
+    /**
+     * List Hotels
+     */
+    public function index(Request $request)
+    {
+        $query = Hotel::query()
+            ->with([
+                'translations' => fn($q) => $q->where('language_code', 'en'),
+                'city',
+                'thumb'
+            ]);
+
+        // 🔍 Search by hotel name
+        if ($request->filled('search')) {
+            $query->whereHas('translations', function ($q) use ($request) {
+                $q->where('language_code', 'en')
+                  ->where('name', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        // 🏙 Filter by city
+        if ($request->filled('city_id')) {
+            $query->where('city_id', $request->city_id);
+        }
+
+        // ⭐ Filter by star rating
+        if ($request->filled('star')) {
+            $query->where('star_rating', $request->star);
+        }
+
+        // 🍽 Filter by meal
+        if ($request->filled('has_meal')) {
+            $query->where('has_meal', $request->has_meal);
+        }
+
+        // 🟢 Filter by status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $hotels = $query->latest()->paginate(10)->withQueryString();
+
+        $cities = City::pluck('slug', 'id');
+
+        return view('backend.hotels.index', compact('hotels', 'cities'));
+    }
+
+
+    /**
+     * Create / Edit form
+     */
+    public function form($id = null)
+    {
+        $model = Hotel::with(['translations', 'gallery', 'thumb'])->find($id) ?? new Hotel();
+        $languages = Language::all();
+        $cities = City::pluck('slug', 'id');
+
+        return view('backend.hotels.form', compact('model', 'languages', 'cities'));
+    }
+
+    public function show($id)
+    {
+        $hotel = Hotel::with([
+            'translations',
+            'city',
+            'images',
+            'thumb'
+        ])->findOrFail($id);
+
+        return view('backend.hotels.show', compact('hotel'));
+    }
+
+
+    /**
+     * Store / Update Hotel
+     */
+    public function save(Request $request)
+    {
+        // Normalize language keys (EN → en)
+        $translations = [];
+        foreach ($request->translations ?? [] as $lang => $data) {
+            $translations[strtolower($lang)] = $data;
+        }
+        $request->merge(['translations' => $translations]);
+
+        // Validate
+        $request->validate([
+            'city_id' => 'required|exists:cities,id',
+            'translations.en.name' => 'required|string|max:255',
+        ], [
+            'translations.en.name.required' => 'English hotel name is required',
+            'city_id.required' => 'Please select a city',
+        ]);
+
+        // Save hotel
+        $hotel = Hotel::updateOrCreate(
+            ['id' => $request->id],
+            [
+                'city_id'   => $request->city_id,
+                'location'  => $request->location,
+                'latitude'  => $request->latitude,
+                'longitude' => $request->longitude,
+                'email'     => $request->email,
+                'phone'     => $request->phone,
+                'star_rating' => $request->star_rating,
+                'has_meal'  => $request->has_meal ? 1 : 0,
+                'status'    => $request->status ? 1 : 0,
+            ]
+
+        );
+
+        // Save translations
+        foreach ($request->translations as $lang => $data) {
+            if (!empty($data['name'])) {
+                HotelTranslation::updateOrCreate(
+                    [
+                        'hotel_id' => $hotel->id,
+                        'language_code' => $lang
+                    ],
+                    [
+                        'name' => $data['name'],
+                        'description' => $data['description'] ?? null
+                    ]
+                );
+            }
+        }
+
+        // Save thumb
+        if ($request->hasFile('thumb')) {
+            if ($hotel->thumb) {
+                Storage::disk('public')->delete($hotel->thumb->image_path);
+                $hotel->thumb()->delete();
+            }
+
+            storeImage($hotel, $request->thumb, 'hotels/thumbs', 'thumb', 'en', true);
+        }
+
+        // Save gallery
+        if ($request->hasFile('gallery')) {
+            foreach ($request->gallery as $file) {
+                storeImage($hotel, $file, 'hotels/gallery', 'gallery');
+            }
+        }
+
+        return redirect()->route('hotels.index')
+            ->with('success', 'Hotel saved successfully');
+    }
+
+    /**
+     * Delete Hotel
+     */
+    public function deleteGallery($id)
+    {
+        $image = Image::findOrFail($id);
+
+        Storage::disk('public')->delete($image->image_path);
+        $image->delete();
+
+        return response()->json(['success' => true]);
+    }
+
+}

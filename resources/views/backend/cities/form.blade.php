@@ -1,222 +1,158 @@
 @extends('backend.layout')
 @section('content')
+    <style>
+        #file-preview img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+        }
 
-<style>
-  #file-preview img { width: 50px; height: 50px; object-fit: cover; }
-  .lang-btn {
-    padding: 0.5rem 1rem; /* px-4 py-2 */
-    border: 1px solid #cbd5e1; /* border-slate-300 */
-    border-radius: 0.375rem; /* rounded-md */
-    font-size: 0.875rem; /* text-sm */
-    font-weight: 500; /* font-medium */
-    cursor: pointer;
-    transition: all 0.15s ease-in-out;
-  }
+        .lang-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s ease-in-out;
+        }
 
-  .lang-btn:hover {
-    background-color: #f1f5f9; /* hover bg-slate-100 */
-  }
+        .lang-btn:hover {
+            background-color: #f1f5f9
+        }
 
-  .lang-btn.active {
-    background-color: #1e293b; /* bg-primary-600 (Tailwind blue-600) */
-    color: #fff;
-    border-color: #1e293b;
-  }
+        .lang-btn.active {
+            background-color: #1e293b;
+            color: #fff
+        }
 
-  .lang-section {
-    display: none;
-  }
+        .lang-section {
+            display: none
+        }
 
-  .lang-section.active {
-    display: block;
-  }
-</style>
+        .lang-section.active {
+            display: block
+        }
+    </style>
 
-
-<div class="content-wrapper transition-all duration-150 ltr:ml-[248px] rtl:mr-[248px]" id="content_wrapper">
-  <div class="page-content">
-    <div class="transition-all duration-150 container-fluid" id="page_layout">
-      <div id="content_layout">
-
-        <!-- Breadcrumb -->
-        <div class="mb-5">
-          <ul class="m-0 p-0 list-none">
-            <li class="inline-block text-base text-primary-500">
-              <a href="{{ route('cities.index') }}">
-                <iconify-icon icon="heroicons-outline:home"></iconify-icon>
-                <iconify-icon icon="heroicons-outline:chevron-right" class="text-slate-500 text-sm rtl:rotate-180"></iconify-icon>
-              </a>
-            </li>
-            <li class="inline-block text-sm text-slate-500">
-              {{ $model->id ? 'Edit City' : 'Add City' }}
-            </li>
-          </ul>
-        </div>
-
-        <div class="grid xl:grid-cols-1 grid-cols-12 gap-6 px-6">
-          <div class="card xl:col-span-2">
-            <div class="card-body flex flex-col p-6">
-              <header class="flex mb-5 items-center border-b pb-5">
-                <div class="flex-1">
-                  <div class="card-title text-slate-900 dark:text-white">
-                    {{ $model->id ? 'Edit City' : 'Add City' }}
-                  </div>
-                </div>
-              </header>
-
-              <form action="{{ route('cities.save') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+    <div class="card">
+        <div class="card-body p-4">
+            <form action="{{ route('cities.save') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="id" value="{{ $model->id }}">
 
-                <div class="input-area">
-                  {{-- LANGUAGE BUTTONS --}}
-                  <div class="mt-6">
-                    <div class="flex gap-2 mb-4">
-                      @foreach($languages as $lang)
-                        <button type="button"
-                                class="lang-btn {{ $loop->first ? 'active' : '' }}"
-                                data-lang="{{ $lang->code }}">
-                          {{ strtoupper($lang->name) }}
-                        </button>
-                      @endforeach
+                {{-- Country --}}
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="input-area mb-4">
+                        <label class="form-label">Country <span class="text-red-500">*</span></label>
+                        <select name="country_id" class="form-control" required>
+                            <option value="">Select Country</option>
+                            @foreach ($countries as $id => $name)
+                                <option value="{{ $id }}"
+                                    {{ old('country_id', $model->country_id) == $id ? 'selected' : '' }}>
+                                    {{ $name }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
 
-                    {{-- LANGUAGE SECTIONS --}}
-                    @foreach($languages as $lang)
-                      @php
-                        $trans = $model->translations->where('language_id', $lang->id)->first() ?? null;
-                      @endphp
-                      <div class="lang-section {{ $loop->first ? 'active' : '' }}" id="lang-section-{{ $lang->code }}">
+                    {{-- Category --}}
+                    <div>
+                        <label class="form-label">
+                            Category <span class="text-red-500">*</span>
+                        </label>
+                        <select name="category_id" class="form-control" required>
+                            <option value="">Select Category</option>
 
-                        {{-- Name --}}
-                        <div class="input-area">
-                          <label class="form-label">
-                            Name ({{ strtoupper($lang->code) }})
-                            @if($lang->code === 'en') <span class="text-red-500">*</span> @endif
-                          </label>
-                          <input type="text"
-                                name="translations[{{ $lang->id }}][name]"
-                                class="form-control"
-                                value="{{ old("translations.$lang->id.name", $trans->name ?? '') }}"
-                                @if($lang->code === 'en') required @endif>
-                          @error("translations.$lang->id.name")
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                          @enderror
-                        </div>
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->id }}"
+                                    {{ old('category_id', $model->category?->id) == $category->id ? 'selected' : '' }}>
+                                    {{ $category->translation?->name }}
+                                </option>
+                            @endforeach
+                        </select>
 
-                        {{-- Tagline --}}
-                        <div class="input-area">
-                          <label class="form-label">Tagline ({{ strtoupper($lang->code) }})
-                          @if($lang->code === 'en') <span class="text-red-500">*</span> @endif</label>
-                          <input type="text"
-                                name="translations[{{ $lang->id }}][tagline]"
-                                class="form-control"
-                                value="{{ old("translations.$lang->id.tagline", $trans->tagline ?? '') }}">
-                          @error("translations.$lang->id.tagline")
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                          @enderror
-                        </div>
 
-                        {{-- About --}}
-                        <div class="input-area">
-                          <label class="form-label">About ({{ strtoupper($lang->code) }})
-                          @if($lang->code === 'en') <span class="text-red-500">*</span> @endif</label>
-                          <textarea id="editor-{{ $lang->code }}"
-                                    name="translations[{{ $lang->id }}][about]"
-                                    class="form-control editor">{{ old("translations.$lang->id.about", $trans->about ?? '') }}</textarea>
-                          @error("translations.$lang->id.about")
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                          @enderror
-                        </div>
-                      </div>
+                    </div>
+                </div>
+
+                {{-- Language Buttons --}}
+                <div class="flex gap-2 mb-4">
+                    @foreach ($languages as $lang)
+                        <button type="button" class="lang-btn {{ $loop->first ? 'active' : '' }}"
+                            data-lang="{{ strtolower($lang->code) }}">
+                            {{ strtoupper($lang->name) }}
+                        </button>
                     @endforeach
-                  </div>
                 </div>
 
-               {{-- Slug --}}
-              <input type="hidden" name="slug" class="form-control" value="{{ old('slug', $model->slug) }}">
-                <header class="flex mb-5 items-center pb-5 pt-5">
-                <div class="flex-1">
-                  <div class="card-title text-slate-900 dark:text-white">
-                   Media
-                  </div>
-                </div>
-              </header>
+                {{-- Language Sections --}}
+                @foreach ($languages as $lang)
+                    @php
+                        $code = strtolower($lang->code);
+                        $trans = $model->translations->where('language_code', $code)->first();
+                    @endphp
 
-                {{-- Video URL --}}
-                <div class="input-area">
-                  <label class="form-label">Video URL</label>
-                  <input type="url" name="video_url" class="form-control" value="{{ old('video_url', $model->video_url) }}">
-                  @error('video_url')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                  @enderror
-                </div>
+                    <div class="lang-section {{ $loop->first ? 'active' : '' }}" id="lang-section-{{ $code }}">
 
-                {{-- Thumb Image --}}
-                <div class="input-area relative">
-                  <label class="form-label">Thumb Image</label>
-                  <input type="file" id="imageInput" name="thumb_image" class="form-control" accept="image/*">
-                  @error('thumb_image')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                  @enderror
+                        <div class="input-area">
+                            <label class="form-label">Name ({{ strtoupper($code) }}) <span
+                                    class="text-red-500">*</span></label>
+                            <input type="text" name="translations[{{ $code }}][name]" class="form-control"
+                                value="{{ old("translations.$code.name", $trans->name ?? '') }}"
+                                {{ $code == 'en' ? 'required' : '' }}>
+                        </div>
 
-                  <div id="previewContainer" class="mt-4 relative pb-10 {{ $model->thumb_image ? '' : 'hidden' }}">
-                    <img id="previewImage"
-                         src="{{ $model->thumb_image ? asset('storage/'.$model->thumb_image) : '#' }}"
-                         alt="Preview"
-                         class="rounded border border-slate-200"
-                         style="width: 50px; height: 50px;">
+                        <div class="input-area">
+                            <label class="form-label">Tagline</label>
+                            <input class="form-control" name="translations[{{ $code }}][tagline]"
+                                value="{{ old("translations.$code.tagline", $trans->tagline ?? '') }}">
+                        </div>
 
-                      
-                 
-                  </div>
+                        <div class="input-area">
+                            <label class="form-label">About</label>
+                            <textarea class="form-control" name="translations[{{ $code }}][about]">{{ old("translations.$code.about", $trans->about ?? '') }}</textarea>
+                        </div>
+
+                    </div>
+                @endforeach
+
+                <input type="hidden" name="slug" value="{{ old('slug', $model->slug) }}">
+
+                {{-- Media --}}
+                <div class="input-area mt-4">
+                    <label class="form-label">Video URL</label>
+                    <input type="url" name="video_url" class="form-control"
+                        value="{{ old('video_url', $model->video_url) }}">
                 </div>
 
                 <div class="input-area mt-4">
-                <label class="form-label">Gallery Images</label>
-                <input type="file" id="galleryInput" name="gallery_images[]" class="form-control" accept="image/*" multiple>
-
-                {{-- Existing images from DB --}}
-                @if($model->galleryImages && $model->galleryImages->count())
-                    <div class="mt-3 grid grid-cols-12 gap-3" id="existingGallery">
-                    @foreach($model->galleryImages as $img)
-                        <div class="relative w-14 h-14 border rounded overflow-hidden">
-                        <img src="{{ asset('storage/'.$img->image_path) }}" 
-                            class="w-14 h-14 object-cover rounded">
-
-                        <button type="button"
-                                class="absolute top-0 left-0 m-1 bg-red-500 text-white rounded-full text-xs px-1 py-0.5 rounded delete-image"
-                                data-url="{{ route('cities.gallery.delete', $img->id) }}">
-                            ✕
-                        </button>
-                        </div>
-                    @endforeach
-                    </div>
-                @endif
-
-                {{-- New images preview (before upload) --}}
-                <div id="galleryPreview" class="mt-4 grid grid-cols-12 gap-3"></div>
+                    <label class="form-label">Thumb Image</label>
+                    <input type="file" name="thumb_image" class="form-control">
+                    @if ($model->thumb_image)
+                        <img src="{{ asset('storage/' . $model->thumb_image) }}" class="w-20 h-20 mt-2 rounded">
+                    @endif
                 </div>
+                {{-- Gallery --}}
+                <x-admin.form.gallery :model="$model" deleteRoute="{{ route('gallery.delete', ':id') }}" />
 
-              
-
-                <button type="submit" class="btn inline-flex justify-center btn-dark mt-5">
-                  {{ $model->id ? 'Update' : 'Create' }}
+                <button class="btn btn-dark mt-6">
+                    {{ $model->id ? 'Update City' : 'Create City' }}
                 </button>
 
-              </form>
-            </div>
-          </div>
+            </form>
+
         </div>
-
-      </div>
     </div>
-  </div>
-</div>
 
-@include('backend.includes.commonjs')
+    <script>
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.onclick = () => {
+                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.lang-section').forEach(s => s.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById('lang-section-' + btn.dataset.lang).classList.add('active');
+            };
+        });
+    </script>
 @endsection
-
-
-
-

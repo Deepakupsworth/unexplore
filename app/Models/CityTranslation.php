@@ -9,8 +9,8 @@ class CityTranslation extends Model
 {
     /** @use HasFactory<\Database\Factories\CityTranslationFactory> */
     use HasFactory;
-    
-    protected $fillable = ['city_id', 'language_id', 'name', 'tagline', 'about'];
+
+    protected $fillable = ['city_id', 'language_code','language_id', 'name', 'tagline', 'about'];
 
     public function language()
     {

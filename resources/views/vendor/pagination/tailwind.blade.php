@@ -1,34 +1,46 @@
 @if ($paginator->hasPages())
-    <nav class="flex justify-end mt-6 space-x-2">
-        {{-- Previous Page Link --}}
-        @if ($paginator->onFirstPage())
-            <span class="px-4 py-2 bg-gray-300 text-gray-500 rounded-full cursor-not-allowed">←</span>
-        @else
-            <a href="{{ $paginator->previousPageUrl() }}" class="px-4 py-2 bg-slate-700 text-white rounded-full hover:bg-blue-700">←</a>
-        @endif
+<div class="card rounded-md bg-white dark:bg-slate-800 shadow-base mt-6">
+    <main class="card-body p-4">
+        <ul class="pagination">
 
-        {{-- Pagination Elements --}}
-        @foreach ($elements as $element)
-            @if (is_string($element))
-                <span class="px-4 py-2 text-gray-500">{{ $element }}</span>
-            @endif
+            {{-- Previous --}}
+            <li>
+                @if ($paginator->onFirstPage())
+                    <button class="text-slate-600 prev-next-btn" disabled>Previous</button>
+                @else
+                    <a href="{{ $paginator->previousPageUrl() }}" class="prev-next-btn">Previous</a>
+                @endif
+            </li>
 
-            @if (is_array($element))
-                @foreach ($element as $page => $url)
-                    @if ($page == $paginator->currentPage())
-                        <span class="px-4 py-2 bg-slate-700 text-white rounded-full">{{ $page }}</span>
-                    @else
-                        <a href="{{ $url }}" class="px-4 py-2 bg-gray-100 hover:bg-blue-100 rounded-full">{{ $page }}</a>
-                    @endif
-                @endforeach
-            @endif
-        @endforeach
+            {{-- Pages --}}
+            @foreach ($elements as $element)
+                @if (is_string($element))
+                    <li><span class="page-link disabled">{{ $element }}</span></li>
+                @endif
 
-        {{-- Next Page Link --}}
-        @if ($paginator->hasMorePages())
-            <a href="{{ $paginator->nextPageUrl() }}" class="px-4 py-2 bg-slate-700 text-white rounded-full hover:bg-blue-700">→</a>
-        @else
-            <span class="px-4 py-2 bg-gray-300 text-gray-500 rounded-full cursor-not-allowed">→</span>
-        @endif
-    </nav>
+                @if (is_array($element))
+                    @foreach ($element as $page => $url)
+                        <li>
+                            @if ($page == $paginator->currentPage())
+                                <span class="page-link active">{{ $page }}</span>
+                            @else
+                                <a href="{{ $url }}" class="page-link">{{ $page }}</a>
+                            @endif
+                        </li>
+                    @endforeach
+                @endif
+            @endforeach
+
+            {{-- Next --}}
+            <li>
+                @if ($paginator->hasMorePages())
+                    <a href="{{ $paginator->nextPageUrl() }}" class="prev-next-btn">Next</a>
+                @else
+                    <button class="text-slate-600 prev-next-btn" disabled>Next</button>
+                @endif
+            </li>
+
+        </ul>
+    </main>
+</div>
 @endif

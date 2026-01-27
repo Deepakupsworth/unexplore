@@ -4,13 +4,16 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
+use App\Models\Image;
 
 class User extends Authenticatable
 {
+    use SoftDeletes;
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
@@ -20,10 +23,13 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
         'email',
+        'phone',
         'role',
         'password',
+        'terms_accepted',
     ];
 
     /**
@@ -67,5 +73,16 @@ class User extends Authenticatable
                     ->subject('Reset Password Notification');
         });
     }
-    
+
+    public function images()
+    {
+        return $this->morphMany(Image::class, 'imageable');
+    }
+
+    public function profileImage()
+    {
+        return $this->morphOne(Image::class, 'imageable')
+                    ->where('role', 'thumb');
+    }
+
 }

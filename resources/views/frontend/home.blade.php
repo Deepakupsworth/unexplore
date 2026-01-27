@@ -18,22 +18,21 @@
 @endphp
 
 <!-- <pre>{{ print_r($home, true) }}</pre> -->
-
+{{-- @dd($things) --}}
 @extends('frontend.layout')
 @section('content')
 <style>
 .hero-banner__carousel .hero-banner__carousel-item>img{ border-radius: 10px;}
 .explore-saudi__map {width: 250px;}
-</style> 
-
+</style>
   <!-- HEADER -->
   <div id="header"></div>
   <!-- Page main content here -->
-
+{{-- @dd($things) --}}
   <!-- 1. HERO BANNER SECTION  -->
   <section class="hero-banner">
     <video class="hero-banner__video" autoplay muted loop playsinline poster="{{ asset('frontend/assets/hero-banner-bg.png') }}">
-      <source src="{{ asset('frontend/assets/Video_intro.mp4') }}" type="video/mp4"> 
+      <source src="{{ asset('frontend/assets/Video_intro.mp4') }}" type="video/mp4">
       Your browser does not support the video tag.
     </video>
     <!-- <img class="hero-banner__image" src="../assets/hero-banner-bg.png" alt="Banner"> -->
@@ -78,27 +77,27 @@
           </div>
         </div>
         <div class="swiper-wrapper">
-        @if(count($heroBanner))
-        @foreach($heroBanner as $banner)
+        @if(count($cities))
+        @foreach($cities as $cites)
           <div class="hero-banner__carousel-item swiper-slide">
-            <img src="{{ asset(ltrim($banner['image'], '/')) }}" alt="{{ $banner['title'] }}">
-            <div class="hero-banner__carousel-item-content"> 
-              <h6>{{ $banner['title'] }} </h6> 
-              <p> {{ $banner['description'] }}</p> 
-              <button class="btn btn-light btn-outline-light rounded-pill">
-                <span class="small">Book Now</span>
-              </button>
+            <img src="{{ asset('storage/' . $cites->thumb_image) }}" alt="">
+            <div class="hero-banner__carousel-item-content">
+              <h6>{{ $cites->translation->name }} </h6>
+              <p> {{ $cites->translation->tagline }}</p>
+              <a href="{{route('destinations.show',$cites->slug)}}" class="btn btn-outline-light rounded-pill">
+                <span class="small">View Now</span>
+              </a>
             </div>
           </div>
-          
+
           @endforeach
         @endif
 
-       
+
         </div>
       </div>
     </div>
-  </section> 
+  </section>
 
   <!-- 2. PLAN TRIP SECTION  -->
   <section class="plan-trip section-padding">
@@ -163,7 +162,7 @@
             of Saudi Arabia</p>
         </div>
         <div class="section__header-CTA">
-          <a href="#" class="btn btn-primary rounded-pill">
+          <a href="{{route('things.to.do')}}" class="btn btn-primary rounded-pill">
             View All
             <i class="fa-solid fa-angles-right"></i>
           </a>
@@ -171,29 +170,9 @@
       </div>
       <div class="dis-adventure__carousel swiper">
         <div class="swiper-wrapper">
-        @if(count($adventures))
-        @foreach($adventures as $item)
-          <div class="dis-adventure__carousel-item swiper-slide">
-            <img src="{{ asset($item['image']) }}" alt="Adventure Image 1" class="img-fluid">
-            <div class="dis-adventure__carousel-item-content">
-              <div class="dis-adventure__carousel-item-top">
-                <div class="badge carousel-badge"><i class="fa-solid fa-location-dot"></i>{{ $item['location'] }}</div>
-              </div>
-              <div class="dis-adventure__carousel-item-bottom">
-                <h6>{{ $item['title'] }} </h6>
-                <div class="dis-adventure__carousel-item-footer">
-                  <p class="dis-adventure__carousel-riyal"><img src="{{ asset('frontend/assets/icons/riyal.svg') }}" alt="Riyal"> {{ $item['price'] }}</p>
-               
-                  <a class="btn btn-outline-light rounded-pill" href="#">Book Now</a>
-                  
-                </div>
-              </div>
-            </div>
-          </div>
-          @endforeach
-          @endif
-          
-          
+        @foreach ($things as $thing)
+            <x-frontend.thing-card :thing="$thing" />
+        @endforeach
         </div>
         <div class="custom__carousel-pagination"></div>
       </div>
@@ -292,7 +271,7 @@
             of Saudi Arabia</p>
         </div>
         <div class="section__header-CTA">
-          <a href="#" class="btn btn-primary rounded-pill">
+          <a href="{{ route('packages.index') }}" class="btn btn-primary rounded-pill">
             View All
             <i class="fa-solid fa-angles-right"></i>
           </a>
@@ -300,49 +279,12 @@
       </div>
       <div class="exclusive-offers__carousel swiper">
         <div class="swiper-wrapper">
-        @if(count($exclusiveOffers))
-        @foreach($exclusiveOffers as $offer)
-          <div class="exclusive-offers__carousel-item swiper-slide">
-            <div class="exclusive-offers__carousel-item-img">
-              <img src="{{ asset($offer['image']) }}" alt="Exclusive Offer" class="img-fluid">
-              <div class="badge carousel-badge"><i class="fa-solid fa-location-dot"></i> {{ $offer['location'] }}</div> 
+            @foreach ($packages as $package)
+            <div class="exclusive-offers__carousel-item swiper-slide">
+                <x-frontend.package-card :package="$package" />
             </div>
-            <div class="exclusive-offers__carousel-item-info">
-              <div class="d-flex justify-content-between mb-1">
-                <h6 class="fw-bold">{{ $offer['title'] }}</h6>
-                <span class="badge carousel-badge-outline rounded-pill">{{ $offer['duration_badge'] }}</span>
-              </div>
-              <p class="text-muted small mb-2">{{ $offer['route'] }}</p>
-              <hr>
-              <ul class="exclusive-offers__carousel-features-list">
-              @foreach($offer['features'] as $feature)
-                <li>{{ $feature }}</li>
             @endforeach
-              </ul>
 
-              <!-- Price Box -->
-              <div class="exclusive-offers__carousel-price-box">
-                <div class="d-flex justify-content-between align-items-center">
-                  <p class="text-muted">Only for now</p>
-                  <div class="d-flex align-items-center gap-1 text-muted">
-                    <img src="{{ asset('frontend/assets/icons/riyal.svg') }}" alt="Riyal">
-                    <p class="fw-bold text-dark">{{ $offer['price_per_person'] }}</p> /Person
-                  </div>
-                </div>
-                <div class="d-flex justify-content-between align-items-center">
-                  <div class="d-flex align-items-center gap-1 text-muted">
-                    <img class="opacity-50" src="{{ asset('frontend/assets/icons/riyal.svg') }}" alt="Riyal">
-                    {{ $offer['emi_price'] }} 
-                  </div>
-                  <p class="text-muted small">Total Price: <img class="opacity-50" src="{{ asset('frontend/assets/icons/riyal.svg') }}"
-                      alt="Riyal">{{ $offer['total_price'] }}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          @endforeach
-          @endif
-      
         </div>
         <div class="custom__carousel-pagination"></div>
       </div>
@@ -367,7 +309,7 @@
             of Saudi Arabia</p>
         </div>
         <div class="section__header-CTA">
-          <a href="#" class="btn btn-primary rounded-pill">
+          <a href="{{ route('event.listing') }}" class="btn btn-primary rounded-pill">
             View All
             <i class="fa-solid fa-angles-right"></i>
           </a>
@@ -375,28 +317,12 @@
       </div>
       <div class="upcoming-event__carousel swiper">
         <div class="upcoming-event__carousel-wrapper swiper-wrapper">
-        @foreach($upcomingEvents as $event)
-          <div class="upcoming-event__carousel-item swiper-slide">
-            <div class="upcoming-event__carousel-item-img">
-              <img src="{{ asset($event['image']) }}" alt="Event" class="img-fluid">
-              <div class="upcoming-event__carousel-item-dates">
-                <p>{{ $event['start_date'] }}</p>
-                <div class="vertical-divider"></div>
-                <p>{{ $event['end_date'] }}</p>
-              </div>
-            </div>
-            <div class="upcoming-event__carousel-item-info">
-              <button class="btn btn-primary rounded-pill btn-sm gap-1"><i class="fa-solid fa-location-dot"></i> {{ $event['city'] }} | {{ $event['category'] }}</button>
-              <div class="d-flex justify-content-between mt-3">
-                <h5 class="fw-bold">{{ $event['title'] }} </h5>
-                <a href="{{ route('event.details') }}" class="p-large">
-                  <i class="fa-solid fa-arrow-right-long primary-text"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-        @endforeach
-          
+            {{-- @dd($events) --}}
+            @foreach ($events as $event)
+            <x-frontend.event-card :event="$event" />
+
+            @endforeach
+
         </div>
         <div class="custom__carousel-pagination"></div>
       </div>
@@ -516,7 +442,7 @@
                       <i class="fa-solid fa-calendar"></i>
                       Nov 28 | 15:30
                     </div>
-                     <h6>Desert Sunsets & Adventure: The Ultimate Arabian Sand Dune..</h6> 
+                     <h6>Desert Sunsets & Adventure: The Ultimate Arabian Sand Dune..</h6>
                   </div>
                 </div>
               </div>
