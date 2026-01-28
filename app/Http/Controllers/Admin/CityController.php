@@ -67,49 +67,154 @@ class CityController extends Controller
     }
 
     // Store / Update
+    // public function save(Request $request)
+    // {
+    //     DB::beginTransaction();
+
+    //     try {
+
+    //         // Normalize language keys: EN → en
+    //         $translations = [];
+    //         foreach ($request->translations ?? [] as $key => $value) {
+    //             $translations[strtolower($key)] = $value;
+    //         }
+    //         $request->merge(['translations' => $translations]);
+
+    //         // Validation
+    //         $validator = Validator::make($request->all(), [
+    //             'country_id' => 'required|exists:countries,id',
+    //             'category_id' => 'nullable|exists:categories,id',
+    //             'translations.en.name' => 'required|string|max:255',
+    //             'translations.*.name' => 'nullable|string|max:255',
+    //             'slug' => [
+    //                 'nullable',
+    //                 'string',
+    //                 'max:255',
+    //                 Rule::unique('cities', 'slug')->ignore($request->id),
+    //             ],
+    //         ]);
+
+    //         if ($validator->fails()) {
+    //             return back()->withErrors($validator)->withInput();
+    //         }
+
+    //         // Create / Update City
+    //         $city = City::updateOrCreate(
+    //             ['id' => $request->id],
+    //             [
+    //                 'country_id'  => $request->country_id,
+    //                 'category_id' => $request->category_id,
+    //                 'slug'        => $request->slug ?? Str::slug($request->translations['en']['name']),
+    //                 'video_url'   => $request->video_url,
+    //             ]
+    //         );
+
+    //         // Save Translations
+    //         foreach ($request->translations as $langCode => $data) {
+    //             if (!empty($data['name'])) {
+    //                 CityTranslation::updateOrCreate(
+    //                     [
+    //                         'city_id'       => $city->id,
+    //                         'language_code' => $langCode,
+    //                     ],
+    //                     [
+    //                         'name'    => $data['name'],
+    //                         'tagline' => $data['tagline'] ?? null,
+    //                         'about'   => $data['about'] ?? null,
+    //                     ]
+    //                 );
+    //             }
+    //         }
+
+    //         // Save Thumb
+    //         if ($request->hasFile('thumb_image')) {
+
+    //             if ($city->thumb_image && Storage::disk('public')->exists($city->thumb_image)) {
+    //                 Storage::disk('public')->delete($city->thumb_image);
+    //             }
+
+    //             $path = $request->file('thumb_image')->store('cities/thumbs', 'public');
+    //             $city->update(['thumb_image' => $path]);
+    //         }
+
+    //         // Save Gallery
+    //         if ($request->hasFile('gallery_images')) {
+    //             foreach ($request->file('gallery_images') as $file) {
+    //                 storeImage($city, $file, 'cities/gallery', 'gallery');
+    //             }
+    //         }
+
+    //         DB::commit();
+
+    //         return redirect()
+    //             ->route('cities.index')
+    //             ->with('success', 'City saved successfully!');
+    //     } catch (Throwable $e) {
+    //         DB::rollBack();
+
+    //         Log::error('City save failed', [
+    //             'error' => $e->getMessage(),
+    //             'trace' => $e->getTraceAsString(),
+    //             'data'  => $request->all(),
+    //         ]);
+
+    //         return back()
+    //             ->withInput()
+    //             ->with('error', 'Something went wrong while saving the city. Please try again.');
+    //     }
+    // }
+
     public function save(Request $request)
     {
         DB::beginTransaction();
 
         try {
 
-            // Normalize language keys: EN → en
+            /** ---------------- NORMALIZE LANG KEYS ---------------- */
             $translations = [];
             foreach ($request->translations ?? [] as $key => $value) {
                 $translations[strtolower($key)] = $value;
             }
             $request->merge(['translations' => $translations]);
 
-            // Validation
+            /** ---------------- VALIDATION ---------------- */
             $validator = Validator::make($request->all(), [
-                'country_id' => 'required|exists:countries,id',
-                'category_id' => 'nullable|exists:categories,id',
-                'translations.en.name' => 'required|string|max:255',
-                'translations.*.name' => 'nullable|string|max:255',
+                'country_id'            => 'required|exists:countries,id',
+
+                // ✅ MULTI CATEGORY
+                'category_ids'          => 'nullable|array',
+                'category_ids.*'        => 'exists:categories,id',
+
+                'translations.en.name'  => 'required|string|max:255',
+                'translations.*.name'   => 'nullable|string|max:255',
+
                 'slug' => [
                     'nullable',
                     'string',
                     'max:255',
                     Rule::unique('cities', 'slug')->ignore($request->id),
                 ],
+
+                'video_url'   => 'nullable|url',
+                'thumb_image' => 'nullable|image|max:2048',
             ]);
 
             if ($validator->fails()) {
                 return back()->withErrors($validator)->withInput();
             }
 
-            // Create / Update City
+            /** ---------------- CREATE / UPDATE CITY ---------------- */
             $city = City::updateOrCreate(
                 ['id' => $request->id],
                 [
-                    'country_id'  => $request->country_id,
-                    'category_id' => $request->category_id,
-                    'slug'        => $request->slug ?? Str::slug($request->translations['en']['name']),
-                    'video_url'   => $request->video_url,
+                    'country_id' => $request->country_id,
+                    'slug'       => $request->slug
+                        ?: Str::slug($request->translations['en']['name']),
+                    'video_url'  => $request->video_url,
                 ]
             );
 
-            // Save Translations
+            /** ---------------- SAVE TRANSLATIONS ---------------- */
             foreach ($request->translations as $langCode => $data) {
                 if (!empty($data['name'])) {
                     CityTranslation::updateOrCreate(
@@ -126,18 +231,28 @@ class CityController extends Controller
                 }
             }
 
-            // Save Thumb
+            /** ---------------- SAVE MULTI CATEGORIES (PIVOT) ---------------- */
+            if ($request->filled('category_ids')) {
+                $city->categories()->sync($request->category_ids);
+            } else {
+                // optional: remove all categories if none selected
+                $city->categories()->detach();
+            }
+
+            /** ---------------- THUMB IMAGE ---------------- */
             if ($request->hasFile('thumb_image')) {
 
                 if ($city->thumb_image && Storage::disk('public')->exists($city->thumb_image)) {
                     Storage::disk('public')->delete($city->thumb_image);
                 }
 
-                $path = $request->file('thumb_image')->store('cities/thumbs', 'public');
+                $path = $request->file('thumb_image')
+                    ->store('cities/thumbs', 'public');
+
                 $city->update(['thumb_image' => $path]);
             }
 
-            // Save Gallery
+            /** ---------------- GALLERY ---------------- */
             if ($request->hasFile('gallery_images')) {
                 foreach ($request->file('gallery_images') as $file) {
                     storeImage($city, $file, 'cities/gallery', 'gallery');
@@ -150,17 +265,17 @@ class CityController extends Controller
                 ->route('cities.index')
                 ->with('success', 'City saved successfully!');
         } catch (Throwable $e) {
+
             DB::rollBack();
 
             Log::error('City save failed', [
                 'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
+                'line'  => $e->getLine(),
                 'data'  => $request->all(),
             ]);
-
             return back()
                 ->withInput()
-                ->with('error', 'Something went wrong while saving the city. Please try again.');
+                ->with('error', 'Something went wrong while saving the city.');
         }
     }
 

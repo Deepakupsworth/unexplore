@@ -11,7 +11,7 @@ $categoryName = $thing->category?->translationData?->name;
                 class="fa-solid fa-location-dot"></i> {{$cityName}}
             | {{$categoryName}}</button>
         <div class="d-flex justify-content-between mt-3">
-            <h5 class="fw-bold">{{ $t?->name }}</h5>
+            <h5 class="fw-bold text-ellipsis-1">{{ $t?->name }}</h5>
             <a href="{{ route('things-to-do.show', ['slug' => $thing->slug]) }}" class="p-large">
                 <i class="fa-solid fa-arrow-right-long primary-text"></i>
             </a>

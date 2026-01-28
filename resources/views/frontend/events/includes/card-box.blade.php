@@ -15,11 +15,11 @@ $end_date = \Carbon\Carbon::parse($event->end_date)->format('d M Y');
         </div>
     </div>
     <div class="upcoming-event__carousel-item-info">
-        <button class="btn btn-primary rounded-pill btn-sm gap-1"><i
+        <button class="btn btn-primary rounded-pill btn-sm gap-1 text-ellipsis-1"><i
                 class="fa-solid fa-location-dot"></i> {{$cityName}}
             | {{$categoryName}}</button>
         <div class="d-flex justify-content-between mt-3">
-            <h5 class="fw-bold">{{ $t?->title }}</h5>
+            <h5 class="fw-bold text-ellipsis-1">{{ $t?->title }}</h5>
             <a href="{{ route('event.show', ['slug' => $event->slug]) }}" class="p-large">
                 <i class="fa-solid fa-arrow-right-long primary-text"></i>
             </a>
