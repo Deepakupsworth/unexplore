@@ -89,15 +89,18 @@
                                         <div class="sub-menu-section">
                                             <ul class="list-unstyled">
                                                 @foreach (header_todos() as $category)
-                                                    <li>
-                                                        <a href="{{ route('things.to.do') }}">
-                                                            {{ $category->translation?->name }}
-                                                            ({{ $category->things_count }})
-                                                            <i
-                                                                class="fa-solid fa-angles-right primary-text flex-v-center"></i>
-                                                        </a>
-                                                    </li>
+                                                    @if ($category->things_count > 0)
+                                                        <li>
+                                                            <a href="{{ route('things.to.do') }}">
+                                                                {{ $category->translation?->name }}
+                                                                ({{ $category->things_count }})
+                                                                <i
+                                                                    class="fa-solid fa-angles-right primary-text flex-v-center"></i>
+                                                            </a>
+                                                        </li>
+                                                    @endif
                                                 @endforeach
+
 
                                             </ul>
                                         </div>
@@ -136,14 +139,16 @@
                                             <ul class="list-unstyled">
 
                                                 @foreach (header_event_categories() as $category)
-                                                    <li>
-                                                        <a href="{{route('event.listing')}}">
-                                                            {{ $category->translationData?->name }}
-                                                            ({{ $category->events_count }})
-                                                            <i
-                                                                class="fa-solid fa-angles-right primary-text flex-v-center"></i>
-                                                        </a>
-                                                    </li>
+                                                    @if ($category->events_count > 0)
+                                                        <li>
+                                                            <a href="{{ route('event.listing') }}">
+                                                                {{ $category->translationData?->name }}
+                                                                ({{ $category->events_count }})
+                                                                <i
+                                                                    class="fa-solid fa-angles-right primary-text flex-v-center"></i>
+                                                            </a>
+                                                        </li>
+                                                    @endif
                                                 @endforeach
 
                                             </ul>

@@ -35,19 +35,20 @@ if (!function_exists('header_todos')) {
     function header_todos()
     {
         $language = current_lang();
-        // Cache::forget("header_todos_{$language}");
+        Cache::forget("header_todos_{$language}");
 
-        return cache()->remember(
-            "header_todos_{$language}",
-            now()->addMinutes(30),
-            function () {
-                return Category::withCount('things')
-                    ->with('translationData')
-                    ->where('type', CategoryType::THING_TO_DO)
-                    ->latest()
-                    ->limit(5)
-                    ->get();
+        return Category::withCount([
+            'things as things_count' => function ($q) use ($language) {
+                $q->whereHas('translation', function ($t) use ($language) {
+                    $t->where('language_code', $language);
+                });
             }
-        );
+        ])
+        ->with('translationData')
+        ->where('type', CategoryType::THING_TO_DO->value)
+        ->latest()
+        ->limit(5)
+        ->get();
+
     }
 }

@@ -118,7 +118,7 @@
     </section>
 
     <!-- 3. THING TO DO NATURE: CONTENT -->
-    <section class="py-3 things-to-do-nature__about">
+    {{-- <section class="py-3 things-to-do-nature__about">
         <div class="container">
             <div class="things-to-do-nature__about-content">
                 <div class="row gy-3">
@@ -157,10 +157,10 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
 
     <!-- 4. THING TO DO NATURE: CONTENT -->
-    <section class="py-3 things-to-do-nature__about">
+    {{-- <section class="py-3 things-to-do-nature__about">
         <div class="container">
             <div class="things-to-do-nature__about-content">
                 <div class="row">
@@ -199,7 +199,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
 
     <!-- 5. THING TO DO NATURE: NATURE ADVENTURE -->
     <section class="section-padding-md">
