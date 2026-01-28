@@ -307,6 +307,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
                 [AdminPackageController::class, 'packageDayOptionsStore']
             )->name('package-day-options');
 
+            Route::delete(
+                '/package-day-options/{option}',
+                [AdminPackageController::class, 'packageDayOptionsDestroy']
+            )->name('packages.package-day-options.delete');
+
+
             // show price edit form
             Route::get(
                 '/packages/{package}/pricing',
@@ -318,6 +324,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
                 '/packages/{package}/pricing',
                 [PackagePricingController::class, 'update']
             )->name('pricing.update');
+
+            Route::post(
+                '/{package}/additional-info',
+                [AdminPackageController::class, 'saveAdditionalInfo']
+            )->name('additional-info.save');
+
         });
     });
 });
@@ -368,6 +380,8 @@ Route::get('/destination-details/{slug?}', [HomeController::class, 'destination_
 Route::get('/package-listing', [FrontendPackageController::class, 'list'])->name('package.listing');
 
 Route::get('/package-details', [FrontendPackageController::class, 'details'])->name('package.details');
+Route::get('/package-day-option/{id}/{type}', [FrontendPackageController::class, 'packageDayOption'])->name('package.details.options');
+
 
 Route::get('/profile', [FrontendProfileController::class, 'index'])->name('profile.view');
 

@@ -15,6 +15,7 @@ use App\Models\City;
 use App\Models\Language;
 use App\Models\Hotel;
 use App\Models\Event;
+use App\Models\PackageDayItem;
 use App\Models\PackageDayItemOption;
 use App\Models\ThingToDo;
 use App\Models\Transport;
@@ -37,8 +38,8 @@ class PackageController extends Controller
             ->when($request->search, function ($q) use ($request) {
                 $q->whereHas(
                     'translations',
-                    fn ($t) =>
-                        $t->where('title', 'like', '%' . $request->search . '%')
+                    fn($t) =>
+                    $t->where('title', 'like', '%' . $request->search . '%')
                 );
             })
 
@@ -87,46 +88,6 @@ class PackageController extends Controller
         return $this->editForm($package);
     }
 
-    // public function show(Package $package)
-    // {
-    //     $lang = app()->getLocale();
-
-    //     $package->load([
-    //         'translations',
-    //         'category.translation',
-    //         'availabilities',
-    //         'cities.city',
-    //         'days.items',
-    //         'price',
-    //         'infos.translations',
-    //     ]);
-
-    //     return view('backend.packages.show', [
-    //         'package' => $package,
-
-    //         // 🔥 ITEMS FOR MODAL
-    //         'hotels' => \App\Models\Hotel::with(['translations' => function ($q) use ($lang) {
-    //             $q->where('language_code', $lang);
-    //         }])->get()->map(fn($h) => [
-    //             'id' => $h->id,
-    //             'name' => $h->translations->first()->name ?? 'Hotel #' . $h->id,
-    //         ]),
-
-    //         'events' => \App\Models\Event::with(['translations' => function ($q) use ($lang) {
-    //             $q->where('language_code', $lang);
-    //         }])->get()->map(fn($e) => [
-    //             'id' => $e->id,
-    //             'name' => $e->translations->first()->title ?? 'Event #' . $e->id,
-    //         ]),
-
-    //         'todos' => \App\Models\ThingToDo::with(['translations' => function ($q) use ($lang) {
-    //             $q->where('language_code', $lang);
-    //         }])->get()->map(fn($t) => [
-    //             'id' => $t->id,
-    //             'name' => $t->translations->first()->title ?? 'Todo #' . $t->id,
-    //         ]),
-    //     ]);
-    // }
     public function show(Package $package)
     {
         $lang = app()->getLocale();
@@ -137,39 +98,78 @@ class PackageController extends Controller
             'availabilities',
             'cities.city',
             'days.items',
-            'days.options',          // 🔥 IMPORTANT
+            'days.options',
+
+            // 🔥 LOAD OPTION RELATIONS
+            'days.options.hotel.translations',
+            'days.options.hotel.thumb',
+
+            'days.options.todo.translations',
+            'days.options.todo.thumb',
+
+            'days.options.event.translations',
+            'days.options.event.thumb',
+
             'price',
             'infos.translations',
             'thumb',
-            'gallery'
+            'gallery',
+
         ]);
+        $languages = Language::select('id', 'code')->get();
+
+        // Already used MAIN day items (hotel/todo/event)
+        $dayItems = \App\Models\PackageDayItem::select(
+                'package_day_id',
+                'item_type',
+                'item_id'
+            )
+            ->get()
+            ->groupBy(fn ($i) => $i->package_day_id.'_'.$i->item_type);
+
+        // Already added OPTIONS
+        $usedOptions = \App\Models\PackageDayItemOption::select(
+                'package_day_id',
+                'item_type',
+                'item_id'
+            )
+            ->get()
+            ->groupBy(fn ($o) => $o->package_day_id.'_'.$o->item_type);
 
         return view('backend.packages.show', [
-            'package' => $package,
 
-            // 🔥 ITEMS FOR MODAL
-            'hotels' => \App\Models\Hotel::with(['translations' => function ($q) use ($lang) {
-                $q->where('language_code', $lang);
-            }])->get()->map(fn($h) => [
-                'id' => $h->id,
-                'name' => $h->translations->first()->name ?? 'Hotel #' . $h->id,
+            'package'     => $package,
+            'dayItems'    => $dayItems,
+            'usedOptions' => $usedOptions,
+            'languages'   => $languages,
+
+            // ================= MODAL DATA =================
+
+            'hotels' => \App\Models\Hotel::with(['translations' => fn ($q) =>
+                $q->where('language_code', $lang)
+            ])->get()->map(fn ($h) => [
+                'id'   => $h->id,
+                'name' => $h->translations->first()->name ?? 'Hotel #'.$h->id,
             ]),
 
-            'events' => \App\Models\Event::with(['translations' => function ($q) use ($lang) {
-                $q->where('language_code', $lang);
-            }])->get()->map(fn($e) => [
-                'id' => $e->id,
-                'name' => $e->translations->first()->title ?? 'Event #' . $e->id,
+            'events' => \App\Models\Event::with(['translations' => fn ($q) =>
+                $q->where('language_code', $lang)
+            ])->get()->map(fn ($e) => [
+                'id'   => $e->id,
+                'name' => $e->translations->first()->title ?? 'Event #'.$e->id,
             ]),
 
-            'todos' => \App\Models\ThingToDo::with(['translations' => function ($q) use ($lang) {
-                $q->where('language_code', $lang);
-            }])->get()->map(fn($t) => [
-                'id' => $t->id,
-                'name' => $t->translations->first()->title ?? 'Todo #' . $t->id,
+            'todos' => \App\Models\ThingToDo::with(['translations' => fn ($q) =>
+                $q->where('language_code', $lang)
+            ])->get()->map(fn ($t) => [
+                'id'   => $t->id,
+                'name' => $t->translations->first()->name ?? 'Todo #'.$t->id,
             ]),
         ]);
     }
+
+
+
 
 
 
@@ -435,20 +435,99 @@ class PackageController extends Controller
             'item_id'        => 'required|integer',
             'extra_price'    => 'nullable|numeric|min:0',
             'is_default'     => 'nullable|boolean',
-            'sort_order'     => 'nullable|integer|min:0',
         ]);
 
+        // ❌ 1. BLOCK: already exists in DAY ITEMS
+        $existsInDay = PackageDayItem::where([
+            'package_day_id' => $request->package_day_id,
+            'item_type'      => $request->item_type,
+            'item_id'        => $request->item_id,
+        ])->exists();
+
+        if ($existsInDay) {
+            return response()->json([
+                'message' => 'Item already exists in day plan'
+            ], 422);
+        }
+
+        // ❌ 2. BLOCK: already exists as OPTION
+        $existsInOption = PackageDayItemOption::where([
+            'package_day_id' => $request->package_day_id,
+            'item_type'      => $request->item_type,
+            'item_id'        => $request->item_id,
+        ])->exists();
+
+        if ($existsInOption) {
+            return response()->json([
+                'message' => 'Option already added'
+            ], 422);
+        }
+
+        // 🔥 3. AUTO SORT ORDER (per day + item_type)
+        $nextSortOrder = PackageDayItemOption::where(
+            'package_day_id',
+            $request->package_day_id
+        )
+            ->where('item_type', $request->item_type)
+            ->max('sort_order');
+
+        // ✅ 4. CREATE OPTION
         PackageDayItemOption::create([
             'package_day_id' => $request->package_day_id,
             'item_type'      => $request->item_type,
             'item_id'        => $request->item_id,
             'extra_price'    => $request->extra_price ?? 0,
             'is_default'     => $request->boolean('is_default'),
-            'sort_order'     => $request->sort_order ?? 0,
+            'sort_order'     => ($nextSortOrder ?? 0) + 1,
         ]);
 
         return response()->json([
             'message' => 'Optional item added successfully'
         ]);
     }
+
+
+    public function packageDayOptionsDestroy(PackageDayItemOption $option)
+    {
+        $option->delete();
+
+        return response()->json([
+            'message' => 'Optional item removed successfully'
+        ]);
+    }
+
+    public function saveAdditionalInfo(Request $request, Package $package)
+{
+    $request->validate([
+        'infos' => 'required|array',
+        'infos.*.type' => 'required|string|max:255',
+        'infos.*.translations' => 'required|array',
+    ]);
+
+    // 🔥 clean old
+    $package->infos()->delete();
+
+    foreach ($request->infos as $infoData) {
+
+        $info = $package->infos()->create([
+            'type' => $infoData['type'],
+        ]);
+
+        foreach ($infoData['translations'] as $lang => $tr) {
+
+            if (empty($tr['title']) && empty($tr['content'])) {
+                continue;
+            }
+
+            $info->translations()->create([
+                'language_code' => $lang,
+                'title'   => $tr['title'] ?? '',
+                'content' => $tr['content'] ?? '',
+            ]);
+        }
+    }
+
+    return redirect()->back()->with('success', 'Additional info saved');
+}
+
 }
