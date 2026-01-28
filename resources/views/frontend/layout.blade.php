@@ -23,6 +23,7 @@
             'packages*',
             'things-to-do',
             'account',
+            'events*'
         ];
     @endphp
     <div id="header" class="{{ request()->is($whiteHeaderPages) ? 'white-header-static' : '' }}">
