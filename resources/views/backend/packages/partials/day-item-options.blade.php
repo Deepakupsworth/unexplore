@@ -25,58 +25,90 @@
                 <div class="py-4 px-5 space-y-3">
 
                     @php
-                        // ✅ ONLY VALID FILTER
+                        // ✅ filter only same item type
                         $options = $day->options
                             ->where('item_type', $item->item_type)
                             ->values();
                     @endphp
 
-                    {{-- @dd( $options) --}}
-
                     @forelse ($options as $opt)
-                    <div class="flex justify-between items-start border rounded-lg p-4 bg-slate-50">
 
-                        {{-- LEFT --}}
-                        <div>
-                            <p class="font-medium text-slate-800">
-                                {{ ucfirst($opt->item_type) }} Upgrade
-                                <span class="text-xs text-slate-400">(#{{ $opt->item_id }})</span>
-                            </p>
+                        @php
+                            // resolve related model based on item_type
+                            $relatedItem = match ($opt->item_type) {
+                                'hotel' => $opt->hotel,
+                                'event' => $opt->event,
+                                'todo'  => $opt->todo,
+                                default => null,
+                            };
+                        @endphp
 
-                            <div class="flex gap-2 mt-1">
-                                @if ($opt->is_default)
-                                    <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
-                                        Included
-                                    </span>
+                        <div class="flex justify-between items-start gap-4 border rounded-lg p-4 bg-slate-50">
+
+                            {{-- LEFT --}}
+                            <div class="flex gap-3">
+
+                                {{-- THUMB --}}
+                                @if ($relatedItem?->thumb)
+                                    <img
+                                        src="{{ asset('storage/' . $relatedItem->thumb->image_path) }} "
+                                        class="w-14 h-14 rounded object-cover border"
+                                        alt="Thumbnail"
+                                    >
                                 @else
-                                    <span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">
-                                        Optional
-                                    </span>
+                                    <div class="w-14 h-14 rounded bg-slate-200 flex items-center justify-center text-xs text-slate-500">
+                                        No Image
+                                    </div>
                                 @endif
 
-                                <span class="text-xs text-slate-400">
-                                    Order {{ $opt->sort_order }}
-                                </span>
+                                <div>
+                                    <p class="font-medium text-slate-800">
+                                        {{ ucfirst($opt->item_type) }} Upgrade
+                                        <span class="text-xs text-slate-400">
+                                            (#{{ $opt->item_id }})
+                                        </span>
+                                    </p>
+
+                                    {{-- ITEM NAME --}}
+                                    <p class="text-sm text-slate-600 mt-0.5">
+                                        {{ $relatedItem?->translation?->name ?? 'Item not found' }}
+                                    </p>
+
+                                    <div class="flex gap-2 mt-1">
+                                        @if ($opt->is_default)
+                                            <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
+                                                Included
+                                            </span>
+                                        @else
+                                            <span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">
+                                                Optional
+                                            </span>
+                                        @endif
+
+                                        <span class="text-xs text-slate-400">
+                                            Order {{ $opt->sort_order }}
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
+
+                            {{-- RIGHT --}}
+                            <div class="text-right space-y-2">
+                                <p class="text-xs text-slate-400">Extra Cost</p>
+
+                                <p class="text-lg font-bold text-green-600">
+                                    ₹ {{ number_format($opt->extra_price, 2) }}
+                                </p>
+
+                                <button
+                                    type="button"
+                                    class="text-xs text-red-600 hover:underline remove-option-btn"
+                                    data-id="{{ $opt->id }}">
+                                    Remove
+                                </button>
+                            </div>
+
                         </div>
-
-                        {{-- RIGHT --}}
-                        <div class="text-right space-y-2">
-                            <p class="text-xs text-slate-400">Extra Cost</p>
-                            <p class="text-lg font-bold text-green-600">
-                                ₹ {{ number_format($opt->extra_price, 2) }}
-                            </p>
-
-                            {{-- ❌ REMOVE BUTTON --}}
-                            <button
-                                type="button"
-                                class="text-xs text-red-600 hover:underline remove-option-btn"
-                                data-id="{{ $opt->id }}">
-                                Remove
-                            </button>
-                        </div>
-
-                    </div>
 
                     @empty
                         <div class="text-sm text-slate-400 italic text-center border border-dashed rounded-lg p-4 bg-slate-50">

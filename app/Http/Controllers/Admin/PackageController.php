@@ -101,13 +101,13 @@ class PackageController extends Controller
             'days.options',
 
             // 🔥 LOAD OPTION RELATIONS
-            'days.options.hotel.translations',
+            'days.options.hotel.translation',
             'days.options.hotel.thumb',
 
-            'days.options.todo.translations',
+            'days.options.todo.translation',
             'days.options.todo.thumb',
 
-            'days.options.event.translations',
+            'days.options.event.translation',
             'days.options.event.thumb',
 
             'price',
@@ -120,21 +120,21 @@ class PackageController extends Controller
 
         // Already used MAIN day items (hotel/todo/event)
         $dayItems = \App\Models\PackageDayItem::select(
-                'package_day_id',
-                'item_type',
-                'item_id'
-            )
+            'package_day_id',
+            'item_type',
+            'item_id'
+        )
             ->get()
-            ->groupBy(fn ($i) => $i->package_day_id.'_'.$i->item_type);
+            ->groupBy(fn($i) => $i->package_day_id . '_' . $i->item_type);
 
         // Already added OPTIONS
         $usedOptions = \App\Models\PackageDayItemOption::select(
-                'package_day_id',
-                'item_type',
-                'item_id'
-            )
+            'package_day_id',
+            'item_type',
+            'item_id'
+        )
             ->get()
-            ->groupBy(fn ($o) => $o->package_day_id.'_'.$o->item_type);
+            ->groupBy(fn($o) => $o->package_day_id . '_' . $o->item_type);
 
         return view('backend.packages.show', [
 
@@ -145,25 +145,28 @@ class PackageController extends Controller
 
             // ================= MODAL DATA =================
 
-            'hotels' => \App\Models\Hotel::with(['translations' => fn ($q) =>
+            'hotels' => \App\Models\Hotel::with([
+                'translations' => fn($q) =>
                 $q->where('language_code', $lang)
-            ])->get()->map(fn ($h) => [
+            ])->get()->map(fn($h) => [
                 'id'   => $h->id,
-                'name' => $h->translations->first()->name ?? 'Hotel #'.$h->id,
+                'name' => $h->translations->first()->name ?? 'Hotel #' . $h->id,
             ]),
 
-            'events' => \App\Models\Event::with(['translations' => fn ($q) =>
+            'events' => \App\Models\Event::with([
+                'translations' => fn($q) =>
                 $q->where('language_code', $lang)
-            ])->get()->map(fn ($e) => [
+            ])->get()->map(fn($e) => [
                 'id'   => $e->id,
-                'name' => $e->translations->first()->title ?? 'Event #'.$e->id,
+                'name' => $e->translations->first()->title ?? 'Event #' . $e->id,
             ]),
 
-            'todos' => \App\Models\ThingToDo::with(['translations' => fn ($q) =>
+            'todos' => \App\Models\ThingToDo::with([
+                'translations' => fn($q) =>
                 $q->where('language_code', $lang)
-            ])->get()->map(fn ($t) => [
+            ])->get()->map(fn($t) => [
                 'id'   => $t->id,
-                'name' => $t->translations->first()->name ?? 'Todo #'.$t->id,
+                'name' => $t->translations->first()->name ?? 'Todo #' . $t->id,
             ]),
         ]);
     }
@@ -497,37 +500,36 @@ class PackageController extends Controller
     }
 
     public function saveAdditionalInfo(Request $request, Package $package)
-{
-    $request->validate([
-        'infos' => 'required|array',
-        'infos.*.type' => 'required|string|max:255',
-        'infos.*.translations' => 'required|array',
-    ]);
-
-    // 🔥 clean old
-    $package->infos()->delete();
-
-    foreach ($request->infos as $infoData) {
-
-        $info = $package->infos()->create([
-            'type' => $infoData['type'],
+    {
+        $request->validate([
+            'infos' => 'required|array',
+            'infos.*.type' => 'required|string|max:255',
+            'infos.*.translations' => 'required|array',
         ]);
 
-        foreach ($infoData['translations'] as $lang => $tr) {
+        // 🔥 clean old
+        $package->infos()->delete();
 
-            if (empty($tr['title']) && empty($tr['content'])) {
-                continue;
-            }
+        foreach ($request->infos as $infoData) {
 
-            $info->translations()->create([
-                'language_code' => $lang,
-                'title'   => $tr['title'] ?? '',
-                'content' => $tr['content'] ?? '',
+            $info = $package->infos()->create([
+                'type' => $infoData['type'],
             ]);
+
+            foreach ($infoData['translations'] as $lang => $tr) {
+
+                if (empty($tr['title']) && empty($tr['content'])) {
+                    continue;
+                }
+
+                $info->translations()->create([
+                    'language_code' => $lang,
+                    'title'   => $tr['title'] ?? '',
+                    'content' => $tr['content'] ?? '',
+                ]);
+            }
         }
+
+        return redirect()->back()->with('success', 'Additional info saved');
     }
-
-    return redirect()->back()->with('success', 'Additional info saved');
-}
-
 }
