@@ -233,13 +233,6 @@
                         @enderror
                     </div>
 
-
-                    {{-- 🔥 ADDITIONAL INFO SECTION --}}
-                    @include('backend.packages.partials.additional-info.index', [
-                        'package' => null,
-                        'languages' => $languages,
-                    ])
-
                    <div>
                     <button class="btn btn-success mt-6">Create Package</button>
                    </div>
