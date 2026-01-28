@@ -158,7 +158,6 @@
                                                 default => 'border-slate-400',
                                             };
                                         @endphp
-
                                         {{-- ITEM CARD --}}
                                         <div class="bg-white border {{ $border }} rounded-xl p-5 shadow-sm mb-4">
 

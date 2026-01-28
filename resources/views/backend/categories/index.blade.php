@@ -52,8 +52,8 @@
                     <x-admin.table.tr>
                         <x-admin.table.th>#</x-admin.table.th>
                         <x-admin.table.th>Thumb</x-admin.table.th>
-                        <x-admin.table.th>Icon</x-admin.table.th>
                         <x-admin.table.th>Name</x-admin.table.th>
+                        <x-admin.table.th>Category</x-admin.table.th>
                         <x-admin.table.th class="text-right">Action</x-admin.table.th>
                     </x-admin.table.tr>
                 </x-admin.table.thead>
@@ -73,19 +73,14 @@
                                     —
                                 @endif
                             </x-admin.table.td>
-                            <x-admin.table.td>
-                                @if ($cat->thumb_icon)
-                                    <img src="{{ asset('storage/' . $cat->thumb_icon) }}"
-                                        class="w-10 h-10 rounded object-cover border">
-                                @else
-                                    —
-                                @endif
-                            </x-admin.table.td>
+
 
                             <x-admin.table.td class="font-medium">
                                 {{ $cat->translation?->name ?? '—' }}
                             </x-admin.table.td>
-
+                            <x-admin.table.td>
+                                {{ $cat->type?->label() ?? '—' }}
+                            </x-admin.table.td>
                             <x-admin.table.td class="text-right">
                                 <x-admin.action-buttons :edit="route('categories.edit', $cat->id)" :delete="route('categories.delete', $cat->id)" />
                             </x-admin.table.td>

@@ -63,6 +63,9 @@
     <!-- Footer End -->
     <!-- scripts -->
     @include('backend.includes.scripts')
+
+    {{-- TOAST --}}
+    @include('partials.izitoast')
 </body>
 
 </html>
