@@ -123,6 +123,7 @@ class ToDoThingsController extends Controller
             'translation' => fn($q) =>
             $q->where('language_code', $language),
             'thumb',
+            'gallery',
             'city.translationData' => fn($q) =>
             $q->where('language_code', $language),
             'category.translationData' => fn($q) =>

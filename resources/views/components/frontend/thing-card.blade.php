@@ -7,13 +7,17 @@
             {{-- <div class="badge carousel-badge"><i class="fa-solid fa-location-dot"></i> Macca</div> --}}
         </div>
         <div class="dis-adventure__carousel-item-bottom">
-            <h6>{{ $thing->translation->name }}</h6>
+            <a href="{{ route('things-to-do.show', $thing->slug) }}" class="text-white">
+                <h6>{{ $thing->translation->name }}</h6>
+            </a>
             <div class="dis-adventure__carousel-item-footer">
                 {{-- <p class="dis-adventure__carousel-riyal"><img src="../assets/icons/riyal.svg" alt="Riyal"> 1500</p> --}}
-                <a href="{{ route('packages.index') }}"
-                    class="btn btn-outline-light rounded-pill">
-                    Related packages ( {{ $thing->package_count }})
-                </a>
+                @if ($thing->package_count > 0)
+                    <a href="{{ route('packages.index') }}" class="btn btn-outline-light rounded-pill">
+                        Related packages ({{ $thing->package_count }})
+                    </a>
+                @endif
+
             </div>
         </div>
     </div>

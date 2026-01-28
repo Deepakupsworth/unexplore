@@ -70,35 +70,28 @@
                             <div class="icon primary-text flex-center"><i class="fa-regular fa-clock"></i></div>
                             <div>
                                 <p class="text-light2 p-small">Time:</p>
-                                <p class="p-large fw-600">Sun:  {{ \App\Helpers\TimeHelper::range($thing->opening_time, $thing->closing_time) }}</p>
+                                <p class="p-large fw-600">Sun:
+                                    {{ \App\Helpers\TimeHelper::range($thing->opening_time, $thing->closing_time) }}</p>
                             </div>
                         </div>
                     </div>
                     <div class="event-map__card position-relative">
 
-                            @php
-                                    $lat = $thing->latitude;
-                                    $lng = $thing->longitude;
-                            @endphp
+                        @php
+                            $lat = $thing->latitude;
+                            $lng = $thing->longitude;
+                        @endphp
                         <!-- use uploaded image path as src -->
 
                         {{-- Google Map --}}
-                        <iframe
-                            width="100%"
-                            height="350"
-                            style="border:0;"
-                            loading="lazy"
-                            allowfullscreen
+                        <iframe width="100%" height="350" style="border:0;" loading="lazy" allowfullscreen
                             referrerpolicy="no-referrer-when-downgrade"
                             src="https://www.google.com/maps?q={{ $lat }},{{ $lng }}&hl=en&z=14&output=embed">
                         </iframe>
 
                         {{-- Get Directions --}}
-                        <a
-                            href="https://www.google.com/maps/dir/?api=1&destination={{ $lat }},{{ $lng }}"
-                            target="_blank"
-                            class="event-map__card-btn btn btn-primary rounded-pill py-2 px-3"
-                        >
+                        <a href="https://www.google.com/maps/dir/?api=1&destination={{ $lat }},{{ $lng }}"
+                            target="_blank" class="event-map__card-btn btn btn-primary rounded-pill py-2 px-3">
                             Get Directions
                         </a>
                     </div>
@@ -251,7 +244,7 @@
                 <div class="swiper-wrapper">
 
                     @foreach ($things as $thing)
-                    <x-frontend.thing-card :thing="$thing" />
+                        <x-frontend.thing-card :thing="$thing" />
                     @endforeach
                 </div>
                 <div class="custom__carousel-pagination"></div>
@@ -278,9 +271,9 @@
             <div class="upcoming-event__carousel swiper">
                 <div class="upcoming-event__carousel-wrapper swiper-wrapper">
                     @foreach ($packages as $package)
-                    <div class="exclusive-offers__carousel-item swiper-slide">
-                        <x-frontend.package-card :package="$package" />
-                    </div>
+                        <div class="exclusive-offers__carousel-item swiper-slide">
+                            <x-frontend.package-card :package="$package" />
+                        </div>
                     @endforeach
                 </div>
                 <div class="custom__carousel-pagination"></div>
@@ -298,66 +291,24 @@
 
                 <div class="pkg-details__banner gallery-modal-parent-carousel-wrapper swiper m-0 p-0">
                     <div class="swiper-wrapper">
-                        <div class="swiper-slide">
-                            <img src="{{ asset('frontend/assets/package-details-banner.png')}}" alt="Package Details Banner 1"
-                                class="img-fluid w-100">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src=".{{ asset('frontend/assets/package-banner.png')}}" alt="Package Details Banner 1"
-                                class="img-fluid w-100">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="{{ asset('frontend/assets/about-saudi.png')}}" alt="Package Details Banner 1" class="img-fluid w-100">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="{{ asset('frontend/assets/adventure1.png')}}" alt="Package Details Banner 1" class="img-fluid w-100">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="{{ asset('frontend/assets/destination-banner-item.png')}}" alt="Package Details Banner 1"
-                                class="img-fluid w-100">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="{{ asset('frontend/assets/exclusive-offer.png')}}" alt="Package Details Banner 1"
-                                class="img-fluid w-100">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="{{ asset('frontend/assets/explore-destination1.png')}}" alt="Package Details Banner 1"
-                                class="img-fluid w-100">
-                        </div>
+                        @foreach ($thing->gallery as $img)
+                            <div class="swiper-slide">
+                                <img src="{{ asset('storage/' . $img->image_path) }}" alt="Gallery Image"
+                                    class="img-fluid w-100">
+                            </div>
+                        @endforeach
                     </div>
                     <div class="gallery-swiper-pagination"></div>
                 </div>
                 <div class="position-relative mt-4 gallery-modal-carousel-container">
                     <div class="gallery-modal-carousel-wrapper swiper">
                         <div class="swiper-wrapper">
-                            <div class="pkg-details__banner-carousel-item swiper-slide">
-                                <img src="{{ asset('frontend/assets/package-details-banner.png')}}" alt="Package Details Banner 1"
-                                    class="img-fluid w-100">
-                            </div>
-                            <div class="pkg-details__banner-carousel-item swiper-slide">
-                                <img src="{{ asset('frontend/assets/package-banner.png')}}" alt="Package Details Banner 2"
-                                    class="img-fluid w-100">
-                            </div>
-                            <div class="pkg-details__banner-carousel-item swiper-slide">
-                                <img src="{{ asset('frontend/assets/about-saudi.png')}}" alt="Package Details Banner 3"
-                                    class="img-fluid w-100">
-                            </div>
-                            <div class="pkg-details__banner-carousel-item swiper-slide">
-                                <img src=".{{ asset('frontend/assets/adventure1.png')}}" alt="Package Details Banner 3"
-                                    class="img-fluid w-100">
-                            </div>
-                            <div class="pkg-details__banner-carousel-item swiper-slide">
-                                <img src="{{ asset('frontend/assets/destination-banner-item.png')}}" alt="Package Details Banner 3"
-                                    class="img-fluid w-100">
-                            </div>
-                            <div class="pkg-details__banner-carousel-item swiper-slide">
-                                <img src="{{ asset('frontend/assets/exclusive-offer.png')}}" alt="Package Details Banner 3"
-                                    class="img-fluid w-100">
-                            </div>
-                            <div class="pkg-details__banner-carousel-item swiper-slide">
-                                <img src="{{ asset('frontend/assets/explore-destination1.png')}}" alt="Package Details Banner 3"
-                                    class="img-fluid w-100">
-                            </div>
+                            @foreach ($thing->gallery as $img)
+                                <div class="pkg-details__banner-carousel-item swiper-slide">
+                                    <img src="{{ asset('storage/' . $img->image_path) }}" alt="Gallery Image"
+                                        class="img-fluid w-100">
+                                </div>
+                            @endforeach
                         </div>
                     </div>
                     <div class="swiper-button-next gallery-carousel__next">
