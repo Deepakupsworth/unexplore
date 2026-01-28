@@ -70,8 +70,9 @@
                             <div class="icon primary-text flex-center"><i class="fa-regular fa-clock"></i></div>
                             <div>
                                 <p class="text-light2 p-small">Time:</p>
-                                <p class="p-large fw-600">Sun:
-                                    {{ \App\Helpers\TimeHelper::range($thing->opening_time, $thing->closing_time) }}</p>
+                                {{-- <p class="p-large fw-600">Sun:
+                                    {{ \App\Helpers\TimeHelper::range($thing->opening_time, $thing->closing_time) }}</p> --}}
+                                    <p class="p-large fw-600">{{ \App\Helpers\TimeHelper::range($thing->opening_time, $thing->closing_time) }}</p>
                             </div>
                         </div>
                     </div>

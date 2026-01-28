@@ -10,7 +10,7 @@ if (!function_exists('header_event_categories')) {
     function header_event_categories()
     {
         $language = current_lang();
-        // Cache::forget("header_event_categories_{$language}");
+        Cache::forget("header_event_categories_{$language}");
         return cache()->remember(
             "header_event_categories_{$language}",
             now()->addMinutes(30),

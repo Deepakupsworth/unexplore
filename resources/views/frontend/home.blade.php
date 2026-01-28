@@ -69,12 +69,12 @@
                                     <h6>{{ $cites->translation->name }}</h6>
                                     <p>{{ $cites->translation->tagline }}</p>
                                     <a href="{{ route('destinations.show', $cites->slug) }}" class="text-white nav-link">
-                                    <button class="btn btn-light btn-outline-light rounded-pill">
+                                        <button class="btn btn-light btn-outline-light rounded-pill">
 
-                                        <span class="small">{{ __('home.hero.view_now') }}</span>
-                                    </button>
+                                            <span class="small">{{ __('home.hero.view_now') }}</span>
+                                        </button>
                                     </a>
-                                  </div>
+                                </div>
                                 {{-- <div class="hero-banner__carousel-item-content">
                                     <h6>{{ $cites->translation->name }} </h6>
                                     <p> {{ $cites->translation->tagline }}</p>
@@ -151,6 +151,7 @@
     </section>
 
     <!-- 3. DISCOVER ADVENTURE SECTION  -->
+    @if ($things->count() > 0)
     <section class="dis-adventure section-padding">
         <div class="container">
             <div class="section__header">
@@ -175,6 +176,7 @@
             </div>
         </div>
     </section>
+    @endif
 
     <!-- 4. EXPLORE SAUDI -->
     <section class="explore-saudi">
@@ -270,34 +272,35 @@
     </section>
 
     <!-- 5. EXCLUSIVE OFFERS -->
-    <section class="exclusive-offers section-padding">
-        <div class="container">
-            <div class="section__header">
-                <div class="section__header-content">
-                    <h2 class="section__heading">{{ __('home.exclusive.title') }}</h2>
-                    <p class="section__description">{{ __('home.exclusive.description') }}</p>
+    @if ($packages->count() > 0)
+        <section class="exclusive-offers section-padding">
+            <div class="container">
+                <div class="section__header">
+                    <div class="section__header-content">
+                        <h2 class="section__heading">{{ __('home.exclusive.title') }}</h2>
+                        <p class="section__description">{{ __('home.exclusive.description') }}</p>
+                    </div>
+                    <div class="section__header-CTA">
+                        <a href="{{ route('packages.index') }}" class="btn btn-primary rounded-pill">
+                            {{ __('home.exclusive.view_all') }}
+                            <i class="fa-solid fa-angles-right"></i>
+                        </a>
+                    </div>
                 </div>
-                <div class="section__header-CTA">
-                    <a href="{{ route('packages.index') }}" class="btn btn-primary rounded-pill">
-                        {{ __('home.exclusive.view_all') }}
-                        <i class="fa-solid fa-angles-right"></i>
-                    </a>
+                <div class="exclusive-offers__carousel swiper">
+                    <div class="swiper-wrapper">
+                        @foreach ($packages as $package)
+                            <div class="exclusive-offers__carousel-item swiper-slide">
+                                <x-frontend.package-card :package="$package" />
+                            </div>
+                        @endforeach
+
+                    </div>
+                    <div class="custom__carousel-pagination"></div>
                 </div>
             </div>
-            <div class="exclusive-offers__carousel swiper">
-                <div class="swiper-wrapper">
-                    @foreach ($packages as $package)
-                        <div class="exclusive-offers__carousel-item swiper-slide">
-                            <x-frontend.package-card :package="$package" />
-                        </div>
-                    @endforeach
-
-                </div>
-                <div class="custom__carousel-pagination"></div>
-            </div>
-        </div>
-    </section>
-
+        </section>
+    @endif
     <!-- 6. VISA BANNER -->
     <section class="visa-banner d-flex align-items-center justify-content-center">
         <div class="visa-banner__content d-flex flex-column align-items-center gap-4">
@@ -306,34 +309,34 @@
                     class="fa-solid fa-angles-right"></i></a>
         </div>
     </section>
-
-    <!-- 7. UPCOMING EVENT -->
-    <section class="upcoming-event section-padding">
-        <div class="container">
-            <div class="section__header">
-                <div class="section__header-content">
-                    <h2 class="section__heading"> {{ __('home.events.title') }}</h2>
-                    <p class="section__description">{{ __('home.events.description') }}</p>
+    @if ($events->count() > 0)
+        <!-- 7. UPCOMING EVENT -->
+        <section class="upcoming-event section-padding">
+            <div class="container">
+                <div class="section__header">
+                    <div class="section__header-content">
+                        <h2 class="section__heading"> {{ __('home.events.title') }}</h2>
+                        <p class="section__description">{{ __('home.events.description') }}</p>
+                    </div>
+                    <div class="section__header-CTA">
+                        <a href="{{ route('event.listing') }}" class="btn btn-primary rounded-pill">
+                            {{ __('home.events.view_all') }}
+                            <i class="fa-solid fa-angles-right"></i>
+                        </a>
+                    </div>
                 </div>
-                <div class="section__header-CTA">
-                    <a href="{{ route('event.listing') }}" class="btn btn-primary rounded-pill">
-                        {{ __('home.events.view_all') }}
-                        <i class="fa-solid fa-angles-right"></i>
-                    </a>
+                <div class="upcoming-event__carousel swiper">
+                    <div class="upcoming-event__carousel-wrapper swiper-wrapper">
+                        @foreach ($events as $event)
+                            <x-frontend.event-card :event="$event" />
+                        @endforeach
+
+                    </div>
+                    <div class="custom__carousel-pagination"></div>
                 </div>
             </div>
-            <div class="upcoming-event__carousel swiper">
-                <div class="upcoming-event__carousel-wrapper swiper-wrapper">
-                    @foreach ($events as $event)
-                        <x-frontend.event-card :event="$event" />
-                    @endforeach
-
-                </div>
-                <div class="custom__carousel-pagination"></div>
-            </div>
-        </div>
-    </section>
-
+        </section>
+    @endif
     <!-- 8. KNOW BEFORE YOU GO -->
     <section class="know-before section-padding">
         <div class="container">
@@ -349,7 +352,8 @@
                             alt="About Saudi">
                         <div class="card-body d-flex flex-column gap-1 justify-content-center p-0">
                             <h5 class="fw-bold">{!! __('home.know.about') !!}</h5>
-                            <a href="#" class="primary-text fw-semibold p-large">{{ __('home.know.learn_more') }}</a>
+                            <a href="#"
+                                class="primary-text fw-semibold p-large">{{ __('home.know.learn_more') }}</a>
                         </div>
                     </div>
                 </div>
@@ -359,7 +363,8 @@
                             alt="About Saudi">
                         <div class="card-body d-flex flex-column gap-1 justify-content-center p-0">
                             <h5 class="fw-bold">{{ __('home.know.visa') }}</h5>
-                            <a href="#" class="primary-text fw-semibold p-large">{{ __('home.know.learn_more') }}</a>
+                            <a href="#"
+                                class="primary-text fw-semibold p-large">{{ __('home.know.learn_more') }}</a>
                         </div>
                     </div>
                 </div>
@@ -369,7 +374,8 @@
                             alt="About Saudi">
                         <div class="card-body d-flex flex-column gap-1 justify-content-center p-0">
                             <h5 class="fw-bold">{{ __('home.know.guide') }}</h5>
-                            <a href="#" class="primary-text fw-semibold p-large">{{ __('home.know.learn_more') }}</a>
+                            <a href="#"
+                                class="primary-text fw-semibold p-large">{{ __('home.know.learn_more') }}</a>
                         </div>
                     </div>
                 </div>
@@ -379,7 +385,8 @@
                             alt="About Saudi">
                         <div class="card-body d-flex flex-column gap-1 justify-content-center p-0">
                             <h5 class="fw-bold">{{ __('home.know.transport') }}</h5>
-                            <a href="#" class="primary-text fw-semibold p-large"> {{ __('home.know.learn_more') }}</a>
+                            <a href="#" class="primary-text fw-semibold p-large">
+                                {{ __('home.know.learn_more') }}</a>
                         </div>
                     </div>
                 </div>
