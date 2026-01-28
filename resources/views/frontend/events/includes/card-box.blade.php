@@ -1,4 +1,4 @@
-@php $t = $event->translation; 
+@php $t = $event->translation;
 $cityName = $event->city?->translationData?->name;
 $categoryName = $event->category?->translationData?->name;
 $start_date = \Carbon\Carbon::parse($event->start_date)->format('d M Y');
@@ -6,7 +6,8 @@ $end_date = \Carbon\Carbon::parse($event->end_date)->format('d M Y');
 @endphp
 <div class="upcoming-event__carousel-item swiper-slide">
     <div class="upcoming-event__carousel-item-img">
-        <img src="{{ asset('frontend/assets/things_to_do/upcoming_events/cultural_performances.jpg') }}" alt="Event" class="img-fluid">
+        <img src="{{ asset('storage/' . $event->thumb->image_path) }}" alt="Event" class="img-fluid">
+
         <div class="upcoming-event__carousel-item-dates">
             <p>{{$start_date }}</p>
             <div class="vertical-divider"></div>
