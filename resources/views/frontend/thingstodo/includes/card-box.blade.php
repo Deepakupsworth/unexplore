@@ -4,12 +4,7 @@ $categoryName = $thing->category?->translationData?->name;
 @endphp
 <div class="upcoming-event__carousel-item swiper-slide">
     <div class="upcoming-event__carousel-item-img">
-        <img src="{{ asset('frontend/assets/things_to_do/upcoming_events/cultural_performances.jpg') }}" alt="Event" class="img-fluid">
-        <!-- <div class="upcoming-event__carousel-item-dates">
-            <p>25 Aug 2025</p>
-            <div class="vertical-divider"></div>
-            <p>28 Aug 2025</p>
-        </div> -->
+        <img src="{{ asset('storage/' . $thing->thumb->image_path) }}" alt="Event" class="img-fluid">
     </div>
     <div class="upcoming-event__carousel-item-info">
         <button class="btn btn-primary rounded-pill btn-sm gap-1"><i
