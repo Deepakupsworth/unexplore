@@ -9,6 +9,7 @@
         const form       = document.getElementById('optionForm');
         const typeSelect = form.querySelector('[name="item_type"]');
         const itemSelect = form.querySelector('[name="item_id"]');
+        const typeInput  = form.querySelector('input[name="item_type"]');
 
         const itemsMap = {
             hotel: @json($hotels),
@@ -25,10 +26,12 @@
                 form.reset();
 
                 currentDayId = btn.dataset.day;
+                // const type   = btn.dataset.type;
                 const type   = btn.dataset.type;
 
                 form.package_day_id.value = currentDayId;
                 typeSelect.value = type;
+                typeInput.value = type;
 
                 populateItems(type);
             });
