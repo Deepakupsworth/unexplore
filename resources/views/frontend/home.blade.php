@@ -66,13 +66,23 @@
                             <div class="hero-banner__carousel-item swiper-slide">
                                 <img src="{{ asset('storage/' . $cites->thumb_image) }}" alt="">
                                 <div class="hero-banner__carousel-item-content">
+                                    <h6>{{ $cites->translation->name }}</h6>
+                                    <p>{{ $cites->translation->tagline }}</p>
+                                    <a href="{{ route('destinations.show', $cites->slug) }}" class="text-white nav-link">
+                                    <button class="btn btn-light btn-outline-light rounded-pill">
+
+                                        <span class="small">{{ __('home.hero.view_now') }}</span>
+                                    </button>
+                                    </a>
+                                  </div>
+                                {{-- <div class="hero-banner__carousel-item-content">
                                     <h6>{{ $cites->translation->name }} </h6>
                                     <p> {{ $cites->translation->tagline }}</p>
                                     <a href="{{ route('destinations.show', $cites->slug) }}"
                                         class="btn btn-outline-light rounded-pill">
                                         <span class="small">{{ __('home.hero.view_now') }}</span>
                                     </a>
-                                </div>
+                                </div> --}}
                             </div>
                         @endforeach
                     @endif
@@ -93,11 +103,10 @@
                     <div class="plan-trip__content">
                         <div class="section__header">
                             <div class="section__header-content">
-                                <h2 class="section__heading"><span class="fw-normal">{{ __('home.plan.title_light') }}</span> Unxplord
-                                    Saudi</h2>
-                                <p class="section__description">Discover Saudi Arabia like never before — from thrilling
-                                    adventures and modern cities to ancient heritage and breathtaking landscapes. Let us
-                                    help you plan a journey filled with unforgettable moments.</p>
+                                <h2 class="section__heading"><span
+                                        class="fw-normal">{{ __('home.plan.title_light') }}</span>
+                                    {{ __('home.plan.title_bold') }} </h2>
+                                <p class="section__description">{{ __('home.plan.description') }}</p>
                             </div>
                         </div>
                         <div class="plan-trip__features">
@@ -107,9 +116,8 @@
                                         class="img-fluid">
                                 </div>
                                 <div class="plan-trip__feature-text">
-                                    <h6 class="mb-1">Choose Your Destination</h6>
-                                    <p>Explore iconic cities, hidden gems, deserts, mountains, and coastal escapes across
-                                        Saudi Arabia tailored to your travel style.</p>
+                                    <h6 class="mb-1">{{ __('home.plan.feature1.title') }}</h6>
+                                    <p>{{ __('home.plan.feature1.desc') }}</p>
                                 </div>
                             </div>
                             <div class="plan-trip__feature">
@@ -118,9 +126,8 @@
                                         class="img-fluid">
                                 </div>
                                 <div class="plan-trip__feature-text">
-                                    <h6 class="mb-1">Experience Culture & Adventure</h6>
-                                    <p>Enjoy cultural festivals, heritage sites, luxury shopping, motorsports, desert
-                                        safaris, and Red Sea experiences in one journey.</p>
+                                    <h6 class="mb-1">{{ __('home.plan.feature2.title') }}</h6>
+                                    <p>{{ __('home.plan.feature2.desc') }}</p>
                                 </div>
                             </div>
                             <div class="plan-trip__feature">
@@ -129,16 +136,15 @@
                                         class="img-fluid">
                                 </div>
                                 <div class="plan-trip__feature-text">
-                                    <h6 class="mb-1">Travel With Confidence</h6>
-                                    <p>From planning to experiences, Unxplord Saudi ensures seamless travel with expert
-                                        guidance, curated itineraries, and local insights.</p>
+                                    <h6 class="mb-1">{{ __('home.plan.feature3.title') }}</h6>
+                                    <p>{{ __('home.plan.feature3.desc') }}</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-1 position-relative d-none-sm d-none-md">
-                    <h2 class="plan-trip__vertical-text">unxplord</h2>
+                    <h2 class="plan-trip__vertical-text">{{ __('home.plan.vertical_text') }}</h2>
                 </div>
             </div>
         </div>
@@ -149,14 +155,12 @@
         <div class="container">
             <div class="section__header">
                 <div class="section__header-content">
-                    <h2 class="section__heading">Discover Your Next Saudi Adventure</h2>
-                    <p class="section__description">Embark on unforgettable journeys and explore the hidden gems across the
-                        heart
-                        of Saudi Arabia</p>
+                    <h2 class="section__heading">{{ __('home.exclusive.title') }}</h2>
+                    <p class="section__description">{{ __('home.exclusive.description') }}</p>
                 </div>
                 <div class="section__header-CTA">
                     <a href="{{ route('things.to.do') }}" class="btn btn-primary rounded-pill">
-                        View All
+                        {{ __('home.exclusive.view_all') }}
                         <i class="fa-solid fa-angles-right"></i>
                     </a>
                 </div>
@@ -184,27 +188,27 @@
                     <div class="col-md-12 col-lg-6 explore-saudi__content">
                         <div class="section__header">
                             <div class="section__header-content">
-                                <h2 class="section__heading">Explore Saudi's diverse regions</h2>
+                                <h2 class="section__heading"> {{ __('home.explore.title') }}</h2>
                             </div>
                         </div>
                         <ul class="nav nav-pills mt-3 explore-saudi__tabs" role="tablist">
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link active" id="explore-saudi__riyad-tab" data-bs-toggle="pill"
                                     data-bs-target="#explore-saudi__riyad-tab-content" type="button" role="tab"
-                                    aria-controls="explore-saudi__riyad-tab-content" aria-selected="true">Ar Riyad
-                                    Region</button>
+                                    aria-controls="explore-saudi__riyad-tab-content"
+                                    aria-selected="true">{{ __('home.explore.tab.riyadh') }}</button>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="explore-saudi__makkah-tab" data-bs-toggle="pill"
                                     data-bs-target="#explore-saudi__makkah-tab-content" type="button" role="tab"
-                                    aria-controls="explore-saudi__makkah-tab-content" aria-selected="false">Jeddah
-                                    Region</button>
+                                    aria-controls="explore-saudi__makkah-tab-content" aria-selected="false">
+                                    {{ __('home.explore.tab.jeddah') }}</button>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="explore-saudi__madinah-tab" data-bs-toggle="pill"
                                     data-bs-target="#explore-saudi__madinah-tab-content" type="button" role="tab"
-                                    aria-controls="explore-saudi__madinah-tab-content" aria-selected="false">AlUla
-                                    Region</button>
+                                    aria-controls="explore-saudi__madinah-tab-content"
+                                    aria-selected="false">{{ __('home.explore.tab.alula') }}</button>
                             </li>
                         </ul>
                         <div class="tab-content">
@@ -216,10 +220,10 @@
                                             alt="Explore Riyad" class="img-fluid explore-saudi__map">
                                     </div>
                                     <div class="explore-saudi__tab-content-info">
-                                        <h5 class="fw-bold">Ar Riyad Region</h5>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                            incididunt ut</p>
-                                        <a href="#" class="btn btn-primary rounded-pill">Explore Riyadh <i
+                                        <h5 class="fw-bold">{{ __('home.explore.riyadh.title') }}</h5>
+                                        <p>{{ __('home.explore.riyadh.desc') }}</p>
+                                        <a href="#" class="btn btn-primary rounded-pill">
+                                            {{ __('home.explore.riyadh.btn') }} <i
                                                 class="fa-solid fa-angles-right"></i></a>
                                     </div>
                                 </div>
@@ -232,10 +236,10 @@
                                             class="img-fluid explore-saudi__map">
                                     </div>
                                     <div class="explore-saudi__tab-content-info">
-                                        <h5 class="fw-bold">Jeddah Region</h5>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                            incididunt ut</p>
-                                        <a href="#" class="btn btn-primary rounded-pill">Explore Riyadh <i
+                                        <h5 class="fw-bold">{{ __('home.explore.jeddah.title') }}</h5>
+                                        <p>{{ __('home.explore.jeddah.desc') }}</p>
+                                        <a href="#" class="btn btn-primary rounded-pill">
+                                            {{ __('home.explore.jeddah.btn') }} <i
                                                 class="fa-solid fa-angles-right"></i></a>
                                     </div>
                                 </div>
@@ -248,10 +252,10 @@
                                             alt="Explore Riyad" class="img-fluid explore-saudi__map">
                                     </div>
                                     <div class="explore-saudi__tab-content-info">
-                                        <h5 class="fw-bold">AlUla Region</h5>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                            incididunt ut</p>
-                                        <a href="#" class="btn btn-primary rounded-pill">Explore AlUlas <i
+                                        <h5 class="fw-bold">{{ __('home.explore.alula.title') }}</h5>
+                                        <p>{{ __('home.explore.alula.desc') }}</p>
+                                        <a href="#"
+                                            class="btn btn-primary rounded-pill">{{ __('home.explore.alula.btn') }} <i
                                                 class="fa-solid fa-angles-right"></i></a>
                                     </div>
                                 </div>
@@ -270,14 +274,12 @@
         <div class="container">
             <div class="section__header">
                 <div class="section__header-content">
-                    <h2 class="section__heading">Discover exclusive offers</h2>
-                    <p class="section__description">Embark on unforgettable journeys and explore the hidden gems across the
-                        heart
-                        of Saudi Arabia</p>
+                    <h2 class="section__heading">{{ __('home.exclusive.title') }}</h2>
+                    <p class="section__description">{{ __('home.exclusive.description') }}</p>
                 </div>
                 <div class="section__header-CTA">
                     <a href="{{ route('packages.index') }}" class="btn btn-primary rounded-pill">
-                        View All
+                        {{ __('home.exclusive.view_all') }}
                         <i class="fa-solid fa-angles-right"></i>
                     </a>
                 </div>
@@ -299,8 +301,8 @@
     <!-- 6. VISA BANNER -->
     <section class="visa-banner d-flex align-items-center justify-content-center">
         <div class="visa-banner__content d-flex flex-column align-items-center gap-4">
-            <h2 class="text-white fw-normal">Your <strong>Visa to Saudi</strong> Easier than ever</h2>
-            <a href="#" class="btn btn-primary rounded-pill">Learn More <i
+            <h2 class="text-white fw-normal">{!! __('home.visa.title') !!}</h2>
+            <a href="#" class="btn btn-primary rounded-pill">{{ __('home.visa.learn_more') }} <i
                     class="fa-solid fa-angles-right"></i></a>
         </div>
     </section>
@@ -310,14 +312,12 @@
         <div class="container">
             <div class="section__header">
                 <div class="section__header-content">
-                    <h2 class="section__heading">Upcoming Events</h2>
-                    <p class="section__description">Embark on unforgettable journeys and explore the hidden gems across the
-                        heart
-                        of Saudi Arabia</p>
+                    <h2 class="section__heading"> {{ __('home.events.title') }}</h2>
+                    <p class="section__description">{{ __('home.events.description') }}</p>
                 </div>
                 <div class="section__header-CTA">
                     <a href="{{ route('event.listing') }}" class="btn btn-primary rounded-pill">
-                        View All
+                        {{ __('home.events.view_all') }}
                         <i class="fa-solid fa-angles-right"></i>
                     </a>
                 </div>
@@ -339,7 +339,7 @@
         <div class="container">
             <div class="section__header">
                 <div class="section__header-content">
-                    <h2 class="section__heading">Know Before You go</h2>
+                    <h2 class="section__heading">{{ __('home.know.title') }}</h2>
                 </div>
             </div>
             <div class="row mt-4 gy-4">
@@ -348,8 +348,8 @@
                         <img src="{{ asset('frontend/assets/destinations/riyadh/5.jpg') }} " class="img-fluid"
                             alt="About Saudi">
                         <div class="card-body d-flex flex-column gap-1 justify-content-center p-0">
-                            <h5 class="fw-bold">About <br>Saudi</h5>
-                            <a href="#" class="primary-text fw-semibold p-large">Learn More</a>
+                            <h5 class="fw-bold">{!! __('home.know.about') !!}</h5>
+                            <a href="#" class="primary-text fw-semibold p-large">{{ __('home.know.learn_more') }}</a>
                         </div>
                     </div>
                 </div>
@@ -358,8 +358,8 @@
                         <img src="{{ asset('frontend/assets/destinations/yanbu/5.jpg') }}" class="img-fluid"
                             alt="About Saudi">
                         <div class="card-body d-flex flex-column gap-1 justify-content-center p-0">
-                            <h5 class="fw-bold">Visa Regulations</h5>
-                            <a href="#" class="primary-text fw-semibold p-large">Learn More</a>
+                            <h5 class="fw-bold">{{ __('home.know.visa') }}</h5>
+                            <a href="#" class="primary-text fw-semibold p-large">{{ __('home.know.learn_more') }}</a>
                         </div>
                     </div>
                 </div>
@@ -368,8 +368,8 @@
                         <img src="{{ asset('frontend/assets/destinations/alula/3.jpg') }}" class="img-fluid"
                             alt="About Saudi">
                         <div class="card-body d-flex flex-column gap-1 justify-content-center p-0">
-                            <h5 class="fw-bold">Travel Guide</h5>
-                            <a href="#" class="primary-text fw-semibold p-large">Learn More</a>
+                            <h5 class="fw-bold">{{ __('home.know.guide') }}</h5>
+                            <a href="#" class="primary-text fw-semibold p-large">{{ __('home.know.learn_more') }}</a>
                         </div>
                     </div>
                 </div>
@@ -378,8 +378,8 @@
                         <img src="{{ asset('frontend/assets/destinations/hail/3.jpg') }}" class="img-fluid"
                             alt="About Saudi">
                         <div class="card-body d-flex flex-column gap-1 justify-content-center p-0">
-                            <h5 class="fw-bold">Getting Around</h5>
-                            <a href="#" class="primary-text fw-semibold p-large">Learn More</a>
+                            <h5 class="fw-bold">{{ __('home.know.transport') }}</h5>
+                            <a href="#" class="primary-text fw-semibold p-large"> {{ __('home.know.learn_more') }}</a>
                         </div>
                     </div>
                 </div>
@@ -394,16 +394,12 @@
                 <div class="col-md-4 d-flex align-items-center">
                     <div class="section__header flex-column align-items-start gap-4">
                         <div class="section__header-content">
-                            <h2 class="section__heading">News and Events</h2>
-                            <p class="section__description">Discover inspiring travel stories and valuable insights from
-                                across Saudi
-                                Arabia. From hidden cultural gems to modern attractions, explore real experiences that help
-                                you plan
-                                your journey better.</p>
+                            <h2 class="section__heading">{{ __('home.news.title') }}</h2>
+                            <p class="section__description">{{ __('home.news.description') }}</p>
                         </div>
                         <div class="section__header-CTA">
                             <a href="#" class="btn btn-primary rounded-pill">
-                                View All
+                                {{ __('home.news.view_all') }}
                                 <i class="fa-solid fa-angles-right"></i>
                             </a>
                         </div>
@@ -482,12 +478,12 @@
                     <div class="section__header flex-column align-items-start gap-4">
                         <div class="section__header-content">
                             <h2 class="section__heading text-white">
-                                <div class="fw-light">Save up to 60% with</div> The Saudi Pass
+                                <div class="fw-light"> {{ __('home.pass.light') }}</div> {{ __('home.pass.bold') }}
                             </h2>
                         </div>
                         <div class="section__header-CTA">
                             <a href="#" class="btn btn-primary rounded-pill">
-                                Grab it now
+                                {{ __('home.pass.cta') }}
                                 <i class="fa-solid fa-angles-right"></i>
                             </a>
                         </div>
