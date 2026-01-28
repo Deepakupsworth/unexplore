@@ -10,8 +10,6 @@ use App\Models\City;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Repositories\ThingToDo\ThingToDoRepositoryInterface;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 
 class ThingtodoController extends Controller
@@ -81,52 +79,21 @@ class ThingtodoController extends Controller
         ));
     }
 
-
     public function save(Request $request)
     {
-        // ✅ Validation
         $request->validate([
             'translations.en.name' => 'required|string|max:255',
-            'city_id'              => 'required|exists:cities,id',
-            'category_id'          => 'nullable|exists:categories,id',
-            'latitude'  => 'nullable|numeric|between:-90,90',
-            'longitude' => 'nullable|numeric|between:-180,180',
+            'city_id' => 'required|exists:cities,id',
+            'category_id' => 'nullable|exists:categories,id',
+            // 'thumb_image' => 'nullable|image|max:2048',
         ]);
 
-        try {
+        $this->repo->createOrUpdate($request->all(), $request->id);
 
-            DB::beginTransaction();
-
-            $this->repo->createOrUpdate(
-                $request->all(),
-                $request->id
-            );
-
-            DB::commit();
-
-            return redirect()
-                ->route('thingtodos.index')
-                ->with('success', 'Thing To Do saved successfully');
-
-        } catch (\Throwable $e) {
-
-            DB::rollBack();
-
-            // 🔍 Log actual error (for dev/debug)
-            Log::error('ThingToDo save failed', [
-                'error' => $e->getMessage(),
-                'request' => $request->all(),
-            ]);
-
-            return back()
-                ->withInput()
-                ->with(
-                    'error',
-                    'Something went wrong while saving Thing To Do. Please try again.'
-                );
-        }
+        return redirect()
+            ->route('thingtodos.index')
+            ->with('success', 'Thing To Do saved successfully');
     }
-
 
     public function destroy($id)
     {
