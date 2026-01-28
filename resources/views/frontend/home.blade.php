@@ -68,7 +68,7 @@
                                 <div class="hero-banner__carousel-item-content">
                                     <h6>{{ $cites->translation->name }}</h6>
                                     <p>{{ $cites->translation->tagline }}</p>
-                                    <a href="{{ route('destinations.index') }}" class="text-white nav-link">
+                                    <a href="{{ route('destinations.show', $cites->slug) }}" class="text-white nav-link">
                                         <button class="btn btn-light btn-outline-light rounded-pill">
 
                                             <span class="small">{{ __('home.hero.view_now') }}</span>
