@@ -61,7 +61,7 @@ class PageController extends Controller
                 ])
                     ->where('status', 1)
                     ->latest()
-                    ->take(12)
+                    ->take(6)
                     ->get();
 
                 $packages = Package::query()
@@ -75,7 +75,7 @@ class PageController extends Controller
                     ])
                     ->where('status', 'active')
                     ->latest()
-                    ->take(12)
+                    ->take(6)
                     ->get();
 
                 return compact('things', 'events', 'packages', 'cities');

@@ -10,12 +10,13 @@
         <!-- <img class="hero-banner__image" src="../assets/hero-banner-bg.png" alt="Banner"> -->
         <div class="container">
             <div class="dest-details-banner__content">
-                <h1>Things to Do in <strong>{{$city->translation->name}}</strong></h1>
+                <h1>Things to Do in <strong>{{ $city->translation->name }}</strong></h1>
                 <img src="{{ asset('frontend/assets/hero-banner-vision.png') }}" alt="Vision 2030"
                     class="dest-details-banner__vision d-none-sm d-none-md">
                 <div class="dest-details-banner__btn-group">
-                    <a href="{{route('packages.index')}}" class="btn btn-outline-light gap-1 rounded-pill">Related Packages
-                        <strong>({{$city->package_count}})</strong></a>
+                    <a href="{{ route('packages.index') }}" class="btn btn-outline-light gap-1 rounded-pill">Related
+                        Packages
+                        <strong>({{ $city->package_count }})</strong></a>
                     <button class="btn btn-primary rounded-pill">See Images</button>
                 </div>
             </div>
@@ -27,7 +28,7 @@
         <div class="container">
             <div class="section__header">
                 <div class="section__header-content">
-                    <h2 class="section__heading">About {{$city->translation->name}}</h2>
+                    <h2 class="section__heading">About {{ $city->translation->name }}</h2>
                     <p class="section__description">
                         {!! $city->translation->about !!}
                     </p>
@@ -37,35 +38,40 @@
     </section>
 
     <!-- 3. DESTINATION DETAILS: TO DO THINGS -->
-    <section class="dis-adventure section-padding-md">
-        <div class="container">
-            <div class="section__header">
-                <div class="section__header-content">
-                    <h2 class="section__heading">To Do Things</h2>
-                    <p class="section__description">Embark on unforgettable journeys and explore the hidden gems across
-                        the heart
-                        of Saudi Arabia</p>
+    @if ($things->count() > 0)
+        <section class="dis-adventure section-padding-md">
+            <div class="container">
+                <div class="section__header">
+                    <div class="section__header-content">
+                        <h2 class="section__heading">To Do Things</h2>
+                        <p class="section__description">
+                            Embark on unforgettable journeys and explore the hidden gems across
+                            the heart of Saudi Arabia
+                        </p>
+                    </div>
+                    <div class="section__header-CTA">
+                        <a href="{{ route('things.to.do') }}" class="btn btn-primary rounded-pill">
+                            View All
+                            <i class="fa-solid fa-angles-right"></i>
+                        </a>
+                    </div>
                 </div>
-                <div class="section__header-CTA">
-                    <a href="{{route('things.to.do')}}" class="btn btn-primary rounded-pill">
-                        View All
-                        <i class="fa-solid fa-angles-right"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="dis-adventure__carousel swiper">
-                <div class="swiper-wrapper">
-                    @foreach ($things as $thing)
-                        <x-frontend.thing-card :thing="$thing" />
-                    @endforeach
 
+                <div class="dis-adventure__carousel swiper">
+                    <div class="swiper-wrapper">
+                        @foreach ($things as $thing)
+                            <x-frontend.thing-card :thing="$thing" />
+                        @endforeach
+                    </div>
+                    <div class="custom__carousel-pagination"></div>
                 </div>
-                <div class="custom__carousel-pagination"></div>
             </div>
-        </div>
-    </section>
+        </section>
+    @endif
+
 
     <!-- 4. DESTINATION DETAILS: UPCOMING EVENT -->
+    @if ($events->count() > 0)
     <section class="upcoming-event section-padding-md">
         <div class="container">
             <div class="section__header">
@@ -92,7 +98,7 @@
             </div>
         </div>
     </section>
-
+    @endif
     <!-- 5. DESTINATION DETAILS: STORIES & INSIGHT -->
     <section>
         <div class="stories-insight__head">
@@ -178,9 +184,9 @@
             <div class="exclusive-offers__carousel swiper">
                 <div class="swiper-wrapper">
                     @foreach ($packages as $package)
-                    <div class="exclusive-offers__carousel-item swiper-slide">
-                        <x-frontend.package-card :package="$package" />
-                    </div>
+                        <div class="exclusive-offers__carousel-item swiper-slide">
+                            <x-frontend.package-card :package="$package" />
+                        </div>
                     @endforeach
 
                 </div>
