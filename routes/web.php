@@ -323,7 +323,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 });
 
 
-Route::middleware('auth')->prefix('user')->group(function () {
+Route::middleware(['auth','user'])->prefix('user')->group(function () {
     Route::get('/profile', [FrontendProfileController::class, 'index'])
         ->name('user.profile.index');
 
