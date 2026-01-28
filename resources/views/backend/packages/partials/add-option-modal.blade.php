@@ -30,7 +30,7 @@
                         {{-- ITEM TYPE --}}
                         <div>
                             <label class="form-label">Item Type</label>
-                            <select name="item_type" class="form-control" required>
+                            <select  name="item_type" class="form-control" required disabled>
                                 <option value="">Select Type</option>
                                 <option value="hotel">Hotel</option>
                                 <option value="event">Event</option>
