@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     @include('frontend.includes.head')
 
@@ -7,7 +8,13 @@
 </head>
 
 <body>
-
+    <style>
+        .text-ellipsis-1 {
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+        }
+    </style>
     {{-- HEADER --}}
     @php
         $whiteHeaderPages = [
@@ -23,7 +30,7 @@
             'packages*',
             'things-to-do',
             'account',
-            'events*'
+            'events*',
         ];
     @endphp
     <div id="header" class="{{ request()->is($whiteHeaderPages) ? 'white-header-static' : '' }}">
@@ -48,4 +55,5 @@
 
     @stack('scripts')
 </body>
+
 </html>

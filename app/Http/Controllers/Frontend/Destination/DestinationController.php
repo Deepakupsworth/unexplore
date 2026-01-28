@@ -18,27 +18,32 @@ class DestinationController extends Controller
     public function index()
     {
         $language = app()->getLocale();
-        // Cache::forget("frontend_destinations_{$language}");
+        Cache::forget("frontend_destinations_{$language}");
         $cities = Cache::remember(
             "frontend_destinations_{$language}",
             now()->addMinutes(30),
             function () use ($language) {
 
                 return City::with([
-                    'translation' => fn($q) =>
-                    $q->where('language_code', $language),
-                    'thumb'
+                    'translation' => fn ($q) =>
+                        $q->where('language_code', $language),
+
+                    'thumb',
+
+                    // ✅ THIS IS THE FIX
+                    'categories.translationData',
                 ])
-                    ->withCount([
-                        'packageCities as package_count' => function ($q) {
-                            $q->whereHas('package', function ($p) {
-                                $p->where('status', 'active');
-                            });
-                        }
-                    ])
-                    ->get();
+                ->withCount([
+                    'packageCities as package_count' => function ($q) {
+                        $q->whereHas('package', function ($p) {
+                            $p->where('status', 'active');
+                        });
+                    }
+                ])
+                ->get();
             }
         );
+
 
 
         return view('frontend.destinations.index', compact('cities'));

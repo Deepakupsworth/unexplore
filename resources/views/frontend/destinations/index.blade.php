@@ -12,24 +12,35 @@
             <div class="dest-banner__carousel swiper">
                 <div class="swiper-wrapper">
                     @foreach($cities as $cites)
-                    <div class="dest-banner__carousel-item swiper-slide">
-                        <div class="position-relative">
-                            <img src="{{ asset('storage/' . $cites->thumb_image) }}" alt="Destination">
-                            <a href="{{ route('destinations.show',$cites->slug) }}" class="btn btn-outline-light dest__explore-btn">
-                                Explore
-                                <i class="fa-solid fa-arrow-right-long"></i>
-                            </a>
-                        </div>
-                        <div class="dest-banner__carousel-item-content">
-                            <p class="p-small">NATURE, BEACHES, ADVENTURE</p>
-                            <div class="d-flex justify-content-between mt-1">
-                                <h6 class="dest-banner__carousel-item-title">{{ $cites->translation->name }}</h6>
-                                <a href="{{ route('packages.index') }}">Packages ({{$cites->package_count}})</a>
+                        <div class="dest-banner__carousel-item swiper-slide">
+                            <div class="position-relative">
+                                <img src="{{ asset('storage/' . $cites->thumb_image) }}" alt="Destination">
+                                <a href="{{ route('destinations.show', $cites->slug) }}"
+                                   class="btn btn-outline-light dest__explore-btn">
+                                    Explore
+                                    <i class="fa-solid fa-arrow-right-long"></i>
+                                </a>
+                            </div>
+
+                            <div class="dest-banner__carousel-item-content">
+                                {{-- 🔥 DYNAMIC CATEGORY NAMES --}}
+                                <p class="p-small text-uppercase">
+                                    {{ $cites->categoryNames() }}
+                                </p>
+
+                                <div class="d-flex justify-content-between mt-1">
+                                    <h6 class="dest-banner__carousel-item-title">
+                                        {{ $cites->translation->name }}
+                                    </h6>
+                                    <a href="{{ route('packages.index') }}">
+                                        Packages ({{ $cites->package_count }})
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
                     @endforeach
                 </div>
+
             </div>
         </div>
     </section>

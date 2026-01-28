@@ -61,16 +61,21 @@
                         <label class="form-label">
                             Category <span class="text-red-500">*</span>
                         </label>
-                        <select name="category_id" class="form-control" required>
-                            <option value="">Select Category</option>
-
+                        <select name="category_ids[]" class="form-control select2" multiple required>
                             @foreach ($categories as $category)
                                 <option value="{{ $category->id }}"
-                                    {{ old('category_id', $model->category?->id) == $category->id ? 'selected' : '' }}>
+                                    {{ in_array(
+                                        $category->id,
+                                        old(
+                                            'category_ids',
+                                            $model->categories->pluck('id')->toArray()
+                                        )
+                                    ) ? 'selected' : '' }}>
                                     {{ $category->translation?->name }}
                                 </option>
                             @endforeach
                         </select>
+
 
 
                     </div>
