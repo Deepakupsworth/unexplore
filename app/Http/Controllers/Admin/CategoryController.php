@@ -10,7 +10,8 @@ use App\Models\Language;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 class CategoryController extends Controller
 {
     /**
@@ -42,7 +43,7 @@ class CategoryController extends Controller
         $languages = Language::all();
         $types = CategoryType::cases();
 
-        return view('backend.categories.form', compact('model', 'languages','types'));
+        return view('backend.categories.form', compact('model', 'languages', 'types'));
     }
 
     /**
@@ -53,83 +54,122 @@ class CategoryController extends Controller
     {
         // ✅ Validation
         $request->validate([
-            'type'                  => 'required|string|max:50', // 👈 NEW
-            'translations.en.name'  => 'required|string|max:255',
-            // 'thumb_image'           => 'nullable|image|max:2048',
-            // 'thumb_icon'            => 'nullable|image|max:1024',
+            'type'                 => ['required'], // enum validated below
+            'translations.en.name' => 'required|string|max:255',
+            'thumb_image'          => 'nullable|image|max:2048',
+            'thumb_icon'           => 'nullable|image|max:1024',
         ]);
 
-        /**
-         * Create or Update Category
-         */
-        $category = Category::updateOrCreate(
-            ['id' => $request->id],
-            [
-                'type' => $request->type, // 👈 IMPORTANT
-                'slug' => $request->slug
-                    ?: Str::slug($request->translations['en']['name']),
-            ]
-        );
+        try {
+            DB::beginTransaction();
 
-        /**
-         * Save Thumb Image
-         */
-        if ($request->hasFile('thumb_image')) {
-            if ($category->thumb_image) {
-                Storage::disk('public')->delete($category->thumb_image);
+            /**
+             * ✅ Resolve & validate enum safely
+             */
+            $typeEnum = $request->type instanceof CategoryType
+                ? $request->type
+                : CategoryType::tryFrom($request->type);
+
+            if (! $typeEnum) {
+                throw new \InvalidArgumentException('Invalid category type selected.');
             }
 
-            $path = $request->file('thumb_image')
-                ->store('categories/thumbs', 'public');
+            /**
+             * ✅ Build slug (type + name)
+             */
+            $baseSlug = Str::slug(
+                $typeEnum->value . ' ' . ($request->translations['en']['name'] ?? '')
+            );
 
-            $category->update(['thumb_image' => $path]);
-        }
+            $slug = $request->slug ?: $baseSlug;
 
-        /**
-         * Save Thumb Icon
-         */
-        if ($request->hasFile('thumb_icon')) {
-            if ($category->thumb_icon) {
-                Storage::disk('public')->delete($category->thumb_icon);
-            }
-
-            $path = $request->file('thumb_icon')
-                ->store('categories/icons', 'public');
-
-            $category->update(['thumb_icon' => $path]);
-        }
-
-        /**
-         * Save Translations
-         */
-        foreach ($request->translations as $langCode => $data) {
-
-            $langCode = strtolower($langCode);
-            $name = trim($data['name'] ?? '');
-
-            // ❌ Remove translation if name empty
-            if ($name === '') {
-                CategoryTranslation::where('category_id', $category->id)
-                    ->where('language_code', $langCode)
-                    ->delete();
-                continue;
-            }
-
-            // ✅ Create or Update translation
-            CategoryTranslation::updateOrCreate(
+            /**
+             * Create or Update Category
+             */
+            $category = Category::updateOrCreate(
+                ['id' => $request->id],
                 [
-                    'category_id'    => $category->id,
-                    'language_code'  => $langCode,
-                ],
-                [
-                    'name' => $name,
+                    'type' => $typeEnum, // enum cast safe
+                    'slug' => $slug,
                 ]
             );
-        }
 
-        return redirect()
-            ->route('categories.index')
-            ->with('success', 'Category saved successfully!');
+            /**
+             * Save Thumb Image
+             */
+            if ($request->hasFile('thumb_image')) {
+
+                if ($category->thumb_image) {
+                    Storage::disk('public')->delete($category->thumb_image);
+                }
+
+                $path = $request->file('thumb_image')
+                    ->store('categories/thumbs', 'public');
+
+                $category->update(['thumb_image' => $path]);
+            }
+
+            /**
+             * Save Thumb Icon
+             */
+            if ($request->hasFile('thumb_icon')) {
+
+                if ($category->thumb_icon) {
+                    Storage::disk('public')->delete($category->thumb_icon);
+                }
+
+                $path = $request->file('thumb_icon')
+                    ->store('categories/icons', 'public');
+
+                $category->update(['thumb_icon' => $path]);
+            }
+
+            /**
+             * Save Translations
+             */
+            foreach ($request->translations as $langCode => $data) {
+
+                $langCode = strtolower($langCode);
+                $name     = trim($data['name'] ?? '');
+
+                // ❌ delete translation if empty
+                if ($name === '') {
+                    CategoryTranslation::where('category_id', $category->id)
+                        ->where('language_code', $langCode)
+                        ->delete();
+                    continue;
+                }
+
+                CategoryTranslation::updateOrCreate(
+                    [
+                        'category_id'   => $category->id,
+                        'language_code' => $langCode,
+                    ],
+                    [
+                        'name' => $name,
+                    ]
+                );
+            }
+
+            DB::commit();
+
+            return redirect()
+                ->route('categories.index')
+                ->with('success', 'Category saved successfully!');
+        } catch (\Throwable $e) {
+
+            DB::rollBack();
+
+            // 🧾 Log for debugging
+            Log::error('Category save failed', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return back()
+                ->withInput()
+                ->with('error', $e->getMessage() ?: 'Something went wrong while saving category.');
+        }
     }
 
     /**
