@@ -271,8 +271,8 @@ class PackageController extends Controller
             'pricing.original_price'   => 'required|numeric|min:0',
             'pricing.per_person_price' => 'required|numeric|min:0',
 
-            'thumb'     => 'nullable|image|max:2048',
-            'gallery'   => 'nullable|array',
+            // 'thumb'     => 'nullable|image|max:2048',
+            // 'gallery'   => 'nullable|array',
             // 'gallery.*' => 'image|max:2048',
         ]);
 

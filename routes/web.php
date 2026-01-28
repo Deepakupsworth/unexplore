@@ -94,7 +94,7 @@ Route::middleware(['auth', 'user'])->group(function () {
         Route::get('/account/addresses/{id}', [AddressController::class, 'show']);
         Route::put('/account/addresses/{id}', [AddressController::class, 'update']);
         Route::delete('/account/addresses/{id}', [AddressController::class, 'destroy']);
-    
+
         // optional
         Route::post('/account/addresses/{id}/restore', [AddressController::class, 'restore']);
 
@@ -141,7 +141,7 @@ Route::get('/events-filter', [FrontendEventController::class, 'filter'])->name('
 
 
 Route::middleware(['auth', 'admin'])->group(function () {
-  
+
     Route::prefix('admin')->group(function () {
 
 
@@ -371,6 +371,11 @@ Route::get('/package-details', [FrontendPackageController::class, 'details'])->n
 
 Route::get('/profile', [FrontendProfileController::class, 'index'])->name('profile.view');
 
+Route::post(
+    '/package/day-items/session',
+    [FrontendPackageController::class, 'saveToSession']
+)->name('package.day.items.session');
+
 // Route::get('/things-to-do-nature', function () {
 //     return view('frontend.things-to-do-nature');
 // })->name('things-to-do-nature');
@@ -415,7 +420,7 @@ Route::get('/packages', [FrontendPackageController::class, 'index'])
 Route::get('/packages/ajax', [FrontendPackageController::class, 'ajax'])
     ->name('packages.ajax');
 
-Route::get('/{slug}', [FrontendPackageController::class, 'show'])
+Route::get('packages/{slug}', [FrontendPackageController::class, 'show'])
     ->name('packages.show');
 //json file route
 Route::get('/saudi-packages', [DemoJsonController::class, 'index']);

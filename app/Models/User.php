@@ -63,14 +63,14 @@ class User extends Authenticatable
 
     public function sendPasswordResetNotification($token)
     {
-        $url = url('/reset-password/'.$token.'?email='.urlencode($this->email));
+        $url = url('/reset-password/' . $token . '?email=' . urlencode($this->email));
 
         \Illuminate\Support\Facades\Mail::send('emails.forgot-password', [
             'url' => $url,
             'name' => $this->name,
         ], function ($message) {
             $message->to($this->email)
-                    ->subject('Reset Password Notification');
+                ->subject('Reset Password Notification');
         });
     }
 
@@ -82,7 +82,11 @@ class User extends Authenticatable
     public function profileImage()
     {
         return $this->morphOne(Image::class, 'imageable')
-                    ->where('role', 'thumb');
+            ->where('role', 'thumb');
     }
 
+    public function addresses()
+    {
+        return $this->hasMany(Address::class);
+    }
 }

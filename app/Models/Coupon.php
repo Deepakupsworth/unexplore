@@ -23,7 +23,7 @@ class Coupon extends Model
         'starts_at' => 'date',
         'ends_at'   => 'date',
         'is_active' => 'boolean',
-    ]; 
+    ];
 
     /* ================= Relations ================= */
 

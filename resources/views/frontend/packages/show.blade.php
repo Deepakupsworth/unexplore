@@ -1,5 +1,14 @@
 @extends('frontend.layout')
+<style>
+    .selectable-card {
+        cursor: pointer;
+    }
 
+    .selectable-card.active {
+        border-color: #198754;
+        background-color: #f6fffa;
+    }
+</style>
 @section('content')
     @php
 
@@ -134,246 +143,281 @@
                                         </div>
                                         <div class="pkg-details__day-plan-right">
                                             <div class="tab-content">
+
                                                 @foreach ($package->days as $day)
                                                     <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}"
                                                         id="day{{ $day->day_number }}">
+
+                                                        {{-- Day Header --}}
                                                         <div class="pkg-details__day-plan-header pkg-details__common-block">
-                                                            <!-- <div class="badge"> Macca</div> -->
                                                             <p class="badge primary-bg">Day {{ $day->day_number }}</p>
                                                             <p class="fw-600">
-                                                                {{ $day->city?->translations?->first()?->name }}</p>
+                                                                {{ $day->city?->translations?->first()?->name }}
+                                                            </p>
                                                         </div>
 
                                                         <div
                                                             class="pkg-details__day-plan-content pkg-details__common-block">
 
-                                                            @foreach ($day->items->where('item_type', 'hotel') as $item)
-                                                                {{-- @dd($item) --}}
-                                                                <div class="accordion accordion-flush" id="hotelAccordion">
+                                                            {{-- ================= HOTEL ================= --}}
+                                                            @php
+                                                                $sessionHotelIds =
+                                                                    $sessionItems[$day->id]['hotel'] ?? null;
+
+                                                                $hotels = $sessionHotelIds
+                                                                    ? $allHotels->whereIn('id', $sessionHotelIds)
+                                                                    : $day->items
+                                                                        ->where('item_type', 'hotel')
+                                                                        ->map(fn($i) => $i->hotel);
+                                                            @endphp
+                                                            {{-- @dd($hotels) --}}
+
+                                                            @if ($hotels->count())
+                                                                <div class="accordion accordion-flush mb-3"
+                                                                    id="hotelAccordion{{ $day->id }}">
                                                                     <div
-                                                                        class="accordion-item border rounded mb-3 pkg-details__accordion-item">
+                                                                        class="accordion-item border rounded pkg-details__accordion-item">
+
                                                                         <div class="accordion-header">
                                                                             <div
-                                                                                class="d-flex justify-content-between align-items-center gap-3">
+                                                                                class="d-flex justify-content-between align-items-center">
                                                                                 <div
                                                                                     class="d-flex align-items-center gap-2">
                                                                                     <div class="accordion-icon"
                                                                                         data-bs-toggle="collapse"
-                                                                                        data-bs-target="#hotelCollapse"
-                                                                                        aria-expanded="true"
-                                                                                        aria-controls="hotelCollapse">
+                                                                                        data-bs-target="#hotelCollapse{{ $day->id }}">
                                                                                         <i
                                                                                             class="fa-solid fa-chevron-down"></i>
                                                                                     </div>
-                                                                                    <p class="p-small fw-600">HOTEL</p>
+                                                                                    <p class="p-small fw-600">Hotel</p>
                                                                                 </div>
-                                                                                {{-- <div class="vertical-divider"></div> --}}
-                                                                                {{-- <p class="p-small">2 Nights</p> --}}
-                                                                                {{-- <div class="vertical-divider"></div>
-                                                                                <p class="p-small">In Riyadh</p> --}}
                                                                             </div>
                                                                             <div
                                                                                 class="d-flex gap-2 pkg-details__accordion-actions">
-                                                                                <button class="btn btn-primary btn-sm">
+                                                                                <button type="button"
+                                                                                    class="btn btn-primary btn-sm editDayItemsBtn"
+                                                                                    data-day-id="{{ $day->id }}"
+                                                                                    data-type="hotel"
+                                                                                    data-selected="{{ $hotels->pluck('id')->join(',') }}"
+>
                                                                                     <i class="fa-solid fa-pencil"></i>
                                                                                 </button>
+
                                                                             </div>
                                                                         </div>
 
-                                                                        <div id="hotelCollapse"
+                                                                        <div id="hotelCollapse{{ $day->id }}"
                                                                             class="accordion-collapse collapse show"
-                                                                            aria-labelledby="headingOne"
-                                                                            data-bs-parent="#hotelAccordion">
-                                                                            <div class="accordion-body">
-                                                                                @php
+                                                                            data-bs-parent="#hotelAccordion{{ $day->id }}">
 
-                                                                                    $hotelImage = $item->hotel->thumb
-                                                                                        ? asset(
-                                                                                            'storage/' .
-                                                                                                $item->hotel->thumb
-                                                                                                    ->image_path,
-                                                                                        )
-                                                                                        : asset(
-                                                                                            'frontend/assets/hotel-placeholder.jpg',
-                                                                                        );
-                                                                                @endphp
-                                                                                {{-- @dd($item->hotel) --}}
-                                                                                <div
-                                                                                    class="d-flex align-items-center gap-3">
-                                                                                    <img src="{{ $hotelImage }}"
-                                                                                        alt="Transfer"
-                                                                                        class="img-fluid pkg-details__tr-ht-img">
+                                                                            <div class="accordion-body"
+                                                                                id="day-{{ $day->id }}-hotel-list">
 
-                                                                                    <div>
-                                                                                        <div
-                                                                                            class="pkg-details__star-ratings">
+                                                                                @foreach ($hotels as $hotel)
+                                                                                    @php
+                                                                                        $hotelImage = $hotel?->thumb
+                                                                                            ? asset(
+                                                                                                'storage/' .
+                                                                                                    $hotel->thumb
+                                                                                                        ->image_path,
+                                                                                            )
+                                                                                            : asset(
+                                                                                                'frontend/assets/hotel-placeholder.jpg',
+                                                                                            );
+                                                                                    @endphp
 
-                                                                                            @for ($i = 1; $i <= 5; $i++)
+                                                                                    <div
+                                                                                        class="d-flex align-items-center gap-3 mb-3">
+                                                                                        <img src="{{ $hotelImage }}"
+                                                                                            class="pkg-details__tr-ht-img">
+
+                                                                                        <div>
+                                                                                            <div
+                                                                                                class="pkg-details__star-ratings">
+                                                                                                @for ($i = 1; $i <= 5; $i++)
+                                                                                                    <i
+                                                                                                        class="fa-solid fa-star {{ $i <= $hotel->star_rating ? 'active' : 'text-muted' }}"></i>
+                                                                                                @endfor
+                                                                                            </div>
+
+                                                                                            <p class="fw-600 my-1">
+                                                                                                {{ $hotel->translation?->name }}
+                                                                                            </p>
+
+                                                                                            <p class="p-small text-light2">
                                                                                                 <i
-                                                                                                    class="fa-solid fa-star {{ $i <= $item->hotel->star_rating ? 'active' : 'text-muted' }}"></i>
-                                                                                            @endfor
-
+                                                                                                    class="fa-solid fa-location-dot"></i>
+                                                                                                {{ $hotel->location }}
+                                                                                            </p>
                                                                                         </div>
-                                                                                        <p class="fw-600 my-1">
-                                                                                            {{ $item->hotel->translation->name }}</p>
-                                                                                        <p class="p-small text-light2">
-                                                                                            <i
-                                                                                                class="fa-solid fa-location-dot p-small"></i>
-                                                                                                        {{ $item->hotel->location}}
-
-                                                                                        </p>
                                                                                     </div>
-                                                                                </div>
+                                                                                @endforeach
+
                                                                             </div>
                                                                         </div>
+
                                                                     </div>
                                                                 </div>
-                                                            @endforeach
+                                                            @endif
 
-                                                            @foreach ($day->items->where('item_type', 'todo') as $item)
+                                                            {{-- ================= TODO ================= --}}
+                                                            @php
+                                                                $sessionTodoIds =
+                                                                    $sessionItems[$day->id]['todo'] ?? null;
 
-                                                                <div class="accordion accordion-flush" id="todoAccordion">
+                                                                $todos = $sessionTodoIds
+                                                                    ? $allTodos->whereIn('id', $sessionTodoIds)
+                                                                    : $day->items->where('item_type', 'todo')->map
+                                                                        ->todo;
+                                                            @endphp
+
+                                                            @if ($todos->count())
+                                                                <div class="accordion accordion-flush mb-3"
+                                                                    id="todoAccordion{{ $day->id }}">
                                                                     <div
-                                                                        class="accordion-item border rounded mb-3 pkg-details__accordion-item">
+                                                                        class="accordion-item border rounded pkg-details__accordion-item">
+
                                                                         <div class="accordion-header">
                                                                             <div
-                                                                                class="d-flex justify-content-between align-items-center gap-3">
+                                                                                class="d-flex justify-content-between align-items-center">
                                                                                 <div
                                                                                     class="d-flex align-items-center gap-2">
                                                                                     <div class="accordion-icon"
                                                                                         data-bs-toggle="collapse"
-                                                                                        data-bs-target="#hotelCollapse"
-                                                                                        aria-expanded="true"
-                                                                                        aria-controls="hotelCollapse">
+                                                                                        data-bs-target="#todoCollapse{{ $day->id }}">
                                                                                         <i
                                                                                             class="fa-solid fa-chevron-down"></i>
                                                                                     </div>
                                                                                     <p class="p-small fw-600">ToDo Thing
                                                                                     </p>
                                                                                 </div>
-                                                                                {{-- <div class="vertical-divider"></div> --}}
-                                                                                {{-- <p class="p-small">2 Nights</p> --}}
-                                                                                {{-- <div class="vertical-divider"></div>
-                                                                                <p class="p-small">In Riyadh</p> --}}
                                                                             </div>
                                                                             <div
                                                                                 class="d-flex gap-2 pkg-details__accordion-actions">
-                                                                                <button class="btn btn-primary btn-sm">
+                                                                                <button type="button"
+                                                                                    class="btn btn-primary btn-sm editDayItemsBtn"
+                                                                                    data-day-id="{{ $day->id }}"
+                                                                                    data-type="todo"
+                                                                                    data-selected="{{ $todos->pluck('id')->join(',') }}">
                                                                                     <i class="fa-solid fa-pencil"></i>
                                                                                 </button>
+
                                                                             </div>
                                                                         </div>
 
-                                                                        <div id="hotelCollapse"
+                                                                        <div id="todoCollapse{{ $day->id }}"
                                                                             class="accordion-collapse collapse show"
-                                                                            aria-labelledby="headingOne"
-                                                                            data-bs-parent="#todoAccordion">
-                                                                            <div class="accordion-body">
+                                                                            data-bs-parent="#todoAccordion{{ $day->id }}">
 
+                                                                            <div class="accordion-body"
+                                                                                id="day-{{ $day->id }}-todo-list">
 
-                                                                                <div
-                                                                                    class="d-flex align-items-center gap-3">
-                                                                                    <img src="{{ asset('storage/' . $item->todo->thumb->image_path) }}"
-                                                                                        alt="Transfer"
-                                                                                        class="img-fluid pkg-details__tr-ht-img">
+                                                                                @foreach ($todos as $todo)
+                                                                                    <div class="d-flex gap-3 mb-3">
+                                                                                        <img src="{{ $todo->thumb ? asset('storage/' . $todo->thumb->image_path) : asset('frontend/assets/hotel-placeholder.jpg') }}"
+                                                                                            class="pkg-details__tr-ht-img">
 
-
-                                                                                    <div>
-
-
-                                                                                        <p class="fw-600 my-1">
-                                                                                            {{ $item->todo->translation->name }}
-                                                                                        </p>
-                                                                                        <p class="p-small text-light2">
-                                                                                            <i
-                                                                                                class="fa-solid fa-location-dot p-small"></i>
-
-                                                                                                {{ \App\Helpers\TimeHelper::range($item->todo->opening_time, $item->todo->closing_time) }}
-
-
-                                                                                        </p>
+                                                                                        <div>
+                                                                                            <p class="fw-600">
+                                                                                                {{ $todo->translation->name }}
+                                                                                            </p>
+                                                                                            <p class="p-small text-light2">
+                                                                                                <i class="fa fa-clock"></i>
+                                                                                                {{ $todo->opening_time }} -
+                                                                                                {{ $todo->closing_time }}
+                                                                                            </p>
+                                                                                        </div>
                                                                                     </div>
-                                                                                </div>
+                                                                                @endforeach
                                                                             </div>
                                                                         </div>
+
                                                                     </div>
                                                                 </div>
-                                                            @endforeach
+                                                            @endif
 
+                                                            {{-- ================= EVENT ================= --}}
+                                                            @php
+                                                                $sessionEventIds =
+                                                                    $sessionItems[$day->id]['event'] ?? null;
 
+                                                                $events = $sessionEventIds
+                                                                    ? $allEvents->whereIn('id', $sessionEventIds)
+                                                                    : $day->items->where('item_type', 'event')->map
+                                                                        ->event;
+                                                            @endphp
 
-                                                            @foreach ($day->items->where('item_type', 'event') as $item)
-                                                                    {{-- @dd($item) --}}
-                                                                <div class="accordion accordion-flush" id="eventAccordion">
+                                                            @if ($events->count())
+                                                                <div class="accordion accordion-flush mb-3"
+                                                                    id="eventAccordion{{ $day->id }}">
                                                                     <div
-                                                                        class="accordion-item border rounded mb-3 pkg-details__accordion-item">
+                                                                        class="accordion-item border rounded pkg-details__accordion-item">
+
                                                                         <div class="accordion-header">
                                                                             <div
-                                                                                class="d-flex justify-content-between align-items-center gap-3">
+                                                                                class="d-flex justify-content-between align-items-center">
                                                                                 <div
                                                                                     class="d-flex align-items-center gap-2">
                                                                                     <div class="accordion-icon"
                                                                                         data-bs-toggle="collapse"
-                                                                                        data-bs-target="#eventlCollapse"
-                                                                                        aria-expanded="true"
-                                                                                        aria-controls="eventlCollapse">
+                                                                                        data-bs-target="#eventCollapse{{ $day->id }}">
                                                                                         <i
                                                                                             class="fa-solid fa-chevron-down"></i>
                                                                                     </div>
-                                                                                    <p class="p-small fw-600">Events
-                                                                                    </p>
+                                                                                    <p class="p-small fw-600">Events</p>
                                                                                 </div>
-                                                                                {{-- <div class="vertical-divider"></div> --}}
-                                                                                {{-- <p class="p-small">2 Nights</p> --}}
-                                                                                {{-- <div class="vertical-divider"></div>
-                                                                                <p class="p-small">In Riyadh</p> --}}
                                                                             </div>
                                                                             <div
                                                                                 class="d-flex gap-2 pkg-details__accordion-actions">
-                                                                                <button class="btn btn-primary btn-sm">
+                                                                                <button type="button"
+                                                                                    class="btn btn-primary btn-sm editDayItemsBtn"
+                                                                                    data-day-id="{{ $day->id }}"
+                                                                                    data-type="event"
+                                                                                    data-selected="{{ $events->pluck('id')->join(',') }}">
                                                                                     <i class="fa-solid fa-pencil"></i>
                                                                                 </button>
-                                                                            </div>
+
+                                                                            </div>:
                                                                         </div>
 
-                                                                        <div id="eventCollapse"
+                                                                        <div id="eventCollapse{{ $day->id }}"
                                                                             class="accordion-collapse collapse show"
-                                                                            aria-labelledby="headingOne"
-                                                                            data-bs-parent="#eventAccordion">
-                                                                            <div class="accordion-body">
+                                                                            data-bs-parent="#eventAccordion{{ $day->id }}">
 
+                                                                            <div class="accordion-body"
+                                                                                id="day-{{ $day->id }}-event-list">
 
-                                                                                <div
-                                                                                    class="d-flex align-items-center gap-3">
-                                                                                    <img src="{{ asset('storage/' . $item->event->thumb->image_path) }}"
-                                                                                        alt="Transfer"
-                                                                                        class="img-fluid pkg-details__tr-ht-img">
+                                                                                @foreach ($events as $event)
+                                                                                    <div class="d-flex gap-3 mb-3">
+                                                                                        <img src="{{ $event->thumb ? asset('storage/' . $event->thumb->image_path) : asset('frontend/assets/hotel-placeholder.jpg') }}"
+                                                                                            class="pkg-details__tr-ht-img">
 
-                                                                                    <div>
-
-                                                                                        <p class="fw-600 my-1">
-                                                                                            {{ $item->event->translation->title }}
-                                                                                        </p>
-                                                                                        <p class="p-small text-light2">
-                                                                                            <i
-                                                                                                class="fa-solid fa-location-dot p-small"></i>
-                                                                                                {{-- {{$item->event->day}} --}}
-                                                                                                {{\App\Helpers\DateHelper::format($item->event->start_date)}} <br/>
-                                                                                                {{ \App\Helpers\TimeHelper::range($item->event->opening_time, $item->event->closing_time) }}
-                                                                                        </p>
+                                                                                        <div>
+                                                                                            <p class="fw-600">
+                                                                                                {{ $event->translation->title }}
+                                                                                            </p>
+                                                                                            <p class="p-small text-light2">
+                                                                                                <i
+                                                                                                    class="fa fa-calendar"></i>
+                                                                                                {{ \App\Helpers\DateHelper::format($event->start_date) }}
+                                                                                            </p>
+                                                                                        </div>
                                                                                     </div>
-                                                                                </div>
+                                                                                @endforeach
                                                                             </div>
                                                                         </div>
+
                                                                     </div>
                                                                 </div>
-                                                            @endforeach
+                                                            @endif
 
                                                         </div>
                                                     </div>
                                                 @endforeach
+
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
 
@@ -838,4 +882,201 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="editDayItemsModal" tabindex="-1">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Day Items</h5>
+                    <button class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <form id="editDayItemsForm">
+                        @csrf
+                        <input type="hidden" name="package_id" value="{{ $package->id }}">
+                        <input type="hidden" name="day_id" id="modalDayId">
+                        <input type="hidden" name="item_type" id="modalItemType">
+
+                        <div class="row g-3" id="modalItemsWrapper"></div>
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button class="btn btn-primary" id="saveDayItemsBtn">Save</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    @push('scripts')
+        <script>
+            /* ===========================
+               GLOBAL DATA
+            =========================== */
+            window.allItems = {
+                hotel: @json($allHotels),
+                todo: @json($allTodos),
+                event: @json($allEvents),
+            };
+
+            /* ===========================
+               HELPERS
+            =========================== */
+            function getImage(item) {
+                return item?.thumb?.image_path ?
+                    `/storage/${item.thumb.image_path}` :
+                    '/frontend/assets/hotel-placeholder.jpg';
+            }
+
+            function getTitle(item) {
+                return (
+                    item?.translation?.name ||
+                    item?.translation?.title ||
+                    item?.translations?.[0]?.name ||
+                    item?.translations?.[0]?.title ||
+                    'N/A'
+                );
+            }
+
+            /* ===========================
+               CARD TEMPLATE (RADIO)
+            =========================== */
+            function cardTemplate(item, checked, meta) {
+                return `
+    <div class="col-md-6">
+      <div class="border rounded p-2 d-flex gap-3 selectable-card ${checked ? 'active' : ''}">
+        <input type="radio"
+               name="items[]"
+               value="${item.id}"
+               class="d-none"
+               ${checked ? 'checked' : ''}>
+
+        <img src="${getImage(item)}" class="pkg-details__tr-ht-img">
+
+        <div class="flex-grow-1">
+          <p class="fw-600 mb-1">${getTitle(item)}</p>
+          <p class="p-small text-light2">${meta}</p>
+        </div>
+
+        <div class="radio-icon">
+          <i class="fa-regular fa-circle ${checked ? 'd-none' : ''}"></i>
+          <i class="fa-solid fa-circle-dot text-success ${checked ? '' : 'd-none'}"></i>
+        </div>
+      </div>
+    </div>`;
+            }
+
+
+            function hotelCard(item, checked, group) {
+                return cardTemplate(
+                    item,
+                    checked,
+                    `<i class="fa fa-location-dot"></i> ${item.location ?? ''}`,
+                    group
+                );
+            }
+
+            function todoCard(item, checked, group) {
+                return cardTemplate(
+                    item,
+                    checked,
+                    `<i class="fa fa-clock"></i> ${item.opening_time} - ${item.closing_time}`,
+                    group
+                );
+            }
+
+            function eventCard(item, checked, group) {
+                return cardTemplate(
+                    item,
+                    checked,
+                    `<i class="fa fa-calendar"></i> ${item.start_date}`,
+                    group
+                );
+            }
+
+            /* ===========================
+               MAIN LOGIC
+            =========================== */
+            document.addEventListener('DOMContentLoaded', () => {
+
+                const modalEl = document.getElementById('editDayItemsModal');
+                const modal = new bootstrap.Modal(modalEl);
+
+                /* ---------- OPEN MODAL ---------- */
+                document.querySelectorAll('.editDayItemsBtn').forEach(btn => {
+    btn.addEventListener('click', () => {
+
+        const type  = btn.dataset.type;
+        const dayId = btn.dataset.dayId;
+
+        // ✅ FIX IS HERE
+        const selected = btn.dataset.selected
+            ? btn.dataset.selected.split(',').map(id => parseInt(id))
+            : [];
+
+        const groupName = `day_${dayId}_${type}`;
+
+        modalDayId.value    = dayId;
+        modalItemType.value = type;
+        modalItemsWrapper.innerHTML = '';
+
+        window.allItems[type].forEach(item => {
+            const checked = selected.includes(item.id);
+
+            if (type === 'hotel')
+                modalItemsWrapper.innerHTML += hotelCard(item, checked, groupName);
+
+            if (type === 'todo')
+                modalItemsWrapper.innerHTML += todoCard(item, checked, groupName);
+
+            if (type === 'event')
+                modalItemsWrapper.innerHTML += eventCard(item, checked, groupName);
+        });
+
+        modal.show();
+    });
+});
+
+
+                /* ---------- RADIO CLICK (MODAL SCOPE ONLY) ---------- */
+                modalEl.addEventListener('click', e => {
+                    const card = e.target.closest('.selectable-card');
+                    if (!card) return;
+
+                    const wrapper = card.closest('#modalItemsWrapper');
+
+                    wrapper.querySelectorAll('.selectable-card').forEach(c => {
+                        c.classList.remove('active');
+                        c.querySelector('input[type="radio"]').checked = false;
+                        c.querySelector('.fa-circle').classList.remove('d-none');
+                        c.querySelector('.fa-circle-dot').classList.add('d-none');
+                    });
+
+                    card.classList.add('active');
+                    card.querySelector('input[type="radio"]').checked = true;
+                    card.querySelector('.fa-circle').classList.add('d-none');
+                    card.querySelector('.fa-circle-dot').classList.remove('d-none');
+                });
+
+                /* ---------- SAVE ---------- */
+                saveDayItemsBtn.addEventListener('click', () => {
+                    fetch("{{ route('package.day.items.session') }}", {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'Accept': 'application/json'
+                            },
+                            body: new FormData(editDayItemsForm)
+                        })
+                        .then(res => res.json())
+                        .then(() => location.reload());
+                });
+
+            });
+        </script>
+    @endpush
 @endsection

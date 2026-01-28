@@ -20,12 +20,11 @@
             'blogs',
             'checkout',
             'contact-us',
-            'packages',
+            'packages*',
             'things-to-do',
             'account',
         ];
     @endphp
-
     <div id="header" class="{{ request()->is($whiteHeaderPages) ? 'white-header-static' : '' }}">
         @include('frontend.includes.header')
     </div>
