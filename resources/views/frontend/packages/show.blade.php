@@ -198,8 +198,7 @@
                                                                                     class="btn btn-primary btn-sm editDayItemsBtn"
                                                                                     data-day-id="{{ $day->id }}"
                                                                                     data-type="hotel"
-                                                                                    data-selected="{{ $hotels->pluck('id')->join(',') }}"
->
+                                                                                    data-selected="{{ $hotels->pluck('id')->join(',') }}">
                                                                                     <i class="fa-solid fa-pencil"></i>
                                                                                 </button>
 
@@ -915,8 +914,8 @@
     @push('scripts')
         <script>
             /* ===========================
-               GLOBAL DATA
-            =========================== */
+                       GLOBAL DATA
+                    =========================== */
             window.allItems = {
                 hotel: @json($allHotels),
                 todo: @json($allTodos),
@@ -1008,38 +1007,41 @@
 
                 /* ---------- OPEN MODAL ---------- */
                 document.querySelectorAll('.editDayItemsBtn').forEach(btn => {
-    btn.addEventListener('click', () => {
+                    btn.addEventListener('click', () => {
 
-        const type  = btn.dataset.type;
-        const dayId = btn.dataset.dayId;
+                        const type = btn.dataset.type;
+                        const dayId = btn.dataset.dayId;
 
-        // ✅ FIX IS HERE
-        const selected = btn.dataset.selected
-            ? btn.dataset.selected.split(',').map(id => parseInt(id))
-            : [];
+                        // ✅ FIX IS HERE
+                        const selected = btn.dataset.selected ?
+                            btn.dataset.selected.split(',').map(id => parseInt(id)) :
+                            [];
 
-        const groupName = `day_${dayId}_${type}`;
+                        const groupName = `day_${dayId}_${type}`;
 
-        modalDayId.value    = dayId;
-        modalItemType.value = type;
-        modalItemsWrapper.innerHTML = '';
+                        modalDayId.value = dayId;
+                        modalItemType.value = type;
+                        modalItemsWrapper.innerHTML = '';
 
-        window.allItems[type].forEach(item => {
-            const checked = selected.includes(item.id);
+                        window.allItems[type].forEach(item => {
+                            const checked = selected.includes(item.id);
 
-            if (type === 'hotel')
-                modalItemsWrapper.innerHTML += hotelCard(item, checked, groupName);
+                            if (type === 'hotel')
+                                modalItemsWrapper.innerHTML += hotelCard(item, checked,
+                                    groupName);
 
-            if (type === 'todo')
-                modalItemsWrapper.innerHTML += todoCard(item, checked, groupName);
+                            if (type === 'todo')
+                                modalItemsWrapper.innerHTML += todoCard(item, checked,
+                                    groupName);
 
-            if (type === 'event')
-                modalItemsWrapper.innerHTML += eventCard(item, checked, groupName);
-        });
+                            if (type === 'event')
+                                modalItemsWrapper.innerHTML += eventCard(item, checked,
+                                    groupName);
+                        });
 
-        modal.show();
-    });
-});
+                        modal.show();
+                    });
+                });
 
 
                 /* ---------- RADIO CLICK (MODAL SCOPE ONLY) ---------- */

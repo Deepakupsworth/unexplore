@@ -15,7 +15,7 @@
 
                     <div class="package-listing__results-header">
                         <p class="primary-text">
-                            All Packages ({{ $packages->total() }})
+                            {{ __('packages.listing.all_packages') }} ({{ $packages->total() }})
                         </p>
                     </div>
 
@@ -60,7 +60,7 @@ $(document).ready(function () {
 
             beforeSend() {
                 $('#package-list').html(
-                    '<div class="text-center py-5">Loading packages...</div>'
+                    '<div class="text-center py-5">{{ __('packages.listing.loading') }}</div>'
                 );
             },
 
@@ -70,7 +70,7 @@ $(document).ready(function () {
 
             error(xhr) {
                 console.error(xhr.responseText);
-                alert('Ajax error – check console');
+                alert('{{ __('common.ajax_error') }}');
             }
         });
     }
@@ -84,4 +84,4 @@ $(document).ready(function () {
 
 });
 </script>
-
+{{-- ✅ END AJAX SCRIPT --}}

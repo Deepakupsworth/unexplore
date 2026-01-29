@@ -6,8 +6,10 @@
 <section class="package-listing__banner">
     <div class="container">
         <div class="package-listing__banner-content text-center">
-            <h1 class="package-listing__banner-heading h2">Explore Events</h1>
-            <p>Discover upcoming events happening across Saudi.</p>
+            <h1 class="package-listing__banner-heading h2">
+                {{ __('events.banner.title') }}
+            </h1>
+            <p>{{ __('events.banner.description') }}</p>
         </div>
     </div>
 </section>
@@ -16,21 +18,24 @@
 <section class="package-listing to-do-things-search">
     <div class="container">
         <div class="package-listing__filters">
+
             <!-- LEFT FILTERS -->
             <div class="package-listing__filter-section">
                 <div class="package-listing__filter-section-header">
-                    <h6>Filters</h6>
+                    <h6>{{ __('events.filters.title') }}</h6>
                 </div>
 
                 <div class="package-listing__filter-items">
 
                     <!-- SEARCH -->
                     <div class="package-listing__filter-item">
-                        <p class="p-large package-listing__filter-title">Search</p>
+                        <p class="p-large package-listing__filter-title">
+                            {{ __('events.filters.search') }}
+                        </p>
                         <div class="input-group mb-3 package-listing__search-bar">
                             <input type="text"
                                    class="form-control"
-                                   placeholder="Browse Event, Locations">
+                                   placeholder="{{ __('events.filters.search_placeholder') }}">
                             <button class="btn" type="button">
                                 <i class="fa-solid fa-magnifying-glass"></i>
                             </button>
@@ -44,7 +49,7 @@
                         <div class="accordion-item">
                             <p class="accordion-header p-large package-listing__filter-title">
                                 <button class="accordion-button" type="button">
-                                    Type
+                                    {{ __('events.filters.type') }}
                                 </button>
                             </p>
 
@@ -55,7 +60,9 @@
                                     <a href="{{ route('things.to.do') }}" class="text-decoration-none">
                                         <div class="package-listing__budget-filter-option package-listing__budget-button">
                                             <label>
-                                                <span class="option-text">Things To Do</span>
+                                                <span class="option-text">
+                                                    {{ __('events.filters.type_things') }}
+                                                </span>
                                             </label>
                                         </div>
                                     </a>
@@ -64,7 +71,9 @@
                                     <a href="{{ route('event.listing') }}" class="text-decoration-none">
                                         <div class="package-listing__budget-filter-option package-listing__budget-button active">
                                             <label>
-                                                <span class="option-text">Events</span>
+                                                <span class="option-text">
+                                                    {{ __('events.filters.type_events') }}
+                                                </span>
                                             </label>
                                         </div>
                                     </a>
@@ -81,7 +90,7 @@
                         <div class="accordion-item">
                             <p class="accordion-header p-large package-listing__filter-title">
                                 <button class="accordion-button" type="button">
-                                    Categories
+                                    {{ __('events.filters.categories') }}
                                 </button>
                             </p>
 
@@ -119,7 +128,7 @@
                         <div class="accordion-item">
                             <p class="accordion-header p-large package-listing__filter-title">
                                 <button class="accordion-button" type="button">
-                                    Destinations
+                                    {{ __('events.filters.destinations') }}
                                 </button>
                             </p>
 
@@ -152,6 +161,7 @@
 
                 </div>
             </div>
+
             <!-- RIGHT RESULTS -->
             <div class="package-listing__results">
 
@@ -172,14 +182,24 @@
                 <div class="package-listing__results-applied-list">
                     <div class="dropdown package-listing__results-sort-dropdown">
                         <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                            <span class="label">Sort by:</span>
+                            <span class="label">{{ __('events.sort.label') }}</span>
                             <span class="package-listing__results-sort-option fw-600"
-                                  id="currentSortLabel">None</span>
+                                  id="currentSortLabel">
+                                {{ __('events.sort.none') }}
+                            </span>
                         </button>
 
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#" data-sort="popular">Popular</a></li>
-                            <li><a class="dropdown-item" href="#" data-sort="newest">Newest</a></li>
+                            <li>
+                                <a class="dropdown-item" href="#" data-sort="popular">
+                                    {{ __('events.sort.popular') }}
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#" data-sort="newest">
+                                    {{ __('events.sort.newest') }}
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -197,72 +217,3 @@
 </section>
 
 @endsection
-
-@push('scripts')
-<script>
-let typingTimer;
-let currentSort = null;
-
-function applyFilters() {
-
-    const search =
-        document.querySelector('input[placeholder*="Browse"]')?.value || '';
-
-    const cities = [...document.querySelectorAll('input[name="cities[]"]:checked')]
-        .map(el => el.value);
-
-    const categories = [...document.querySelectorAll('input[name="categories[]"]:checked')]
-        .map(el => el.value);
-
-    const params = new URLSearchParams();
-
-    if (search.length >= 3) {
-        params.set('search', search);
-    }
-
-    cities.forEach(id => params.append('cities[]', id));
-    categories.forEach(id => params.append('categories[]', id));
-
-    if (currentSort) {
-        params.set('sort', currentSort);
-    }
-
-    const newUrl =
-        `${window.location.pathname}${params.toString() ? '?' + params.toString() : ''}`;
-    window.history.pushState({}, '', newUrl);
-
-    fetch(`{{ route('events.filter') }}?${params.toString()}`, {
-        headers: { 'X-Requested-With': 'XMLHttpRequest' }
-    })
-    .then(res => res.text())
-    .then(html => {
-        document.getElementById('eventsList').innerHTML = html;
-    });
-}
-
-/* Search */
-document.querySelectorAll('input[type="text"]').forEach(input => {
-    input.addEventListener('keyup', () => {
-        clearTimeout(typingTimer);
-        if (input.value.length >= 3 || input.value.length === 0) {
-            typingTimer = setTimeout(applyFilters, 400);
-        }
-    });
-});
-
-/* Checkbox filters */
-document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-    cb.addEventListener('change', applyFilters);
-});
-
-/* Sort */
-document.querySelectorAll('.dropdown-item[data-sort]').forEach(item => {
-    item.addEventListener('click', e => {
-        e.preventDefault();
-        currentSort = item.dataset.sort;
-        document.getElementById('currentSortLabel').textContent = item.textContent;
-        applyFilters();
-    });
-});
-</script>
-@endpush
