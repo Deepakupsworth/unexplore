@@ -177,7 +177,7 @@
                                                 value="{{ old("translations.$code.sub_title", $trans->sub_title ?? '') }}">
 
                                             <label class="form-label">Description</label>
-                                            <textarea class="form-control h-28" name="translations[{{ $code }}][description]">{{ old("translations.$code.description", $trans->description ?? '') }}</textarea>
+                                            <textarea class="editor form-control h-28" name="translations[{{ $code }}][description]">{{ old("translations.$code.description", $trans->description ?? '') }}</textarea>
                                         </div>
                                     @endforeach
 

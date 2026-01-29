@@ -102,7 +102,7 @@
                                 <label class="form-label">
                                     About ({{ strtoupper($code) }})
                                 </label>
-                                <textarea class="form-control" name="translations[{{ $code }}][about]" rows="4">{{ old("translations.$code.about", $trans->about ?? '') }}</textarea>
+                                <textarea class="editor form-control" name="translations[{{ $code }}][about]" rows="4">{{ old("translations.$code.about", $trans->about ?? '') }}</textarea>
                             </div>
                         </div>
                     </div>
