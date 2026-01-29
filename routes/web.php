@@ -335,7 +335,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 });
 
 
-Route::middleware('auth')->prefix('user')->group(function () {
+Route::middleware(['auth','user'])->prefix('user')->group(function () {
     Route::get('/profile', [FrontendProfileController::class, 'index'])
         ->name('user.profile.index');
 
@@ -383,6 +383,12 @@ Route::get('/package-details', [FrontendPackageController::class, 'details'])->n
 Route::get('/package-day-option/{id}/{type}', [FrontendPackageController::class, 'packageDayOption'])->name('package.details.options');
 
 
+
+Route::get('/package-day-option/{id}/{type}', [FrontendPackageController::class, 'packageDayOption'])->name('package.details.option');
+
+Route::post('/save-package-day-item-session', [FrontendPackageController::class, 'savePackageDayItemSession'])->name('package.day.item.option.session');
+
+
 Route::get('/profile', [FrontendProfileController::class, 'index'])->name('profile.view');
 
 Route::post(
@@ -417,7 +423,7 @@ Route::get('/blog-details', [BlogController::class, 'detail'])->name('blog.detai
 
 
 // checkout route
-Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.view');
+Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout.view');
 
 //pages routes
 Route::get('/about-us', [PageController::class, 'about_us'])->name('about.us');

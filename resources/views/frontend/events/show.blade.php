@@ -6,12 +6,12 @@
         @if ($event->video_url)
             <video class="hero-banner__video" autoplay muted loop playsinline poster="../assets/hero-banner-bg.png">
                 <source src="{{ $event->video_url }}" type="video/mp4">
-                Your browser does not support the video tag.
+                {{ __('common.video_not_supported') }}
             </video>
         @else
             <video class="hero-banner__video" autoplay muted loop playsinline poster="../assets/hero-banner-bg.png">
                 <source src="{{ asset('frontend/assets/videos/seekers-entry-video.mp4') }}" type="video/mp4">
-                Your browser does not support the video tag.
+                {{ __('common.video_not_supported') }}
             </video>
         @endif
 
@@ -33,7 +33,6 @@
                     <p class="section__description">
                         {!! $event->translation->description !!}
                     </p>
-
                 </div>
             </div>
         </div>
@@ -43,17 +42,26 @@
     <section class="event-info-section section-padding-md pt-0">
         <div class="container">
             <div class="event-info-wrapper d-flex align-items-center text-white">
+
                 <!-- Event Date -->
                 <div class="event-info__block">
-                    <p class="p-large mb-2"><i class="fa-regular fa-calendar"></i> Event Date</p>
-                    <h5 class="m-0 fw-bold">{{ \App\Helpers\DateHelper::format($event->start_date) }}</h5>
+                    <p class="p-large mb-2">
+                        <i class="fa-regular fa-calendar"></i>
+                        {{ __('event_details.info.event_date') }}
+                    </p>
+                    <h5 class="m-0 fw-bold">
+                        {{ \App\Helpers\DateHelper::format($event->start_date) }}
+                    </h5>
                 </div>
 
                 <div class="event-divider"></div>
 
                 <!-- Location -->
                 <div class="event-info__block">
-                    <p class="p-large mb-2"><i class="fa-solid fa-location-dot"></i> Location</p>
+                    <p class="p-large mb-2">
+                        <i class="fa-solid fa-location-dot"></i>
+                        {{ __('event_details.info.location') }}
+                    </p>
                     <h6 class="m-0 fw-bold">{{ $event->location }}</h6>
                 </div>
 
@@ -62,22 +70,24 @@
                 <!-- Price + Buttons -->
                 <div class="d-flex align-items-center gap-3 justify-content-between w-100 event-info__block">
                     <div>
-                        <p class="p-large mb-2">Starting from </p>
-                        <h5 class="m-0 fw-bold">{{ \App\Helpers\DateHelper::format($event->start_date) }}</h5>
+                        <p class="p-large mb-2">
+                            {{ __('event_details.info.starting_from') }}
+                        </p>
+                        <h5 class="m-0 fw-bold">
+                            {{ \App\Helpers\DateHelper::format($event->start_date) }}
+                        </h5>
                     </div>
+
                     {{-- <div class="d-flex align-items-center gap-3">
-                        <!-- Wishlist -->
                         <button
                             class="btn btn-outline-light rounded-circle d-flex align-items-center justify-content-center heart-btn">
                             <i class="fa-regular fa-heart"></i>
                         </button>
 
-                        <!-- Buy Tickets -->
                         <button class="btn btn-success d-flex align-items-center gap-5 px-4 py-3 rounded-pill">
                             Buy Tickets <i class="fa-solid fa-ticket"></i>
                         </button>
                     </div> --}}
-
                 </div>
 
             </div>
@@ -88,10 +98,15 @@
         <div class="container">
             <div class="d-flex justify-content-between flex-column flex-sm-row">
                 <div class="py-3 event-details__overview-title flex-center">
-                    <p class="p-large fw-bold primary-text">Overview</p>
+                    <p class="p-large fw-bold primary-text">
+                        {{ __('event_details.overview.title') }}
+                    </p>
                 </div>
+
                 <div class="d-flex align-items-center gap-4 py-3">
-                    <p class="p-large fw-500">Do you like it? Share it</p>
+                    <p class="p-large fw-500">
+                        {{ __('event_details.overview.share_text') }}
+                    </p>
                     <div class="d-flex gap-3">
                         <a href="#" class="social-icon">
                             <img src="{{ asset('frontend/assets/icons/instagram.svg') }}" alt="">
@@ -111,67 +126,66 @@
     <section class="section-padding-md event-map-info offwhite-bg">
         <div class="container">
             <div class="row gy-3">
-                <!-- Left: map (large) -->
                 <div class="col-lg-8">
                     @php
-                    $lat = $event->latitude;
-                    $lng = $event->longitude;
-                @endphp
+                        $lat = $event->latitude;
+                        $lng = $event->longitude;
+                    @endphp
 
-                @if($lat && $lng)
-                    <div class="event-map__card position-relative rounded-5 overflow-hidden">
+                    @if($lat && $lng)
+                        <div class="event-map__card position-relative rounded-5 overflow-hidden">
 
-                        {{-- Google Map --}}
-                        <iframe
-                            width="100%"
-                            height="500"
-                            style="border:0;"
-                            loading="lazy"
-                            allowfullscreen
-                            referrerpolicy="no-referrer-when-downgrade"
-                            src="https://www.google.com/maps?q={{ $lat }},{{ $lng }}&hl=en&z=14&output=embed">
-                        </iframe>
+                            {{-- Google Map --}}
+                            <iframe
+                                width="100%"
+                                height="500"
+                                style="border:0;"
+                                loading="lazy"
+                                allowfullscreen
+                                referrerpolicy="no-referrer-when-downgrade"
+                                src="https://www.google.com/maps?q={{ $lat }},{{ $lng }}&hl=en&z=14&output=embed">
+                            </iframe>
 
-                        {{-- Get Directions --}}
-                        <a
-                            href="https://www.google.com/maps/dir/?api=1&destination={{ $lat }},{{ $lng }}"
-                            target="_blank"
-                            class="event-map__card-btn btn btn-primary rounded-pill py-2 px-3 position-absolute bottom-0 end-0 m-3"
-                        >
-                            Get Directions
-                        </a>
+                            {{-- Get Directions --}}
+                            <a
+                                href="https://www.google.com/maps/dir/?api=1&destination={{ $lat }},{{ $lng }}"
+                                target="_blank"
+                                class="event-map__card-btn btn btn-primary rounded-pill py-2 px-3 position-absolute bottom-0 end-0 m-3">
+                                {{ __('event_details.map.get_directions') }}
+                            </a>
 
-                    </div>
-                @endif
-
+                        </div>
+                    @endif
                 </div>
 
-                <!-- Right: stacked info cards -->
                 <div class="col-lg-4">
+
                     <!-- Information card -->
                     <div class="event-map__info-card rounded-5 mb-3">
-                        <h6 class="fw-600 p-large mb-2">Information</h6>
+                        <h6 class="fw-600 p-large mb-2">
+                            {{ __('event_details.info_card.title') }}
+                        </h6>
 
                         <div class="event-map__info-card-row flex-v-center rounded-4 gap-1 mb-3">
-                            <div class="icon primary-text flex-center"><i class="fa-solid fa-location-dot"></i></div>
+                            <div class="icon primary-text flex-center">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
                             <div>
-                                <p class="text-light2 p-small">Location:</p>
+                                <p class="text-light2 p-small">
+                                    {{ __('event_details.info_card.location_label') }}
+                                </p>
                                 <p class="p-large fw-600">{{ $event->location }}</p>
                             </div>
                         </div>
 
-                        {{-- <div class="event-map__info-card-row flex-v-center rounded-4 gap-1 mb-3">
-                            <div class="icon primary-text flex-center"><i class="fa-solid fa-cake-candles"></i></div>
-                            <div>
-                                <p class="text-light2 p-small">Ages:</p>
-                                <p class="p-large fw-600">All</p>
-                            </div>
-                        </div> --}}
-
                         <div class="event-map__info-card-row flex-v-center rounded-4 gap-1">
-                            <div class="icon primary-text flex-center"><i class="fa-regular fa-clock"></i></div>
+                            <div class="icon primary-text flex-center">
+                                <i class="fa-regular fa-clock"></i>
+                            </div>
                             <div>
-                                <p class="text-light2 p-small">Time:</p>
+                                <p class="text-light2 p-small">
+                                    {{ __('event_details.info_card.time_label') }}
+                                </p>
                                 <p class="p-large fw-600">
                                     {{ $event->opening_days }} :
                                     {{ \App\Helpers\TimeHelper::range($event->opening_time, $event->closing_time) }}
@@ -182,11 +196,13 @@
 
                     <!-- Weather card -->
                     <div class="event-map__info-card rounded-5 position-relative pb-5">
-                        <p class="fw-600 p-large">Weather in Riyadh</p>
+                        <p class="fw-600 p-large">
+                            {{ __('event_details.weather.title') }}
+                        </p>
                         <p class="event-map__info-temp fw-bold">30.4°</p>
                         <div class="text-success event-map__info-weather-status">
                             <i class="fa-regular fa-moon"></i>
-                            Clear
+                            {{ __('event_details.weather.status') }}
                         </div>
                         <div class="event-map__info-weather-decor"></div>
                     </div>
@@ -200,17 +216,21 @@
         <div class="container">
             <div class="section__header">
                 <div class="section__header-content">
-                    <h2 class="section__heading">Similar Events</h2>
-                    <p class="section__description">Embark on unforgettable journeys and explore the hidden gems across the
-                        heart of Saudi Arabia</p>
+                    <h2 class="section__heading">
+                        {{ __('event_details.similar.title') }}
+                    </h2>
+                    <p class="section__description">
+                        {{ __('event_details.similar.description') }}
+                    </p>
                 </div>
                 <div class="section__header-CTA">
                     <a href="#" class="btn btn-primary rounded-pill">
-                        View All
+                        {{ __('common.view_all') }}
                         <i class="fa-solid fa-angles-right"></i>
                     </a>
                 </div>
             </div>
+
             <div class="upcoming-event__carousel swiper">
                 <div class="upcoming-event__carousel-wrapper swiper-wrapper">
                     @foreach ($similarEvents as $event)
@@ -226,24 +246,27 @@
         <div class="container">
             <div class="section__header">
                 <div class="section__header-content">
-                    <h2 class="section__heading">Related Packages</h2>
-                    <p class="section__description">Embark on unforgettable journeys and explore the hidden gems across
-                        the heart
-                        of Saudi Arabia</p>
+                    <h2 class="section__heading">
+                        {{ __('event_details.related_packages.title') }}
+                    </h2>
+                    <p class="section__description">
+                        {{ __('event_details.related_packages.description') }}
+                    </p>
                 </div>
                 <div class="section__header-CTA">
                     <a href="#" class="btn btn-primary rounded-pill">
-                        View All
+                        {{ __('common.view_all') }}
                         <i class="fa-solid fa-angles-right"></i>
                     </a>
                 </div>
             </div>
+
             <div class="exclusive-offers__carousel swiper">
                 <div class="swiper-wrapper">
                     @foreach ($relatedPackages as $package)
-                    <div class="exclusive-offers__carousel-item swiper-slide">
-                        <x-frontend.package-card :package="$package" />
-                    </div>
+                        <div class="exclusive-offers__carousel-item swiper-slide">
+                            <x-frontend.package-card :package="$package" />
+                        </div>
                     @endforeach
                 </div>
                 <div class="custom__carousel-pagination"></div>

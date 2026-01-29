@@ -30,8 +30,6 @@ class PackageDayItemOption extends Model
     {
         return $this->belongsTo(PackageDay::class, 'package_day_id');
     }
-
-
     public function transport()
     {
         return $this->belongsTo(Transport::class, 'item_id');

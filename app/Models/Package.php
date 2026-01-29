@@ -41,7 +41,7 @@ class Package extends Model
     /* ================= AVAILABILITY ================= */
     public function availabilities()
     {
-        return $this->hasMany(PackageAvailability::class);
+        return $this->hasOne(PackageAvailability::class);
     }
 
     /* ================= CITIES (🔥 MISSING RELATION) ================= */
@@ -134,6 +134,8 @@ class Package extends Model
             ?->title
             ?? '';
     }
+
+
 
 
 }

@@ -264,7 +264,7 @@
             <div class="section__header">
                 <div class="section__header-content">
                     <h2 class="section__heading"> {{ __('thing_detail.related_packages.title') }}</h2>
-                    <p class="section__description"> {{ __('tthing_detail.related_packages.description') }}</p>
+                    <p class="section__description"> {{ __('thing_detail.related_packages.description') }}</p>
                 </div>
                 <div class="section__header-CTA">
                     <a href="#" class="btn btn-primary rounded-pill">

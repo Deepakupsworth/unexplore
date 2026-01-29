@@ -50,8 +50,8 @@
         <div class="container">
             <div class="section__header">
                 <div class="section__header-content">
-                    <h2 class="section__heading">Explore More Destinations</h2>
-                    <p class="section__description">Embark on unforgettable journeys and explore the hidden gems across the heart of Saudi Arabia</p>
+                    <h2 class="section__heading">{{ __('destinations.explore_more.title') }}</h2>
+                    <p class="section__description">{{ __('destinations.explore_more.description') }}</p>
                 </div>
             </div>
             <div class="row gy-xl-5 gy-lg-3 gy-3 gx-4 explore-destinations__items">
@@ -61,7 +61,7 @@
                         <div class="position-relative explore-destinations__item-image">
                             <img src="{{ asset('storage/' . $cites->thumb_image) }}" alt="Destination">
                             <a href="{{ route('destinations.show',$cites->slug) }}" class="btn btn-outline-light dest__explore-btn">
-                                Explore
+                                {{ __('destinations.card.explore') }}
                                 <i class="fa-solid fa-arrow-right-long"></i>
                             </a>
                         </div>
@@ -71,7 +71,7 @@
                                 <h5 class="explore-destinations__item-description">{{ $cites->translation->name }}</h5>
                             </div>
                             {{-- destinations.show --}}
-                            <a href="{{ route('packages.index') }}" class="btn btn-outline-primary rounded-pill">Packages ({{$cites->package_count}}) <i class="fa-solid fa-angles-right"></i></a>
+                            <a href="{{ route('packages.index') }}" class="btn btn-outline-primary rounded-pill"> {{__('destinations.card.packages') }} ({{$cites->package_count}}) <i class="fa-solid fa-angles-right"></i></a>
                         </div>
                     </div>
                 </div>

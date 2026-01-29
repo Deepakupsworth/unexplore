@@ -1,7 +1,12 @@
 @extends('frontend.layout')
 @section('content')
-
-<section class="checkout-section">
+    <script>
+        window.CHECKOUT = {
+            adults: 2,
+            travellers: @json($travellers)
+        };
+    </script>
+    <section class="checkout-section">
         <div class="container">
             <div class="row">
                 <div class="col-lg-9">
@@ -34,9 +39,8 @@
 
                     <div class=" accordion accordion-flush mt-3 checkout-accordion" id="checkoutTravelDetails">
                         <div class="accordion-item border rounded mb-3 pkg-details__accordion-item">
-                            <div class="accordion-header" data-bs-toggle="collapse"
-                                data-bs-target="#checkoutTravelCollapse" aria-expanded="true"
-                                aria-controls="checkoutTravelCollapse">
+                            <div class="accordion-header" data-bs-toggle="collapse" data-bs-target="#checkoutTravelCollapse"
+                                aria-expanded="true" aria-controls="checkoutTravelCollapse">
                                 <div class="d-flex gap-2 pkg-details__accordion-actions">
                                     <p class="fw-600">1. Traveller Details</p>
                                 </div>
@@ -62,66 +66,47 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <div
-                                            class="d-flex justify-content-between align-items-center checkout-traveller-header">
+                                        @forelse($travellers as $index => $traveller)
+                                            <div
+                                                class="d-flex justify-content-between align-items-center checkout-traveller-header">
 
-                                            <!-- Left section -->
-                                            <div class="d-flex align-items-center gap-3">
-                                                <div class="traveller-icon flex-center rounded-4">
-                                                    <i class="fa-solid fa-user"></i>
-                                                </div>
+                                                <!-- Left section -->
+                                                <div class="d-flex align-items-center gap-3">
+                                                    <div class="traveller-icon flex-center rounded-4">
+                                                        <i class="fa-solid fa-user"></i>
+                                                    </div>
 
-                                                <div>
-                                                    <h6 class="fw-600 p">TRAVELLER 1</h6>
-                                                    <div class="flex-center gap-1
-                                                        <p class=" p-small fw-600">Tony stark</p>
-                                                        <button class="p-0 border-0 bg-transparent text-danger">
-                                                            <i class="fa-solid fa-circle-xmark"></i>
-                                                        </button>
+                                                    <div>
+                                                        <h6 class="fw-600 p">TRAVELLER {{ $index + 1 }}</h6>
+                                                        <div class="flex-center gap-1
+                                                        <p class="
+                                                            p-small fw-600">{{ $traveller->first_name }}
+                                                            {{ $traveller->last_name }}</p>
+                                                            <button class="p-0 border-0 bg-transparent text-danger">
+                                                                <i class="fa-solid fa-circle-xmark"></i>
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                            <!-- Right section -->
-                                            <div class="flex-center gap-3">
-                                                <div class="flex-center gap-1 primary-text">
-                                                    <button class=" p-0 border-0 bg-transparent primary-text">
-                                                        <i class="fa-solid fa-circle-check"></i>
+                                                <!-- Right section -->
+                                                <div class="flex-center gap-3">
+                                                    <div class="flex-center gap-1 primary-text">
+                                                        <button class=" p-0 border-0 bg-transparent primary-text">
+                                                            <i class="fa-solid fa-circle-check"></i>
+                                                        </button>
+                                                        <p class="p-small fw-500">Traveller Added</p>
+                                                    </div>
+                                                    <button
+                                                        class="btn btn-outline-primary add-traveller-btn rounded-pill border-1-5 fw-500"
+                                                        data-bs-toggle="modal" data-bs-target="#travellerModal"
+                                                        data-traveller-id="{{ $traveller->id }}">
+                                                        Update
                                                     </button>
-                                                    <p class="p-small fw-500">Traveller Added</p>
-                                                </div>
-                                                <button
-                                                    class="btn btn-outline-primary add-traveller-btn rounded-pill border-1-5 fw-500"
-                                                    data-bs-toggle="modal" data-bs-target="#travellerModal">
-                                                    Update
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <hr>
-                                        <div
-                                            class="d-flex justify-content-between align-items-center checkout-traveller-header">
-
-                                            <!-- Left section -->
-                                            <div class="d-flex align-items-center gap-3">
-                                                <div class="traveller-icon flex-center rounded-4">
-                                                    <i class="fa-solid fa-user"></i>
-                                                </div>
-
-                                                <div>
-                                                    <h6 class="fw-600 p">TRAVELLER 2</h6>
-                                                    <p class="text-light2 p-small">*Adult – Should be above 18 years
-                                                    </p>
                                                 </div>
                                             </div>
-
-                                            <!-- Right section -->
-                                            <button
-                                                class="btn btn-outline-primary add-traveller-btn rounded-pill border-1-5 fw-500"
-                                                data-bs-toggle="modal" data-bs-target="#travellerModal">
-                                                Add Traveller
-                                            </button>
-                                        </div>
-                                        <hr>
+                                            <hr>
+                                        @endforeach
                                     </div>
 
                                     <!-- Contact Details Section -->
@@ -204,7 +189,8 @@
                                     <!-- Header -->
                                     <div class="d-flex justify-content-between align-items-start mb-3">
                                         <div class="d-flex align-items-center gap-2">
-                                            <img src="{{ asset('/frontend/assets/icons/medical.svg') }}" alt="Medical Insurance">
+                                            <img src="{{ asset('/frontend/assets/icons/medical.svg') }}"
+                                                alt="Medical Insurance">
                                             <div>
                                                 <p class="fw-600">Travel + Medical Insurance</p>
                                                 <p class="text-light2 p-small">Secure your trip and travel worry
@@ -232,21 +218,25 @@
                                         <div class="d-flex justify-content-between align-items-end">
                                             <div class="d-flex flex-column gap-1">
                                                 <div class="d-flex gap-2 align-items-center">
-                                                    <img src="{{ asset('/frontend/assets/icons/emergency.svg') }}" alt="Emergency Medical">
+                                                    <img src="{{ asset('/frontend/assets/icons/emergency.svg') }}"
+                                                        alt="Emergency Medical">
                                                     <span class="p-small">Emergency Medical Expenses –
                                                         <span class="fw-600">$500000</span></span>
                                                 </div>
                                                 <div class="d-flex gap-2 align-items-center">
-                                                    <img src="{{ asset('/frontend/assets/icons/trip-cancel.svg') }}" alt="Trip Cancellation">
+                                                    <img src="{{ asset('/frontend/assets/icons/trip-cancel.svg') }}"
+                                                        alt="Trip Cancellation">
                                                     <span class="p-small">Trip Cancellation and/or Interruption  –
                                                         <span class="fw-600">$1250</span></span>
                                                 </div>
                                                 <div class="d-flex gap-2 align-items-center">
-                                                    <img src="{{ asset('/frontend/assets/icons/baggage.svg') }}" alt="Baggage Delay">
+                                                    <img src="{{ asset('/frontend/assets/icons/baggage.svg') }}"
+                                                        alt="Baggage Delay">
                                                     <span class="p-small">Delay of Checked In Baggage –
                                                         <span class="fw-600">$125</span></span>
                                                 </div>
-                                                <a href="#" class="primary-text mt-2 p-small fw-500">View Benefits</a>
+                                                <a href="#" class="primary-text mt-2 p-small fw-500">View
+                                                    Benefits</a>
                                             </div>
                                             <div class="text-end">
                                                 <p class="fw-600">+ $12,00</p>
@@ -292,1440 +282,370 @@
                                                 <div class="pkg-details__day-plan-header pkg-details__common-block">Day
                                                     Plan
                                                 </div>
-                                                <div
-                                                    class="pkg-details__day-dates pkg-details__common-block d-flex gap-3 flex-column nav nav-tabs">
-                                                    <div class="pkg-details__day-date-item rounded-pill active"
-                                                        data-bs-toggle="tab" data-bs-target="#packageDay1" type="button"
-                                                        role="tab" aria-controls="packageDay1" aria-selected="true">
-                                                        <div class="dot"></div>
-                                                        26 Nov, Sun
-                                                    </div>
-                                                    <div class="pkg-details__day-date-item rounded-pill"
-                                                        data-bs-toggle="tab" data-bs-target="#packageDay2" type="button"
-                                                        role="tab" aria-controls="packageDay2" aria-selected="true">
-                                                        <div class="dot"></div>
-                                                        27 Nov, Sun
-                                                    </div>
-                                                    <div class="pkg-details__day-date-item rounded-pill"
-                                                        data-bs-toggle="tab" data-bs-target="#packageDay3" type="button"
-                                                        role="tab" aria-controls="packageDay3" aria-selected="true">
-                                                        <div class="dot"></div>
-                                                        28 Nov, Sun
-                                                    </div>
-                                                    <div class="pkg-details__day-date-item rounded-pill"
-                                                        data-bs-toggle="tab" data-bs-target="#packageDay4" type="button"
-                                                        role="tab" aria-controls="packageDay4" aria-selected="true">
-                                                        <div class="dot"></div>
-                                                        29 Nov, Sun
+                                                <div class="pkg-details__day-dates-wrapper">
+                                                    <div
+                                                        class="pkg-details__day-dates pkg-details__common-block d-flex gap-3 flex-column nav nav-tabs">
+                                                        @foreach ($package->days as $day)
+                                                            <div class="pkg-details__day-date-item rounded-pill {{ $loop->first ? 'active' : '' }}"
+                                                                data-bs-toggle="tab"
+                                                                data-bs-target="#day{{ $day->day_number }}">
+                                                                <div class="dot"></div>
+                                                                Day {{ $day->day_number }}
+                                                            </div>
+                                                        @endforeach
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="pkg-details__day-plan-right">
                                                 <div class="tab-content">
-                                                    <div class="tab-pane fade show active" id="packageDay1"
-                                                        role="tabpanel" aria-labelledby="packageDay1">
-                                                        <div
-                                                            class="pkg-details__day-plan-header pkg-details__common-block">
-                                                            <!-- <div class="badge"> Macca</div> -->
-                                                            <p class="badge primary-bg">Day 1</p>
-                                                            <p class="fw-600">Riyadh</p>
-                                                        </div>
-                                                        <div
-                                                            class="pkg-details__day-plan-content pkg-details__common-block">
-                                                            <!-- Flight -->
-                                                            <div class="accordion accordion-flush" id="flightAccordion">
-                                                                <div
-                                                                    class="accordion-item border rounded mb-3 pkg-details__accordion-item">
-                                                                    <div class="accordion-header">
-                                                                        <div
-                                                                            class="d-flex justify-content-between align-items-center gap-3">
-                                                                            <div
-                                                                                class="d-flex align-items-center gap-2">
-                                                                                <div class="accordion-icon"
-                                                                                    data-bs-toggle="collapse"
-                                                                                    data-bs-target="#flightCollapse"
-                                                                                    aria-expanded="true"
-                                                                                    aria-controls="flightCollapse">
-                                                                                    <i
-                                                                                        class="fa-solid fa-chevron-down"></i>
-                                                                                </div>
-                                                                                <p class="p-small fw-600">FLIGHT</p>
-                                                                            </div>
-                                                                            <div class="vertical-divider"></div>
-                                                                            <p class="p-small">New Delhi to Riyadh</p>
-                                                                            <div class="vertical-divider"></div>
-                                                                            <p class="p-small">08h 30m</p>
-                                                                        </div>
-                                                                        <div
-                                                                            class="d-flex gap-2 pkg-details__accordion-actions">
-                                                                            <button class="btn btn-dark btn-sm">
-                                                                                <i class="fa-solid fa-trash-can"></i>
-                                                                            </button>
-                                                                            <button class="btn btn-primary btn-sm">
-                                                                                <i class="fa-solid fa-pencil"></i>
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
 
-                                                                    <div id="flightCollapse"
-                                                                        class="accordion-collapse collapse show"
-                                                                        aria-labelledby="headingOne"
-                                                                        data-bs-parent="#flightAccordion">
-                                                                        <div class="accordion-body">
+                                                    @foreach ($package->days as $day)
+                                                        <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}"
+                                                            id="day{{ $day->day_number }}">
 
-                                                                            <!-- First Flight Segment -->
-                                                                            <div class="pkg-details__flight-segment">
-                                                                                <div
-                                                                                    class="pkg-details__flight-box flex-shrink-0">
-                                                                                    <img src="{{ asset('frontend/assets/airline-logo.png') }}" 
-                                                                                        alt="Airline Logo" width="50">
-                                                                                    <p class="p-small">GF-131</p>
-                                                                                </div>
-
-                                                                                <div class="w-100">
-                                                                                    <div
-                                                                                        class="d-flex justify-content-between align-items-center">
-                                                                                        <div class="flex-shrink-0">
-                                                                                            <p class="m-0 fw-600">04:55
-                                                                                            </p>
-                                                                                            <p
-                                                                                                class="mb-0 text-muted p-small">
-                                                                                                Wed, 08
-                                                                                                Oct</p>
-                                                                                            <p
-                                                                                                class="mb-0 text-muted p-small">
-                                                                                                New Delhi
-                                                                                            </p>
-                                                                                        </div>
-
-                                                                                        <div
-                                                                                            class="pkg-details__flight-duration-block mx-3">
-                                                                                            <p
-                                                                                                class="p-small pkg-details__flight-duration">
-                                                                                                04h 00m</p>
-                                                                                            <div
-                                                                                                class="pkg-details__flight-point pkg-details__flight-departure flex-center">
-                                                                                                <i
-                                                                                                    class="fa-solid fa-plane"></i>
-                                                                                            </div>
-                                                                                            <div
-                                                                                                class="pkg-details__flight-connector">
-                                                                                            </div>
-                                                                                            <div
-                                                                                                class="pkg-details__flight-point pkg-details__flight-arrival flex-center">
-                                                                                                <i
-                                                                                                    class="fa-solid fa-plane"></i>
-                                                                                            </div>
-                                                                                        </div>
-
-                                                                                        <div class="flex-shrink-0">
-                                                                                            <p class="m-0 fw-600">08:55
-                                                                                            </p>
-                                                                                            <p
-                                                                                                class="mb-0 text-muted p-small">
-                                                                                                Wed, 08
-                                                                                                Oct</p>
-                                                                                            <p
-                                                                                                class="mb-0 text-muted p-small">
-                                                                                                New Delhi
-                                                                                            </p>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-
-                                                                                <div
-                                                                                    class="pkg-details__flight-box pkg-details__baggage-info flex-shrink-0">
-                                                                                    <p class="p-small">
-                                                                                        <i
-                                                                                            class="fa-solid fa-briefcase"></i>
-                                                                                        <strong>Cabin:</strong> 6 Kgs
-                                                                                    </p>
-                                                                                    <p class="p-small">
-                                                                                        <i
-                                                                                            class="fa-solid fa-suitcase-rolling"></i>
-                                                                                        <strong>Check-in:</strong> 35
-                                                                                        Kgs
-                                                                                    </p>
-                                                                                </div>
-                                                                            </div>
-
-                                                                            <!-- Layover Section -->
-                                                                            <div
-                                                                                class="text-center py-2 my-2 rounded p-small pkg-details__layover-info">
-                                                                                04h 00m Layover in BAH, Baharain
-                                                                            </div>
-
-                                                                            <!-- Second Flight Segment -->
-                                                                            <div class="pkg-details__flight-segment">
-                                                                                <div
-                                                                                    class="pkg-details__flight-box flex-shrink-0">
-                                                                                    <img src="{{ asset('frontend/assets/airline-logo.png') }}" 
-                                                                                        alt="Airline Logo" width="50">
-                                                                                    <p class="p-small">GF-131</p>
-                                                                                </div>
-
-                                                                                <div class="w-100">
-                                                                                    <div
-                                                                                        class="d-flex justify-content-between align-items-center">
-                                                                                        <div class="flex-shrink-0">
-                                                                                            <p class="m-0 fw-600">04:55
-                                                                                            </p>
-                                                                                            <p
-                                                                                                class="mb-0 text-muted p-small">
-                                                                                                Wed, 08
-                                                                                                Oct</p>
-                                                                                            <p
-                                                                                                class="mb-0 text-muted p-small">
-                                                                                                New Delhi
-                                                                                            </p>
-                                                                                        </div>
-
-                                                                                        <div
-                                                                                            class="pkg-details__flight-duration-block mx-3">
-                                                                                            <p
-                                                                                                class="p-small pkg-details__flight-duration">
-                                                                                                04h 00m</p>
-                                                                                            <div
-                                                                                                class="pkg-details__flight-point pkg-details__flight-departure flex-center">
-                                                                                                <i
-                                                                                                    class="fa-solid fa-plane"></i>
-                                                                                            </div>
-                                                                                            <div
-                                                                                                class="pkg-details__flight-connector">
-                                                                                            </div>
-                                                                                            <div
-                                                                                                class="pkg-details__flight-point pkg-details__flight-arrival flex-center">
-                                                                                                <i
-                                                                                                    class="fa-solid fa-plane"></i>
-                                                                                            </div>
-                                                                                        </div>
-
-                                                                                        <div class="flex-shrink-0">
-                                                                                            <p class="m-0 fw-600">08:55
-                                                                                            </p>
-                                                                                            <p
-                                                                                                class="mb-0 text-muted p-small">
-                                                                                                Wed, 08
-                                                                                                Oct</p>
-                                                                                            <p
-                                                                                                class="mb-0 text-muted p-small">
-                                                                                                New Delhi
-                                                                                            </p>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-
-                                                                                <div
-                                                                                    class="pkg-details__flight-box pkg-details__baggage-info flex-shrink-0">
-                                                                                    <p class="p-small">
-                                                                                        <i
-                                                                                            class="fa-solid fa-briefcase"></i>
-                                                                                        <strong>Cabin:</strong> 6 Kgs
-                                                                                    </p>
-                                                                                    <p class="p-small">
-                                                                                        <i
-                                                                                            class="fa-solid fa-suitcase-rolling"></i>
-                                                                                        <strong>Check-in:</strong> 35
-                                                                                        Kgs
-                                                                                    </p>
-                                                                                </div>
-                                                                            </div>
-
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
+                                                            {{-- Day Header --}}
+                                                            <div
+                                                                class="pkg-details__day-plan-header pkg-details__common-block">
+                                                                <p class="badge primary-bg">Day {{ $day->day_number }}</p>
+                                                                <p class="fw-600">
+                                                                    {{ $day->city?->translations?->first()?->name }}
+                                                                </p>
                                                             </div>
 
-                                                            <div class="accordion accordion-flush"
-                                                                id="transferAccordion">
-                                                                <div
-                                                                    class="accordion-item border rounded mb-3 pkg-details__accordion-item">
-                                                                    <div class="accordion-header">
-                                                                        <div
-                                                                            class="d-flex justify-content-between align-items-center gap-3">
-                                                                            <div
-                                                                                class="d-flex align-items-center gap-2">
-                                                                                <div class="accordion-icon"
-                                                                                    data-bs-toggle="collapse"
-                                                                                    data-bs-target="#transferCollapse"
-                                                                                    aria-expanded="true"
-                                                                                    aria-controls="transferCollapse">
-                                                                                    <i
-                                                                                        class="fa-solid fa-chevron-down"></i>
-                                                                                </div>
-                                                                                <p class="p-small fw-600">TRANSFER</p>
-                                                                            </div>
-                                                                            <div class="vertical-divider"></div>
-                                                                            <p class="p-small">Airport to hotel in
-                                                                                Riyadh</p>
-                                                                        </div>
-                                                                        <div
-                                                                            class="d-flex gap-2 pkg-details__accordion-actions">
-                                                                            <button class="btn btn-dark btn-sm">
-                                                                                <i class="fa-solid fa-trash-can"></i>
-                                                                            </button>
-                                                                            <button class="btn btn-primary btn-sm">
-                                                                                <i class="fa-solid fa-pencil"></i>
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
+                                                            <div
+                                                                class="pkg-details__day-plan-content pkg-details__common-block">
 
-                                                                    <div id="transferCollapse"
-                                                                        class="accordion-collapse collapse show"
-                                                                        aria-labelledby="headingOne"
-                                                                        data-bs-parent="#transferAccordion">
-                                                                        <div class="accordion-body">
-                                                                            <div
-                                                                                class="d-flex align-items-center gap-3">
-                                                                                <img src="{{ asset('frontend/assets/transfer.png') }}"
-                                                                                    alt="Transfer"
-                                                                                    class="img-fluid pkg-details__tr-ht-img">
-                                                                                <div>
-                                                                                    <p class="fw-600">Private Transfer
-                                                                                    </p>
-                                                                                    <p class="p-small text-light2">Pick
-                                                                                        up from
-                                                                                        Riyadh
-                                                                                        International Airport to Riyadh
-                                                                                        City
-                                                                                        Hotel by
-                                                                                        private vehicle</p>
-                                                                                    <p class="p-small text-light2 mt-2">
-                                                                                        <i
-                                                                                            class="fa-solid fa-location-dot p-small"></i>
-                                                                                        Airport to Hotel
-                                                                                    </p>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
+                                                                {{-- ================= HOTEL ================= --}}
+                                                                @php
+                                                                    $sessionHotelIds =
+                                                                        $sessionItems[$day->id]['hotel'] ?? null;
 
-                                                            <div class="accordion accordion-flush" id="hotelAccordion">
-                                                                <div
-                                                                    class="accordion-item border rounded mb-3 pkg-details__accordion-item">
-                                                                    <div class="accordion-header">
-                                                                        <div
-                                                                            class="d-flex justify-content-between align-items-center gap-3">
-                                                                            <div
-                                                                                class="d-flex align-items-center gap-2">
-                                                                                <div class="accordion-icon"
-                                                                                    data-bs-toggle="collapse"
-                                                                                    data-bs-target="#hotelCollapse"
-                                                                                    aria-expanded="true"
-                                                                                    aria-controls="hotelCollapse">
-                                                                                    <i
-                                                                                        class="fa-solid fa-chevron-down"></i>
-                                                                                </div>
-                                                                                <p class="p-small fw-600">HOTEL</p>
-                                                                            </div>
-                                                                            <div class="vertical-divider"></div>
-                                                                            <p class="p-small">2 Nights</p>
-                                                                            <div class="vertical-divider"></div>
-                                                                            <p class="p-small">In Riyadh</p>
-                                                                        </div>
-                                                                        <div
-                                                                            class="d-flex gap-2 pkg-details__accordion-actions">
-                                                                            <button class="btn btn-primary btn-sm">
-                                                                                <i class="fa-solid fa-pencil"></i>
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
+                                                                    if ($sessionHotelIds) {
+                                                                        // session exists → show selected
+                                                                        $hotels = $allHotels->whereIn(
+                                                                            'id',
+                                                                            array_values($sessionHotelIds),
+                                                                        );
+                                                                    } else {
+                                                                        // first time → show package default
+                                                                        $hotels = $day->items
+                                                                            ->where('item_type', 'hotel')
+                                                                            ->map(fn($i) => $i->hotel);
+                                                                    }
 
-                                                                    <div id="hotelCollapse"
-                                                                        class="accordion-collapse collapse show"
-                                                                        aria-labelledby="headingOne"
-                                                                        data-bs-parent="#hotelAccordion">
-                                                                        <div class="accordion-body">
-                                                                            <div
-                                                                                class="d-flex align-items-center gap-3">
-                                                                                <img src="{{ asset('frontend/assets/transfer.png') }}"
-                                                                                    alt="Transfer"
-                                                                                    class="img-fluid pkg-details__tr-ht-img">
-                                                                                <div>
+                                                                    $slot = 0;
+                                                                @endphp
+                                                                @if ($hotels->count())
+                                                                    <div class="accordion accordion-flush mb-3"
+                                                                        id="hotelAccordion{{ $day->id }}">
+                                                                        <div
+                                                                            class="accordion-item border rounded pkg-details__accordion-item">
+
+                                                                            <div class="accordion-header">
+                                                                                <div
+                                                                                    class="d-flex justify-content-between align-items-center">
                                                                                     <div
-                                                                                        class="pkg-details__star-ratings">
-                                                                                        <i
-                                                                                            class="fa-solid fa-star active"></i>
-                                                                                        <i
-                                                                                            class="fa-solid fa-star active"></i>
-                                                                                        <i
-                                                                                            class="fa-solid fa-star active"></i>
-                                                                                        <i
-                                                                                            class="fa-solid fa-star active"></i>
-                                                                                        <i class="fa-solid fa-star"></i>
+                                                                                        class="d-flex align-items-center gap-2">
+                                                                                        <div class="accordion-icon"
+                                                                                            data-bs-toggle="collapse"
+                                                                                            data-bs-target="#hotelCollapse{{ $day->id }}">
+                                                                                            <i
+                                                                                                class="fa-solid fa-chevron-down"></i>
+                                                                                        </div>
+                                                                                        <p class="p-small fw-600">Hotel</p>
                                                                                     </div>
-                                                                                    <p class="fw-600 my-1">Crowne Plaza
-                                                                                        Riyadh
-                                                                                        Palace
-                                                                                    </p>
-                                                                                    <p class="p-small text-light2">
-                                                                                        <i
-                                                                                            class="fa-solid fa-location-dot p-small"></i>
-                                                                                        8 October - 10 October, 2 Nights
-                                                                                    </p>
+                                                                                </div>
+                                                                                <div
+                                                                                    class="d-flex gap-2 pkg-details__accordion-actions">
+
+                                                                                    <!-- <button
+                                                                                        type="button"
+                                                                                        class="btn btn-primary btn-sm editDayItemsBtn"
+                                                                                        data-day-id="{{ $day->id }}"
+                                                                                        data-type="hotel"
+                                             >
+                                                                                        <i class="fa-solid fa-pencil"></i>
+                                                                                    </button> -->
+
+
+
+
                                                                                 </div>
                                                                             </div>
+
+                                                                            <div id="hotelCollapse{{ $day->id }}"
+                                                                                class="accordion-collapse collapse show"
+                                                                                data-bs-parent="#hotelAccordion{{ $day->id }}">
+
+                                                                                <div class="accordion-body"
+                                                                                    id="day-{{ $day->id }}-hotel-list">
+                                                                                    @php
+                                                                                        $hotel_slot = 0;
+                                                                                    @endphp
+                                                                                    @foreach ($hotels as $index => $hotel)
+                                                                                        @php
+                                                                                            $hotelImage = $hotel?->thumb
+                                                                                                ? asset(
+                                                                                                    'storage/' .
+                                                                                                        $hotel->thumb
+                                                                                                            ->image_path,
+                                                                                                )
+                                                                                                : asset(
+                                                                                                    'frontend/assets/hotel-placeholder.jpg',
+                                                                                                );
+                                                                                        @endphp
+                                                                                        <div class="day-item-slot d-flex position-relative"
+                                                                                            data-day-id="{{ $day->id }}"
+                                                                                            data-type="hotel"
+                                                                                            data-index="{{ $hotel_slot }}">
+                                                                                            <div class="day-item-wrapper"
+                                                                                                data-day-id="{{ $day->id }}"
+                                                                                                data-type="hotel"
+                                                                                                data-item-id="{{ $hotel->id }}"
+                                                                                                data-default-item-id="{{ $hotel->id }}"
+                                                                                                data-index="{{ $hotel_slot }}">
+                                                                                                <div
+                                                                                                    class="d-flex align-items-center gap-3 mb-3 ">
+                                                                                                    <img src="{{ $hotelImage }}"
+                                                                                                        class="pkg-details__tr-ht-img">
+
+                                                                                                    <div>
+                                                                                                        <div
+                                                                                                            class="pkg-details__star-ratings">
+                                                                                                            @for ($i = 1; $i <= 5; $i++)
+                                                                                                                <i
+                                                                                                                    class="fa-solid fa-star {{ $i <= $hotel->star_rating ? 'active' : 'text-muted' }}"></i>
+                                                                                                            @endfor
+                                                                                                        </div>
+
+                                                                                                        <p
+                                                                                                            class="fw-600 my-1">
+                                                                                                            {{ $hotel->translation?->name }}
+                                                                                                        </p>
+
+                                                                                                        <p
+                                                                                                            class="p-small text-light2">
+                                                                                                            <i
+                                                                                                                class="fa-solid fa-location-dot"></i>
+                                                                                                            {{ $hotel->location }}
+                                                                                                        </p>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+
+                                                                                        </div>
+                                                                                        @php
+                                                                                            $hotel_slot++;
+                                                                                        @endphp
+                                                                                    @endforeach
+
+                                                                                </div>
+                                                                            </div>
+
                                                                         </div>
                                                                     </div>
-                                                                </div>
+                                                                @endif
+
+                                                                {{-- ================= TODO ================= --}}
+                                                                @php
+                                                                    $sessionTodoIds =
+                                                                        $sessionItems[$day->id]['todo'] ?? null;
+
+                                                                    $todos = $sessionTodoIds
+                                                                        ? $allTodos->whereIn('id', $sessionTodoIds)
+                                                                        : $day->items->where('item_type', 'todo')->map
+                                                                            ->todo;
+                                                                @endphp
+
+                                                                @if ($todos->count())
+                                                                    <div class="accordion accordion-flush mb-3"
+                                                                        id="todoAccordion{{ $day->id }}">
+                                                                        <div
+                                                                            class="accordion-item border rounded pkg-details__accordion-item">
+
+                                                                            <div class="accordion-header">
+                                                                                <div
+                                                                                    class="d-flex justify-content-between align-items-center">
+                                                                                    <div
+                                                                                        class="d-flex align-items-center gap-2">
+                                                                                        <div class="accordion-icon"
+                                                                                            data-bs-toggle="collapse"
+                                                                                            data-bs-target="#todoCollapse{{ $day->id }}">
+                                                                                            <i
+                                                                                                class="fa-solid fa-chevron-down"></i>
+                                                                                        </div>
+                                                                                        <p class="p-small fw-600">ToDo
+                                                                                            Thing
+                                                                                        </p>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div
+                                                                                    class="d-flex gap-2 pkg-details__accordion-actions">
+                                                                                    <!-- <button type="button"
+                                                                                            class="btn btn-primary btn-sm editDayItemsBtn"
+                                                                                            data-day-id="{{ $day->id }}"
+                                                                                            data-type="todo"
+                                                                                            data-selected="{{ $todos->pluck('id')->join(',') }}">
+                                                                                            <i class="fa-solid fa-pencil"></i>
+                                                                                        </button> -->
+
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div id="todoCollapse{{ $day->id }}"
+                                                                                class="accordion-collapse collapse show"
+                                                                                data-bs-parent="#todoAccordion{{ $day->id }}">
+
+                                                                                <div class="accordion-body"
+                                                                                    id="day-{{ $day->id }}-todo-list">
+
+                                                                                    @php
+                                                                                        $todo_slot = 0;
+                                                                                    @endphp
+
+                                                                                    @foreach ($todos as $index => $todo)
+                                                                                        <div class="day-item-slot d-flex position-relative"
+                                                                                            data-day-id="{{ $day->id }}"
+                                                                                            data-type="todo"
+                                                                                            data-index="{{ $todo_slot }}">
+                                                                                            <div class="day-item-wrapper"
+                                                                                                data-day-id="{{ $day->id }}"
+                                                                                                data-type="todo"
+                                                                                                data-item-id="{{ $todo->id }}"
+                                                                                                data-index="{{ $todo_slot }}">
+                                                                                                <div
+                                                                                                    class="d-flex gap-3 mb-3">
+                                                                                                    <img src="{{ $todo->thumb ? asset('storage/' . $todo->thumb->image_path) : asset('frontend/assets/hotel-placeholder.jpg') }}"
+                                                                                                        class="pkg-details__tr-ht-img">
+
+                                                                                                    <div>
+                                                                                                        <p class="fw-600">
+                                                                                                            {{ $todo->translation->name }}
+                                                                                                        </p>
+                                                                                                        <p
+                                                                                                            class="p-small text-light2">
+                                                                                                            <i
+                                                                                                                class="fa fa-clock"></i>
+                                                                                                            {{ $todo->opening_time }}
+                                                                                                            -
+                                                                                                            {{ $todo->closing_time }}
+                                                                                                        </p>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+
+                                                                                        </div>
+                                                                                        @php
+                                                                                            $todo_slot++;
+                                                                                        @endphp
+                                                                                    @endforeach
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </div>
+                                                                    </div>
+                                                                @endif
+
+                                                                {{-- ================= EVENT ================= --}}
+                                                                @php
+                                                                    $sessionEventIds =
+                                                                        $sessionItems[$day->id]['event'] ?? null;
+
+                                                                    $events = $sessionEventIds
+                                                                        ? $allEvents->whereIn('id', $sessionEventIds)
+                                                                        : $day->items->where('item_type', 'event')->map
+                                                                            ->event;
+                                                                @endphp
+
+                                                                @if ($events->count())
+                                                                    <div class="accordion accordion-flush mb-3"
+                                                                        id="eventAccordion{{ $day->id }}">
+                                                                        <div
+                                                                            class="accordion-item border rounded pkg-details__accordion-item">
+
+                                                                            <div class="accordion-header">
+                                                                                <div
+                                                                                    class="d-flex justify-content-between align-items-center">
+                                                                                    <div
+                                                                                        class="d-flex align-items-center gap-2">
+                                                                                        <div class="accordion-icon"
+                                                                                            data-bs-toggle="collapse"
+                                                                                            data-bs-target="#eventCollapse{{ $day->id }}">
+                                                                                            <i
+                                                                                                class="fa-solid fa-chevron-down"></i>
+                                                                                        </div>
+                                                                                        <p class="p-small fw-600">Events
+                                                                                        </p>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div
+                                                                                    class="d-flex gap-2 pkg-details__accordion-actions">
+                                                                                    <!-- <button type="button"
+                                                                                            class="btn btn-primary btn-sm editDayItemsBtn"
+                                                                                            data-day-id="{{ $day->id }}"
+                                                                                            data-type="event"
+                                                                                            data-selected="{{ $events->pluck('id')->join(',') }}">
+                                                                                            <i class="fa-solid fa-pencil"></i>
+                                                                                        </button> -->
+
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div id="eventCollapse{{ $day->id }}"
+                                                                                class="accordion-collapse collapse show"
+                                                                                data-bs-parent="#eventAccordion{{ $day->id }}">
+
+                                                                                <div class="accordion-body"
+                                                                                    id="day-{{ $day->id }}-event-list">
+                                                                                    @php
+                                                                                        $event_slot = 0;
+                                                                                    @endphp
+
+                                                                                    @foreach ($events as $index => $event)
+                                                                                        <div class="day-item-slot d-flex position-relative"
+                                                                                            data-day-id="{{ $day->id }}"
+                                                                                            data-type="event"
+                                                                                            data-index="{{ $event_slot }}">
+                                                                                            <div class="day-item-wrapper"
+                                                                                                data-day-id="{{ $day->id }}"
+                                                                                                data-type="event"
+                                                                                                data-item-id="{{ $event->id }}"
+                                                                                                data-index="{{ $event_slot }}">
+                                                                                                <div
+                                                                                                    class="d-flex gap-3 mb-3">
+                                                                                                    <img src="{{ $event->thumb ? asset('storage/' . $event->thumb->image_path) : asset('frontend/assets/hotel-placeholder.jpg') }}"
+                                                                                                        class="pkg-details__tr-ht-img">
+
+                                                                                                    <div>
+                                                                                                        <p class="fw-600">
+                                                                                                            {{ $event->translation->title }}
+                                                                                                        </p>
+                                                                                                        <p
+                                                                                                            class="p-small text-light2">
+                                                                                                            <i
+                                                                                                                class="fa fa-calendar"></i>
+                                                                                                            {{ \App\Helpers\DateHelper::format($event->start_date) }}
+                                                                                                        </p>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+
+                                                                                            @php
+                                                                                                $event_slot++;
+                                                                                            @endphp
+                                                                                        </div>
+                                                                                    @endforeach
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </div>
+                                                                    </div>
+                                                                @endif
+
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="tab-pane fade" id="packageDay2" role="tabpanel"
-                                                        aria-labelledby="packageDay2">
-                                                        <div
-                                                            class="pkg-details__day-plan-header pkg-details__common-block">
-                                                            <!-- <div class="badge"> Macca</div> -->
-                                                            <p class="badge primary-bg">Day 2</p>
-                                                            <p class="fw-600">Riyadh</p>
-                                                        </div>
-                                                        <div
-                                                            class="pkg-details__day-plan-content pkg-details__common-block">
-                                                            <!-- Flight -->
-                                                            <div class="accordion accordion-flush" id="flightAccordion">
-                                                                <div
-                                                                    class="accordion-item border rounded mb-3 pkg-details__accordion-item">
-                                                                    <div class="accordion-header">
-                                                                        <div
-                                                                            class="d-flex justify-content-between align-items-center gap-3">
-                                                                            <div
-                                                                                class="d-flex align-items-center gap-2">
-                                                                                <div class="accordion-icon"
-                                                                                    data-bs-toggle="collapse"
-                                                                                    data-bs-target="#flightCollapse"
-                                                                                    aria-expanded="true"
-                                                                                    aria-controls="flightCollapse">
-                                                                                    <i
-                                                                                        class="fa-solid fa-chevron-down"></i>
-                                                                                </div>
-                                                                                <p class="p-small fw-600">FLIGHT</p>
-                                                                            </div>
-                                                                            <div class="vertical-divider"></div>
-                                                                            <p class="p-small">New Delhi to Riyadh</p>
-                                                                            <div class="vertical-divider"></div>
-                                                                            <p class="p-small">08h 30m</p>
-                                                                        </div>
-                                                                        <div
-                                                                            class="d-flex gap-2 pkg-details__accordion-actions">
-                                                                            <button class="btn btn-dark btn-sm">
-                                                                                <i class="fa-solid fa-trash-can"></i>
-                                                                            </button>
-                                                                            <button class="btn btn-primary btn-sm">
-                                                                                <i class="fa-solid fa-pencil"></i>
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
+                                                    @endforeach
 
-                                                                    <div id="flightCollapse"
-                                                                        class="accordion-collapse collapse show"
-                                                                        aria-labelledby="headingOne"
-                                                                        data-bs-parent="#flightAccordion">
-                                                                        <div class="accordion-body">
-
-                                                                            <!-- First Flight Segment -->
-                                                                            <div class="pkg-details__flight-segment">
-                                                                                <div
-                                                                                    class="pkg-details__flight-box flex-shrink-0">
-                                                                                    <img src="{{ asset('frontend/assets/airline-logo.png') }}"
-                                                                                        alt="Airline Logo" width="50">
-                                                                                    <p class="p-small">GF-131</p>
-                                                                                </div>
-
-                                                                                <div class="w-100">
-                                                                                    <div
-                                                                                        class="d-flex justify-content-between align-items-center">
-                                                                                        <div class="flex-shrink-0">
-                                                                                            <p class="m-0 fw-600">04:55
-                                                                                            </p>
-                                                                                            <p
-                                                                                                class="mb-0 text-muted p-small">
-                                                                                                Wed, 08
-                                                                                                Oct</p>
-                                                                                            <p
-                                                                                                class="mb-0 text-muted p-small">
-                                                                                                New Delhi
-                                                                                            </p>
-                                                                                        </div>
-
-                                                                                        <div
-                                                                                            class="pkg-details__flight-duration-block mx-3">
-                                                                                            <p
-                                                                                                class="p-small pkg-details__flight-duration">
-                                                                                                04h 00m</p>
-                                                                                            <div
-                                                                                                class="pkg-details__flight-point pkg-details__flight-departure flex-center">
-                                                                                                <i
-                                                                                                    class="fa-solid fa-plane"></i>
-                                                                                            </div>
-                                                                                            <div
-                                                                                                class="pkg-details__flight-connector">
-                                                                                            </div>
-                                                                                            <div
-                                                                                                class="pkg-details__flight-point pkg-details__flight-arrival flex-center">
-                                                                                                <i
-                                                                                                    class="fa-solid fa-plane"></i>
-                                                                                            </div>
-                                                                                        </div>
-
-                                                                                        <div class="flex-shrink-0">
-                                                                                            <p class="m-0 fw-600">08:55
-                                                                                            </p>
-                                                                                            <p
-                                                                                                class="mb-0 text-muted p-small">
-                                                                                                Wed, 08
-                                                                                                Oct</p>
-                                                                                            <p
-                                                                                                class="mb-0 text-muted p-small">
-                                                                                                New Delhi
-                                                                                            </p>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-
-                                                                                <div
-                                                                                    class="pkg-details__flight-box pkg-details__baggage-info flex-shrink-0">
-                                                                                    <p class="p-small">
-                                                                                        <i
-                                                                                            class="fa-solid fa-briefcase"></i>
-                                                                                        <strong>Cabin:</strong> 6 Kgs
-                                                                                    </p>
-                                                                                    <p class="p-small">
-                                                                                        <i
-                                                                                            class="fa-solid fa-suitcase-rolling"></i>
-                                                                                        <strong>Check-in:</strong> 35
-                                                                                        Kgs
-                                                                                    </p>
-                                                                                </div>
-                                                                            </div>
-
-                                                                            <!-- Layover Section -->
-                                                                            <div
-                                                                                class="text-center py-2 my-2 rounded p-small pkg-details__layover-info">
-                                                                                04h 00m Layover in BAH, Baharain
-                                                                            </div>
-
-                                                                            <!-- Second Flight Segment -->
-                                                                            <div class="pkg-details__flight-segment">
-                                                                                <div
-                                                                                    class="pkg-details__flight-box flex-shrink-0">
-                                                                                    <img src="{{ asset('frontend/assets/airline-logo.png') }}"
-                                                                                        alt="Airline Logo" width="50">
-                                                                                    <p class="p-small">GF-131</p>
-                                                                                </div>
-
-                                                                                <div class="w-100">
-                                                                                    <div
-                                                                                        class="d-flex justify-content-between align-items-center">
-                                                                                        <div class="flex-shrink-0">
-                                                                                            <p class="m-0 fw-600">04:55
-                                                                                            </p>
-                                                                                            <p
-                                                                                                class="mb-0 text-muted p-small">
-                                                                                                Wed, 08
-                                                                                                Oct</p>
-                                                                                            <p
-                                                                                                class="mb-0 text-muted p-small">
-                                                                                                New Delhi
-                                                                                            </p>
-                                                                                        </div>
-
-                                                                                        <div
-                                                                                            class="pkg-details__flight-duration-block mx-3">
-                                                                                            <p
-                                                                                                class="p-small pkg-details__flight-duration">
-                                                                                                04h 00m</p>
-                                                                                            <div
-                                                                                                class="pkg-details__flight-point pkg-details__flight-departure flex-center">
-                                                                                                <i
-                                                                                                    class="fa-solid fa-plane"></i>
-                                                                                            </div>
-                                                                                            <div
-                                                                                                class="pkg-details__flight-connector">
-                                                                                            </div>
-                                                                                            <div
-                                                                                                class="pkg-details__flight-point pkg-details__flight-arrival flex-center">
-                                                                                                <i
-                                                                                                    class="fa-solid fa-plane"></i>
-                                                                                            </div>
-                                                                                        </div>
-
-                                                                                        <div class="flex-shrink-0">
-                                                                                            <p class="m-0 fw-600">08:55
-                                                                                            </p>
-                                                                                            <p
-                                                                                                class="mb-0 text-muted p-small">
-                                                                                                Wed, 08
-                                                                                                Oct</p>
-                                                                                            <p
-                                                                                                class="mb-0 text-muted p-small">
-                                                                                                New Delhi
-                                                                                            </p>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-
-                                                                                <div
-                                                                                    class="pkg-details__flight-box pkg-details__baggage-info flex-shrink-0">
-                                                                                    <p class="p-small">
-                                                                                        <i
-                                                                                            class="fa-solid fa-briefcase"></i>
-                                                                                        <strong>Cabin:</strong> 6 Kgs
-                                                                                    </p>
-                                                                                    <p class="p-small">
-                                                                                        <i
-                                                                                            class="fa-solid fa-suitcase-rolling"></i>
-                                                                                        <strong>Check-in:</strong> 35
-                                                                                        Kgs
-                                                                                    </p>
-                                                                                </div>
-                                                                            </div>
-
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="accordion accordion-flush"
-                                                                id="transferAccordion">
-                                                                <div
-                                                                    class="accordion-item border rounded mb-3 pkg-details__accordion-item">
-                                                                    <div class="accordion-header">
-                                                                        <div
-                                                                            class="d-flex justify-content-between align-items-center gap-3">
-                                                                            <div
-                                                                                class="d-flex align-items-center gap-2">
-                                                                                <div class="accordion-icon"
-                                                                                    data-bs-toggle="collapse"
-                                                                                    data-bs-target="#transferCollapse"
-                                                                                    aria-expanded="true"
-                                                                                    aria-controls="transferCollapse">
-                                                                                    <i
-                                                                                        class="fa-solid fa-chevron-down"></i>
-                                                                                </div>
-                                                                                <p class="p-small fw-600">TRANSFER</p>
-                                                                            </div>
-                                                                            <div class="vertical-divider"></div>
-                                                                            <p class="p-small">Airport to hotel in
-                                                                                Riyadh</p>
-                                                                        </div>
-                                                                        <div
-                                                                            class="d-flex gap-2 pkg-details__accordion-actions">
-                                                                            <button class="btn btn-dark btn-sm">
-                                                                                <i class="fa-solid fa-trash-can"></i>
-                                                                            </button>
-                                                                            <button class="btn btn-primary btn-sm">
-                                                                                <i class="fa-solid fa-pencil"></i>
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div id="transferCollapse"
-                                                                        class="accordion-collapse collapse show"
-                                                                        aria-labelledby="headingOne"
-                                                                        data-bs-parent="#transferAccordion">
-                                                                        <div class="accordion-body">
-                                                                            <div
-                                                                                class="d-flex align-items-center gap-3">
-                                                                                <img src="{{ asset('frontend/assets/transfer.png') }}"
-                                                                                    alt="Transfer"
-                                                                                    class="img-fluid pkg-details__tr-ht-img">
-                                                                                <div>
-                                                                                    <p class="fw-600">Private Transfer
-                                                                                    </p>
-                                                                                    <p class="p-small text-light2">Pick
-                                                                                        up from
-                                                                                        Riyadh
-                                                                                        International Airport to Riyadh
-                                                                                        City
-                                                                                        Hotel by
-                                                                                        private vehicle</p>
-                                                                                    <p class="p-small text-light2 mt-2">
-                                                                                        <i
-                                                                                            class="fa-solid fa-location-dot p-small"></i>
-                                                                                        Airport to Hotel
-                                                                                    </p>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="accordion accordion-flush" id="hotelAccordion">
-                                                                <div
-                                                                    class="accordion-item border rounded mb-3 pkg-details__accordion-item">
-                                                                    <div class="accordion-header">
-                                                                        <div
-                                                                            class="d-flex justify-content-between align-items-center gap-3">
-                                                                            <div
-                                                                                class="d-flex align-items-center gap-2">
-                                                                                <div class="accordion-icon"
-                                                                                    data-bs-toggle="collapse"
-                                                                                    data-bs-target="#hotelCollapse"
-                                                                                    aria-expanded="true"
-                                                                                    aria-controls="hotelCollapse">
-                                                                                    <i
-                                                                                        class="fa-solid fa-chevron-down"></i>
-                                                                                </div>
-                                                                                <p class="p-small fw-600">HOTEL</p>
-                                                                            </div>
-                                                                            <div class="vertical-divider"></div>
-                                                                            <p class="p-small">2 Nights</p>
-                                                                            <div class="vertical-divider"></div>
-                                                                            <p class="p-small">In Riyadh</p>
-                                                                        </div>
-                                                                        <div
-                                                                            class="d-flex gap-2 pkg-details__accordion-actions">
-                                                                            <button class="btn btn-primary btn-sm">
-                                                                                <i class="fa-solid fa-pencil"></i>
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div id="hotelCollapse"
-                                                                        class="accordion-collapse collapse show"
-                                                                        aria-labelledby="headingOne"
-                                                                        data-bs-parent="#hotelAccordion">
-                                                                        <div class="accordion-body">
-                                                                            <div
-                                                                                class="d-flex align-items-center gap-3">
-                                                                                <img src="{{ asset('frontend/assets/transfer.png') }}"
-                                                                                    alt="Transfer"
-                                                                                    class="img-fluid pkg-details__tr-ht-img">
-                                                                                <div>
-                                                                                    <div
-                                                                                        class="pkg-details__star-ratings">
-                                                                                        <i
-                                                                                            class="fa-solid fa-star active"></i>
-                                                                                        <i
-                                                                                            class="fa-solid fa-star active"></i>
-                                                                                        <i
-                                                                                            class="fa-solid fa-star active"></i>
-                                                                                        <i
-                                                                                            class="fa-solid fa-star active"></i>
-                                                                                        <i class="fa-solid fa-star"></i>
-                                                                                    </div>
-                                                                                    <p class="fw-600 my-1">Crowne Plaza
-                                                                                        Riyadh
-                                                                                        Palace
-                                                                                    </p>
-                                                                                    <p class="p-small text-light2">
-                                                                                        <i
-                                                                                            class="fa-solid fa-location-dot p-small"></i>
-                                                                                        8 October - 10 October, 2 Nights
-                                                                                    </p>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="tab-pane fade" id="packageDay3" role="tabpanel"
-                                                        aria-labelledby="packageDay3">
-                                                        <div
-                                                            class="pkg-details__day-plan-header pkg-details__common-block">
-                                                            <!-- <div class="badge"> Macca</div> -->
-                                                            <p class="badge primary-bg">Day 3</p>
-                                                            <p class="fw-600">Riyadh</p>
-                                                        </div>
-                                                        <div
-                                                            class="pkg-details__day-plan-content pkg-details__common-block">
-                                                            <!-- Flight -->
-                                                            <div class="accordion accordion-flush" id="flightAccordion">
-                                                                <div
-                                                                    class="accordion-item border rounded mb-3 pkg-details__accordion-item">
-                                                                    <div class="accordion-header">
-                                                                        <div
-                                                                            class="d-flex justify-content-between align-items-center gap-3">
-                                                                            <div
-                                                                                class="d-flex align-items-center gap-2">
-                                                                                <div class="accordion-icon"
-                                                                                    data-bs-toggle="collapse"
-                                                                                    data-bs-target="#flightCollapse"
-                                                                                    aria-expanded="true"
-                                                                                    aria-controls="flightCollapse">
-                                                                                    <i
-                                                                                        class="fa-solid fa-chevron-down"></i>
-                                                                                </div>
-                                                                                <p class="p-small fw-600">FLIGHT</p>
-                                                                            </div>
-                                                                            <div class="vertical-divider"></div>
-                                                                            <p class="p-small">New Delhi to Riyadh</p>
-                                                                            <div class="vertical-divider"></div>
-                                                                            <p class="p-small">08h 30m</p>
-                                                                        </div>
-                                                                        <div
-                                                                            class="d-flex gap-2 pkg-details__accordion-actions">
-                                                                            <button class="btn btn-dark btn-sm">
-                                                                                <i class="fa-solid fa-trash-can"></i>
-                                                                            </button>
-                                                                            <button class="btn btn-primary btn-sm">
-                                                                                <i class="fa-solid fa-pencil"></i>
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div id="flightCollapse"
-                                                                        class="accordion-collapse collapse show"
-                                                                        aria-labelledby="headingOne"
-                                                                        data-bs-parent="#flightAccordion">
-                                                                        <div class="accordion-body">
-
-                                                                            <!-- First Flight Segment -->
-                                                                            <div class="pkg-details__flight-segment">
-                                                                                <div
-                                                                                    class="pkg-details__flight-box flex-shrink-0">
-                                                                                    <img src="{{ asset('frontend/assets/airline-logo.png') }}"
-                                                                                        alt="Airline Logo" width="50">
-                                                                                    <p class="p-small">GF-131</p>
-                                                                                </div>
-
-                                                                                <div class="w-100">
-                                                                                    <div
-                                                                                        class="d-flex justify-content-between align-items-center">
-                                                                                        <div class="flex-shrink-0">
-                                                                                            <p class="m-0 fw-600">04:55
-                                                                                            </p>
-                                                                                            <p
-                                                                                                class="mb-0 text-muted p-small">
-                                                                                                Wed, 08
-                                                                                                Oct</p>
-                                                                                            <p
-                                                                                                class="mb-0 text-muted p-small">
-                                                                                                New Delhi
-                                                                                            </p>
-                                                                                        </div>
-
-                                                                                        <div
-                                                                                            class="pkg-details__flight-duration-block mx-3">
-                                                                                            <p
-                                                                                                class="p-small pkg-details__flight-duration">
-                                                                                                04h 00m</p>
-                                                                                            <div
-                                                                                                class="pkg-details__flight-point pkg-details__flight-departure flex-center">
-                                                                                                <i
-                                                                                                    class="fa-solid fa-plane"></i>
-                                                                                            </div>
-                                                                                            <div
-                                                                                                class="pkg-details__flight-connector">
-                                                                                            </div>
-                                                                                            <div
-                                                                                                class="pkg-details__flight-point pkg-details__flight-arrival flex-center">
-                                                                                                <i
-                                                                                                    class="fa-solid fa-plane"></i>
-                                                                                            </div>
-                                                                                        </div>
-
-                                                                                        <div class="flex-shrink-0">
-                                                                                            <p class="m-0 fw-600">08:55
-                                                                                            </p>
-                                                                                            <p
-                                                                                                class="mb-0 text-muted p-small">
-                                                                                                Wed, 08
-                                                                                                Oct</p>
-                                                                                            <p
-                                                                                                class="mb-0 text-muted p-small">
-                                                                                                New Delhi
-                                                                                            </p>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-
-                                                                                <div
-                                                                                    class="pkg-details__flight-box pkg-details__baggage-info flex-shrink-0">
-                                                                                    <p class="p-small">
-                                                                                        <i
-                                                                                            class="fa-solid fa-briefcase"></i>
-                                                                                        <strong>Cabin:</strong> 6 Kgs
-                                                                                    </p>
-                                                                                    <p class="p-small">
-                                                                                        <i
-                                                                                            class="fa-solid fa-suitcase-rolling"></i>
-                                                                                        <strong>Check-in:</strong> 35
-                                                                                        Kgs
-                                                                                    </p>
-                                                                                </div>
-                                                                            </div>
-
-                                                                            <!-- Layover Section -->
-                                                                            <div
-                                                                                class="text-center py-2 my-2 rounded p-small pkg-details__layover-info">
-                                                                                04h 00m Layover in BAH, Baharain
-                                                                            </div>
-
-                                                                            <!-- Second Flight Segment -->
-                                                                            <div class="pkg-details__flight-segment">
-                                                                                <div
-                                                                                    class="pkg-details__flight-box flex-shrink-0">
-                                                                                    <img src="{{ asset('frontend/assets/airline-logo.png') }}"
-                                                                                        alt="Airline Logo" width="50">
-                                                                                    <p class="p-small">GF-131</p>
-                                                                                </div>
-
-                                                                                <div class="w-100">
-                                                                                    <div
-                                                                                        class="d-flex justify-content-between align-items-center">
-                                                                                        <div class="flex-shrink-0">
-                                                                                            <p class="m-0 fw-600">04:55
-                                                                                            </p>
-                                                                                            <p
-                                                                                                class="mb-0 text-muted p-small">
-                                                                                                Wed, 08
-                                                                                                Oct</p>
-                                                                                            <p
-                                                                                                class="mb-0 text-muted p-small">
-                                                                                                New Delhi
-                                                                                            </p>
-                                                                                        </div>
-
-                                                                                        <div
-                                                                                            class="pkg-details__flight-duration-block mx-3">
-                                                                                            <p
-                                                                                                class="p-small pkg-details__flight-duration">
-                                                                                                04h 00m</p>
-                                                                                            <div
-                                                                                                class="pkg-details__flight-point pkg-details__flight-departure flex-center">
-                                                                                                <i
-                                                                                                    class="fa-solid fa-plane"></i>
-                                                                                            </div>
-                                                                                            <div
-                                                                                                class="pkg-details__flight-connector">
-                                                                                            </div>
-                                                                                            <div
-                                                                                                class="pkg-details__flight-point pkg-details__flight-arrival flex-center">
-                                                                                                <i
-                                                                                                    class="fa-solid fa-plane"></i>
-                                                                                            </div>
-                                                                                        </div>
-
-                                                                                        <div class="flex-shrink-0">
-                                                                                            <p class="m-0 fw-600">08:55
-                                                                                            </p>
-                                                                                            <p
-                                                                                                class="mb-0 text-muted p-small">
-                                                                                                Wed, 08
-                                                                                                Oct</p>
-                                                                                            <p
-                                                                                                class="mb-0 text-muted p-small">
-                                                                                                New Delhi
-                                                                                            </p>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-
-                                                                                <div
-                                                                                    class="pkg-details__flight-box pkg-details__baggage-info flex-shrink-0">
-                                                                                    <p class="p-small">
-                                                                                        <i
-                                                                                            class="fa-solid fa-briefcase"></i>
-                                                                                        <strong>Cabin:</strong> 6 Kgs
-                                                                                    </p>
-                                                                                    <p class="p-small">
-                                                                                        <i
-                                                                                            class="fa-solid fa-suitcase-rolling"></i>
-                                                                                        <strong>Check-in:</strong> 35
-                                                                                        Kgs
-                                                                                    </p>
-                                                                                </div>
-                                                                            </div>
-
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="accordion accordion-flush"
-                                                                id="transferAccordion">
-                                                                <div
-                                                                    class="accordion-item border rounded mb-3 pkg-details__accordion-item">
-                                                                    <div class="accordion-header">
-                                                                        <div
-                                                                            class="d-flex justify-content-between align-items-center gap-3">
-                                                                            <div
-                                                                                class="d-flex align-items-center gap-2">
-                                                                                <div class="accordion-icon"
-                                                                                    data-bs-toggle="collapse"
-                                                                                    data-bs-target="#transferCollapse"
-                                                                                    aria-expanded="true"
-                                                                                    aria-controls="transferCollapse">
-                                                                                    <i
-                                                                                        class="fa-solid fa-chevron-down"></i>
-                                                                                </div>
-                                                                                <p class="p-small fw-600">TRANSFER</p>
-                                                                            </div>
-                                                                            <div class="vertical-divider"></div>
-                                                                            <p class="p-small">Airport to hotel in
-                                                                                Riyadh</p>
-                                                                        </div>
-                                                                        <div
-                                                                            class="d-flex gap-2 pkg-details__accordion-actions">
-                                                                            <button class="btn btn-dark btn-sm">
-                                                                                <i class="fa-solid fa-trash-can"></i>
-                                                                            </button>
-                                                                            <button class="btn btn-primary btn-sm">
-                                                                                <i class="fa-solid fa-pencil"></i>
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div id="transferCollapse"
-                                                                        class="accordion-collapse collapse show"
-                                                                        aria-labelledby="headingOne"
-                                                                        data-bs-parent="#transferAccordion">
-                                                                        <div class="accordion-body">
-                                                                            <div
-                                                                                class="d-flex align-items-center gap-3">
-                                                                                <img src="{{ asset('frontend/assets/transfer.png') }}"
-                                                                                    alt="Transfer"
-                                                                                    class="img-fluid pkg-details__tr-ht-img">
-                                                                                <div>
-                                                                                    <p class="fw-600">Private Transfer
-                                                                                    </p>
-                                                                                    <p class="p-small text-light2">Pick
-                                                                                        up from
-                                                                                        Riyadh
-                                                                                        International Airport to Riyadh
-                                                                                        City
-                                                                                        Hotel by
-                                                                                        private vehicle</p>
-                                                                                    <p class="p-small text-light2 mt-2">
-                                                                                        <i
-                                                                                            class="fa-solid fa-location-dot p-small"></i>
-                                                                                        Airport to Hotel
-                                                                                    </p>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="accordion accordion-flush" id="hotelAccordion">
-                                                                <div
-                                                                    class="accordion-item border rounded mb-3 pkg-details__accordion-item">
-                                                                    <div class="accordion-header">
-                                                                        <div
-                                                                            class="d-flex justify-content-between align-items-center gap-3">
-                                                                            <div
-                                                                                class="d-flex align-items-center gap-2">
-                                                                                <div class="accordion-icon"
-                                                                                    data-bs-toggle="collapse"
-                                                                                    data-bs-target="#hotelCollapse"
-                                                                                    aria-expanded="true"
-                                                                                    aria-controls="hotelCollapse">
-                                                                                    <i
-                                                                                        class="fa-solid fa-chevron-down"></i>
-                                                                                </div>
-                                                                                <p class="p-small fw-600">HOTEL</p>
-                                                                            </div>
-                                                                            <div class="vertical-divider"></div>
-                                                                            <p class="p-small">2 Nights</p>
-                                                                            <div class="vertical-divider"></div>
-                                                                            <p class="p-small">In Riyadh</p>
-                                                                        </div>
-                                                                        <div
-                                                                            class="d-flex gap-2 pkg-details__accordion-actions">
-                                                                            <button class="btn btn-primary btn-sm">
-                                                                                <i class="fa-solid fa-pencil"></i>
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div id="hotelCollapse"
-                                                                        class="accordion-collapse collapse show"
-                                                                        aria-labelledby="headingOne"
-                                                                        data-bs-parent="#hotelAccordion">
-                                                                        <div class="accordion-body">
-                                                                            <div
-                                                                                class="d-flex align-items-center gap-3">
-                                                                                <img src="{{ asset('frontend/assets/transfer.png') }}"
-                                                                                    alt="Transfer"
-                                                                                    class="img-fluid pkg-details__tr-ht-img">
-                                                                                <div>
-                                                                                    <div
-                                                                                        class="pkg-details__star-ratings">
-                                                                                        <i
-                                                                                            class="fa-solid fa-star active"></i>
-                                                                                        <i
-                                                                                            class="fa-solid fa-star active"></i>
-                                                                                        <i
-                                                                                            class="fa-solid fa-star active"></i>
-                                                                                        <i
-                                                                                            class="fa-solid fa-star active"></i>
-                                                                                        <i class="fa-solid fa-star"></i>
-                                                                                    </div>
-                                                                                    <p class="fw-600 my-1">Crowne Plaza
-                                                                                        Riyadh
-                                                                                        Palace
-                                                                                    </p>
-                                                                                    <p class="p-small text-light2">
-                                                                                        <i
-                                                                                            class="fa-solid fa-location-dot p-small"></i>
-                                                                                        8 October - 10 October, 2 Nights
-                                                                                    </p>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="tab-pane fade" id="packageDay4" role="tabpanel"
-                                                        aria-labelledby="packageDay4">
-                                                        <div
-                                                            class="pkg-details__day-plan-header pkg-details__common-block">
-                                                            <!-- <div class="badge"> Macca</div> -->
-                                                            <p class="badge primary-bg">Day 4</p>
-                                                            <p class="fw-600">Riyadh</p>
-                                                        </div>
-                                                        <div
-                                                            class="pkg-details__day-plan-content pkg-details__common-block">
-                                                            <!-- Flight -->
-                                                            <div class="accordion accordion-flush" id="flightAccordion">
-                                                                <div
-                                                                    class="accordion-item border rounded mb-3 pkg-details__accordion-item">
-                                                                    <div class="accordion-header">
-                                                                        <div
-                                                                            class="d-flex justify-content-between align-items-center gap-3">
-                                                                            <div
-                                                                                class="d-flex align-items-center gap-2">
-                                                                                <div class="accordion-icon"
-                                                                                    data-bs-toggle="collapse"
-                                                                                    data-bs-target="#flightCollapse"
-                                                                                    aria-expanded="true"
-                                                                                    aria-controls="flightCollapse">
-                                                                                    <i
-                                                                                        class="fa-solid fa-chevron-down"></i>
-                                                                                </div>
-                                                                                <p class="p-small fw-600">FLIGHT</p>
-                                                                            </div>
-                                                                            <div class="vertical-divider"></div>
-                                                                            <p class="p-small">New Delhi to Riyadh</p>
-                                                                            <div class="vertical-divider"></div>
-                                                                            <p class="p-small">08h 30m</p>
-                                                                        </div>
-                                                                        <div
-                                                                            class="d-flex gap-2 pkg-details__accordion-actions">
-                                                                            <button class="btn btn-dark btn-sm">
-                                                                                <i class="fa-solid fa-trash-can"></i>
-                                                                            </button>
-                                                                            <button class="btn btn-primary btn-sm">
-                                                                                <i class="fa-solid fa-pencil"></i>
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div id="flightCollapse"
-                                                                        class="accordion-collapse collapse show"
-                                                                        aria-labelledby="headingOne"
-                                                                        data-bs-parent="#flightAccordion">
-                                                                        <div class="accordion-body">
-
-                                                                            <!-- First Flight Segment -->
-                                                                            <div class="pkg-details__flight-segment">
-                                                                                <div
-                                                                                    class="pkg-details__flight-box flex-shrink-0">
-                                                                                    <img src="{{ asset('frontend/assets/airline-logo.png') }}"
-                                                                                        alt="Airline Logo" width="50">
-                                                                                    <p class="p-small">GF-131</p>
-                                                                                </div>
-
-                                                                                <div class="w-100">
-                                                                                    <div
-                                                                                        class="d-flex justify-content-between align-items-center">
-                                                                                        <div class="flex-shrink-0">
-                                                                                            <p class="m-0 fw-600">04:55
-                                                                                            </p>
-                                                                                            <p
-                                                                                                class="mb-0 text-muted p-small">
-                                                                                                Wed, 08
-                                                                                                Oct</p>
-                                                                                            <p
-                                                                                                class="mb-0 text-muted p-small">
-                                                                                                New Delhi
-                                                                                            </p>
-                                                                                        </div>
-
-                                                                                        <div
-                                                                                            class="pkg-details__flight-duration-block mx-3">
-                                                                                            <p
-                                                                                                class="p-small pkg-details__flight-duration">
-                                                                                                04h 00m</p>
-                                                                                            <div
-                                                                                                class="pkg-details__flight-point pkg-details__flight-departure flex-center">
-                                                                                                <i
-                                                                                                    class="fa-solid fa-plane"></i>
-                                                                                            </div>
-                                                                                            <div
-                                                                                                class="pkg-details__flight-connector">
-                                                                                            </div>
-                                                                                            <div
-                                                                                                class="pkg-details__flight-point pkg-details__flight-arrival flex-center">
-                                                                                                <i
-                                                                                                    class="fa-solid fa-plane"></i>
-                                                                                            </div>
-                                                                                        </div>
-
-                                                                                        <div class="flex-shrink-0">
-                                                                                            <p class="m-0 fw-600">08:55
-                                                                                            </p>
-                                                                                            <p
-                                                                                                class="mb-0 text-muted p-small">
-                                                                                                Wed, 08
-                                                                                                Oct</p>
-                                                                                            <p
-                                                                                                class="mb-0 text-muted p-small">
-                                                                                                New Delhi
-                                                                                            </p>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-
-                                                                                <div
-                                                                                    class="pkg-details__flight-box pkg-details__baggage-info flex-shrink-0">
-                                                                                    <p class="p-small">
-                                                                                        <i
-                                                                                            class="fa-solid fa-briefcase"></i>
-                                                                                        <strong>Cabin:</strong> 6 Kgs
-                                                                                    </p>
-                                                                                    <p class="p-small">
-                                                                                        <i
-                                                                                            class="fa-solid fa-suitcase-rolling"></i>
-                                                                                        <strong>Check-in:</strong> 35
-                                                                                        Kgs
-                                                                                    </p>
-                                                                                </div>
-                                                                            </div>
-
-                                                                            <!-- Layover Section -->
-                                                                            <div
-                                                                                class="text-center py-2 my-2 rounded p-small pkg-details__layover-info">
-                                                                                04h 00m Layover in BAH, Baharain
-                                                                            </div>
-
-                                                                            <!-- Second Flight Segment -->
-                                                                            <div class="pkg-details__flight-segment">
-                                                                                <div
-                                                                                    class="pkg-details__flight-box flex-shrink-0">
-                                                                                    <img src="{{ asset('frontend/assets/airline-logo.png') }}"
-                                                                                        alt="Airline Logo" width="50">
-                                                                                    <p class="p-small">GF-131</p>
-                                                                                </div>
-
-                                                                                <div class="w-100">
-                                                                                    <div
-                                                                                        class="d-flex justify-content-between align-items-center">
-                                                                                        <div class="flex-shrink-0">
-                                                                                            <p class="m-0 fw-600">04:55
-                                                                                            </p>
-                                                                                            <p
-                                                                                                class="mb-0 text-muted p-small">
-                                                                                                Wed, 08
-                                                                                                Oct</p>
-                                                                                            <p
-                                                                                                class="mb-0 text-muted p-small">
-                                                                                                New Delhi
-                                                                                            </p>
-                                                                                        </div>
-
-                                                                                        <div
-                                                                                            class="pkg-details__flight-duration-block mx-3">
-                                                                                            <p
-                                                                                                class="p-small pkg-details__flight-duration">
-                                                                                                04h 00m</p>
-                                                                                            <div
-                                                                                                class="pkg-details__flight-point pkg-details__flight-departure flex-center">
-                                                                                                <i
-                                                                                                    class="fa-solid fa-plane"></i>
-                                                                                            </div>
-                                                                                            <div
-                                                                                                class="pkg-details__flight-connector">
-                                                                                            </div>
-                                                                                            <div
-                                                                                                class="pkg-details__flight-point pkg-details__flight-arrival flex-center">
-                                                                                                <i
-                                                                                                    class="fa-solid fa-plane"></i>
-                                                                                            </div>
-                                                                                        </div>
-
-                                                                                        <div class="flex-shrink-0">
-                                                                                            <p class="m-0 fw-600">08:55
-                                                                                            </p>
-                                                                                            <p
-                                                                                                class="mb-0 text-muted p-small">
-                                                                                                Wed, 08
-                                                                                                Oct</p>
-                                                                                            <p
-                                                                                                class="mb-0 text-muted p-small">
-                                                                                                New Delhi
-                                                                                            </p>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-
-                                                                                <div
-                                                                                    class="pkg-details__flight-box pkg-details__baggage-info flex-shrink-0">
-                                                                                    <p class="p-small">
-                                                                                        <i
-                                                                                            class="fa-solid fa-briefcase"></i>
-                                                                                        <strong>Cabin:</strong> 6 Kgs
-                                                                                    </p>
-                                                                                    <p class="p-small">
-                                                                                        <i
-                                                                                            class="fa-solid fa-suitcase-rolling"></i>
-                                                                                        <strong>Check-in:</strong> 35
-                                                                                        Kgs
-                                                                                    </p>
-                                                                                </div>
-                                                                            </div>
-
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="accordion accordion-flush"
-                                                                id="transferAccordion">
-                                                                <div
-                                                                    class="accordion-item border rounded mb-3 pkg-details__accordion-item">
-                                                                    <div class="accordion-header">
-                                                                        <div
-                                                                            class="d-flex justify-content-between align-items-center gap-3">
-                                                                            <div
-                                                                                class="d-flex align-items-center gap-2">
-                                                                                <div class="accordion-icon"
-                                                                                    data-bs-toggle="collapse"
-                                                                                    data-bs-target="#transferCollapse"
-                                                                                    aria-expanded="true"
-                                                                                    aria-controls="transferCollapse">
-                                                                                    <i
-                                                                                        class="fa-solid fa-chevron-down"></i>
-                                                                                </div>
-                                                                                <p class="p-small fw-600">TRANSFER</p>
-                                                                            </div>
-                                                                            <div class="vertical-divider"></div>
-                                                                            <p class="p-small">Airport to hotel in
-                                                                                Riyadh</p>
-                                                                        </div>
-                                                                        <div
-                                                                            class="d-flex gap-2 pkg-details__accordion-actions">
-                                                                            <button class="btn btn-dark btn-sm">
-                                                                                <i class="fa-solid fa-trash-can"></i>
-                                                                            </button>
-                                                                            <button class="btn btn-primary btn-sm">
-                                                                                <i class="fa-solid fa-pencil"></i>
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div id="transferCollapse"
-                                                                        class="accordion-collapse collapse show"
-                                                                        aria-labelledby="headingOne"
-                                                                        data-bs-parent="#transferAccordion">
-                                                                        <div class="accordion-body">
-                                                                            <div
-                                                                                class="d-flex align-items-center gap-3">
-                                                                                <img src="{{ asset('/frontend/assets/transfer.png') }}"
-                                                                                    alt="Transfer"
-                                                                                    class="img-fluid pkg-details__tr-ht-img">
-                                                                                <div>
-                                                                                    <p class="fw-600">Private Transfer
-                                                                                    </p>
-                                                                                    <p class="p-small text-light2">Pick
-                                                                                        up from
-                                                                                        Riyadh
-                                                                                        International Airport to Riyadh
-                                                                                        City
-                                                                                        Hotel by
-                                                                                        private vehicle</p>
-                                                                                    <p class="p-small text-light2 mt-2">
-                                                                                        <i
-                                                                                            class="fa-solid fa-location-dot p-small"></i>
-                                                                                        Airport to Hotel
-                                                                                    </p>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="accordion accordion-flush" id="hotelAccordion">
-                                                                <div
-                                                                    class="accordion-item border rounded mb-3 pkg-details__accordion-item">
-                                                                    <div class="accordion-header">
-                                                                        <div
-                                                                            class="d-flex justify-content-between align-items-center gap-3">
-                                                                            <div
-                                                                                class="d-flex align-items-center gap-2">
-                                                                                <div class="accordion-icon"
-                                                                                    data-bs-toggle="collapse"
-                                                                                    data-bs-target="#hotelCollapse"
-                                                                                    aria-expanded="true"
-                                                                                    aria-controls="hotelCollapse">
-                                                                                    <i
-                                                                                        class="fa-solid fa-chevron-down"></i>
-                                                                                </div>
-                                                                                <p class="p-small fw-600">HOTEL</p>
-                                                                            </div>
-                                                                            <div class="vertical-divider"></div>
-                                                                            <p class="p-small">2 Nights</p>
-                                                                            <div class="vertical-divider"></div>
-                                                                            <p class="p-small">In Riyadh</p>
-                                                                        </div>
-                                                                        <div
-                                                                            class="d-flex gap-2 pkg-details__accordion-actions">
-                                                                            <button class="btn btn-primary btn-sm">
-                                                                                <i class="fa-solid fa-pencil"></i>
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div id="hotelCollapse"
-                                                                        class="accordion-collapse collapse show"
-                                                                        aria-labelledby="headingOne"
-                                                                        data-bs-parent="#hotelAccordion">
-                                                                        <div class="accordion-body">
-                                                                            <div
-                                                                                class="d-flex align-items-center gap-3">
-                                                                                <img src="{{ asset('/frontend/assets/transfer.png') }}"
-                                                                                    alt="Transfer"
-                                                                                    class="img-fluid pkg-details__tr-ht-img">
-                                                                                <div>
-                                                                                    <div
-                                                                                        class="pkg-details__star-ratings">
-                                                                                        <i
-                                                                                            class="fa-solid fa-star active"></i>
-                                                                                        <i
-                                                                                            class="fa-solid fa-star active"></i>
-                                                                                        <i
-                                                                                            class="fa-solid fa-star active"></i>
-                                                                                        <i
-                                                                                            class="fa-solid fa-star active"></i>
-                                                                                        <i class="fa-solid fa-star"></i>
-                                                                                    </div>
-                                                                                    <p class="fw-600 my-1">Crowne Plaza
-                                                                                        Riyadh
-                                                                                        Palace
-                                                                                    </p>
-                                                                                    <p class="p-small text-light2">
-                                                                                        <i
-                                                                                            class="fa-solid fa-location-dot p-small"></i>
-                                                                                        8 October - 10 October, 2 Nights
-                                                                                    </p>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -1864,7 +784,8 @@
                                     <div>
                                         <div class="d-flex primary-text p-large gap-1 align-items-center">
                                             <p>-</p>
-                                            <img src="{{ asset('/frontend/assets/icons/riyal-primary.svg') }}" alt="Riyal">
+                                            <img src="{{ asset('/frontend/assets/icons/riyal-primary.svg') }}"
+                                                alt="Riyal">
                                             <p>35,200</p>
                                         </div>
 
@@ -1887,7 +808,8 @@
                                     <div>
                                         <div class="d-flex primary-text p-large gap-1 align-items-center">
                                             <p>-</p>
-                                            <img src="{{ asset('/frontend/assets/icons/riyal-primary.svg') }}" alt="Riyal">
+                                            <img src="{{ asset('/frontend/assets/icons/riyal-primary.svg') }}"
+                                                alt="Riyal">
                                             <p>35,200</p>
                                         </div>
 
@@ -1910,7 +832,8 @@
                                     <div>
                                         <div class="d-flex primary-text p-large gap-1 align-items-center">
                                             <p>-</p>
-                                            <img src="{{ asset('/frontend/assets/icons/riyal-primary.svg') }}" alt="Riyal">
+                                            <img src="{{ asset('/frontend/assets/icons/riyal-primary.svg') }}"
+                                                alt="Riyal">
                                             <p>35,200</p>
                                         </div>
 
@@ -1937,121 +860,244 @@
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content traveller-modal">
 
-                <!-- Header -->
+                <!-- HEADER -->
                 <div class="modal-header">
                     <div>
-                        <h6 class="modal-title fw-600 p-large">Add Traveller Details</h6>
-                        <p class="text-lihgt2 p-small mb-0">Traveller 2/2</p>
+                        <h6 class="modal-title fw-600 p-large">
+                            Add Traveller Details
+                        </h6>
+                        <p class="text-light2 p-small mb-0">
+                            Traveller {{ max(1, $travellers->count()) }}/{{ max(1, $travellers->count()) }}
+                        </p>
                     </div>
-
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
-                <div class="modal-body">
+                <form method="POST" id="travellerForm">
 
-                    <!-- Traveller Tabs -->
-                    <div class="d-flex traveller-tabs gap-3 mb-3 flex-wrap">
-                        <button class="btn btn-outline-secondary trav-btn d-flex gap-2 align-items-center active">
-                            <div class="trav-btn__icon flex-center">
-                                <i class=" fa-solid fa-user"></i>
+                    @csrf
+
+                    <input type="hidden" name="traveller_id" id="traveller_id">
+
+                    <div class="modal-body">
+
+                        <!-- TABS -->
+                        <div class="d-flex traveller-tabs gap-3 mb-3 flex-wrap">
+
+                            @foreach ($travellers as $index => $traveller)
+                                <button type="button"
+                                    class="btn btn-outline-secondary trav-btn d-flex gap-2 align-items-center {{ $index === 0 ? 'active' : '' }}"
+                                    data-id="{{ $traveller->id }}" data-first="{{ $traveller->first_name }}"
+                                    data-last="{{ $traveller->last_name }}" data-dob="{{ $traveller->dob }}"
+                                    data-gender="{{ $traveller->gender }}" data-country="{{ $traveller->country }}"
+                                    data-type="{{ $traveller->type }}">
+
+                                    <div class="trav-btn__icon flex-center">
+                                        <i class="fa-solid fa-user"></i>
+                                    </div>
+                                    <div>
+                                        <span class="fw-500">
+                                            {{ ucfirst($traveller->type) }}:
+                                        </span>
+                                        Traveller {{ $index + 1 }}
+                                    </div>
+                                </button>
+                            @endforeach
+
+                            <button type="button"
+                                class="btn btn-outline-secondary trav-btn d-flex gap-2 align-items-center w-auto"
+                                id="addTravellerTab">
+
+                                <div class="trav-btn__icon flex-center">
+                                    <i class="fa-solid fa-plus"></i>
+                                </div>
+                                <div>
+                                    <span class="fw-500">Add Traveller</span>
+                                </div>
+                            </button>
+                        </div>
+
+                        <!-- INFO -->
+                        <div class="mb-3">
+                            <h6 class="fw-600 p">Mandatory Information</h6>
+                            <p class="p-small text-light2">
+                                <i class="fa-solid fa-circle-info"></i>
+                                Please Enter Mandatory Information
+                            </p>
+                        </div>
+
+                        <!-- FORM -->
+                        <div class="row g-3">
+
+                            <div class="col-md-6 col-lg-4">
+                                <label class="form-label">First Name *</label>
+                                <input type="text" name="first_name" id="first_name" class="form-control">
                             </div>
-                            <div>
-                                <span class="fw-500">Adult:</span>
-                                Traveller 1
+
+                            <div class="col-md-6 col-lg-4">
+                                <label class="form-label">Last Name *</label>
+                                <input type="text" name="last_name" id="last_name" class="form-control">
                             </div>
+
+                            <div class="col-md-6 col-lg-4">
+                                <label class="form-label">Date of Birth *</label>
+                                <input type="date" name="dob" id="dob" class="form-control">
+                            </div>
+
+                            <div class="col-md-6 col-lg-4">
+                                <label class="form-label">Gender *</label>
+                                <select name="gender" id="gender" class="form-select">
+                                    <option value="">Select</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 col-lg-4">
+                                <label class="form-label">Country *</label>
+                                <input type="text" name="country" id="country" class="form-control">
+                            </div>
+                            <div class="col-md-6 col-lg-4">
+                                <label class="form-label">Traveller Type *</label>
+                                <select name="type" id="type" class="form-select">
+                                    <option value="">Select Type</option>
+                                    <option value="adult">Adult</option>
+                                    <option value="child">Child</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- FOOTER -->
+                    <div class="modal-footer traveller-footer">
+                        <button type="button" class="btn btn-outline-secondary px-3 rounded-pill"
+                            data-bs-dismiss="modal">
+                            Cancel
                         </button>
 
-                        <button class="btn btn-outline-secondary trav-btn d-flex gap-2 align-items-center">
-                            <div class="trav-btn__icon flex-center">
-                                <i class=" fa-solid fa-user"></i>
-                            </div>
-                            <div>
-                                <span class="fw-500">Adult:</span>
-                                Traveller 2
-                            </div>
-                        </button>
-
-                        <button class="btn btn-outline-secondary trav-btn d-flex gap-2 align-items-center w-auto">
-                            <div class="trav-btn__icon flex-center">
-                                <i class="fa-solid fa-plus"></i>
-                            </div>
-                            <div>
-                                <span class="fw-500">Add Traveller</span>
-                            </div>
+                        <button type="submit" class="btn btn-success px-3 rounded-pill">
+                            Confirm Details
                         </button>
                     </div>
 
-                    <!-- Instruction -->
-                    <div class="mb-3">
-                        <h6 class="fw-600 p">Mandatory Information</h6>
-                        <p class="p-small text-light2">
-                            <i class="fa-solid fa-circle-info"></i> Please Enter Mandatory Information
-                        </p>
-
-                    </div>
-
-                    <!-- Form -->
-                    <div class="row g-3">
-
-                        <div class="col-md-6 col-lg-4">
-                            <label class="form-label">First Name *</label>
-                            <input type="text" class="form-control" placeholder="Enter First Name">
-                        </div>
-
-                        <div class="col-md-6 col-lg-4">
-                            <label class="form-label">Last Name *</label>
-                            <input type="text" class="form-control" placeholder="Enter Last Name">
-                        </div>
-
-                        <div class="col-md-6 col-lg-4 position-relative">
-                            <label class="form-label">Date of Birth *</label>
-                            <input type="text" class="form-control" placeholder="Select Date">
-                            <i class="bi bi-calendar date-icon"></i>
-                        </div>
-
-                        <div class="col-md-6 col-lg-4">
-                            <label class="form-label">Gender *</label>
-                            <select class="form-select">
-                                <option>Select</option>
-                            </select>
-                        </div>
-
-                        <div class="col-md-6 col-lg-4">
-                            <label class="form-label">Nationality *</label>
-                            <select class="form-select">
-                                <option>Select Country</option>
-                            </select>
-                        </div>
-
-                        <div class="col-md-6 col-lg-4">
-                            <label class="form-label">Passport Number *</label>
-                            <input type="text" class="form-control" placeholder="Enter Passport Number">
-                        </div>
-
-                        <div class="col-md-6 col-lg-4 position-relative">
-                            <label class="form-label">Passport Expiry Date *</label>
-                            <input type="text" class="form-control" placeholder="Select Date">
-                            <i class="bi bi-calendar date-icon"></i>
-                        </div>
-
-                        <div class="col-md-6 col-lg-4">
-                            <label class="form-label">Passport issuing Country *</label>
-                            <select class="form-select">
-                                <option>Select country</option>
-                            </select>
-                        </div>
-
-                    </div>
-                </div>
-
-                <!-- Footer -->
-                <div class="modal-footer traveller-footer">
-                    <button class="btn btn-outline-secondary px-3 rounded-pill">Cancel</button>
-                    <button class="btn btn-success px-3 rounded-pill">Confirm Details</button>
-                </div>
-
+                </form>
             </div>
         </div>
     </div>
 
-    @endsection
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const modal = document.getElementById('travellerModal');
+            const form = modal.querySelector('form');
+
+            const fields = {
+                traveller_id: document.getElementById('traveller_id'),
+                first_name: document.getElementById('first_name'),
+                last_name: document.getElementById('last_name'),
+                dob: document.getElementById('dob'),
+                gender: document.getElementById('gender'),
+                country: document.getElementById('country'),
+                type: document.getElementById('type'),
+            };
+
+            /* ---------------------------------
+               FILL FORM FROM BUTTON DATA
+            --------------------------------- */
+            function fillFormFromButton(btn) {
+                fields.traveller_id.value = btn.dataset.id || '';
+                fields.first_name.value = btn.dataset.first || '';
+                fields.last_name.value = btn.dataset.last || '';
+                fields.dob.value = btn.dataset.dob || '';
+                fields.gender.value = btn.dataset.gender || '';
+                fields.country.value = btn.dataset.country || '';
+                fields.type.value = btn.dataset.type || '';
+
+                setActive(btn);
+            }
+
+            /* ---------------------------------
+               ACTIVE TAB HANDLER
+            --------------------------------- */
+            function setActive(activeBtn) {
+                modal.querySelectorAll('.trav-btn').forEach(btn =>
+                    btn.classList.remove('active')
+                );
+                activeBtn.classList.add('active');
+            }
+
+            /* ---------------------------------
+               TAB CLICK (EVENT DELEGATION)
+            --------------------------------- */
+            modal.addEventListener('click', e => {
+                const btn = e.target.closest('.trav-btn[data-id]');
+                if (!btn) return;
+
+                e.preventDefault();
+                fillFormFromButton(btn);
+            });
+
+            /* ---------------------------------
+               ADD TRAVELLER
+            --------------------------------- */
+            const addBtn = document.getElementById('addTravellerTab');
+            if (addBtn) {
+                addBtn.addEventListener('click', () => {
+                    form.reset();
+                    fields.traveller_id.value = '';
+                    setActive(addBtn);
+                });
+            }
+
+            /* ---------------------------------
+               🔥 CRITICAL FIX (FIRST OPEN ISSUE)
+               Modal open hote hi active tab click
+            --------------------------------- */
+            modal.addEventListener('shown.bs.modal', () => {
+
+                const firstBtn =
+                    modal.querySelector('.trav-btn.active[data-id]') ||
+                    modal.querySelector('.trav-btn[data-id]');
+
+                if (firstBtn) {
+                    firstBtn.click(); // ✅ THIS FIXES FIRST TIME ISSUE
+                }
+            });
+
+            /* ---------------------------------
+               FORM SUBMIT (AJAX, NO JQUERY)
+            --------------------------------- */
+            form.addEventListener('submit', async e => {
+                e.preventDefault();
+
+                const travellerId = fields.traveller_id.value;
+                const isUpdate = travellerId !== '';
+
+                const url = isUpdate ?
+                    `/account/travellers/${travellerId}` :
+                    `/account/travellers`;
+
+                try {
+                    const res = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+                        },
+                        body: new FormData(form)
+                    });
+
+                    if (!res.ok) throw new Error('Request failed');
+
+                    // ✅ PAGE RELOAD AS REQUESTED
+                    window.location.reload();
+
+                } catch (err) {
+                    alert('Something went wrong. Please try again.');
+                    console.error(err);
+                }
+            });
+
+        });
+    </script>
+@endsection
