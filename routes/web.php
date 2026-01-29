@@ -423,7 +423,7 @@ Route::get('/blog-details', [BlogController::class, 'detail'])->name('blog.detai
 
 
 // checkout route
-Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.view');
+Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout.view');
 
 //pages routes
 Route::get('/about-us', [PageController::class, 'about_us'])->name('about.us');
