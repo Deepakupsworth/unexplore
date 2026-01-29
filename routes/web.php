@@ -335,7 +335,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 });
 
 
-Route::middleware('auth')->prefix('user')->group(function () {
+Route::middleware(['auth','user'])->prefix('user')->group(function () {
     Route::get('/profile', [FrontendProfileController::class, 'index'])
         ->name('user.profile.index');
 
@@ -381,6 +381,12 @@ Route::get('/package-listing', [FrontendPackageController::class, 'list'])->name
 
 Route::get('/package-details', [FrontendPackageController::class, 'details'])->name('package.details');
 Route::get('/package-day-option/{id}/{type}', [FrontendPackageController::class, 'packageDayOption'])->name('package.details.options');
+
+
+
+Route::get('/package-day-option/{id}/{type}', [FrontendPackageController::class, 'packageDayOption'])->name('package.details.option');
+
+Route::post('/save-package-day-item-session', [FrontendPackageController::class, 'savePackageDayItemSession'])->name('package.day.item.option.session');
 
 
 Route::get('/profile', [FrontendProfileController::class, 'index'])->name('profile.view');

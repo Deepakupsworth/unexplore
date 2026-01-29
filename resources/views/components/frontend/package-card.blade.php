@@ -22,6 +22,8 @@
         ?? $perPersonPrice;
 @endphp
 
+{{-- @dd($package) --}}
+
 <a href="{{ route('packages.show', $package->slug) }}"
    class="text-decoration-none text-dark">
 

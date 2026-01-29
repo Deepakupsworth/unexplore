@@ -45,8 +45,6 @@
         $startDate = Carbon::parse($package->start_date); // MUST EXIST
         $endDate = $startDate->copy()->addDays($package->duration_nights);
     @endphp
-
-    @dd($package)
     <section>
         <div class="container">
             <div class="gallery-wrapper swiper">
@@ -357,7 +355,7 @@
                                                                                                 'frontend/assets/hotel-placeholder.jpg',
                                                                                             );
                                                                                     @endphp
-                                                                                    <div class="day-item-slot d-flex position-relative"
+                                                                                    <div class="day-item-slot"
                                                                                         data-day-id="{{ $day->id }}"
                                                                                         data-type="hotel"
                                                                                         data-index="{{ $hotel_slot  }}">
@@ -397,7 +395,7 @@
                                                                                  </div>
                                                                                  <button
                                                                             type="button"
-                                                                            class="btn btn-primary btn-sm position-absolute top-0 end-0 m-2 editDayItemsBtn"
+                                                                            class="btn btn-primary btn-sm editDayItemsBtn"
                                                                             data-day-id="{{ $day->id }}"
                                                                             data-type="hotel"
                                                                             data-item-id="{{ $hotel->id }}"
@@ -475,7 +473,7 @@
                                                                                  @endphp
 
                                                                                 @foreach ($todos as $index => $todo)
-                                                                                <div class="day-item-slot d-flex position-relative"
+                                                                                <div class="day-item-slot"
                                                                                         data-day-id="{{ $day->id }}"
                                                                                         data-type="todo"
                                                                                         data-index="{{ $todo_slot  }}">
@@ -504,7 +502,7 @@
                                                                                 </div>
                                                                                 <button
                                                                             type="button"
-                                                                            class="btn btn-primary btn-sm position-absolute top-0 end-0 m-2 editDayItemsBtn"
+                                                                            class="btn btn-primary btn-sm editDayItemsBtn"
                                                                             data-day-id="{{ $day->id }}"
                                                                             data-type="todo"
                                                                             data-item-id="{{ $todo->id }}"
@@ -580,7 +578,7 @@
                                                                                  @endphp
 
                                                                                 @foreach ($events as $index => $event)
-                                                                                <div class="day-item-slot d-flex position-relative"
+                                                                                <div class="day-item-slot"
                                                                                         data-day-id="{{ $day->id }}"
                                                                                         data-type="event"
                                                                                         data-index="{{ $event_slot  }}">
@@ -609,7 +607,7 @@
                                                                                 </div>
                                                                                     <button
                                                                             type="button"
-                                                                            class="btn btn-primary position-absolute top-0 end-0 m-2 editDayItemsBtn"
+                                                                            class="btn btn-primary btn-sm editDayItemsBtn"
                                                                             data-day-id="{{ $day->id }}"
                                                                             data-type="event"
                                                                             data-item-id="{{ $event->id }}"
@@ -1103,19 +1101,25 @@
     </div>
 
 
-    <div class="offcanvas offcanvas-end" id="dayItemModal" tabindex="-1">
+    <div class="modal fade" id="dayItemModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
             <div class="modal-header">
                 <h5 class="modal-title" id="dayItemModalTitle"></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
-            <div class="offcanvas-body side-drawer__booking-body">
+            <div class="modal-body">
                 <div id="dayItemList" class="row g-3"></div>
             </div>
-            <div class="offcanvas-footer border-top text-end p-3">
-                <button id="saveDayItems" class="btn btn-outline-secondary rounded-pill" data-bs-dismiss="offcanvas">Save</button>
+
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="saveDayItems">Save</button>
             </div>
 
+        </div>
+    </div>
 </div>
 
 
@@ -1579,7 +1583,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentWrapper.querySelectorAll('input[name="extra_price"]').forEach(i => i.remove());
 
         const currentCard = document.createElement('div');
-        currentCard.className = 'selectable-card-wrapper active';
+        currentCard.className = 'col-md-4 selectable-card-wrapper active';
         currentCard.appendChild(currentWrapper);
 
         selectedClone = currentWrapper.cloneNode(true);
@@ -1644,7 +1648,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
 
                     const card = document.createElement('div');
-                    card.className = 'col-md-12 selectable-card-wrapper';
+                    card.className = 'col-md-4 selectable-card-wrapper';
                     card.appendChild(wrapper);
 
                     card.onclick = () => {
@@ -1657,13 +1661,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     list.appendChild(card);
                 });
 
-                // new bootstrap.Modal(
-                //     document.getElementById('dayItemModal')
-                // ).show();
-
-                new bootstrap.Offcanvas(
-    document.getElementById('dayItemModal')
-).show();
+                new bootstrap.Modal(
+                    document.getElementById('dayItemModal')
+                ).show();
             });
     });
 
@@ -1711,11 +1711,7 @@ document.addEventListener('DOMContentLoaded', () => {
             })
         });
 
-        // bootstrap.Modal.getInstance(
-        //     document.getElementById('dayItemModal')
-        // ).hide();
-
-        bootstrap.Offcanvas.getInstance(
+        bootstrap.Modal.getInstance(
             document.getElementById('dayItemModal')
         ).hide();
     };
