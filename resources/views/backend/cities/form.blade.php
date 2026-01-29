@@ -116,7 +116,7 @@
 
                         <div class="input-area">
                             <label class="form-label">About</label>
-                            <textarea class="form-control" name="translations[{{ $code }}][about]">{{ old("translations.$code.about", $trans->about ?? '') }}</textarea>
+                            <textarea class="editor form-control" name="translations[{{ $code }}][about]">{{ old("translations.$code.about", $trans->about ?? '') }}</textarea>
                         </div>
 
                     </div>

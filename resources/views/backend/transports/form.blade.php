@@ -110,7 +110,7 @@
 
                                 <div class="mt-3">
                                     <label class="form-label">Description</label>
-                                    <textarea class="form-control h-32" name="translations[{{ $code }}][description]">{{ old("translations.$code.description", $trans->description ?? '') }}</textarea>
+                                    <textarea class="editor form-control h-32" name="translations[{{ $code }}][description]">{{ old("translations.$code.description", $trans->description ?? '') }}</textarea>
                                 </div>
 
                             </div>

@@ -95,7 +95,7 @@
                                     {{-- DESCRIPTION --}}
                                     <div>
                                         <label class="form-label">Description</label>
-                                        <textarea class="form-control @error("translations.$code.description") error-input @enderror" rows="4"
+                                        <textarea class="form-control editor @error("translations.$code.description") error-input @enderror" rows="4"
                                             name="translations[{{ $code }}][description]">{{ old("translations.$code.description", $trans->description ?? '') }}</textarea>
                                         @error("translations.$code.description")
                                             <p class="error-text">{{ $message }}</p>
