@@ -1,5 +1,8 @@
 @extends('frontend.layout')
 @section('content')
+    @php
+        $currentThing = $thing;
+    @endphp
     <!-- 1. THING TO DO NATURE: BANNER SECTION  -->
     <section class="hero-banner hero-banner-fullscreen">
         <video class="hero-banner__video" autoplay muted loop playsinline poster="../assets/hero-banner-bg.png">
@@ -13,13 +16,17 @@
                 <img src="{{ asset('frontend/assets/hero-banner-vision.png') }}" alt="Vision 2030"
                     class="dest-details-banner__vision d-none-sm d-none-md">
                 <div class="dest-details-banner__btn-group">
-                    <button class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#galleryModal">See
-                        Images</button>
+                    @if ($currentThing?->gallery && $currentThing?->gallery->count() > 0)
+                        <button class="btn btn-primary rounded-pill" data-bs-toggle="modal"
+                            data-bs-target="#galleryModal">{{ __('thing_detail.banner.see_images') }}</button>
+                    @endif
                 </div>
             </div>
         </div>
     </section>
     {{-- @dd($thing) --}}
+
+
     <!-- 2. THING TO DO NATURE: DESCRIPTION -->
     <section class="section-padding things-to-do-nature__details">
         <div class="container">
@@ -48,12 +55,12 @@
                 </div>
                 <div class="col-lg-4">
                     <div class="event-map__info-card rounded-5 mb-3">
-                        <h6 class="fw-600 p-large mb-2">Information</h6>
+                        <h6 class="fw-600 p-large mb-2">{{ __('thing_detail.info.title') }}</h6>
 
                         <div class="event-map__info-card-row flex-v-center rounded-4 gap-1 mb-3">
                             <div class="icon primary-text flex-center"><i class="fa-solid fa-location-dot"></i></div>
                             <div>
-                                <p class="text-light2 p-small">Location:</p>
+                                <p class="text-light2 p-small">{{ __('thing_detail.info.location_label') }}</p>
                                 <p class="p-large fw-600">{{ $thing->location }}</p>
                             </div>
                         </div>
@@ -61,18 +68,19 @@
                         <div class="event-map__info-card-row flex-v-center rounded-4 gap-1 mb-3">
                             <div class="icon primary-text flex-center"><i class="fa-solid fa-cake-candles"></i></div>
                             <div>
-                                <p class="text-light2 p-small">Ages:</p>
-                                <p class="p-large fw-600">All</p>
+                                <p class="text-light2 p-small">{{ __('thing_detail.info.ages_label') }}</p>
+                                <p class="p-large fw-600">{{ __('thing_detail.info.ages_all') }}</p>
                             </div>
                         </div>
 
                         <div class="event-map__info-card-row flex-v-center rounded-4 gap-1">
                             <div class="icon primary-text flex-center"><i class="fa-regular fa-clock"></i></div>
                             <div>
-                                <p class="text-light2 p-small">Time:</p>
+                                <p class="text-light2 p-small">{{ __('thing_detail.info.time_label') }}</p>
                                 {{-- <p class="p-large fw-600">Sun:
                                     {{ \App\Helpers\TimeHelper::range($thing->opening_time, $thing->closing_time) }}</p> --}}
-                                    <p class="p-large fw-600">{{ \App\Helpers\TimeHelper::range($thing->opening_time, $thing->closing_time) }}</p>
+                                <p class="p-large fw-600">
+                                    {{ \App\Helpers\TimeHelper::range($thing->opening_time, $thing->closing_time) }}</p>
                             </div>
                         </div>
                     </div>
@@ -93,7 +101,7 @@
                         {{-- Get Directions --}}
                         <a href="https://www.google.com/maps/dir/?api=1&destination={{ $lat }},{{ $lng }}"
                             target="_blank" class="event-map__card-btn btn btn-primary rounded-pill py-2 px-3">
-                            Get Directions
+                            {{ __('thing_detail.map.get_directions') }}
                         </a>
                     </div>
                     <div class="event-map__info-card">
@@ -208,14 +216,13 @@
             <div class="things-to-do-nature__adventure-wrapper">
                 <div class="section__header flex-column align-items-start gap-4">
                     <div class="section__header-content">
-                        <h2 class="section__heading text-white">Take on your own nature adventure</h2>
-                        <p class="section__description text-white">Embark on unforgettable journeys and explore the hidden
-                            gems
-                            across the heart of Saudi Arabia</p>
+                        <h2 class="section__heading text-white">{{ __('thing_detail.adventure.title') }}</h2>
+                        <p class="section__description text-white">{{ __('thing_detail.adventure.description') }}</p>
                     </div>
                     <div class="section__header-CTA">
                         <a href="#" class="btn btn-primary rounded-pill btn-lg">
-                            Plan your adventure
+                            >{{ __('common.view_all') }}
+
                             <i class="fa-solid fa-angles-right"></i>
                         </a>
                     </div>
@@ -229,14 +236,12 @@
         <div class="container">
             <div class="section__header">
                 <div class="section__header-content">
-                    <h2 class="section__heading">To Do Things</h2>
-                    <p class="section__description">Embark on unforgettable journeys and explore the hidden gems across
-                        the heart
-                        of Saudi Arabia</p>
+                    <h2 class="section__heading">{{ __('thing_detail.similar.title') }}</h2>
+                    <p class="section__description">{{ __('thing_detail.similar.description') }}</p>
                 </div>
                 <div class="section__header-CTA">
                     <a href="#" class="btn btn-primary rounded-pill">
-                        View All
+                        {{ __('common.view_all') }}
                         <i class="fa-solid fa-angles-right"></i>
                     </a>
                 </div>
@@ -258,13 +263,12 @@
         <div class="container">
             <div class="section__header">
                 <div class="section__header-content">
-                    <h2 class="section__heading">Related Packages</h2>
-                    <p class="section__description">Embark on unforgettable journeys and explore the hidden gems across
-                        the heart of Saudi Arabia</p>
+                    <h2 class="section__heading"> {{ __('thing_detail.related_packages.title') }}</h2>
+                    <p class="section__description"> {{ __('tthing_detail.related_packages.description') }}</p>
                 </div>
                 <div class="section__header-CTA">
                     <a href="#" class="btn btn-primary rounded-pill">
-                        View All
+                        {{ __('common.view_all') }}
                         <i class="fa-solid fa-angles-right"></i>
                     </a>
                 </div>
@@ -292,7 +296,7 @@
 
                 <div class="pkg-details__banner gallery-modal-parent-carousel-wrapper swiper m-0 p-0">
                     <div class="swiper-wrapper">
-                        @foreach ($thing->gallery as $img)
+                        @foreach ($currentThing->gallery as $img)
                             <div class="swiper-slide">
                                 <img src="{{ asset('storage/' . $img->image_path) }}" alt="Gallery Image"
                                     class="img-fluid w-100">
@@ -304,7 +308,7 @@
                 <div class="position-relative mt-4 gallery-modal-carousel-container">
                     <div class="gallery-modal-carousel-wrapper swiper">
                         <div class="swiper-wrapper">
-                            @foreach ($thing->gallery as $img)
+                            @foreach ($currentThing->gallery as $img)
                                 <div class="pkg-details__banner-carousel-item swiper-slide">
                                     <img src="{{ asset('storage/' . $img->image_path) }}" alt="Gallery Image"
                                         class="img-fluid w-100">
@@ -322,25 +326,25 @@
 
                 <!-- Main Image -->
                 <!-- <div class="gallery-main">
-              <img id="galleryMainImg" src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200"
-                class="img-fluid">
-            </div> -->
+                          <img id="galleryMainImg" src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200"
+                            class="img-fluid">
+                        </div> -->
 
                 <!-- Thumbnails + Arrows -->
                 <!-- <div class="gallery-thumbs-wrapper">
 
-              <button class="gallery-arrow" id="prevImg">&#10094;</button>
+                          <button class="gallery-arrow" id="prevImg">&#10094;</button>
 
-              <div class="gallery-thumbs">
-                <img class="thumb active" src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=300">
-                <img class="thumb" src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=300">
-                <img class="thumb" src="https://images.unsplash.com/photo-1519681393784-d120267933ba?w=300">
-                <img class="thumb" src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=300">
-                <img class="thumb" src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=300">
-              </div>
+                          <div class="gallery-thumbs">
+                            <img class="thumb active" src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=300">
+                            <img class="thumb" src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=300">
+                            <img class="thumb" src="https://images.unsplash.com/photo-1519681393784-d120267933ba?w=300">
+                            <img class="thumb" src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=300">
+                            <img class="thumb" src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=300">
+                          </div>
 
-              <button class="gallery-arrow" id="nextImg">&#10095;</button>
-            </div> -->
+                          <button class="gallery-arrow" id="nextImg">&#10095;</button>
+                        </div> -->
 
             </div>
         </div>
