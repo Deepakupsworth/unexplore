@@ -369,6 +369,12 @@ Route::get('/package-listing', [FrontendPackageController::class, 'list'])->name
 
 Route::get('/package-details', [FrontendPackageController::class, 'details'])->name('package.details');
 
+
+Route::get('/package-day-option/{id}/{type}', [FrontendPackageController::class, 'packageDayOption'])->name('package.details.option');
+
+Route::post('/save-package-day-item-session', [FrontendPackageController::class, 'savePackageDayItemSession'])->name('package.day.item.option.session');
+
+
 Route::get('/profile', [FrontendProfileController::class, 'index'])->name('profile.view');
 
 Route::post(

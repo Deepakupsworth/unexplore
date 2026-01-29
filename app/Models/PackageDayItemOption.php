@@ -26,4 +26,23 @@ class PackageDayItemOption extends Model
     {
         return $this->belongsTo(PackageDay::class, 'package_day_id');
     }
+    public function transport()
+    {
+        return $this->belongsTo(Transport::class, 'item_id');
+    }
+
+    public function hotel()
+    {
+        return $this->belongsTo(Hotel::class, 'item_id');
+    }
+
+    public function event()
+    {
+        return $this->belongsTo(Event::class, 'item_id');
+    }
+
+    public function todo()
+    {
+        return $this->belongsTo(ThingToDo::class, 'item_id');
+    }
 }

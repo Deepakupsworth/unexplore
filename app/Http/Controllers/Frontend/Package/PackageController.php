@@ -7,7 +7,9 @@ use App\Models\City;
 use App\Models\Event;
 use App\Models\Hotel;
 use App\Models\Package;
+use App\Models\PackageDayItemOption;
 use App\Models\ThingToDo;
+use App\Models\PackageDayItem;
 use App\Services\Frontend\Package\PackageService;
 use Illuminate\Http\Request;
 use App\Support\PriceCalculator;
@@ -286,6 +288,8 @@ class PackageController extends Controller
 
      public function show(string $slug)
      {
+        //session()->flush(); 
+
          $language = current_lang();
 
          $package = Package::with([
@@ -297,24 +301,258 @@ class PackageController extends Controller
 
              'days.items.event.translation' => fn($q) => $q->where('language_code', $language),
              'days.items.event.thumb',
+
+             // ===== ✅ ADD THIS ONLY =====
+            'days.options.hotel.translation' => fn ($q) => $q->where('language_code', $language),
+            'days.options.hotel.thumb',
+
+            'days.options.todo.translation' => fn ($q) => $q->where('language_code', $language),
+            'days.options.todo.thumb',
+
+            'days.options.event.translation' => fn ($q) => $q->where('language_code', $language),
+            'days.options.event.thumb',
          ])->where('slug', $slug)->firstOrFail();
 
-         // ✅ LOAD SESSION FOR THIS PACKAGE ONLY
-         $sessionItems = session("package_day_items.{$package->id}", []);
 
+        // ===== ✅ DAY WISE OPTIONS (FINAL STRUCTURE) =====
+        $dayWiseOptions = [];
+
+        // foreach ($package->days as $day) {
+        //     $dayWiseOptions[$day->id] = $day->options
+        //         ->groupBy('item_type')
+        //         ->map(function ($items, $type) {
+
+        //             return $items
+        //                 ->keyBy('id')
+        //                 ->map(function ($option) use ($type) {
+
+        //                     // remove unrelated relations
+        //                     if ($type !== 'hotel') unset($option['hotel']);
+        //                     if ($type !== 'todo')  unset($option['todo']);
+        //                     if ($type !== 'event') unset($option['event']);
+
+        //                     return $option;
+        //                 })
+        //                 ->toArray();
+
+        //         })
+        //         ->toArray();
+        // }
+
+        $sessionItems = session("package_day_items.{$package->id}", []);
+        //print_r($sessionItems);
+
+        $hotelIds = [];
+        $eventIds = [];
+        $todoIds  = [];
+
+        foreach ($package->days as $day) {
+
+            foreach ($day->items as $index => $item) {
+        
+                $type = $item->item_type;
+        
+                // 🔑 SESSION OVERRIDE → else DEFAULT
+                $selectedItemId =
+                    $sessionItems[$day->id][$type][$index]
+                    ?? $item->item_id;
+        
+                if ($type === 'hotel') {
+                    $hotelIds[] = $selectedItemId;
+                }
+        
+                if ($type === 'event') {
+                    $eventIds[] = $selectedItemId;
+                }
+        
+                if ($type === 'todo') {
+                    $todoIds[] = $selectedItemId;
+                }
+            }
+        }
+        
+        
+
+        // remove duplicates
+        $hotelIds = array_unique($hotelIds);
+
+        //print_r($hotelIds);die;
+        $eventIds = array_unique($eventIds);
+        $todoIds  = array_unique($todoIds);
+
+        
          // ✅ MASTER LIST (POPUP)
-         $allHotels = Hotel::with(['translation', 'thumb'])->get();
-         $allTodos  = ThingToDo::with(['translation', 'thumb'])->get();
-         $allEvents = Event::with(['translation', 'thumb'])->get();
+         $allHotels = Hotel::with(['translation', 'thumb'])
+            ->whereIn('id', $hotelIds)
+            ->get()
+            ->keyBy('id');
+
+        $allEvents = Event::with(['translation', 'thumb'])
+            ->whereIn('id', $eventIds)
+            ->get()
+            ->keyBy('id');
+
+        $allTodos = ThingToDo::with(['translation', 'thumb'])
+            ->whereIn('id', $todoIds)
+            ->get()
+            ->keyBy('id');
 
          return view('frontend.packages.show', compact(
              'package',
-             'sessionItems',
              'allHotels',
              'allTodos',
-             'allEvents'
+             'allEvents',
+             'dayWiseOptions',
+             'sessionItems'
          ));
      }
+
+
+
+    //  public function packageDayOption($id,$type)
+    //  {
+    //     //print_r($id);die;
+    //     $language = current_lang();
+
+    //         $packageOptions = PackageDayItemOption::with([
+    //             'hotel.translation' => fn($q) => $q->where('language_code', $language),
+    //             'hotel.thumb',
+
+    //             'todo.translation' => fn($q) => $q->where('language_code', $language),
+    //             'todo.thumb',
+
+    //             'event.translation' => fn($q) => $q->where('language_code', $language),
+    //             'event.thumb',
+    //         ])->where(['package_day_id'=>$id,'item_type'=>$type])->get();
+
+    //         //print_r($packageOptions);die;
+    //         return response()->json([
+    //             'status' => true,
+    //             'data'   => $packageOptions
+    //         ]);
+
+    //  }
+//     public function packageDayOption($dayId, $type)
+// {
+//     $language = current_lang();
+
+//     if (!in_array($type, ['hotel', 'todo', 'event'])) {
+//         return response()->json([
+//             'status' => false,
+//             'message' => 'Invalid item type'
+//         ], 422);
+//     }
+
+//     $relations = [
+//         "$type.translation" => fn ($q) => $q->where('language_code', $language),
+//         "$type.thumb",
+//     ];
+
+//     $items = PackageDayItemOption::with($relations)
+//         ->where('package_day_id', $dayId)
+//         ->where('item_type', $type)
+//         ->orderBy('sort_order')
+//         ->get();
+
+//     return response()->json([
+//         'status' => true,
+//         'type'   => $type,
+//         'data'   => $items
+//     ]);
+// }
+public function packageDayOption($dayId, $type)
+{
+    $language = current_lang();
+
+    if (!in_array($type, ['hotel', 'todo', 'event'])) {
+        return response()->json([
+            'status'  => false,
+            'message' => 'Invalid item type'
+        ], 422);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | 1️⃣ CURRENT ITEM (FROM package_day_items)
+    |--------------------------------------------------------------------------
+    */
+    $currentItem = PackageDayItem::with([
+            "$type.translation" => fn ($q) => $q->where('language_code', $language),
+            "$type.thumb",
+        ])
+        ->where('package_day_id', $dayId)
+        ->where('item_type', $type)
+        ->first(); // only ONE current item
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | 2️⃣ OPTION ITEMS (FROM package_day_item_options)
+    |--------------------------------------------------------------------------
+    */
+    $optionItems = PackageDayItemOption::with([
+            "$type.translation" => fn ($q) => $q->where('language_code', $language),
+            "$type.thumb",
+        ])
+        ->where('package_day_id', $dayId)
+        ->where('item_type', $type)
+        ->orderBy('sort_order')
+        ->get();
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | 3️⃣ MERGE LOGIC
+    |--------------------------------------------------------------------------
+    | - current item FIRST
+    | - mark is_selected = true
+    | - remove duplicates from options
+    */
+    $merged = collect();
+
+    if ($currentItem) {
+        $currentItem->is_selected = true;
+        $merged->push($currentItem);
+    }
+
+    foreach ($optionItems as $option) {
+
+        // Skip duplicate of current item
+        if (
+            $currentItem &&
+            $option->item_id === $currentItem->item_id
+        ) {
+            continue;
+        }
+
+        $option->is_selected = false;
+        $merged->push($option);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | 4️⃣ RESPONSE
+    |--------------------------------------------------------------------------
+    */
+    return response()->json([
+        'status' => true,
+        'type'   => $type,
+        'data'   => $merged->values()
+    ]);
+}
+
+
+public function savePackageDayItemSession(Request $request)
+{
+    $data = session("package_day_items.{$request->package_id}", []);
+
+    $data[$request->day_id][$request->type][$request->index]
+        = $request->item_id;
+
+    session(["package_day_items.{$request->package_id}" => $data]);
+
+    return response()->json(['success' => true]);
+}
 
 
      public function saveToSession(Request $request)
