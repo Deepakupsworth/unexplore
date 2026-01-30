@@ -274,7 +274,7 @@
                         <img src="{{ asset('frontend/assets/start-explore-1.png') }}" alt="Explore" class="img-fluid">
                         <div class="start-exploring__item-content">
                             <p class="mb-1 p-large fw-600">
-                                {{ __('destination_details.start_exploring.city') }}
+                                {{ __('destination_details.start_exploring.city_name') }}
                             </p>
                             <p class="p-small">
                                 {{ __('destination_details.start_exploring.city_tagline') }}
@@ -289,7 +289,7 @@
                         <img src="{{ asset('frontend/assets/start-explore-1.png') }}" alt="Explore" class="img-fluid">
                         <div class="start-exploring__item-content">
                             <p class="mb-1 p-large fw-600">
-                                {{ __('destination_details.start_exploring.city') }}
+                                {{ __('destination_details.start_exploring.city_name') }}
                             </p>
                             <p class="p-small">
                                 {{ __('destination_details.start_exploring.city_tagline') }}
@@ -303,7 +303,7 @@
                         <img src="{{ asset('frontend/assets/start-explore-1.png') }}" alt="Explore" class="img-fluid">
                         <div class="start-exploring__item-content">
                             <p class="mb-1 p-large fw-600">
-                                {{ __('destination_details.start_exploring.city') }}
+                                {{ __('destination_details.start_exploring.city_name') }}
                             </p>
                             <p class="p-small">
                                 {{ __('destination_details.start_exploring.city_tagline') }}
@@ -317,7 +317,7 @@
                         <img src="{{ asset('frontend/assets/start-explore-1.png') }}" alt="Explore" class="img-fluid">
                         <div class="start-exploring__item-content">
                             <p class="mb-1 p-large fw-600">
-                                {{ __('destination_details.start_exploring.city') }}
+                                {{ __('destination_details.start_exploring.city_name') }}
                             </p>
                             <p class="p-small">
                                 {{ __('destination_details.start_exploring.city_tagline') }}

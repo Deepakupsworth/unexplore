@@ -1,13 +1,43 @@
 @extends('frontend.layout')
 @section('content')
-    <script>
-        window.CHECKOUT = {
-            adults: 2,
-            travellers: @json($travellers)
-        };
-    </script>
+
+@php
+$travellerSlots = collect($travellers);
+
+$totalTravellers = $travellerSlots->count();
+$adultCount = $travellerSlots->where('type', 'adult')->count();
+$childCount = $travellerSlots->where('type', 'child')->count();
+@endphp
+
+
+<script>
+    window.CHECKOUT = {
+        adults: {{ (int)($checkout['adults'] ?? 0) }},
+        travellers: @json($travellerSlots->values())
+    };
+</script>
+
+
+
+    {{-- @dd($package) --}}
+    @php
+        use Carbon\Carbon;
+
+        $availability = $package->availabilities;
+
+        $startDate = $availability?->available_from ? Carbon::parse($availability->available_from) : null;
+
+        $endDate = $startDate ? $startDate->copy()->addDays($package->duration_days - 1) : null;
+
+        // fallback values (agar dynamic selection abhi nahi hai)
+        $rooms = 1;
+        $adults = 3;
+    @endphp
+
     <section class="checkout-section">
         <div class="container">
+            <form method="POST" action="{{ route('checkout.book') }}">
+                @csrf
             <div class="row">
                 <div class="col-lg-9">
                     <div
@@ -15,26 +45,48 @@
 
                         <!-- LEFT BLOCK -->
                         <div>
-                            <h1 class="fw-600 text-white mb-1 h3">Al-Bujairi Heritage Tourist Park</h1>
+                            <h1 class="fw-600 text-white mb-1 h3">{{ $package?->translation?->title }}</h1>
 
                             <div class="text-white d-flex align-items-center gap-3 my-2">
-                                <p>2N Diriya</p>
-                                <div class="dot primary-bg"></div>
-                                <p>3D Jeddah</p>
+                                @foreach ($package->itinerarySubtitleFull() as $text)
+                                    <p>{{ $text }}</p>
+
+                                    @if (!$loop->last)
+                                        <div class="dot primary-bg"></div>
+                                    @endif
+                                @endforeach
                             </div>
 
                             <div class="text-white d-flex flex-wrap align-items-center gap-3">
-                                <p class="p-small">Thu, Nov 13, 2025</p>
-                                <span class="trip-badge p-micro rounded-pill">6D/5N</span>
-                                <p class="p-small">Tue, Nov 18, 2025 / From Riyadh</p>
-                                <span class="vertical-divider"></span>
-                                <p class="p-small"><span class="fw-600">1 Room</span> - 3 Adults</p>
+
+                                {{-- START DATE --}}
+                                <p class="p-small">
+                                    {{ $startDate?->format('D, M d, Y') }}
+                                </p>
+
+                                {{-- DURATION --}}
+                                <span class="trip-badge p-micro rounded-pill">
+                                    {{ $package->duration_days }}D / {{ $package->duration_nights }}N
+                                </span>
+
+                                {{-- END DATE --}}
+                                <p class="p-small">
+                                    {{ $endDate?->format('D, M d, Y') }}
+                                </p>
+
+                                {{-- ROOM & ADULTS --}}
+                                {{-- <span class="vertical-divider"></span>
+                                <p class="p-small">
+                                    <span class="fw-600">{{ $rooms }} Room</span> - {{ $adults }} Adults
+                                </p> --}}
+
                             </div>
+
                         </div>
                         <!-- RIGHT BUTTON -->
-                        <button class="btn btn-light rounded-pill customizable-btn mt-3 mt-sm-0 fw-500">
+                        {{-- <button class="btn btn-light rounded-pill customizable-btn mt-3 mt-sm-0 fw-500">
                             Customizable
-                        </button>
+                        </button> --}}
                     </div>
 
                     <div class=" accordion accordion-flush mt-3 checkout-accordion" id="checkoutTravelDetails">
@@ -56,96 +108,102 @@
                             <div id="checkoutTravelCollapse" class="accordion-collapse collapse show"
                                 aria-labelledby="headingOne" data-bs-parent="#checkoutTravelDetails">
 
+
+
                                 <div class="accordion-body">
 
-                                    {{-- 🔹 HEADER COUNTS --}}
+                                    {{-- ================= HEADER COUNTS ================= --}}
                                     <div class="d-flex gap-1 mb-3">
                                         <p class="fw-600">
-                                            {{ $travellers->count() }} Travellers -
+                                            {{ $totalTravellers }} Traveller{{ $totalTravellers !== 1 ? 's' : '' }}
                                         </p>
-                                        <div class="d-flex gap-2 p-small align-items-center">
-                                            <p>1 Room</p>
-                                            <div class="vertical-divider h-75"></div>
-                                            <p>{{ $travellers->where('type', 'adult')->count() }} Adults</p>
-                                        </div>
+
+                                        @if ($totalTravellers > 0)
+                                            <div class="d-flex gap-2 p-small align-items-center">
+                                                <p>1 Room</p>
+                                                <div class="vertical-divider h-75"></div>
+                                                <p>{{ $adultCount }} Adult{{ $adultCount !== 1 ? 's' : '' }}</p>
+                                                @if ($childCount > 0)
+                                                    <div class="vertical-divider h-75"></div>
+                                                    <p>{{ $childCount }} Child{{ $childCount !== 1 ? 'ren' : '' }}</p>
+                                                @endif
+                                            </div>
+                                        @endif
                                     </div>
 
-                                    {{-- 🔹 TRAVELLER LIST --}}
+                                    {{-- ================= TRAVELLER LIST ================= --}}
                                     <div>
-                                        @forelse($travellers as $index => $traveller)
-                                            <div
-                                                class="d-flex justify-content-between align-items-center checkout-traveller-header">
+                                        @foreach($travellerSlots as $index => $slot)
 
-                                                <!-- LEFT -->
-                                                <div class="d-flex align-items-center gap-3">
-                                                    <div class="traveller-icon flex-center rounded-4">
-                                                        <i class="fa-solid fa-user"></i>
-                                                    </div>
+                                        @php
+                                            $traveller = $slot['data'];
+                                        @endphp
 
-                                                    <div>
-                                                        <h6 class="fw-600 p">TRAVELLER {{ $index + 1 }}</h6>
+                                        <div class="d-flex justify-content-between align-items-center checkout-traveller-header">
 
-                                                        <div class="d-flex align-items-center gap-2">
-                                                            <p class="p-small fw-600 mb-0">
-                                                                {{ $traveller->first_name }} {{ $traveller->last_name }}
-                                                            </p>
-
-                                                            {{-- DELETE --}}
-                                                            <button type="button"
-                                                                class="p-0 border-0 bg-transparent text-danger delete-traveller-btn"
-                                                                data-id="{{ $traveller->id }}" title="Delete Traveller">
-                                                                <i class="fa-solid fa-circle-xmark"></i>
-                                                            </button>
-                                                        </div>
-                                                    </div>
+                                            {{-- LEFT --}}
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="traveller-icon flex-center rounded-4">
+                                                    <i class="fa-solid fa-user"></i>
                                                 </div>
 
-                                                <!-- RIGHT -->
-                                                <div class="flex-center gap-3">
+                                                <div>
+                                                    <h6 class="fw-600 p">
+                                                        TRAVELLER {{ $index + 1 }}
+                                                        <span class="text-muted p-small">
+                                                            ({{ ucfirst($slot['type']) }})
+                                                        </span>
+                                                    </h6>
+
+                                                    @if($traveller)
+                                                        <p class="p-small fw-600 mb-0">
+                                                            {{ $traveller->first_name }} {{ $traveller->last_name }}
+                                                        </p>
+                                                    @else
+                                                        <p class="text-danger p-small mb-0">
+                                                            Traveller details missing
+                                                        </p>
+                                                    @endif
+                                                </div>
+                                            </div>
+
+                                            {{-- RIGHT --}}
+                                            <div class="flex-center gap-3">
+                                                @if($traveller)
                                                     <div class="flex-center gap-1 text-success">
                                                         <i class="fa-solid fa-circle-check"></i>
                                                         <p class="p-small fw-500 mb-0">Traveller Added</p>
                                                     </div>
 
                                                     <button
-                                                        class="btn btn-outline-primary add-traveller-btn rounded-pill border-1-5 fw-500"
-                                                        data-bs-toggle="modal" data-bs-target="#travellerModal"
-                                                        data-traveller-id="{{ $traveller->id }}">
+                                                        class="btn btn-outline-primary rounded-pill fw-500"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#travellerModal"
+                                                        data-id="{{ $traveller->id }}">
                                                         Update
                                                     </button>
-                                                </div>
+                                                @else
+                                                    <button
+                                                        class="btn btn-outline-primary rounded-pill fw-500"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#travellerModal"
+                                                        data-type="{{ $slot['type'] }}">
+                                                        Add Traveller
+                                                    </button>
+                                                @endif
                                             </div>
 
-                                            <hr>
+                                        </div>
+                                        <hr>
 
-                                        @empty
-                                            {{-- 🔥 NO TRAVELLER CASE --}}
-                                            <div
-                                                class="d-flex justify-content-between align-items-center checkout-traveller-header">
+                                        @endforeach
 
-                                                <div class="d-flex align-items-center gap-3">
-                                                    <div class="traveller-icon flex-center rounded-4">
-                                                        <i class="fa-solid fa-user"></i>
-                                                    </div>
 
-                                                    <div>
-                                                        <h6 class="fw-600 p mb-1">No Traveller Added</h6>
-                                                        <p class="text-light2 p-small mb-0">
-                                                            Please add traveller details to continue
-                                                        </p>
-                                                    </div>
-                                                </div>
 
-                                                <button
-                                                    class="btn btn-outline-primary add-traveller-btn rounded-pill border-1-5 fw-500"
-                                                    data-bs-toggle="modal" data-bs-target="#travellerModal">
-                                                    Add Traveller
-                                                </button>
-                                            </div>
-                                        @endforelse
+
                                     </div>
 
-                                    {{-- 🔹 CONTACT DETAILS (UNCHANGED) --}}
+                                    {{-- ================= CONTACT DETAILS (UNCHANGED) ================= --}}
                                     <div class="booking-contact mt-4">
 
                                         <p class="fw-600 mb-3">Please Enter Contact Details</p>
@@ -153,17 +211,17 @@
                                         <div class="row g-3 mb-4">
                                             <div class="col-md-4">
                                                 <label class="form-label small mb-1">Email</label>
-                                                <input type="email" class="form-control" placeholder="Enter email">
+                                                <input  name="contact_email" required class="form-control" placeholder="Enter email">
                                             </div>
-
+{{--
                                             <div class="col-md-4">
                                                 <label class="form-label small mb-1">Mobile Code</label>
-                                                <input type="text" class="form-control" placeholder="Enter here">
-                                            </div>
+                                                <input name="contact_code" required type="text" class="form-control" placeholder="Enter here">
+                                            </div> --}}
 
                                             <div class="col-md-4">
                                                 <label class="form-label small mb-1">Mobile</label>
-                                                <input type="text" class="form-control" placeholder="Enter here">
+                                                <input name="contact_mobile" required type="text" class="form-control" placeholder="Enter here">
                                             </div>
                                         </div>
 
@@ -181,19 +239,19 @@
                                             </p>
                                             <p class="mb-0 text-muted p-small">
                                                 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                                tempor incididunt ut
-                                                labore et dolore magna aliqua.
+                                                tempor incididunt ut labore.
                                             </p>
                                         </div>
                                     </div>
 
                                 </div>
+
                             </div>
 
                         </div>
                     </div>
 
-                    <div class="accordion accordion-flush mt-3 checkout-accordion" id="checkoutPackageAddOn">
+                    {{-- <div class="accordion accordion-flush mt-3 checkout-accordion" id="checkoutPackageAddOn">
                         <div class="accordion-item border rounded mb-3 pkg-details__accordion-item">
                             <div class="accordion-header" data-bs-toggle="collapse"
                                 data-bs-target="#checkoutPackageAddOnCollapse" aria-expanded="true"
@@ -277,7 +335,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <div class="accordion accordion-flush mt-3 checkout-accordion" id="checkoutItinerary">
                         <div class="accordion-item border rounded mb-3 pkg-details__accordion-item">
@@ -285,7 +343,7 @@
                                 data-bs-target="#checkoutItineraryOnCollapse" aria-expanded="true"
                                 aria-controls="checkoutItineraryOnCollapse">
                                 <div class="d-flex gap-2 pkg-details__accordion-actions">
-                                    <p class="fw-600">3. Package Itinerary & Inclusions</p>
+                                    <p class="fw-600">2. Package Itinerary & Inclusions</p>
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center gap-3">
                                     <div class="d-flex align-items-center gap-2">
@@ -387,13 +445,13 @@
                                                                                     class="d-flex gap-2 pkg-details__accordion-actions">
 
                                                                                     <!-- <button
-                                                                                                type="button"
-                                                                                                class="btn btn-primary btn-sm editDayItemsBtn"
-                                                                                                data-day-id="{{ $day->id }}"
-                                                                                                data-type="hotel"
-                                                     >
-                                                                                                <i class="fa-solid fa-pencil"></i>
-                                                                                            </button> -->
+                                                                                                        type="button"
+                                                                                                        class="btn btn-primary btn-sm editDayItemsBtn"
+                                                                                                        data-day-id="{{ $day->id }}"
+                                                                                                        data-type="hotel"
+                                                             >
+                                                                                                        <i class="fa-solid fa-pencil"></i>
+                                                                                                    </button> -->
 
 
 
@@ -510,12 +568,12 @@
                                                                                 <div
                                                                                     class="d-flex gap-2 pkg-details__accordion-actions">
                                                                                     <!-- <button type="button"
-                                                                                                    class="btn btn-primary btn-sm editDayItemsBtn"
-                                                                                                    data-day-id="{{ $day->id }}"
-                                                                                                    data-type="todo"
-                                                                                                    data-selected="{{ $todos->pluck('id')->join(',') }}">
-                                                                                                    <i class="fa-solid fa-pencil"></i>
-                                                                                                </button> -->
+                                                                                                            class="btn btn-primary btn-sm editDayItemsBtn"
+                                                                                                            data-day-id="{{ $day->id }}"
+                                                                                                            data-type="todo"
+                                                                                                            data-selected="{{ $todos->pluck('id')->join(',') }}">
+                                                                                                            <i class="fa-solid fa-pencil"></i>
+                                                                                                        </button> -->
 
                                                                                 </div>
                                                                             </div>
@@ -609,12 +667,12 @@
                                                                                 <div
                                                                                     class="d-flex gap-2 pkg-details__accordion-actions">
                                                                                     <!-- <button type="button"
-                                                                                                    class="btn btn-primary btn-sm editDayItemsBtn"
-                                                                                                    data-day-id="{{ $day->id }}"
-                                                                                                    data-type="event"
-                                                                                                    data-selected="{{ $events->pluck('id')->join(',') }}">
-                                                                                                    <i class="fa-solid fa-pencil"></i>
-                                                                                                </button> -->
+                                                                                                            class="btn btn-primary btn-sm editDayItemsBtn"
+                                                                                                            data-day-id="{{ $day->id }}"
+                                                                                                            data-type="event"
+                                                                                                            data-selected="{{ $events->pluck('id')->join(',') }}">
+                                                                                                            <i class="fa-solid fa-pencil"></i>
+                                                                                                        </button> -->
 
                                                                                 </div>
                                                                             </div>
@@ -689,7 +747,7 @@
                                 data-bs-target="#checkoutCancellationCollapse" aria-expanded="true"
                                 aria-controls="checkoutCancellationCollapse">
                                 <div class="d-flex gap-2 pkg-details__accordion-actions">
-                                    <p class="fw-600">4. Cancellation & Date Change</p>
+                                    <p class="fw-600">3. Cancellation & Date Change</p>
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center gap-3">
                                     <div class="d-flex align-items-center gap-2">
@@ -726,7 +784,7 @@
 
                 </div>
                 <div class="col-lg-3">
-                    <div class="card pkg-details__pricing-card checkout-pricing-card">
+                    {{-- <div class="card pkg-details__pricing-card checkout-pricing-card">
 
                         <p class="fw-500 mb-1">Grand Total - 3 Adults</p>
                         <div class="d-flex align-items-center gap-1 mb-2">
@@ -789,9 +847,136 @@
                                 <i class=" fa-solid fa-angles-right"></i>
                             </button>
                         </div>
+                    </div> --}}
+
+                    <div class="card pkg-details__pricing-card checkout-pricing-card">
+
+                        {{-- GRAND TOTAL --}}
+                        <p class="fw-500 mb-1">
+                            Grand Total - {{ $checkout['adults'] }} Adult{{ $checkout['adults'] > 1 ? 's' : '' }}
+                            @if ($checkout['total_persons'] - $checkout['adults'] > 0)
+                                , {{ $checkout['total_persons'] - $checkout['adults'] }} Child
+                            @endif
+                        </p>
+
+                        <div class="d-flex align-items-center gap-1 mb-2">
+                            <img src="{{ asset('/frontend/assets/icons/riyal-primary.svg') }}" alt="Riyal">
+                            <h5 class="text-success fw-bold">
+                                {{ number_format($checkout['final_total']) }}
+                            </h5>
+
+                            {{-- OPTIONAL DISCOUNT BADGE --}}
+                            @if (($package->price->discount_price ?? 0) > 0)
+                                <span class="badge primary-bg rounded-pill fw-600">
+                                    {{ round((($package->price->discount_price - $package->price->per_person_price) / $package->price->discount_price) * 100) }}%
+                                    OFF
+                                </span>
+                            @endif
+                        </div>
+
+                        <p class="fw-600">Pay Full Amount Now</p>
+                        <hr>
+
+                        {{-- FARE BREAKUP --}}
+                        <p class="fw-600 mb-2">Fare Breakup</p>
+
+                        {{-- BASE PRICE --}}
+                        <div
+                            class="pkg-details__additional-info-item p-2 d-flex align-items-start gap-2 mb-2 justify-content-between">
+                            <div>
+                                <p class="fw-600 p-small">Total Basic Cost</p>
+                                <p class="p-small text-light2">
+                                    {{ number_format($checkout['base_price'] / max(1, $package->base_persons)) }}
+                                    x {{ $package->base_persons }} Travellers
+                                </p>
+                            </div>
+                            <div class="d-flex align-items-center gap-1">
+                                <img src="{{ asset('/frontend/assets/icons/riyal-light.svg') }}" alt="Riyal">
+                                <p class="fw-600 text-light2">
+                                    {{ number_format($checkout['base_price']) }}
+                                </p>
+                            </div>
+                        </div>
+
+                        {{-- EXTRA ADULTS --}}
+                        @if ($checkout['extra_adults'] > 0)
+                            <div
+                                class="pkg-details__additional-info-item p-2 d-flex align-items-start gap-2 mb-2 justify-content-between">
+                                <div>
+                                    <p class="fw-600 p-small">Extra Adults</p>
+                                    <p class="p-small text-light2">
+                                        {{ $checkout['extra_adults'] }}
+                                        x {{ number_format($checkout['extra_adult_per_price']) }}
+                                    </p>
+                                </div>
+                                <div class="d-flex align-items-center gap-1">
+                                    <img src="{{ asset('/frontend/assets/icons/riyal-light.svg') }}" alt="Riyal">
+                                    <p class="fw-600 text-light2">
+                                        {{ number_format($checkout['extra_adult_total_price']) }}
+                                    </p>
+                                </div>
+                            </div>
+                        @endif
+
+                        {{-- CHILD PRICE --}}
+                        @if ($checkout['child_total_price'] > 0)
+                            <div
+                                class="pkg-details__additional-info-item p-2 d-flex align-items-start gap-2 mb-2 justify-content-between">
+                                <div>
+                                    <p class="fw-600 p-small">Children Price</p>
+                                    <p class="p-small text-light2">
+                                        {{ number_format($checkout['child_per_price']) }} x
+                                        {{ $checkout['total_persons'] - $checkout['adults'] }} Child
+                                    </p>
+                                </div>
+                                <div class="d-flex align-items-center gap-1">
+                                    <img src="{{ asset('/frontend/assets/icons/riyal-light.svg') }}" alt="Riyal">
+                                    <p class="fw-600 text-light2">
+                                        {{ number_format($checkout['child_total_price']) }}
+                                    </p>
+                                </div>
+                            </div>
+                        @endif
+
+                        {{-- FINAL TOTAL --}}
+                        <div
+                            class="pkg-details__additional-info-item p-2 d-flex align-items-start gap-2 mb-2 justify-content-between">
+                            <div>
+                                <p class="fw-600 p-small">Total Payable</p>
+                                <p class="p-small text-light2">
+                                    All taxes included
+                                </p>
+                            </div>
+                            <div class="d-flex align-items-center gap-1">
+                                <img src="{{ asset('/frontend/assets/icons/riyal-light.svg') }}" alt="Riyal">
+                                <p class="fw-600 text-light2">
+                                    {{ number_format($checkout['final_total']) }}
+                                </p>
+                            </div>
+                        </div>
+
+                        {{-- T&C --}}
+                        <div class="mt-3">
+                            <p class="fw-600">Important Information</p>
+                            <div class="form-check mt-2">
+                                <input name="accept_terms" required class="form-check-input" type="checkbox" id="tncCheck" required>
+                                <label class="form-check-label p-micro" for="tncCheck">
+                                    I confirm that I have read and I accept
+                                    Cancellation Policy, User Agreement, Terms of
+                                    Service and Privacy Policy
+                                </label>
+                            </div>
+
+                            <button class="btn btn-primary rounded-pill w-100 mt-2 justify-content-between">
+                                Continue
+                                <i class="fa-solid fa-angles-right"></i>
+                            </button>
+                        </div>
+
                     </div>
 
-                    <div class="card pkg-details__pricing-card checkout-pricing-card mt-3">
+
+                    {{-- <div class="card pkg-details__pricing-card checkout-pricing-card mt-3">
                         <p class="fw-600">Coupons & Offers</p>
                         <div class="input-group mt-3 package-listing__search-bar checkout-pricing-card__search-bar">
                             <input type="text" class="form-control" placeholder="Enter Coupon Code"
@@ -878,9 +1063,11 @@
                         <div class="mt-3 text-center">
                             <a href="#" class="primary-text">+ 10 More</a>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
+
+        </form>
         </div>
     </section>
 
@@ -895,7 +1082,7 @@
                             Add Traveller Details
                         </h6>
                         <p class="text-light2 p-small mb-0">
-                            Traveller {{ max(1, $travellers->count()) }}/{{ max(1, $travellers->count()) }}
+                            {{-- Traveller {{ max(1, $travellerCount) }}/{{ max(1, $travellerCount) }} --}}
                         </p>
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -912,38 +1099,34 @@
                         <!-- TABS -->
                         <div class="d-flex traveller-tabs gap-3 mb-3 flex-wrap">
 
-                            @foreach ($travellers as $index => $traveller)
-                                <button type="button"
-                                    class="btn btn-outline-secondary trav-btn d-flex gap-2 align-items-center {{ $index === 0 ? 'active' : '' }}"
-                                    data-id="{{ $traveller->id }}" data-first="{{ $traveller->first_name }}"
-                                    data-last="{{ $traveller->last_name }}" data-dob="{{ $traveller->dob }}"
-                                    data-gender="{{ $traveller->gender }}" data-country="{{ $traveller->country }}"
-                                    data-type="{{ $traveller->type }}">
+                            @foreach ($travellerSlots as $index => $slot)
+                            @php $t = $slot['data']; @endphp
 
-                                    <div class="trav-btn__icon flex-center">
-                                        <i class="fa-solid fa-user"></i>
-                                    </div>
-                                    <div>
-                                        <span class="fw-500">
-                                            {{ ucfirst($traveller->type) }}:
-                                        </span>
-                                        Traveller {{ $index + 1 }}
-                                    </div>
-                                </button>
-                            @endforeach
-
-                            <button type="button"
-                                class="btn btn-outline-secondary trav-btn d-flex gap-2 align-items-center w-auto"
-                                id="addTravellerTab">
+                            <button
+                                type="button"
+                                class="btn btn-outline-secondary trav-btn d-flex gap-2 align-items-center"
+                                data-slot="{{ $index }}"
+                                data-id="{{ $t?->id ?? '' }}"
+                                data-first="{{ $t?->first_name ?? '' }}"
+                                data-last="{{ $t?->last_name ?? '' }}"
+                                data-dob="{{ $t?->dob ?? '' }}"
+                                data-gender="{{ $t?->gender ?? '' }}"
+                                data-country="{{ $t?->country ?? '' }}"
+                                data-type="{{ $slot['type'] }}">
 
                                 <div class="trav-btn__icon flex-center">
-                                    <i class="fa-solid fa-plus"></i>
+                                    <i class="fa-solid fa-user"></i>
                                 </div>
+
                                 <div>
-                                    <span class="fw-500">Add Traveller</span>
+                                    <span class="fw-500">{{ ucfirst($slot['type']) }}:</span>
+                                    Traveller {{ $index + 1 }}
                                 </div>
                             </button>
-                        </div>
+
+                            @endforeach
+                            </div>
+
 
                         <!-- INFO -->
                         <div class="mb-3">
@@ -959,22 +1142,22 @@
 
                             <div class="col-md-6 col-lg-4">
                                 <label class="form-label">First Name *</label>
-                                <input type="text" name="first_name" id="first_name" class="form-control">
+                                <input type="text" name="first_name" id="first_name" class="form-control" required>
                             </div>
 
                             <div class="col-md-6 col-lg-4">
                                 <label class="form-label">Last Name *</label>
-                                <input type="text" name="last_name" id="last_name" class="form-control">
+                                <input type="text" name="last_name" id="last_name" class="form-control" required>
                             </div>
 
                             <div class="col-md-6 col-lg-4">
                                 <label class="form-label">Date of Birth *</label>
-                                <input type="date" name="dob" id="dob" class="form-control">
+                                <input type="date" name="dob" id="dob" class="form-control" required>
                             </div>
 
                             <div class="col-md-6 col-lg-4">
                                 <label class="form-label">Gender *</label>
-                                <select name="gender" id="gender" class="form-select">
+                                <select name="gender" id="gender" class="form-select" required>
                                     <option value="">Select</option>
                                     <option value="male">Male</option>
                                     <option value="female">Female</option>
@@ -983,11 +1166,11 @@
 
                             <div class="col-md-6 col-lg-4">
                                 <label class="form-label">Country *</label>
-                                <input type="text" name="country" id="country" class="form-control">
+                                <input type="text" name="country" id="country" class="form-control" required>
                             </div>
                             <div class="col-md-6 col-lg-4">
                                 <label class="form-label">Traveller Type *</label>
-                                <select name="type" id="type" class="form-select">
+                                <select name="type" id="type" class="form-select" required>
                                     <option value="">Select Type</option>
                                     <option value="adult">Adult</option>
                                     <option value="child">Child</option>
@@ -1018,93 +1201,80 @@
         document.addEventListener('DOMContentLoaded', () => {
 
             const modal = document.getElementById('travellerModal');
-            const form = modal.querySelector('form');
+            const form  = document.getElementById('travellerForm');
 
-            const fields = {
-                traveller_id: document.getElementById('traveller_id'),
-                first_name: document.getElementById('first_name'),
-                last_name: document.getElementById('last_name'),
-                dob: document.getElementById('dob'),
-                gender: document.getElementById('gender'),
-                country: document.getElementById('country'),
-                type: document.getElementById('type'),
+            const f = {
+                id      : document.getElementById('traveller_id'),
+                first   : document.getElementById('first_name'),
+                last    : document.getElementById('last_name'),
+                dob     : document.getElementById('dob'),
+                gender  : document.getElementById('gender'),
+                country : document.getElementById('country'),
+                type    : document.getElementById('type'),
             };
 
-            /* ---------------------------------
-               FILL FORM FROM BUTTON DATA
-            --------------------------------- */
-            function fillFormFromButton(btn) {
-                fields.traveller_id.value = btn.dataset.id || '';
-                fields.first_name.value = btn.dataset.first || '';
-                fields.last_name.value = btn.dataset.last || '';
-                fields.dob.value = btn.dataset.dob || '';
-                fields.gender.value = btn.dataset.gender || '';
-                fields.country.value = btn.dataset.country || '';
-                fields.type.value = btn.dataset.type || '';
-
-                setActive(btn);
+            /* ---------------- RESET FORM ---------------- */
+            function resetForm(type) {
+                form.reset();
+                f.id.value = '';
+                f.type.value = type || 'adult';
             }
 
-            /* ---------------------------------
-               ACTIVE TAB HANDLER
-            --------------------------------- */
-            function setActive(activeBtn) {
-                modal.querySelectorAll('.trav-btn').forEach(btn =>
-                    btn.classList.remove('active')
-                );
-                activeBtn.classList.add('active');
+            /* ---------------- FILL FORM ---------------- */
+            function fillForm(btn) {
+                f.id.value      = btn.dataset.id || '';
+                f.first.value   = btn.dataset.first || '';
+                f.last.value    = btn.dataset.last || '';
+                f.dob.value     = btn.dataset.dob || '';
+                f.gender.value  = btn.dataset.gender || '';
+                f.country.value = btn.dataset.country || '';
+                f.type.value    = btn.dataset.type || 'adult';
             }
 
-            /* ---------------------------------
-               TAB CLICK (EVENT DELEGATION)
-            --------------------------------- */
-            modal.addEventListener('click', e => {
-                const btn = e.target.closest('.trav-btn[data-id]');
-                if (!btn) return;
-
-                e.preventDefault();
-                fillFormFromButton(btn);
-            });
-
-            /* ---------------------------------
-               ADD TRAVELLER
-            --------------------------------- */
-            const addBtn = document.getElementById('addTravellerTab');
-            if (addBtn) {
-                addBtn.addEventListener('click', () => {
-                    form.reset();
-                    fields.traveller_id.value = '';
-                    setActive(addBtn);
+            /* ---------------- TAB ACTIVE ---------------- */
+            function setActiveTab(slotIndex) {
+                document.querySelectorAll('.trav-btn').forEach(b => {
+                    b.classList.toggle('active', b.dataset.slot === slotIndex);
                 });
             }
 
-            /* ---------------------------------
-               🔥 CRITICAL FIX (FIRST OPEN ISSUE)
-               Modal open hote hi active tab click
-            --------------------------------- */
-            modal.addEventListener('shown.bs.modal', () => {
+            /* ---------------- OPEN MODAL ---------------- */
+            document.addEventListener('click', e => {
+                const btn = e.target.closest('.openTravellerModal');
+                if (!btn) return;
 
-                const firstBtn =
-                    modal.querySelector('.trav-btn.active[data-id]') ||
-                    modal.querySelector('.trav-btn[data-id]');
+                const mode = btn.dataset.mode;
+                const slot = btn.dataset.slot;
 
-                if (firstBtn) {
-                    firstBtn.click(); // ✅ THIS FIXES FIRST TIME ISSUE
+                setActiveTab(slot);
+
+                if (mode === 'add') {
+                    resetForm(btn.dataset.type);
+                } else {
+                    fillForm(btn);
                 }
             });
 
-            /* ---------------------------------
-               FORM SUBMIT (AJAX, NO JQUERY)
-            --------------------------------- */
+            /* ---------------- TAB CLICK ---------------- */
+            document.querySelectorAll('.trav-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    setActiveTab(btn.dataset.slot);
+                    if (btn.dataset.id) {
+                        fillForm(btn);
+                    } else {
+                        resetForm(btn.dataset.type);
+                    }
+                });
+            });
+
+            /* ---------------- SUBMIT ---------------- */
             form.addEventListener('submit', async e => {
                 e.preventDefault();
 
-                const travellerId = fields.traveller_id.value;
-                const isUpdate = travellerId !== '';
-
-                const url = isUpdate ?
-                    `/account/travellers/${travellerId}` :
-                    `/account/travellers`;
+                const isUpdate = f.id.value !== '';
+                const url = isUpdate
+                    ? `/account/travellers/${f.id.value}`
+                    : `/account/travellers`;
 
                 try {
                     const res = await fetch(url, {
@@ -1115,46 +1285,32 @@
                         body: new FormData(form)
                     });
 
-                    if (!res.ok) throw new Error('Request failed');
-
-                    // ✅ PAGE RELOAD AS REQUESTED
-                    window.location.reload();
-
-                } catch (err) {
-                    alert('Something went wrong. Please try again.');
-                    console.error(err);
-                }
-            });
-
-            /* ===============================
-               DELETE TRAVELLER
-            =============================== */
-            document.addEventListener('click', async e => {
-
-                const delBtn = e.target.closest('.delete-traveller-btn');
-                if (!delBtn) return;
-
-                const travellerId = delBtn.dataset.id;
-                if (!travellerId) return;
-
-                if (!confirm('Are you sure you want to delete this traveller?')) return;
-
-                try {
-                    const res = await fetch(`/account/travellers/${travellerId}`, {
-                        method: 'DELETE',
-                        headers: {
-                            'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
-                        }
-                    });
-
                     if (!res.ok) throw new Error();
                     location.reload();
 
                 } catch {
-                    alert('Unable to delete traveller');
+                    alert('Something went wrong');
                 }
             });
 
+            /* ---------------- DELETE ---------------- */
+            document.addEventListener('click', async e => {
+                const btn = e.target.closest('.delete-traveller-btn');
+                if (!btn) return;
+
+                if (!confirm('Delete this traveller?')) return;
+
+                await fetch(`/account/travellers/${btn.dataset.id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+                    }
+                });
+
+                location.reload();
+            });
+
         });
-    </script>
+        </script>
+
 @endsection

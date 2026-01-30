@@ -80,6 +80,10 @@ Route::middleware([RedirectIfAuthenticated::class])->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/checkout', [CheckoutController::class, 'show'])
         ->name('checkout.view');
+
+    Route::post('/checkout/book', [CheckoutController::class, 'book'])
+        ->name('checkout.book');
+
 });
 
 
@@ -450,3 +454,8 @@ Route::get('/packege-details-json', [DemoJsonController::class, 'packege_details
 Route::get('/things-to-do-nature-json', [DemoJsonController::class, 'things_to_do_nature_page']);
 Route::get('/event-details-json', [DemoJsonController::class, 'event_details_page']);
 Route::get('/destination-details-json', [DemoJsonController::class, 'destination_detail_page']);
+
+
+
+Route::post('/checkout/init', [CheckoutController::class, 'init'])
+    ->name('checkout.init');
