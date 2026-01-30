@@ -14,12 +14,8 @@
     $city = $package->current_city ?? null;
 
     // Pricing
-    $perPersonPrice = $package->calculated_price['per_person']
-        ?? optional($package->price)->per_person_price
-        ?? 0;
+    $perPersonPrice =$package->price->per_person_price ?? 0;
 
-    $totalPrice = $package->calculated_price['total']
-        ?? $perPersonPrice;
 @endphp
 
 {{-- @dd($package) --}}
@@ -97,7 +93,7 @@
                         <img class="opacity-50"
                              src="{{ asset('frontend/assets/icons/riyal.svg') }}"
                              alt="Riyal">
-                        {{ number_format($totalPrice) }}
+                        {{ number_format($perPersonPrice) }}
                     </div>
 
                     <p class="text-muted small mb-0">
@@ -105,7 +101,7 @@
                         <img class="opacity-50"
                              src="{{ asset('frontend/assets/icons/riyal.svg') }}"
                              alt="Riyal">
-                        {{ number_format($totalPrice) }}
+                        {{ number_format($package->price->original_price) }}
                     </p>
                 </div>
 

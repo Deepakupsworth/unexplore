@@ -77,9 +77,10 @@ Route::middleware([RedirectIfAuthenticated::class])->group(function () {
     Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
 });
 
-
-
-
+Route::middleware('auth')->group(function () {
+    Route::get('/checkout', [CheckoutController::class, 'show'])
+        ->name('checkout.view');
+});
 
 
 Route::middleware(['auth', 'user'])->group(function () {
@@ -108,6 +109,7 @@ Route::middleware(['auth', 'user'])->group(function () {
     Route::delete('/account/travellers/{id}', [TravellerController::class, 'destroy']);
     Route::get('/travellers/{traveller}', [TravellerController::class, 'show'])
         ->name('travellers.show');
+
 });
 
 
@@ -423,7 +425,7 @@ Route::get('/blog-details', [BlogController::class, 'detail'])->name('blog.detai
 
 
 // checkout route
-Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout.view');
+// Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout.view');
 
 //pages routes
 Route::get('/about-us', [PageController::class, 'about_us'])->name('about.us');
