@@ -17,6 +17,12 @@ return new class extends Migration {
                 ->constrained()
                 ->nullOnDelete();
 
+            $table->foreignId('package_id')
+            ->nullable()
+            ->constrained()
+            ->nullOnDelete();
+                
+
             $table->enum('status', [
                 'pending',
                 'confirmed',
@@ -43,6 +49,9 @@ return new class extends Migration {
             $table->date('travel_start_date');
             $table->date('travel_end_date');
 
+            $table->unsignedSmallInteger('total_person');
+            $table->unsignedSmallInteger('total_adult');
+            $table->unsignedSmallInteger('total_child');
             $table->timestamps();
         });
     }

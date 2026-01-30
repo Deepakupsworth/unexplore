@@ -317,27 +317,27 @@ class PackageController extends Controller
         // ===== ✅ DAY WISE OPTIONS (FINAL STRUCTURE) =====
         $dayWiseOptions = [];
 
-        // foreach ($package->days as $day) {
-        //     $dayWiseOptions[$day->id] = $day->options
-        //         ->groupBy('item_type')
-        //         ->map(function ($items, $type) {
+        foreach ($package->days as $day) {
+            $dayWiseOptions[$day->id] = $day->options
+                ->groupBy('item_type')
+                ->map(function ($items, $type) {
 
-        //             return $items
-        //                 ->keyBy('id')
-        //                 ->map(function ($option) use ($type) {
+                    return $items
+                        ->keyBy('id')
+                        ->map(function ($option) use ($type) {
 
-        //                     // remove unrelated relations
-        //                     if ($type !== 'hotel') unset($option['hotel']);
-        //                     if ($type !== 'todo')  unset($option['todo']);
-        //                     if ($type !== 'event') unset($option['event']);
+                            // remove unrelated relations
+                            if ($type !== 'hotel') unset($option['hotel']);
+                            if ($type !== 'todo')  unset($option['todo']);
+                            if ($type !== 'event') unset($option['event']);
 
-        //                     return $option;
-        //                 })
-        //                 ->toArray();
+                            return $option;
+                        })
+                        ->toArray();
 
-        //         })
-        //         ->toArray();
-        // }
+                })
+                ->toArray();
+        }
 
         $sessionItems = session("package_day_items.{$package->id}", []);
         //print_r($sessionItems);

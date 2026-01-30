@@ -106,7 +106,13 @@
 
                     <div class="pkg-fil-bar__input-wrapper flex-center">
                         <label>Starting From</label>
-                        <input type="date" value="" placeholder="Enter...">
+                        <input
+                                type="date"
+                                name="travel_date"
+                                min="{{ $availability->available_from }}"
+                                max="{{ $availability->available_to }}"
+                                required
+                            >
                     </div>
 
                     <div class="pkg-fil-bar__input-wrapper flex-center dropdown">
