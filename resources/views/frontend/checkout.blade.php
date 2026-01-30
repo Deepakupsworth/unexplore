@@ -55,22 +55,28 @@
 
                             <div id="checkoutTravelCollapse" class="accordion-collapse collapse show"
                                 aria-labelledby="headingOne" data-bs-parent="#checkoutTravelDetails">
+
                                 <div class="accordion-body">
 
+                                    {{-- 🔹 HEADER COUNTS --}}
                                     <div class="d-flex gap-1 mb-3">
-                                        <p class="fw-600">2 Travellers - </p>
+                                        <p class="fw-600">
+                                            {{ $travellers->count() }} Travellers -
+                                        </p>
                                         <div class="d-flex gap-2 p-small align-items-center">
-                                            <p>1 Room </p>
+                                            <p>1 Room</p>
                                             <div class="vertical-divider h-75"></div>
-                                            <p>2 Adults</p>
+                                            <p>{{ $travellers->where('type', 'adult')->count() }} Adults</p>
                                         </div>
                                     </div>
+
+                                    {{-- 🔹 TRAVELLER LIST --}}
                                     <div>
                                         @forelse($travellers as $index => $traveller)
                                             <div
                                                 class="d-flex justify-content-between align-items-center checkout-traveller-header">
 
-                                                <!-- Left section -->
+                                                <!-- LEFT -->
                                                 <div class="d-flex align-items-center gap-3">
                                                     <div class="traveller-icon flex-center rounded-4">
                                                         <i class="fa-solid fa-user"></i>
@@ -78,25 +84,29 @@
 
                                                     <div>
                                                         <h6 class="fw-600 p">TRAVELLER {{ $index + 1 }}</h6>
-                                                        <div class="flex-center gap-1
-                                                        <p class="
-                                                            p-small fw-600">{{ $traveller->first_name }}
-                                                            {{ $traveller->last_name }}</p>
-                                                            <button class="p-0 border-0 bg-transparent text-danger">
+
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <p class="p-small fw-600 mb-0">
+                                                                {{ $traveller->first_name }} {{ $traveller->last_name }}
+                                                            </p>
+
+                                                            {{-- DELETE --}}
+                                                            <button type="button"
+                                                                class="p-0 border-0 bg-transparent text-danger delete-traveller-btn"
+                                                                data-id="{{ $traveller->id }}" title="Delete Traveller">
                                                                 <i class="fa-solid fa-circle-xmark"></i>
                                                             </button>
                                                         </div>
                                                     </div>
                                                 </div>
 
-                                                <!-- Right section -->
+                                                <!-- RIGHT -->
                                                 <div class="flex-center gap-3">
-                                                    <div class="flex-center gap-1 primary-text">
-                                                        <button class=" p-0 border-0 bg-transparent primary-text">
-                                                            <i class="fa-solid fa-circle-check"></i>
-                                                        </button>
-                                                        <p class="p-small fw-500">Traveller Added</p>
+                                                    <div class="flex-center gap-1 text-success">
+                                                        <i class="fa-solid fa-circle-check"></i>
+                                                        <p class="p-small fw-500 mb-0">Traveller Added</p>
                                                     </div>
+
                                                     <button
                                                         class="btn btn-outline-primary add-traveller-btn rounded-pill border-1-5 fw-500"
                                                         data-bs-toggle="modal" data-bs-target="#travellerModal"
@@ -105,19 +115,45 @@
                                                     </button>
                                                 </div>
                                             </div>
+
                                             <hr>
-                                        @endforeach
+
+                                        @empty
+                                            {{-- 🔥 NO TRAVELLER CASE --}}
+                                            <div
+                                                class="d-flex justify-content-between align-items-center checkout-traveller-header">
+
+                                                <div class="d-flex align-items-center gap-3">
+                                                    <div class="traveller-icon flex-center rounded-4">
+                                                        <i class="fa-solid fa-user"></i>
+                                                    </div>
+
+                                                    <div>
+                                                        <h6 class="fw-600 p mb-1">No Traveller Added</h6>
+                                                        <p class="text-light2 p-small mb-0">
+                                                            Please add traveller details to continue
+                                                        </p>
+                                                    </div>
+                                                </div>
+
+                                                <button
+                                                    class="btn btn-outline-primary add-traveller-btn rounded-pill border-1-5 fw-500"
+                                                    data-bs-toggle="modal" data-bs-target="#travellerModal">
+                                                    Add Traveller
+                                                </button>
+                                            </div>
+                                        @endforelse
                                     </div>
 
-                                    <!-- Contact Details Section -->
-                                    <div class="booking-contact">
+                                    {{-- 🔹 CONTACT DETAILS (UNCHANGED) --}}
+                                    <div class="booking-contact mt-4">
 
                                         <p class="fw-600 mb-3">Please Enter Contact Details</p>
 
                                         <div class="row g-3 mb-4">
                                             <div class="col-md-4">
                                                 <label class="form-label small mb-1">Email</label>
-                                                <input type="email" class="form-control" placeholder="Noshad@gmail.com">
+                                                <input type="email" class="form-control" placeholder="Enter email">
                                             </div>
 
                                             <div class="col-md-4">
@@ -138,30 +174,22 @@
                                             <input type="text" class="form-control" placeholder="Enter here">
                                         </div>
 
-                                        <!-- TCS Info Box -->
                                         <div class="checkout-tcs-box p-3 rounded-4">
                                             <p class="mb-2 fw-600 p-small">
                                                 TCS (Tax Collected at Source) is mandatory for International Holiday
                                                 Packages
                                             </p>
                                             <p class="mb-0 text-muted p-small">
-                                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                                                eiusmod
-                                                tempor incididunt ut labore
-                                                et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                                                exercitation ullamco laboris nisi ut
-                                                aliquip ex ea commodo consequat. Duis aute irure dolor in
-                                                reprehenderit
-                                                in voluptate velit esse
-                                                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                                                cupidatat non proident, sunt in culpa
-                                                qui officia deserunt mollit anim id est laborum
+                                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                                                tempor incididunt ut
+                                                labore et dolore magna aliqua.
                                             </p>
                                         </div>
                                     </div>
 
                                 </div>
                             </div>
+
                         </div>
                     </div>
 
@@ -359,13 +387,13 @@
                                                                                     class="d-flex gap-2 pkg-details__accordion-actions">
 
                                                                                     <!-- <button
-                                                                                        type="button"
-                                                                                        class="btn btn-primary btn-sm editDayItemsBtn"
-                                                                                        data-day-id="{{ $day->id }}"
-                                                                                        data-type="hotel"
-                                             >
-                                                                                        <i class="fa-solid fa-pencil"></i>
-                                                                                    </button> -->
+                                                                                                type="button"
+                                                                                                class="btn btn-primary btn-sm editDayItemsBtn"
+                                                                                                data-day-id="{{ $day->id }}"
+                                                                                                data-type="hotel"
+                                                     >
+                                                                                                <i class="fa-solid fa-pencil"></i>
+                                                                                            </button> -->
 
 
 
@@ -482,12 +510,12 @@
                                                                                 <div
                                                                                     class="d-flex gap-2 pkg-details__accordion-actions">
                                                                                     <!-- <button type="button"
-                                                                                            class="btn btn-primary btn-sm editDayItemsBtn"
-                                                                                            data-day-id="{{ $day->id }}"
-                                                                                            data-type="todo"
-                                                                                            data-selected="{{ $todos->pluck('id')->join(',') }}">
-                                                                                            <i class="fa-solid fa-pencil"></i>
-                                                                                        </button> -->
+                                                                                                    class="btn btn-primary btn-sm editDayItemsBtn"
+                                                                                                    data-day-id="{{ $day->id }}"
+                                                                                                    data-type="todo"
+                                                                                                    data-selected="{{ $todos->pluck('id')->join(',') }}">
+                                                                                                    <i class="fa-solid fa-pencil"></i>
+                                                                                                </button> -->
 
                                                                                 </div>
                                                                             </div>
@@ -581,12 +609,12 @@
                                                                                 <div
                                                                                     class="d-flex gap-2 pkg-details__accordion-actions">
                                                                                     <!-- <button type="button"
-                                                                                            class="btn btn-primary btn-sm editDayItemsBtn"
-                                                                                            data-day-id="{{ $day->id }}"
-                                                                                            data-type="event"
-                                                                                            data-selected="{{ $events->pluck('id')->join(',') }}">
-                                                                                            <i class="fa-solid fa-pencil"></i>
-                                                                                        </button> -->
+                                                                                                    class="btn btn-primary btn-sm editDayItemsBtn"
+                                                                                                    data-day-id="{{ $day->id }}"
+                                                                                                    data-type="event"
+                                                                                                    data-selected="{{ $events->pluck('id')->join(',') }}">
+                                                                                                    <i class="fa-solid fa-pencil"></i>
+                                                                                                </button> -->
 
                                                                                 </div>
                                                                             </div>
@@ -1095,6 +1123,35 @@
                 } catch (err) {
                     alert('Something went wrong. Please try again.');
                     console.error(err);
+                }
+            });
+
+            /* ===============================
+               DELETE TRAVELLER
+            =============================== */
+            document.addEventListener('click', async e => {
+
+                const delBtn = e.target.closest('.delete-traveller-btn');
+                if (!delBtn) return;
+
+                const travellerId = delBtn.dataset.id;
+                if (!travellerId) return;
+
+                if (!confirm('Are you sure you want to delete this traveller?')) return;
+
+                try {
+                    const res = await fetch(`/account/travellers/${travellerId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+                        }
+                    });
+
+                    if (!res.ok) throw new Error();
+                    location.reload();
+
+                } catch {
+                    alert('Unable to delete traveller');
                 }
             });
 

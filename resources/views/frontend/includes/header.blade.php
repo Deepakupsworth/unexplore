@@ -91,7 +91,9 @@
                                                 @foreach (header_todos() as $category)
                                                     @if ($category->things_count > 0)
                                                         <li>
-                                                            <a href="{{ route('things.to.do') }}">
+                                                            <a href="{{ route('things.to.do', [
+                                                                'categories[]' => $category->id
+                                                            ]) }}">
                                                                 {{ $category->translation?->name }}
                                                                 ({{ $category->things_count }})
                                                                 <i
@@ -141,7 +143,10 @@
                                                 @foreach (header_event_categories() as $category)
                                                     @if ($category->events_count > 0)
                                                         <li>
-                                                            <a href="{{ route('event.listing') }}">
+                                                            <a
+                                                                href="{{ route('event.listing', [
+                                                                    'categories[]' => $category->id,
+                                                                ]) }}">
                                                                 {{ $category->translationData?->name }}
                                                                 ({{ $category->events_count }})
                                                                 <i

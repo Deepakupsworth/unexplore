@@ -13,7 +13,10 @@
             <div class="dis-adventure__carousel-item-footer">
                 {{-- <p class="dis-adventure__carousel-riyal"><img src="../assets/icons/riyal.svg" alt="Riyal"> 1500</p> --}}
                 @if ($thing->package_count > 0)
-                    <a href="{{ route('packages.index') }}" class="btn btn-outline-light rounded-pill">
+                    <a href="{{ route('packages.index', [
+                        'todo_id' => $thing->id,
+                    ]) }}"
+                        class="btn btn-outline-light rounded-pill">
                         Related packages ({{ $thing->package_count }})
                     </a>
                 @endif
