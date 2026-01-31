@@ -126,12 +126,19 @@
 
          <ul class="sidebar-menu">
             <li class="sidebar-menu-title">MENU</li>
-
             <li>
                 <x-sidebar-link href="{{ url('/admin/dashboard') }}">
                     <span class="flex items-center">
                         <iconify-icon class="nav-icon" icon="heroicons-outline:home"></iconify-icon>
                         <span>Dashboard</span>
+                    </span>
+                </x-sidebar-link>
+            </li>
+            <li>
+                <x-sidebar-link href="{{ url('/admin/bookings') }}">
+                    <span class="flex items-center">
+                        <iconify-icon class="nav-icon" icon="heroicons-outline:calendar-days"></iconify-icon>
+                        <span>Bookings</span>
                     </span>
                 </x-sidebar-link>
             </li>
@@ -203,11 +210,21 @@
             <li>
                 <x-sidebar-link href="{{ url('/admin/packages') }}">
                     <span class="flex items-center">
-                        <iconify-icon class="nav-icon" icon="heroicons-outline:calendar"></iconify-icon>
+                        <iconify-icon class="nav-icon" icon="heroicons-outline:archive-box"></iconify-icon>
                         <span>Package</span>
                     </span>
                 </x-sidebar-link>
             </li>
+
+            <li>
+                <x-sidebar-link href="{{ url('/admin/coupon') }}">
+                    <span class="flex items-center">
+                        <iconify-icon class="nav-icon" icon="heroicons-outline:ticket"></iconify-icon>
+                        <span>Coupons</span>
+                    </span>
+                </x-sidebar-link>
+            </li>
+
 
             <li class="sidebar-menu-title">SETTINGS</li>
 

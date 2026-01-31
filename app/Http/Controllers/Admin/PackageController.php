@@ -111,11 +111,16 @@ class PackageController extends Controller
             'days.options.event.thumb',
 
             'price',
+            'price.childPrices',          // ✅ FIX
+            'price.increasePersons',
+
             'infos.translations',
             'thumb',
             'gallery',
 
         ]);
+
+
         $languages = Language::select('id', 'code')->get();
 
         // Already used MAIN day items (hotel/todo/event)

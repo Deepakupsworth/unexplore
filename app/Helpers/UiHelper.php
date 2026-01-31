@@ -13,30 +13,56 @@ if (! function_exists('ui_badge')) {
         ];
 
         $class = $variants[$variant] ?? $variants['gray'];
+
         return "<span class='inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full {$class}'>
-        {$label}
-    </span>";
+            {$label}
+        </span>";
     }
 }
 
 if (! function_exists('status_badge')) {
 
-    function status_badge(string|int $status): string
+    /**
+     * GLOBAL STATUS BADGE
+     *
+     * Supports:
+     * - active / inactive
+     * - booking status
+     * - payment status
+     * - numeric (0/1)
+     */
+    function status_badge(string|int|null $status): string
     {
-        // Normalize status
-        $normalized = match (true) {
-            $status === 1 || $status === '1' || $status === 'active'   => 'active',
-            $status === 0 || $status === '0' || $status === 'inactive' => 'inactive',
-            default => 'draft',
-        };
+        if ($status === null) {
+            return ui_badge('Unknown', 'gray');
+        }
+
+        // normalize
+        $status = strtolower((string) $status);
 
         return ui_badge(
-            ucfirst($normalized),
-            match ($normalized) {
-                'active'   => 'success',
-                'inactive' => 'danger',
-                'draft'    => 'gray',
-                default    => 'info',
+            ucfirst($status),
+            match ($status) {
+
+                /* ✅ ACTIVE / INACTIVE */
+                '1', 'active', 'enabled'       => 'success',
+                '0', 'inactive', 'disabled'    => 'danger',
+
+                /* ✅ BOOKING STATUS */
+                'pending'                      => 'warning',
+                'confirmed', 'completed'       => 'success',
+                'cancelled'                    => 'danger',
+
+                /* ✅ PAYMENT STATUS */
+                'paid'                         => 'success',
+                'unpaid'                       => 'warning',
+                'refunded'                     => 'info',
+                'failed'                       => 'danger',
+
+                /* ✅ GENERIC */
+                'draft'                        => 'gray',
+
+                default                        => 'gray',
             }
         );
     }

@@ -31,8 +31,10 @@
             'things-to-do',
             'account',
             'events*',
+            'booking*'
         ];
     @endphp
+
     <div id="header" class="{{ request()->is($whiteHeaderPages) ? 'white-header-static' : '' }}">
         @include('frontend.includes.header')
     </div>

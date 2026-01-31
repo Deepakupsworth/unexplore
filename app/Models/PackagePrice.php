@@ -22,13 +22,23 @@ class PackagePrice extends Model
         return $this->belongsTo(Package::class);
     }
 
-    public function increasePersons()
-    {
-        return $this->hasMany(PackagePriceIncreasePerson::class);
-    }
+   // PackagePrice.php
+public function increasePersons()
+{
+    return $this->hasMany(
+        PackagePriceIncreasePerson::class,
+        'package_id',
+        'package_id'
+    );
+}
 
-    public function childPrices()
-    {
-        return $this->hasMany(PackageChildPrice::class);
-    }
+public function childPrices()
+{
+    return $this->hasMany(
+        PackageChildPrice::class,
+        'package_id',
+        'package_id'
+    );
+}
+
 }

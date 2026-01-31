@@ -99,6 +99,7 @@
             </div>
         </div>
     </section>
+    {{-- @dd($package) --}}
     @include('frontend.packages.partials.filter-bar', [
         'package' => $package
     ])
@@ -607,10 +608,10 @@
                             Book Now
                         </a> --}}
 
-                        <form action="{{ route('checkout.view') }}" method="GET" id="packageCheckoutForm">
+                        <form action="{{ route('checkout.init') }}" method="POST" id="packageCheckoutForm">
 
                             {{-- 🔒 CSRF not required for GET, but ok if POST --}}
-                            {{-- @csrf --}}
+                            @csrf
                             <input type="hidden" name="slug" value="{{ $package->slug }}">
                             <button
                                 type="submit"
