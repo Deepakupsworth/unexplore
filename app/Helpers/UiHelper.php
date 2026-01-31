@@ -37,33 +37,46 @@ if (! function_exists('status_badge')) {
             return ui_badge('Unknown', 'gray');
         }
 
-        // normalize
         $status = strtolower((string) $status);
 
-        return ui_badge(
-            ucfirst($status),
-            match ($status) {
+        return match ($status) {
 
-                /* ✅ ACTIVE / INACTIVE */
-                '1', 'active', 'enabled'       => 'success',
-                '0', 'inactive', 'disabled'    => 'danger',
+            /* ✅ ACTIVE / INACTIVE */
+            '1', 'active', 'enabled'
+            => ui_badge('Active', 'success'),
 
-                /* ✅ BOOKING STATUS */
-                'pending'                      => 'warning',
-                'confirmed', 'completed'       => 'success',
-                'cancelled'                    => 'danger',
+            '0', 'inactive', 'disabled'
+            => ui_badge('Inactive', 'danger'),
 
-                /* ✅ PAYMENT STATUS */
-                'paid'                         => 'success',
-                'unpaid'                       => 'warning',
-                'refunded'                     => 'info',
-                'failed'                       => 'danger',
+            /* ✅ BOOKING STATUS */
+            'pending'
+            => ui_badge('Pending', 'warning'),
 
-                /* ✅ GENERIC */
-                'draft'                        => 'gray',
+            'confirmed', 'completed'
+            => ui_badge('Confirmed', 'success'),
 
-                default                        => 'gray',
-            }
-        );
+            'cancelled'
+            => ui_badge('Cancelled', 'danger'),
+
+            /* ✅ PAYMENT STATUS */
+            'paid'
+            => ui_badge('Paid', 'success'),
+
+            'unpaid'
+            => ui_badge('Unpaid', 'warning'),
+
+            'refunded'
+            => ui_badge('Refunded', 'info'),
+
+            'failed'
+            => ui_badge('Failed', 'danger'),
+
+            /* ✅ GENERIC */
+            'draft'
+            => ui_badge('Draft', 'gray'),
+
+            default
+            => ui_badge(ucfirst($status), 'gray'),
+        };
     }
 }
