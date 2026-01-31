@@ -1,4 +1,15 @@
 @extends('frontend.layout')
+<style>
+    #package-list {
+        transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+
+    #package-list.loading {
+        opacity: 0.35;
+        transform: translateY(6px);
+        pointer-events: none;
+    }
+    </style>
 
 @section('content')
     @include('frontend.packages.partials.banner')
@@ -39,49 +50,57 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
 <script>
-$(document).ready(function () {
-    // 🔁 Trigger AJAX on filter change
-    $(document).on('change', '.package-filter input', function () {
-        loadPackages();
-    });
+    $(document).ready(function () {
 
-    // 🔍 Search debounce
-    let timer;
-    $(document).on('keyup', '.package-filter input[name="search"]', function () {
-        clearTimeout(timer);
-        timer = setTimeout(() => loadPackages(), 400);
-    });
-
-    function loadPackages(page = 1) {
-        $.ajax({
-            url: "{{ route('packages.ajax') }}",
-            type: "GET",
-            data: $('.package-filter').serialize() + '&page=' + page,
-
-            beforeSend() {
-                $('#package-list').html(
-                    '<div class="text-center py-5">{{ __('packages.listing.loading') }}</div>'
-                );
-            },
-
-            success(res) {
-                $('#package-list').html(res);
-            },
-
-            error(xhr) {
-                console.error(xhr.responseText);
-                alert('{{ __('common.ajax_error') }}');
-            }
+        // 🔁 Trigger AJAX on filter change
+        $(document).on('change', '.package-filter input', function () {
+            loadPackages();
         });
-    }
 
-    // 📄 AJAX pagination
-    $(document).on('click', '#package-list .pagination a', function (e) {
-        e.preventDefault();
-        let page = $(this).attr('href').split('page=')[1];
-        loadPackages(page);
+        // 🔍 Search debounce
+        let timer;
+        $(document).on('keyup', '.package-filter input[name="search"]', function () {
+            clearTimeout(timer);
+            timer = setTimeout(() => loadPackages(), 400);
+        });
+
+        function loadPackages(page = 1) {
+            const $list = $('#package-list');
+
+            $.ajax({
+                url: "{{ route('packages.ajax') }}",
+                type: "GET",
+                data: $('.package-filter').serialize() + '&page=' + page,
+
+                beforeSend() {
+                    // ❌ html() mat karo — yahi jhatka tha
+                    $list.addClass('loading');
+                },
+
+                success(res) {
+                    // ✅ smooth replace
+                    $list.fadeOut(120, function () {
+                        $list.html(res).fadeIn(180);
+                        $list.removeClass('loading');
+                    });
+                },
+
+                error(xhr) {
+                    console.error(xhr.responseText);
+                    $list.removeClass('loading');
+                    alert('{{ __('common.ajax_error') }}');
+                }
+            });
+        }
+
+        // 📄 AJAX pagination
+        $(document).on('click', '#package-list .pagination a', function (e) {
+            e.preventDefault();
+            let page = new URL($(this).attr('href')).searchParams.get('page');
+            loadPackages(page);
+        });
+
     });
+    </script>
 
-});
-</script>
 {{-- ✅ END AJAX SCRIPT --}}

@@ -23,14 +23,26 @@ class CheckoutController extends Controller
 
     public function init(Request $request)
     {
+        // package resolve FIRST
+        $package = Package::where('slug', $request->slug)->firstOrFail();
 
-        // dd($request->all());
-        // ✅ store in session (secure)
-        session(['checkout' => $request->all()]);
-        session()->forget('travellers');
-        // 🔥 IMPORTANT: redirect to GET
+        // checkout payload
+        $checkout = $request->all();
+
+        // 🔥 REQUIRED FOR BOOKING
+        $checkout['package_id'] = $package->id;
+
+        // optional but safe
+        $checkout['base_currency']    = $checkout['base_currency'] ?? 'SAR';
+        $checkout['booking_currency'] = $checkout['booking_currency'] ?? 'SAR';
+        $checkout['exchange_rate']    = $checkout['exchange_rate'] ?? 1;
+
+        session()->put('checkout', $checkout);
+
         return redirect()->route('checkout.view');
     }
+
+
 
 
     public function show(Request $request)
@@ -126,23 +138,5 @@ class CheckoutController extends Controller
             'checkout',
             'sessionItems'
         ));
-    }
-
-    public function book(Request $request)
-    {
-        dd('Booking process to be implemented');
-        DB::beginTransaction();
-
-        try {
-
-            // 1️⃣ Create Booking
-            DB::commit();
-
-            // 6️⃣ Redirect to Payment
-            return redirect()->route('payment.init');
-        } catch (\Throwable $e) {
-            DB::rollBack();
-            return back()->withErrors($e->getMessage());
-        }
     }
 }

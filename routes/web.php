@@ -33,10 +33,8 @@ use App\Models\Event;
 use App\Http\Controllers\Frontend\Profile\ProfileController as FrontendProfileController;
 use App\Http\Controllers\Frontend\Destination\DestinationController AS FrontendDestinationController;
 use App\Http\Controllers\Frontend\{TravellerController,AddressController,AccountController};
-
-
-
-
+use App\Http\Controllers\Frontend\Booking\BookingController;
+use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 
 // routes/web.php
 Route::get('/lang/{locale}', function ($locale) {
@@ -81,8 +79,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/checkout', [CheckoutController::class, 'show'])
         ->name('checkout.view');
 
-    Route::post('/checkout/book', [CheckoutController::class, 'book'])
+    Route::post('/checkout/book', [BookingController::class, 'store'])
         ->name('checkout.book');
+    Route::get('/booking/success', [BookingController::class, 'success'])
+        ->name('booking.success');
+    Route::get('/test-booking-mail', [BookingController::class, 'testBookingMail']);
 
 });
 
@@ -338,6 +339,39 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
         });
     });
+
+    Route::prefix('admin')->name('admin.')->group(function () {
+
+        Route::prefix('bookings')->name('bookings.')->group(function () {
+
+            // 📋 Booking Listing
+            Route::get('/', [AdminBookingController::class, 'index'])
+                ->name('index');
+
+            // 👁 View Booking Details
+            Route::get('/{booking}/show', [AdminBookingController::class, 'show'])
+                ->name('show');
+
+            // 🔄 Update Booking Status
+            Route::post('/{booking}/status', [AdminBookingController::class, 'updateStatus'])
+                ->name('status.update');
+
+            // 💳 Update Payment Status
+            Route::post('/{booking}/payment-status', [AdminBookingController::class, 'updatePaymentStatus'])
+                ->name('payment-status.update');
+
+            // 📧 Resend Booking Confirmation Mail
+            Route::post('/{booking}/resend-mail', [AdminBookingController::class, 'resendConfirmationMail'])
+                ->name('resend-mail');
+
+            // 🧾 Download Invoice (PDF)
+            Route::get('/{booking}/invoice', [AdminBookingController::class, 'downloadInvoice'])
+                ->name('invoice.download');
+
+        });
+
+    });
+
 });
 
 

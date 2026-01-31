@@ -120,7 +120,7 @@ $childCount = $travellerSlots->where('type', 'child')->count();
 
                                         @if ($totalTravellers > 0)
                                             <div class="d-flex gap-2 p-small align-items-center">
-                                                <p>1 Room</p>
+                                                {{-- <p>1 Room</p> --}}
                                                 <div class="vertical-divider h-75"></div>
                                                 <p>{{ $adultCount }} Adult{{ $adultCount !== 1 ? 's' : '' }}</p>
                                                 @if ($childCount > 0)
