@@ -13,31 +13,70 @@ if (! function_exists('ui_badge')) {
         ];
 
         $class = $variants[$variant] ?? $variants['gray'];
+
         return "<span class='inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full {$class}'>
-        {$label}
-    </span>";
+            {$label}
+        </span>";
     }
 }
 
 if (! function_exists('status_badge')) {
 
-    function status_badge(string|int $status): string
+    /**
+     * GLOBAL STATUS BADGE
+     *
+     * Supports:
+     * - active / inactive
+     * - booking status
+     * - payment status
+     * - numeric (0/1)
+     */
+    function status_badge(string|int|null $status): string
     {
-        // Normalize status
-        $normalized = match (true) {
-            $status === 1 || $status === '1' || $status === 'active'   => 'active',
-            $status === 0 || $status === '0' || $status === 'inactive' => 'inactive',
-            default => 'draft',
-        };
+        if ($status === null) {
+            return ui_badge('Unknown', 'gray');
+        }
 
-        return ui_badge(
-            ucfirst($normalized),
-            match ($normalized) {
-                'active'   => 'success',
-                'inactive' => 'danger',
-                'draft'    => 'gray',
-                default    => 'info',
-            }
-        );
+        $status = strtolower((string) $status);
+
+        return match ($status) {
+
+            /* ✅ ACTIVE / INACTIVE */
+            '1', 'active', 'enabled'
+            => ui_badge('Active', 'success'),
+
+            '0', 'inactive', 'disabled'
+            => ui_badge('Inactive', 'danger'),
+
+            /* ✅ BOOKING STATUS */
+            'pending'
+            => ui_badge('Pending', 'warning'),
+
+            'confirmed', 'completed'
+            => ui_badge('Confirmed', 'success'),
+
+            'cancelled'
+            => ui_badge('Cancelled', 'danger'),
+
+            /* ✅ PAYMENT STATUS */
+            'paid'
+            => ui_badge('Paid', 'success'),
+
+            'unpaid'
+            => ui_badge('Unpaid', 'warning'),
+
+            'refunded'
+            => ui_badge('Refunded', 'info'),
+
+            'failed'
+            => ui_badge('Failed', 'danger'),
+
+            /* ✅ GENERIC */
+            'draft'
+            => ui_badge('Draft', 'gray'),
+
+            default
+            => ui_badge(ucfirst($status), 'gray'),
+        };
     }
 }

@@ -75,4 +75,23 @@ class City extends Model
     {
         return $this->hasMany(PackageCity::class);
     }
+
+    // ✅ MAIN RELATION (MULTI CATEGORY)
+    public function categories()
+    {
+        return $this->belongsToMany(
+            Category::class,
+            'city_category',
+            'city_id',
+            'category_id'
+        );
+    }
+
+    public function categoryNames()
+    {
+        return $this->categories
+            ->map(fn($cat) => $cat->translationData?->name)
+            ->filter()
+            ->implode(', ');
+    }
 }

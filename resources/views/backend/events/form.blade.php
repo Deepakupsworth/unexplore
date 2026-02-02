@@ -95,7 +95,7 @@
                                     {{-- DESCRIPTION --}}
                                     <div>
                                         <label class="form-label">Description</label>
-                                        <textarea class="form-control @error("translations.$code.description") error-input @enderror" rows="4"
+                                        <textarea class="form-control editor @error("translations.$code.description") error-input @enderror" rows="4"
                                             name="translations[{{ $code }}][description]">{{ old("translations.$code.description", $trans->description ?? '') }}</textarea>
                                         @error("translations.$code.description")
                                             <p class="error-text">{{ $message }}</p>
@@ -146,8 +146,18 @@
                         <div class="grid grid-cols-2 gap-4">
                             <x-admin.form.input type="date" label="Start Date" name="start_date" :value="old('start_date', $model->start_date)" />
                             <x-admin.form.input type="date" label="End Date" name="end_date" :value="old('end_date', $model->end_date)" />
-                            <x-admin.form.input type="time" label="Opening Time" name="opening_time" :value="old('opening_time', $model->opening_time)" />
-                            <x-admin.form.input type="time" label="Closing Time" name="closing_time" :value="old('closing_time', $model->closing_time)" />
+                                <x-admin.form.input
+                                type="time"
+                                label="Opening Time"
+                                name="opening_time"
+                                :value="old('opening_time', $model->opening_time ? substr($model->opening_time, 0, 5) : '')" />
+
+                            <x-admin.form.input
+                                type="time"
+                                label="Closing Time"
+                                name="closing_time"
+                                :value="old('closing_time', $model->closing_time ? substr($model->closing_time, 0, 5) : '')" />
+
                             <x-admin.form.input label="Opening Days" name="opening_days" :value="old('opening_days', $model->opening_days)" />
                         </div>
                     </div>

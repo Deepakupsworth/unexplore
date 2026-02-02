@@ -103,12 +103,13 @@ class EventController extends Controller
     {
         // Normalize time
         $request->merge([
-            'opening_time' => $request->opening_time
+            'opening_time' => $request->opening_time && str_contains($request->opening_time, 'M')
                 ? TimeHelper::to24Hour($request->opening_time)
-                : null,
-            'closing_time' => $request->closing_time
+                : $request->opening_time,
+
+            'closing_time' => $request->closing_time && str_contains($request->closing_time, 'M')
                 ? TimeHelper::to24Hour($request->closing_time)
-                : null,
+                : $request->closing_time,
         ]);
 
         $validated = $request->validate([
@@ -132,6 +133,7 @@ class EventController extends Controller
             'opening_days' => 'nullable|string|max:255',
             'opening_time' => 'nullable|date_format:H:i',
             'closing_time' => 'nullable|date_format:H:i',
+
 
             // MAP
             'latitude'  => 'nullable|numeric|between:-90,90',

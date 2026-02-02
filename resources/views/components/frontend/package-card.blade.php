@@ -14,13 +14,11 @@
     $city = $package->current_city ?? null;
 
     // Pricing
-    $perPersonPrice = $package->calculated_price['per_person']
-        ?? optional($package->price)->per_person_price
-        ?? 0;
+    $perPersonPrice =$package->price->per_person_price ?? 0;
 
-    $totalPrice = $package->calculated_price['total']
-        ?? $perPersonPrice;
 @endphp
+
+{{-- @dd($package) --}}
 
 <a href="{{ route('packages.show', $package->slug) }}"
    class="text-decoration-none text-dark">
@@ -52,7 +50,7 @@
         <div class="exclusive-offers__carousel-item-info">
 
             <div class="d-flex justify-content-between mb-1">
-                <h6 class="fw-bold mb-0">
+                <h6 class="fw-bold mb-0 text-ellipsis-1">
                     {{ $title }}
                 </h6>
 
@@ -95,7 +93,7 @@
                         <img class="opacity-50"
                              src="{{ asset('frontend/assets/icons/riyal.svg') }}"
                              alt="Riyal">
-                        {{ number_format($totalPrice) }}
+                        {{ number_format($perPersonPrice) }}
                     </div>
 
                     <p class="text-muted small mb-0">
@@ -103,7 +101,7 @@
                         <img class="opacity-50"
                              src="{{ asset('frontend/assets/icons/riyal.svg') }}"
                              alt="Riyal">
-                        {{ number_format($totalPrice) }}
+                        {{ number_format($package->price->original_price) }}
                     </p>
                 </div>
 

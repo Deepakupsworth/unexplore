@@ -144,7 +144,7 @@
                                 value="{{ old("translations.$code.sub_title") }}">
 
                             <label class="form-label">Description</label>
-                            <textarea class="form-control h-28" name="translations[{{ $code }}][description]">{{ old("translations.$code.description") }}</textarea>
+                            <textarea class="editor form-control h-28" name="translations[{{ $code }}][description]">{{ old("translations.$code.description") }}</textarea>
                         </div>
                     @endforeach
 
@@ -232,13 +232,6 @@
                             <p class="error-text">{{ $message }}</p>
                         @enderror
                     </div>
-
-
-                    {{-- 🔥 ADDITIONAL INFO SECTION --}}
-                    @include('backend.packages.partials.additional-info.index', [
-                        'package' => null,
-                        'languages' => $languages,
-                    ])
 
                    <div>
                     <button class="btn btn-success mt-6">Create Package</button>

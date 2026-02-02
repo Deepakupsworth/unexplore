@@ -22,7 +22,7 @@ class PageController extends Controller
     public function index()
     {
         $language = $this->language; // e.g. en, de, ar
-        // Cache::forget("home_page_data_{$language}");
+        Cache::forget("home_page_data_{$language}");
 
         $homeData = Cache::remember(
             "home_page_data_{$language}",
@@ -33,7 +33,9 @@ class PageController extends Controller
                     'translation' => fn($q) =>
                     $q->where('language_code', $language),
                     'thumb'
-                ])->get();
+                ])->latest()
+                    ->take(6)
+                    ->get();
 
                 $things = ThingToDo::query()
                     ->with([
@@ -59,12 +61,12 @@ class PageController extends Controller
                 ])
                     ->where('status', 1)
                     ->latest()
-                    ->take(12)
+                    ->take(6)
                     ->get();
 
                 $packages = Package::query()
                     ->with([
-                        'translation' => fn ($q) =>
+                        'translation' => fn($q) =>
                         $q->where('language_code', $language),
                         'cities.city',
                         'price',
@@ -73,10 +75,10 @@ class PageController extends Controller
                     ])
                     ->where('status', 'active')
                     ->latest()
-                    ->take(12)
+                    ->take(6)
                     ->get();
 
-                return compact('things', 'events', 'packages','cities');
+                return compact('things', 'events', 'packages', 'cities');
             }
         );
 

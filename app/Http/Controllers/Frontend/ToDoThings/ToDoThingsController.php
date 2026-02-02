@@ -118,18 +118,26 @@ class ToDoThingsController extends Controller
         $language = current_lang();
         $slug = $request->slug;
 
-        // ✅ Single Thing (language specific)
-        $thing = ThingToDo::with([
-            'translation' => fn($q) =>
-            $q->where('language_code', $language),
-            'thumb',
-            'city.translationData' => fn($q) =>
-            $q->where('language_code', $language),
-            'category.translationData' => fn($q) =>
-            $q->where('language_code', $language),
-        ])
+        // ✅ FIX: pick the LATEST thing for this slug (gallery linked by ID)
+        $thing = ThingToDo::query()
             ->where('slug', $slug)
+            ->orderByDesc('id') // 🔥 MOST IMPORTANT LINE
+            ->with([
+                'translation' => fn($q) =>
+                $q->where('language_code', $language),
+
+                'thumb',
+                'gallery',
+
+                'city.translationData' => fn($q) =>
+                $q->where('language_code', $language),
+
+                'category.translationData' => fn($q) =>
+                $q->where('language_code', $language),
+            ])
             ->firstOrFail();
+
+        // 🔁 Rest remains SAME (no change needed)
 
         $things = ThingToDo::query()
             ->with([
@@ -147,7 +155,6 @@ class ToDoThingsController extends Controller
             ->orderByDesc('package_count')
             ->get();
 
-        // ✅ Categories → Packages → Cities (from PACKAGE CATEGORY)
         $categories = Category::query()
             ->where('type', 'thing_to_do')
             ->with([
@@ -159,7 +166,6 @@ class ToDoThingsController extends Controller
                         'translation' => fn($t) =>
                         $t->where('language_code', $language),
 
-                        // package chain
                         'packageDayItems.packageDay.package.cities.city.translationData'
                     ]);
                 }
@@ -167,7 +173,6 @@ class ToDoThingsController extends Controller
             ->get()
             ->map(function ($category) {
 
-                // 🔥 Step 1: Collect ACTIVE packages of this category
                 $packages = $category->things
                     ->flatMap(function ($thing) {
                         return $thing->packageDayItems
@@ -179,10 +184,8 @@ class ToDoThingsController extends Controller
                     })
                     ->unique('id');
 
-                // 🔥 Step 2: Package count
                 $category->package_count = $packages->count();
 
-                // 🔥 Step 3: Cities FROM PACKAGE CATEGORY (✔ correct source)
                 $category->cities = $packages
                     ->flatMap(fn($package) => $package->cities)
                     ->map(fn($pc) => $pc->city)
@@ -194,7 +197,6 @@ class ToDoThingsController extends Controller
             })
             ->sortByDesc('package_count')
             ->values();
-
 
         $events = Event::with([
             'translation',
@@ -221,9 +223,12 @@ class ToDoThingsController extends Controller
             ->take(12)
             ->get();
 
-
-        return view('frontend.thingstodo.things-to-do', compact('things','thing', 'categories', 'events', 'packages'));
+        return view(
+            'frontend.thingstodo.things-to-do',
+            compact('things', 'thing', 'categories', 'events', 'packages')
+        );
     }
+
 
 
     public function categoriesWisePackageCounts()

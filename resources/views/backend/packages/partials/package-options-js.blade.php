@@ -1,45 +1,89 @@
 <script>
+    /* ================= GLOBAL DATA FROM CONTROLLER ================= */
+    window.usedDayItems = @json($dayItems ?? []);
+    window.usedOptions  = @json($usedOptions ?? []);
+
+    /* ================= MAIN SCRIPT ================= */
     document.addEventListener('DOMContentLoaded', () => {
 
-        const form = document.getElementById('optionForm');
+        const form       = document.getElementById('optionForm');
         const typeSelect = form.querySelector('[name="item_type"]');
         const itemSelect = form.querySelector('[name="item_id"]');
+        const typeInput  = form.querySelector('input[name="item_type"]');
 
-        // 🔥 ITEMS FROM CONTROLLER
         const itemsMap = {
             hotel: @json($hotels),
             event: @json($events),
-            todo: @json($todos),
+            todo:  @json($todos),
         };
 
-        /* SET DAY ID ON OPEN */
+        let currentDayId = null;
+
+        /* ================= OPEN ADD OPTION MODAL ================= */
         document.querySelectorAll('.add-option-btn').forEach(btn => {
             btn.addEventListener('click', () => {
+
                 form.reset();
-                form.package_day_id.value = btn.dataset.day;
-                itemSelect.innerHTML = '<option value="">Select Item</option>';
+
+                currentDayId = btn.dataset.day;
+                // const type   = btn.dataset.type;
+                const type   = btn.dataset.type;
+
+                form.package_day_id.value = currentDayId;
+                typeSelect.value = type;
+                typeInput.value = type;
+
+                populateItems(type);
             });
         });
 
-        /* ITEM TYPE CHANGE */
+        /* ================= TYPE CHANGE ================= */
         typeSelect.addEventListener('change', () => {
-            const type = typeSelect.value;
+            populateItems(typeSelect.value);
+        });
+
+        /* ================= POPULATE ITEMS (FINAL LOGIC) ================= */
+        function populateItems(type) {
+
             itemSelect.innerHTML = '<option value="">Select Item</option>';
 
+            if (!type || !currentDayId) return;
+
+            const key = `${currentDayId}_${type}`;
+
+            const usedMainItems =
+                (window.usedDayItems[key] || []).map(i => parseInt(i.item_id));
+
+            const usedOptionItems =
+                (window.usedOptions[key] || []).map(o => parseInt(o.item_id));
+
             (itemsMap[type] || []).forEach(item => {
+
+                // ❌ already added as main day item
+                if (usedMainItems.includes(item.id)) return;
+
+                // ❌ already added as option
+                if (usedOptionItems.includes(item.id)) return;
+
                 itemSelect.insertAdjacentHTML(
                     'beforeend',
                     `<option value="${item.id}">${item.name}</option>`
                 );
             });
-        });
 
-        /* SUBMIT */
+            if (itemSelect.options.length === 1) {
+                itemSelect.innerHTML =
+                    '<option disabled>No more items available</option>';
+            }
+        }
+
+        /* ================= SUBMIT ADD OPTION ================= */
         form.addEventListener('submit', async e => {
             e.preventDefault();
 
             const res = await fetch(
-                "{{ route('admin.packages.package-day-options') }}", {
+                "{{ route('admin.packages.package-day-options') }}",
+                {
                     method: "POST",
                     headers: {
                         'X-CSRF-TOKEN': "{{ csrf_token() }}",
@@ -50,11 +94,40 @@
             );
 
             if (res.ok) {
-                location.reload();
+                location.reload(); // safest
             } else {
-                alert('Failed to save option');
+                const data = await res.json();
+                alert(data.message || 'Failed to add option');
             }
         });
 
     });
-</script>
+
+    /* ================= REMOVE OPTION ================= */
+    document.addEventListener('click', async function (e) {
+
+        const btn = e.target.closest('.remove-option-btn');
+        if (!btn) return;
+
+        if (!confirm('Are you sure you want to remove this option?')) return;
+
+        const optionId = btn.dataset.id;
+
+        const res = await fetch(
+            `/admin/packages/package-day-options/${optionId}`,
+            {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                }
+            }
+        );
+
+        if (res.ok) {
+            location.reload();
+        } else {
+            alert('Failed to remove option');
+        }
+    });
+    </script>

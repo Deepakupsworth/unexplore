@@ -7,7 +7,7 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        document.querySelectorAll('textarea').forEach((textarea) => {
+        document.querySelectorAll('textarea.editor').forEach((textarea) => {
             ClassicEditor
                 .create(textarea, {
                     toolbar: [
@@ -40,7 +40,7 @@
                     console.log('CKEditor initialized for:', textarea.name);
                 })
                 .catch(error => {
-                    console.error('CKEditor initialization error:', error);
+                    console.error('CKEditor init error:', error);
                 });
         });
     });

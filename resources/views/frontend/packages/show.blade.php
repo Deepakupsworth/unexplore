@@ -13,7 +13,7 @@
         background-color: #f6fffa;
     }
 
-    
+
     .selectable-card-wrapper{
         cursor: pointer;
     }
@@ -44,7 +44,9 @@
 
         $startDate = Carbon::parse($package->start_date); // MUST EXIST
         $endDate = $startDate->copy()->addDays($package->duration_nights);
+
     @endphp
+
     <section>
         <div class="container">
             <div class="gallery-wrapper swiper">
@@ -97,118 +99,10 @@
             </div>
         </div>
     </section>
-    <section class="mb-2 mt-4 package-filter-bar-section">
-        <div class="container">
-            <div
-                class="package-filter-bar package-filter-bar__desktop d-flex flex-wrap align-items-center gap-2 justify-content-between">
-                <div class="d-flex gap-2">
-                    
-
-                    <div class="pkg-fil-bar__input-wrapper flex-center">
-                        <label>Starting From</label>
-                        <input
-                                type="date"
-                                name="travel_date"
-                                min="{{ $availability->available_from }}"
-                                max="{{ $availability->available_to }}"
-                                required
-                            >
-                    </div>
-
-                    <div class="pkg-fil-bar__input-wrapper flex-center dropdown">
-                        <label>Persons</label>
-                        <div class="w-100 d-flex justify-content-between align-items-center text-white gap-1"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            <p class="text-truncate">3 Adults, Economy</p>
-                            <i class="fa-solid fa-angle-down"></i>
-                        </div>
-                        <div class="dropdown-menu travellers-dropdown p-3 shadow-lg">
-
-                            <!-- Adults -->
-                            <div class="traveller-row d-flex justify-content-between align-items-center mb-3">
-                                <div>
-                                    <strong>Adults</strong>
-                                    <p class="text-muted small m-0">12+ Years</p>
-                                </div>
-
-                                <div class="traveller-counter d-flex align-items-center gap-2">
-                                    <button class="traveller-counter-btn minus">
-                                        <i class="fa-solid fa-minus"></i>
-                                    </button>
-                                    <span class="count">1</span>
-                                    <button class="traveller-counter-btn plus">
-                                        <i class="fa-solid fa-plus"></i>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- Children -->
-                            <div class="traveller-row d-flex justify-content-between align-items-center mb-3">
-                                <div>
-                                    <strong>Children</strong>
-                                    <p class="text-muted small m-0">2–12 Years</p>
-                                </div>
-
-                                <div class="traveller-counter d-flex align-items-center gap-2">
-                                    <button class="traveller-counter-btn minus">
-                                        <i class="fa-solid fa-minus"></i>
-                                    </button>
-                                    <span class="count">1</span>
-                                    <button class="traveller-counter-btn plus">
-                                        <i class="fa-solid fa-plus"></i>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- Infants -->
-                            <!-- <div class="traveller-row d-flex justify-content-between align-items-center mb-3">
-                                <div>
-                                    <strong>Infants</strong>
-                                    <p class="text-muted small m-0">Below 2 Years</p>
-                                </div>
-
-                                <div class="traveller-counter d-flex align-items-center gap-2">
-                                    <button class="traveller-counter-btn minus">
-                                        <i class="fa-solid fa-minus"></i>
-                                    </button>
-                                    <span class="count">1</span>
-                                    <button class="traveller-counter-btn plus">
-                                        <i class="fa-solid fa-plus"></i>
-                                    </button>
-                                </div>
-                            </div> -->
-                            <!-- Travel Classes -->
-                            <!-- <div class="d-flex flex-wrap gap-2 mt-2">
-                                <span class="traveller-chip active">Economy</span>
-                                <span class="traveller-chip">Business Class</span>
-                                <span class="traveller-chip">First Class</span>
-                                <span class="traveller-chip">Premium Economy</span>
-                            </div> -->
-                        </div>
-                    </div>
-
-                    <!-- Search Button -->
-                    <button class="btn btn-dark pkg-fil-bar__search-btn px-4 rounded-pill">Search</button>
-                </div>
-
-                <!-- Explore More Button -->
-                <button class="btn btn-light pkg-fil-bar__explore-btn flex-v-center gap-3">
-                    Explore More <i class="fa-solid fa-angles-right"></i>
-                </button>
-            </div>
-            <div class="w-100 text-start package-filter-bar__mobile mb-2">
-                <p class="f-14">Riyadh to</p>
-                <h4 class="fw-bold">Jeddah</h4>
-                <div class="d-flex align-items-center gap-2">
-                    <p class="f-14">25 Dec 2025, 2 Adults, 1 Room</p>
-                    <div class="primary-text" id="package-filter-bar-edit-btn" data-bs-toggle="modal"
-                        data-bs-target="#packageFilterModal">
-                        <i class="fa-solid fa-pen-to-square"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    {{-- @dd($package) --}}
+    @include('frontend.packages.partials.filter-bar', [
+        'package' => $package
+    ])
     <section>
         <div class="container">
             <div class="pkg-details__wrapper mb-3">
@@ -322,7 +216,7 @@
                                                                             </div>
                                                                             <div
                                                                                 class="d-flex gap-2 pkg-details__accordion-actions">
-                                                                               
+
                                                                                 <!-- <button
                                                                                 type="button"
                                                                                 class="btn btn-primary btn-sm editDayItemsBtn"
@@ -331,13 +225,13 @@
                                      >
                                                                                 <i class="fa-solid fa-pencil"></i>
                                                                             </button> -->
-                                                                              
+
 
 
 
                                                                             </div>
                                                                         </div>
-         
+
                                                                         <div id="hotelCollapse{{ $day->id }}"
                                                                             class="accordion-collapse collapse show"
                                                                             data-bs-parent="#hotelAccordion{{ $day->id }}">
@@ -361,7 +255,7 @@
                                                                                                 'frontend/assets/hotel-placeholder.jpg',
                                                                                             );
                                                                                     @endphp
-                                                                                    <div class="day-item-slot"
+                                                                                    <div class="day-item-slot d-flex position-relative"
                                                                                         data-day-id="{{ $day->id }}"
                                                                                         data-type="hotel"
                                                                                         data-index="{{ $hotel_slot  }}">
@@ -399,9 +293,10 @@
                                                                                         </div>
                                                                                     </div>
                                                                                  </div>
-                                                                                 <button                                                                
+                                                                                 @if($package->package_type !== 'fixed')
+                                                                                 <button
                                                                             type="button"
-                                                                            class="btn btn-primary btn-sm editDayItemsBtn"
+                                                                            class="btn btn-primary btn-sm position-absolute top-0 end-0 m-2 editDayItemsBtn"
                                                                             data-day-id="{{ $day->id }}"
                                                                             data-type="hotel"
                                                                             data-item-id="{{ $hotel->id }}"
@@ -409,7 +304,8 @@
                                                                         >
                                                                             <i class="fa-solid fa-pencil"></i>
                                                                         </button>
-                                                            </div> 
+                                                                        @endif
+                                                            </div>
                                                             @php
                                                                                 $hotel_slot++;
                                                                                  @endphp
@@ -479,7 +375,7 @@
                                                                                  @endphp
 
                                                                                 @foreach ($todos as $index => $todo)
-                                                                                <div class="day-item-slot"
+                                                                                <div class="day-item-slot d-flex position-relative"
                                                                                         data-day-id="{{ $day->id }}"
                                                                                         data-type="todo"
                                                                                         data-index="{{ $todo_slot  }}">
@@ -489,7 +385,7 @@
                                                                                         data-type="todo"
                                                                                         data-item-id="{{ $todo->id }}"
                                                                                         data-index="{{ $todo_slot }}"
-                                                                                    >   
+                                                                                    >
                                                                                             <div class="d-flex gap-3 mb-3">
                                                                                                     <img src="{{ $todo->thumb ? asset('storage/' . $todo->thumb->image_path) : asset('frontend/assets/hotel-placeholder.jpg') }}"
                                                                                                         class="pkg-details__tr-ht-img">
@@ -505,10 +401,11 @@
                                                                                                         </p>
                                                                                                     </div>
                                                                                                 </div>
-                                                                                </div>   
-                                                                                <button                                                                
+                                                                                </div>
+                                                                                @if($package->package_type !== 'fixed')
+                                                                                <button
                                                                             type="button"
-                                                                            class="btn btn-primary btn-sm editDayItemsBtn"
+                                                                            class="btn btn-primary btn-sm position-absolute top-0 end-0 m-2 editDayItemsBtn"
                                                                             data-day-id="{{ $day->id }}"
                                                                             data-type="todo"
                                                                             data-item-id="{{ $todo->id }}"
@@ -516,6 +413,7 @@
                                                                         >
                                                                             <i class="fa-solid fa-pencil"></i>
                                                                         </button>
+                                                                        @endif
                                                                     </div>
                                                                     @php
                                                                                 $todo_slot++;
@@ -584,7 +482,7 @@
                                                                                  @endphp
 
                                                                                 @foreach ($events as $index => $event)
-                                                                                <div class="day-item-slot"
+                                                                                <div class="day-item-slot d-flex position-relative"
                                                                                         data-day-id="{{ $day->id }}"
                                                                                         data-type="event"
                                                                                         data-index="{{ $event_slot  }}">
@@ -594,7 +492,7 @@
                                                                                         data-type="event"
                                                                                         data-item-id="{{ $event->id }}"
                                                                                         data-index="{{ $event_slot }}"
-                                                                                    >  
+                                                                                    >
                                                                                     <div class="d-flex gap-3 mb-3">
                                                                                         <img src="{{ $event->thumb ? asset('storage/' . $event->thumb->image_path) : asset('frontend/assets/hotel-placeholder.jpg') }}"
                                                                                             class="pkg-details__tr-ht-img">
@@ -610,10 +508,11 @@
                                                                                             </p>
                                                                                         </div>
                                                                                     </div>
-                                                                                </div>   
-                                                                                    <button                                                                
+                                                                                </div>
+                                                                                @if($package->package_type !== 'fixed')
+                                                                                    <button
                                                                             type="button"
-                                                                            class="btn btn-primary btn-sm editDayItemsBtn"
+                                                                            class="btn btn-primary position-absolute top-0 end-0 m-2 editDayItemsBtn"
                                                                             data-day-id="{{ $day->id }}"
                                                                             data-type="event"
                                                                             data-item-id="{{ $event->id }}"
@@ -621,6 +520,7 @@
                                                                         >
                                                                             <i class="fa-solid fa-pencil"></i>
                                                                         </button>
+                                                                        @endif
 
                                                                         @php
                                                                                 $event_slot++;
@@ -704,9 +604,23 @@
                             <p class="text-light2 fw-500">Per Person</p>
                         </div>
 
-                        <button class="btn btn-primary justify-content-center pkg-details__book-now-btn my-2">
+                        {{-- <a href="{{route('checkout.view')}}" class="btn btn-primary justify-content-center pkg-details__book-now-btn my-2">
                             Book Now
-                        </button>
+                        </a> --}}
+
+                        <form action="{{ route('checkout.init') }}" method="POST" id="packageCheckoutForm">
+
+                            {{-- 🔒 CSRF not required for GET, but ok if POST --}}
+                            @csrf
+                            <input type="hidden" name="slug" value="{{ $package->slug }}">
+                            <button
+                                type="submit"
+                                class="btn btn-primary justify-content-center pkg-details__book-now-btn my-2">
+                                Book Now
+                            </button>
+
+                        </form>
+
 
                         <div class="fw-500 text-light2 d-flex align-items-center gap-1">
                             <p>Total Price: </p>
@@ -1106,29 +1020,23 @@
         </div>
     </div>
 
-   
-    <div class="modal fade" id="dayItemModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
 
+    <div class="offcanvas offcanvas-end" id="dayItemModal" tabindex="-1">
             <div class="modal-header">
                 <h5 class="modal-title" id="dayItemModalTitle"></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
 
-            <div class="modal-body">
+            <div class="offcanvas-body side-drawer__booking-body">
                 <div id="dayItemList" class="row g-3"></div>
             </div>
-
-            <div class="modal-footer">
-                <button class="btn btn-primary" id="saveDayItems">Save</button>
+            <div class="offcanvas-footer border-top text-end p-3">
+                <button id="saveDayItems" class="btn btn-outline-secondary rounded-pill" data-bs-dismiss="offcanvas">Save</button>
             </div>
 
-        </div>
-    </div>
 </div>
 
-  
+
     <!-- Modal -->
     <div class="modal fade" id="packageFilterModal" tabindex="-1" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -1240,7 +1148,7 @@
         </div>
     </div>
     @push('scripts')
- 
+
 <!-- <script>
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -1463,7 +1371,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (parseFloat(option.extra_price) > 0) {
                         priceEl.innerText = `+ ${option.extra_price}`;
 
-                       
+
 
                     } else {
                         priceEl.remove();
@@ -1480,7 +1388,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         selectedClone = wrapper.cloneNode(true);
                     };
 
-                   
+
 
                     list.appendChild(card);
                 });
@@ -1589,7 +1497,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentWrapper.querySelectorAll('input[name="extra_price"]').forEach(i => i.remove());
 
         const currentCard = document.createElement('div');
-        currentCard.className = 'col-md-4 selectable-card-wrapper active';
+        currentCard.className = 'selectable-card-wrapper active';
         currentCard.appendChild(currentWrapper);
 
         selectedClone = currentWrapper.cloneNode(true);
@@ -1654,7 +1562,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
 
                     const card = document.createElement('div');
-                    card.className = 'col-md-4 selectable-card-wrapper';
+                    card.className = 'col-md-12 selectable-card-wrapper';
                     card.appendChild(wrapper);
 
                     card.onclick = () => {
@@ -1667,9 +1575,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     list.appendChild(card);
                 });
 
-                new bootstrap.Modal(
-                    document.getElementById('dayItemModal')
-                ).show();
+                // new bootstrap.Modal(
+                //     document.getElementById('dayItemModal')
+                // ).show();
+
+                new bootstrap.Offcanvas(
+    document.getElementById('dayItemModal')
+).show();
             });
     });
 
@@ -1717,7 +1629,11 @@ document.addEventListener('DOMContentLoaded', () => {
             })
         });
 
-        bootstrap.Modal.getInstance(
+        // bootstrap.Modal.getInstance(
+        //     document.getElementById('dayItemModal')
+        // ).hide();
+
+        bootstrap.Offcanvas.getInstance(
             document.getElementById('dayItemModal')
         ).hide();
     };

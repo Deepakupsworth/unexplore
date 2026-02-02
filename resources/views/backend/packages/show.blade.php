@@ -23,6 +23,8 @@
         </div>
     </div>
 
+
+
     <div class="space-y-10">
 
         {{-- ================= BASIC INFO ================= --}}
@@ -146,6 +148,7 @@
                                     </h3>
                                 </header>
                                 <div class="py-3 px-5">
+
                                     @forelse ($day->items as $item)
                                         @php
                                             $border = match ($item->item_type) {
@@ -155,7 +158,6 @@
                                                 default => 'border-slate-400',
                                             };
                                         @endphp
-
                                         {{-- ITEM CARD --}}
                                         <div class="bg-white border {{ $border }} rounded-xl p-5 shadow-sm mb-4">
 
@@ -163,6 +165,7 @@
                                             <div class="flex justify-between items-start mb-3">
                                                 <div>
                                                     <p class="text-base font-semibold capitalize text-slate-800">
+
                                                         {{ $item->item_type }}
                                                         <span class="text-xs text-slate-400">
                                                             (#{{ $item->item_id }})

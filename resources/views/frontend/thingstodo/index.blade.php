@@ -5,8 +5,8 @@
     <section class="package-listing__banner">
         <div class="container">
             <div class="package-listing__banner-content text-center">
-                <h1 class="package-listing__banner-heading h2">Explore To Do Thing</h1>
-                <p>Discover the full range of amazing things to see and do across Saudi.</p>
+                <h1 class="package-listing__banner-heading h2">{{ __('things.banner.title') }}</h1>
+                <p>{{ __('things.banner.description') }}</p>
             </div>
         </div>
     </section>
@@ -17,13 +17,13 @@
             <div class="package-listing__filters">
                 <div class="package-listing__filter-section">
                     <div class="package-listing__filter-section-header">
-                        <h6>Filters</h6>
+                        <h6>{{ __('things.filters.title') }}</h6>
                     </div>
                     <div class="package-listing__filter-items">
                         <div class="package-listing__filter-item">
-                            <p class="p-large package-listing__filter-title">Search</p>
+                            <p class="p-large package-listing__filter-title">{{__('things.filters.search.title')}}</p>
                             <div class="input-group mb-3 package-listing__search-bar">
-                                <input type="text" class="form-control" placeholder="Browse Package, Locations"
+                                <input type="text" class="form-control" placeholder="{{ __('things.filters.search.placeholder') }}"
                                     aria-label="Browse Package, Location">
                                 <button class="btn" type="button">
                                     <i class="fa-solid fa-magnifying-glass"></i>
@@ -37,7 +37,7 @@
                                     <button class="accordion-button" type="button" data-bs-toggle="collapse"
                                         data-bs-target="#collapsePackages" aria-expanded="true"
                                         aria-controls="collapsePackages">
-                                        Type
+                                        {{ __('things.filters.type') }}
                                     </button>
                                 </p>
                                 <div id="collapsePackages" class="accordion-collapse collapse show"
@@ -53,7 +53,7 @@
                                                     {{ request()->routeIs('things.to.do') ? 'active' : '' }}">
                                                     <label>
                                                         <!-- <input type="checkbox" aria-label="Things To Do" /> -->
-                                                        <span class="option-text">Things To Do</span>
+                                                        <span class="option-text">{{ __('things.results.sort.popular') }}</span>
                                                     </label>
                                                 </div>
                                             </a>
@@ -66,7 +66,7 @@
                                                     {{ request()->routeIs('event.listing') ? 'active' : '' }}">
                                                     <label>
                                                         <!-- <input type="checkbox" aria-label="Events" /> -->
-                                                        <span class="option-text">Events</span>
+                                                        <span class="option-text">{{ __('things.filters.type.events') }}</span>
                                                     </label>
                                                 </div>
                                             </a>
@@ -85,7 +85,7 @@
                                         <button class="accordion-button" type="button" data-bs-toggle="collapse"
                                             data-bs-target="#collapseCategory" aria-expanded="true"
                                             aria-controls="collapseCategory">
-                                            Categories
+                                            {{ __('things.filters.categories') }}
                                         </button>
                                     </p>
 
@@ -129,7 +129,7 @@
                                             data-bs-target="#collapseDestination"
                                             aria-expanded="true"
                                             aria-controls="collapseDestination">
-                                            Destinations
+                                            {{ __('things.filters.destinations') }}
                                         </button>
                                     </p>
 
@@ -259,18 +259,18 @@
                         </div>
                         <div class="dropdown package-listing__results-sort-dropdown">
     <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-        <span class="label">Sort by:</span>
+        <span class="label"> {{ __('things.results.sort.label') }}</span>
         <span class="package-listing__results-sort-option fw-600" id="currentSortLabel">
-            Popular
+            {{ __('things.results.sort.popular') }}
         </span>
     </button>
 
     <ul class="dropdown-menu">
         <li>
-            <a class="dropdown-item" href="#" data-sort="popular">Popular</a>
+            <a class="dropdown-item" href="#" data-sort="popular">{{ __('things.results.sort.popular') }}</a>
         </li>
         <li>
-            <a class="dropdown-item" href="#" data-sort="newest">Newest</a>
+            <a class="dropdown-item" href="#" data-sort="newest">{{ __('things.results.sort.newest') }}</a>
         </li>
         <!-- <li>
             <a class="dropdown-item" href="#" data-sort="price_low">Price: Low to High</a>

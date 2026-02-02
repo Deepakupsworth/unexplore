@@ -4,6 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Transport;
+use App\Models\Event;
+use App\Models\PackageDay;
+use App\Models\ThingToDo;
 
 
 class PackageDayItemOption extends Model

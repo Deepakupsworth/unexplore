@@ -41,7 +41,7 @@ class Package extends Model
     /* ================= AVAILABILITY ================= */
     public function availabilities()
     {
-        return $this->hasMany(PackageAvailability::class);
+        return $this->hasOne(PackageAvailability::class);
     }
 
     /* ================= CITIES (🔥 MISSING RELATION) ================= */
@@ -135,5 +135,25 @@ class Package extends Model
             ?? '';
     }
 
+    public function itinerarySubtitleFull()
+    {
+        if ($this->days->isEmpty()) {
+            return collect();
+        }
+
+        return $this->days
+            ->groupBy('city_id')
+            ->map(function ($days) {
+
+                $city = $days->first()->city;
+                $cityName = $city?->translation?->name ?? '';
+
+                $dayCount   = $days->count();          // ✅ Days
+                $nightCount = max(0, $dayCount - 1);   // ✅ Nights
+
+                return "{$nightCount}N / {$dayCount}D {$cityName}";
+            })
+            ->values();
+    }
 
 }
