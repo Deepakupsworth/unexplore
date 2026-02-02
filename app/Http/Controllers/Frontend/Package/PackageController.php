@@ -344,6 +344,7 @@ class PackageController extends Controller
             'availabilities'
         ])->where('slug', $slug)->firstOrFail();
 
+        //print_r($package->toArray());die;
 
         // ===== ✅ DAY WISE OPTIONS (FINAL STRUCTURE) =====
         $dayWiseOptions = [];
@@ -354,7 +355,7 @@ class PackageController extends Controller
                 ->map(function ($items, $type) {
 
                     return $items
-                        ->keyBy('id')
+                        ->keyBy('item_id')
                         ->map(function ($option) use ($type) {
 
                             // remove unrelated relations
@@ -369,6 +370,7 @@ class PackageController extends Controller
                 ->toArray();
         }
 
+        //print_r($dayWiseOptions);die;
         $sessionItems = session("package_day_items.{$package->id}", []);
         //print_r($sessionItems);
 

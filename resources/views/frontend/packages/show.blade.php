@@ -292,6 +292,7 @@
                                                                                             </p>
                                                                                         </div>
                                                                                     </div>
+                                                                                    <input type="hidden" name="extra_price" value="{{$dayWiseOptions[$day->id]['hotel'][$hotel->id]['extra_price'] ?? 0 }}">
                                                                                  </div>
                                                                                  @if($package->package_type !== 'fixed')
                                                                                  <button
@@ -401,6 +402,8 @@
                                                                                                         </p>
                                                                                                     </div>
                                                                                                 </div>
+                                                                                                <input type="hidden" name="extra_price" value="{{$dayWiseOptions[$day->id]['todo'][$todo->id]['extra_price'] ?? 0 }}">
+
                                                                                 </div>
                                                                                 @if($package->package_type !== 'fixed')
                                                                                 <button
@@ -493,7 +496,7 @@
                                                                                         data-item-id="{{ $event->id }}"
                                                                                         data-index="{{ $event_slot }}"
                                                                                     >
-                                                                                    <div class="d-flex gap-3 mb-3">
+                                                                                    <digiv class="d-flex gap-3 mb-3">
                                                                                         <img src="{{ $event->thumb ? asset('storage/' . $event->thumb->image_path) : asset('frontend/assets/hotel-placeholder.jpg') }}"
                                                                                             class="pkg-details__tr-ht-img">
 
@@ -508,6 +511,8 @@
                                                                                             </p>
                                                                                         </div>
                                                                                     </div>
+                                                                                    <input type="hidden" name="extra_price" value="{{$dayWiseOptions[$day->id]['event'][$event->id]['extra_price'] ?? 0 }}">
+
                                                                                 </div>
                                                                                 @if($package->package_type !== 'fixed')
                                                                                     <button

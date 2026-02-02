@@ -84,7 +84,7 @@ class EventController extends Controller
                 $q->where('location', 'LIKE', "%{$request->search}%")
                     ->orWhereHas('translation', function ($t) use ($request, $lang) {
                         $t->where('language_code', $lang)
-                            ->where('name', 'LIKE', "%{$request->search}%");
+                            ->where('title', 'LIKE', "%{$request->search}%");
                     });
             });
         }
