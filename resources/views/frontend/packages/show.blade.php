@@ -402,6 +402,8 @@
                                                                                                         </p>
                                                                                                     </div>
                                                                                                 </div>
+                                                                                                <input type="hidden" name="extra_price" value="{{$dayWiseOptions[$day->id]['todo'][$todo->id]['extra_price'] ?? 0 }}">
+
                                                                                 </div>
                                                                                 @if($package->package_type !== 'fixed')
                                                                                 <button
@@ -509,6 +511,8 @@
                                                                                             </p>
                                                                                         </div>
                                                                                     </div>
+                                                                                    <input type="hidden" name="extra_price" value="{{$dayWiseOptions[$day->id]['event'][$event->id]['extra_price'] ?? 0 }}">
+
                                                                                 </div>
                                                                                 @if($package->package_type !== 'fixed')
                                                                                     <button
