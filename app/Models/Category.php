@@ -60,4 +60,9 @@ class Category extends Model
     {
         return $this->hasMany(Event::class);
     }
+
+    public function packageCategories()
+    {
+        return $this->hasMany(PackageCategory::class, 'category_id');
+    }
 }

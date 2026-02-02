@@ -156,4 +156,28 @@ class Package extends Model
             ->values();
     }
 
+
+    /**
+     * Package → Pivot records
+     */
+    public function packageCategories()
+    {
+        return $this->hasMany(PackageCategory::class, 'package_id');
+    }
+
+    /**
+     * (Optional) Direct categories relation
+     * Use only if you need Category model details
+     */
+    public function categories()
+    {
+        return $this->belongsToMany(
+            Category::class,
+            'package_category',
+            'package_id',
+            'category_id'
+        );
+    }
+    
+
 }

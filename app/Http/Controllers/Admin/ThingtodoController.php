@@ -78,17 +78,23 @@ class ThingtodoController extends Controller
             'categories'
         ));
     }
-
     public function save(Request $request)
     {
         $request->validate([
             'translations.en.name' => 'required|string|max:255',
-            'city_id' => 'required|exists:cities,id',
-            'category_id' => 'nullable|exists:categories,id',
+            'city_id'              => 'required|exists:cities,id',
+
+            // ✅ MULTI CATEGORY
+            'category_ids'         => 'required|array|min:1',
+            'category_ids.*'       => 'exists:categories,id',
+
             // 'thumb_image' => 'nullable|image|max:2048',
         ]);
 
-        $this->repo->createOrUpdate($request->all(), $request->id);
+        $this->repo->createOrUpdate(
+            $request->all(),
+            $request->id
+        );
 
         return redirect()
             ->route('thingtodos.index')

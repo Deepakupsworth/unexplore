@@ -1,15 +1,4 @@
 @extends('frontend.layout')
-<style>
-    #package-list {
-        transition: opacity 0.25s ease, transform 0.25s ease;
-    }
-
-    #package-list.loading {
-        opacity: 0.35;
-        transform: translateY(6px);
-        pointer-events: none;
-    }
-    </style>
 
 @section('content')
     @include('frontend.packages.partials.banner')
@@ -24,13 +13,13 @@
                 {{-- RIGHT RESULTS --}}
                 <div class="package-listing__results">
 
-                    <div class="package-listing__results-header">
-                        <p class="primary-text">
-                            {{ __('packages.listing.all_packages') }} ({{ $packages->total() }})
-                        </p>
-                    </div>
+                    {{-- 🔥 HEADER (STATIC – NEVER AJAX) --}}
+                    @include('frontend.packages.partials.header', [
+                        'packages' => $packages,
+                        'packageTypes' => $packageTypes,
+                    ])
 
-                    {{-- RESULTS LIST --}}
+                    {{-- 🔥 AJAX CONTAINER (ONLY CARDS) --}}
                     <div id="package-list">
                         @include('frontend.packages.partials.list', [
                             'packages' => $packages,
@@ -43,64 +32,57 @@
     </section>
 @endsection
 
-
-{{-- ✅ AJAX SCRIPT (MUST BE AFTER CONTENT) --}}
-
-{{-- jQuery (required) --}}
+{{-- ================= AJAX ================= --}}
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
 <script>
-    $(document).ready(function () {
+    function loadPackages(page = 1) {
+        const $list = $('#package-list');
 
-        // 🔁 Trigger AJAX on filter change
-        $(document).on('change', '.package-filter input', function () {
-            loadPackages();
-        });
+        $.ajax({
+            url: "{{ route('packages.ajax') }}",
+            type: "GET",
+            data: $('.package-filter').serialize() + '&page=' + page,
 
-        // 🔍 Search debounce
-        let timer;
-        $(document).on('keyup', '.package-filter input[name="search"]', function () {
-            clearTimeout(timer);
-            timer = setTimeout(() => loadPackages(), 400);
-        });
+            beforeSend() {
+                $list.addClass('loading');
+            },
 
-        function loadPackages(page = 1) {
-            const $list = $('#package-list');
-
-            $.ajax({
-                url: "{{ route('packages.ajax') }}",
-                type: "GET",
-                data: $('.package-filter').serialize() + '&page=' + page,
-
-                beforeSend() {
-                    // ❌ html() mat karo — yahi jhatka tha
-                    $list.addClass('loading');
-                },
-
-                success(res) {
-                    // ✅ smooth replace
-                    $list.fadeOut(120, function () {
-                        $list.html(res).fadeIn(180);
-                        $list.removeClass('loading');
-                    });
-                },
-
-                error(xhr) {
-                    console.error(xhr.responseText);
+            success(res) {
+                $list.fadeOut(120, function() {
+                    $list.html(res).fadeIn(180);
                     $list.removeClass('loading');
-                    alert('{{ __('common.ajax_error') }}');
-                }
-            });
-        }
+                });
+            },
 
-        // 📄 AJAX pagination
-        $(document).on('click', '#package-list .pagination a', function (e) {
-            e.preventDefault();
-            let page = new URL($(this).attr('href')).searchParams.get('page');
-            loadPackages(page);
+            error() {
+                $list.removeClass('loading');
+                alert('Something went wrong');
+            }
         });
+    }
 
+    // Filters
+    $(document).on('change', '.package-filter input', () => loadPackages());
+
+    // Search
+    let timer;
+    $(document).on('keyup', 'input[name="search"]', function() {
+        clearTimeout(timer);
+        timer = setTimeout(() => loadPackages(), 400);
     });
-    </script>
 
-{{-- ✅ END AJAX SCRIPT --}}
+    // Pagination
+    $(document).on('click', '#package-list .pagination a', function(e) {
+        e.preventDefault();
+        const page = new URL($(this).attr('href')).searchParams.get('page');
+        loadPackages(page);
+    });
+
+    // Sorting
+    $(document).on('click', '.sort-option', function(e) {
+        e.preventDefault();
+        $('input[name="sort"]').val($(this).data('sort'));
+        loadPackages();
+    });
+</script>

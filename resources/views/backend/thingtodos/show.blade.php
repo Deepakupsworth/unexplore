@@ -22,11 +22,18 @@
 
         {{-- HEADER --}}
         <div class="px-6 py-4 border-b dark:border-slate-700">
-            <h2 class="text-xl font-semibold">
+            <h2 class="text-xl font-semibold capitalize">
                 {{ $thing->translation?->name }}
             </h2>
             <p class="text-sm text-slate-500">
-                {{ $thing->city?->translation?->name }} · {{ $thing->category?->translation?->name }}
+                @forelse ($thing->thingCategories as $tc)
+                    {{ $tc->category?->translation?->name }}
+                    @if (!$loop->last)
+                        ,
+                    @endif
+                @empty
+                    —
+                @endforelse
             </p>
         </div>
 
@@ -46,11 +53,19 @@
                         </div>
 
                         <div>
-                            <p class="text-xs text-slate-500">Category</p>
+                            <p class="text-xs text-slate-500">Categories</p>
                             <p class="font-medium">
-                                {{ $thing->category?->translation?->name ?? '—' }}
+                                @forelse ($thing->thingCategories as $tc)
+                                <span class="badge bg-slate-900 text-white capitalize rounded-3xl"> {{ $tc->category?->translation?->name }}</span>
+                                    @if (!$loop->last)
+                                        ,
+                                    @endif
+                                @empty
+                                    —
+                                @endforelse
                             </p>
                         </div>
+
 
                         <div>
                             <p class="text-xs text-slate-500">Latitude</p>

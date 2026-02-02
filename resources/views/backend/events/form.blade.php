@@ -129,8 +129,11 @@
                             <x-admin.form.select label="City" name="city_id" :options="$cities" :selected="$model->city_id"
                                 required />
 
-                            <x-admin.form.category-select label="Event Category" :categories="$categories" :selected="$model->category_id"
-                                required />
+                            {{-- <x-admin.form.category-select label="Event Category" :categories="$categories" :selected="$model->category_id"
+                                required /> --}}
+                            <x-admin.form.category-select label="Event Categories" :categories="$categories" name="category_ids"
+                                :selected="$model?->eventCategories->pluck('category_id')->toArray()" multiple required />
+
 
                             <x-admin.form.input label="Capacity" name="capacity" :value="old('capacity', $model->capacity)" />
 
@@ -146,17 +149,15 @@
                         <div class="grid grid-cols-2 gap-4">
                             <x-admin.form.input type="date" label="Start Date" name="start_date" :value="old('start_date', $model->start_date)" />
                             <x-admin.form.input type="date" label="End Date" name="end_date" :value="old('end_date', $model->end_date)" />
-                                <x-admin.form.input
-                                type="time"
-                                label="Opening Time"
-                                name="opening_time"
-                                :value="old('opening_time', $model->opening_time ? substr($model->opening_time, 0, 5) : '')" />
+                            <x-admin.form.input type="time" label="Opening Time" name="opening_time" :value="old(
+                                'opening_time',
+                                $model->opening_time ? substr($model->opening_time, 0, 5) : '',
+                            )" />
 
-                            <x-admin.form.input
-                                type="time"
-                                label="Closing Time"
-                                name="closing_time"
-                                :value="old('closing_time', $model->closing_time ? substr($model->closing_time, 0, 5) : '')" />
+                            <x-admin.form.input type="time" label="Closing Time" name="closing_time" :value="old(
+                                'closing_time',
+                                $model->closing_time ? substr($model->closing_time, 0, 5) : '',
+                            )" />
 
                             <x-admin.form.input label="Opening Days" name="opening_days" :value="old('opening_days', $model->opening_days)" />
                         </div>
