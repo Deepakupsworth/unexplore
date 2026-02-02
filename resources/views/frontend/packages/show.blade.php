@@ -292,6 +292,7 @@
                                                                                             </p>
                                                                                         </div>
                                                                                     </div>
+                                                                                    <input type="hidden" name="extra_price" value="{{$dayWiseOptions[$day->id]['hotel'][$hotel->id]['extra_price'] ?? 0 }}">
                                                                                  </div>
                                                                                  @if($package->package_type !== 'fixed')
                                                                                  <button
