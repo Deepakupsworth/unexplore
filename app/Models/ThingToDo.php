@@ -76,10 +76,33 @@ class ThingToDo extends Model
         return $this->belongsTo(Category::class);
     }
 
-     // OLD HISTORY SAFE
-     public function packageDayItems()
-     {
-         return $this->hasMany(PackageDayItem::class, 'item_id')
-             ->where('item_type', 'todo');
-     }
+
+    /**
+     * ThingToDo → Pivot records
+     */
+    public function thingCategories()
+    {
+        return $this->hasMany(ThingToDoCategory::class, 'thing_id');
+    }
+
+    /**
+     * (Optional) Direct categories relation
+     * Use only if you need Category model data
+     */
+    public function categories()
+    {
+        return $this->belongsToMany(
+            Category::class,
+            'thing_to_do_category',
+            'thing_id',
+            'category_id'
+        );
+    }
+
+    // OLD HISTORY SAFE
+    public function packageDayItems()
+    {
+        return $this->hasMany(PackageDayItem::class, 'item_id')
+            ->where('item_type', 'todo');
+    }
 }

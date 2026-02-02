@@ -102,7 +102,12 @@
                                                         </li>
                                                     @endif
                                                 @endforeach
-
+                                                <li class="fw-bold">
+                                                    <a href="{{ route('things.to.do') }}">
+                                                        All Things to Do
+                                                        <i class="fa-solid fa-angles-right primary-text"></i>
+                                                    </a>
+                                                </li>
 
                                             </ul>
                                         </div>
@@ -156,6 +161,13 @@
                                                     @endif
                                                 @endforeach
 
+                                                {{-- 🔥 ALL EVENTS (Professional default) --}}
+                                                <li class="fw-bold">
+                                                    <a href="{{ route('event.listing') }}">
+                                                        All Events
+                                                        <i class="fa-solid fa-angles-right primary-text flex-v-center"></i>
+                                                    </a>
+                                                </li>
                                             </ul>
                                         </div>
                                     </div>

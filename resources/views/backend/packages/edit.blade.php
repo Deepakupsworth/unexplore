@@ -80,16 +80,9 @@
 
                                     <div class="grid grid-cols-2 gap-4">
 
-                                        <div>
-                                            <label class="form-label">Category *</label>
-                                            <select name="category_id" class="form-control">
-                                                @foreach ($categories as $cat)
-                                                    <option value="{{ $cat->id }}" @selected(old('category_id', $package->category_id) == $cat->id)>
-                                                        {{ $cat->translation->name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+                                        <x-admin.form.category-select label="Package Categories" :categories="$categories"
+                                            name="category_ids" :selected="$package?->packageCategories->pluck('category_id')->toArray()" multiple required />
+
 
                                         <div>
                                             <label class="form-label">Package Type *</label>
@@ -378,8 +371,8 @@
                     <option value="">Select City</option>
                     ${cities.map(c =>
                         `<option value="${c.id}" ${c.id == row.city_id ? 'selected' : ''}>
-                                                                    ${c.slug}
-                                                                </option>`
+                                                                            ${c.slug}
+                                                                        </option>`
                     ).join('')}
                 </select>
 
@@ -416,8 +409,8 @@
                 <option value="">Activity Type</option>
                 ${['hotel','event','todo','transport'].map(t =>
                     `<option value="${t}" ${item.item_type === t ? 'selected' : ''}>
-                                                                ${t.charAt(0).toUpperCase()+t.slice(1)}
-                                                            </option>`
+                                                                        ${t.charAt(0).toUpperCase()+t.slice(1)}
+                                                                    </option>`
                 ).join('')}
             </select>
 
@@ -472,8 +465,8 @@
                     <option value="">Select City</option>
                     ${cities.map(c =>
                         `<option value="${c.id}" ${c.id == dayData.city_id ? 'selected' : ''}>
-                                                                    ${c.slug}
-                                                                </option>`
+                                                                            ${c.slug}
+                                                                        </option>`
                     ).join('')}
                 </select>
 

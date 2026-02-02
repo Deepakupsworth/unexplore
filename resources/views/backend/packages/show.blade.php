@@ -33,18 +33,28 @@
 
             <div class="grid grid-cols-2 gap-6 text-sm">
                 <div>
-                    <p class="text-slate-500">Category</p>
-                    <p class="font-semibold">{{ $package->category?->translation?->name }}</p>
+                    <p class="text-slate-500 mb-2">Category</p>
+                    <p class="font-semibold">
+                        @forelse ($package->packageCategories as $pc)
+                        <span class="badge bg-slate-900 text-white capitalize rounded-3xl">{{ $pc->category?->translation?->name }}
+                            @if (!$loop->last)</span>
+                                ,
+                            @endif
+                        @empty
+                            —
+                        @endforelse
+                    </p>
+
                 </div>
 
                 <div>
-                    <p class="text-slate-500">Status</p>
+                    <p class="text-slate-500 mb-2">Status</p>
                     {!! status_badge($package->status) !!}
                 </div>
 
                 <div>
-                    <p class="text-slate-500">Package Type</p>
-                    <span class="inline-block px-3 py-1 rounded-full text-xs bg-blue-100 text-blue-700">
+                    <p class="text-slate-500 mb-2">Package Type</p>
+                    <span class="badge bg-secondary-500 text-secondary-500 bg-opacity-30 capitalize rounded-3xl">
                         {{ ucfirst($package->package_type) }}
                     </span>
                 </div>
@@ -205,40 +215,6 @@
             </div>
         </section>
 
-
-
-        {{-- ================= PRICING ================= --}}
-        {{-- <section class="{{ $card }}">
-            <h3 class="text-lg font-semibold mb-6 border-b pb-3">Pricing</h3>
-
-            <div class="grid grid-cols-2 gap-6 text-sm">
-                <div>
-                    <p class="text-slate-500">Currency</p>
-                    <p class="font-semibold">{{ $package->price?->currency }}</p>
-                </div>
-
-                <div>
-                    <p class="text-slate-500">Original Price</p>
-                    <p class="font-semibold line-through text-slate-400">
-                        {{ $package->price?->original_price }}
-                    </p>
-                </div>
-
-                <div>
-                    <p class="text-slate-500">Discount Price</p>
-                    <p class="font-semibold text-green-600">
-                        {{ $package->price?->discount_price ?? '—' }}
-                    </p>
-                </div>
-
-                <div>
-                    <p class="text-slate-500">Per Person</p>
-                    <p class="text-lg font-bold text-slate-800">
-                        {{ $package->price?->per_person_price }}
-                    </p>
-                </div>
-            </div>
-        </section> --}}
 
         {{-- ================= PRICING ================= --}}
         @include('backend.packages.partials.pricing', ['card' => $card])

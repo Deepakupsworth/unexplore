@@ -97,4 +97,19 @@ class Event extends Model
         return $this->hasMany(PackageDayItem::class, 'item_id')
             ->where('item_type', 'event');
     }
+
+    public function eventCategories()
+    {
+        return $this->hasMany(EventCategory::class);
+    }
+
+    public function categories()
+    {
+        return $this->belongsToMany(
+            Category::class,
+            'category_event',
+            'event_id',
+            'category_id'
+        );
+    }
 }

@@ -126,18 +126,9 @@
                                 </select>
                             </div>
 
-                            <div>
-                                <label class="form-label">Category *</label>
-                                <select name="category_id" class="form-control" required>
-                                    <option value="">Select Category</option>
-                                    @foreach ($categories as $category)
-                                        <option value="{{ $category->id }}"
-                                            {{ old('category_id', $model->category_id) == $category->id ? 'selected' : '' }}>
-                                            {{ $category->translation?->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
+                            <x-admin.form.category-select label="Categories" :categories="$categories" name="category_ids"
+                                :selected="$model?->thingCategories->pluck('category_id')->toArray()" multiple required />
+
                         </div>
                     </div>
 

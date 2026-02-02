@@ -15,6 +15,7 @@ use App\Models\City;
 use App\Models\Language;
 use App\Models\Hotel;
 use App\Models\Event;
+use App\Models\PackageCategory;
 use App\Models\PackageDayItem;
 use App\Models\PackageDayItemOption;
 use App\Models\ThingToDo;
@@ -95,6 +96,7 @@ class PackageController extends Controller
         $package->load([
             'translations',
             'category.translation',
+            'packageCategories.category.translation',
             'availabilities',
             'cities.city',
             'days.items',
@@ -175,10 +177,6 @@ class PackageController extends Controller
             ]),
         ]);
     }
-
-
-
-
 
 
     /* ================= CREATE FORM ================= */
@@ -266,7 +264,9 @@ class PackageController extends Controller
     private function persist(Request $request, Package $package)
     {
         $request->validate([
-            'category_id'     => 'required|exists:categories,id',
+            'category_ids'   => 'required|array|min:1',
+            'category_ids.*' => 'exists:categories,id',
+
             'package_type'    => 'required|in:fixed,customized',
             'duration_days'   => 'required|integer|min:1',
             'duration_nights' => 'required|integer|min:0',
@@ -290,7 +290,6 @@ class PackageController extends Controller
 
             /* ================= PACKAGE ================= */
             $package->fill([
-                'category_id'     => $request->category_id,
                 'package_type'    => $request->package_type,
                 'duration_days'   => $request->duration_days,
                 'duration_nights' => $request->duration_nights,
@@ -306,6 +305,17 @@ class PackageController extends Controller
             }
 
             $package->save();
+
+
+            /* ================= PACKAGE CATEGORIES (MULTI) ================= */
+            PackageCategory::where('package_id', $package->id)->delete();
+
+            foreach ($request->category_ids as $categoryId) {
+                PackageCategory::create([
+                    'package_id'  => $package->id,
+                    'category_id' => $categoryId,
+                ]);
+            }
 
             /* ================= TRANSLATIONS ================= */
             $package->translations()->delete();
