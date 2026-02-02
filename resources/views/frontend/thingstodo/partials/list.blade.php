@@ -12,6 +12,6 @@
 @endforelse
 
 <div class="col-md-12 col-lg-12 col-xl-12">
-{{ $things->withQueryString()->links() }}
+{{ $things->withQueryString()->links('vendor.pagination.bootstrap-5') }}
 </div>
 

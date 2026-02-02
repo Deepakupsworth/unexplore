@@ -496,7 +496,7 @@
                                                                                         data-item-id="{{ $event->id }}"
                                                                                         data-index="{{ $event_slot }}"
                                                                                     >
-                                                                                    <digiv class="d-flex gap-3 mb-3">
+                                                                                    <div class="d-flex gap-3 mb-3">
                                                                                         <img src="{{ $event->thumb ? asset('storage/' . $event->thumb->image_path) : asset('frontend/assets/hotel-placeholder.jpg') }}"
                                                                                             class="pkg-details__tr-ht-img">
 

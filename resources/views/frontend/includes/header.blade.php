@@ -335,7 +335,7 @@
                                 {{ Auth()?->user()->first_name }}
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                <li><a class="dropdown-item" href="/profile">My Profile</a></li>
+                                <li><a class="dropdown-item" href="{{url('/account')}}?tab=profile">{{__('my_profile')}}</a></li>
 
                                 <li>
                                     <form method="POST" action="/logout">
