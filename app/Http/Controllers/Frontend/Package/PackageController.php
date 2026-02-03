@@ -11,6 +11,7 @@ use App\Models\Package;
 use App\Models\PackageDayItemOption;
 use App\Models\ThingToDo;
 use App\Models\PackageDayItem;
+use App\Models\Transport;
 use App\Services\Frontend\Package\PackageService;
 use Illuminate\Http\Request;
 use App\Support\PriceCalculator;
@@ -389,7 +390,10 @@ class PackageController extends Controller
 
             'days.options.event.translation' => fn($q) => $q->where('language_code', $language),
             'days.options.event.thumb',
-            'availabilities'
+            'availabilities',
+
+            'days.options.transport.translation' => fn($q) => $q->where('language_code', $language),
+            'days.options.transport.thumb',
         ])->where('slug', $slug)->firstOrFail();
 
         //print_r($package->toArray());die;
@@ -425,6 +429,7 @@ class PackageController extends Controller
         $hotelIds = [];
         $eventIds = [];
         $todoIds  = [];
+        $transportIds = [];
 
         foreach ($package->days as $day) {
 
@@ -448,6 +453,9 @@ class PackageController extends Controller
                 if ($type === 'todo') {
                     $todoIds[] = $selectedItemId;
                 }
+                if ($type === 'transport') {
+                    $transportIds[] = $selectedItemId;
+                }
             }
         }
 
@@ -459,6 +467,8 @@ class PackageController extends Controller
         //print_r($hotelIds);die;
         $eventIds = array_unique($eventIds);
         $todoIds  = array_unique($todoIds);
+
+        $transportIds  = array_unique($transportIds);
 
 
         // ✅ MASTER LIST (POPUP)
@@ -477,11 +487,18 @@ class PackageController extends Controller
             ->get()
             ->keyBy('id');
 
+        $allTransports = Transport::with(['translation', 'thumb'])
+            ->whereIn('id', $transportIds)
+            ->get()
+            ->keyBy('id');
+
+
         return view('frontend.packages.show', compact(
             'package',
             'allHotels',
             'allTodos',
             'allEvents',
+            'allTransports',
             'dayWiseOptions',
             'sessionItems'
         ));
@@ -544,7 +561,7 @@ class PackageController extends Controller
     {
         $language = current_lang();
 
-        if (!in_array($type, ['hotel', 'todo', 'event'])) {
+        if (!in_array($type, ['hotel', 'todo', 'event','transport'])) {
             return response()->json([
                 'status'  => false,
                 'message' => 'Invalid item type'

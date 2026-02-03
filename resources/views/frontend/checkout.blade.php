@@ -728,6 +728,104 @@ $childCount = $travellerSlots->where('type', 'child')->count();
                                                                     </div>
                                                                 @endif
 
+
+                                                                 {{-- ================= TRANSPORT ================= --}}
+                                                            @php
+                                                            $sessionTransportIds =
+                                                                $sessionItems[$day->id]['transport'] ?? null;
+
+                                                            $transports = $sessionTransportIds
+                                                                ? $allTransports->whereIn(
+                                                                    'id',
+                                                                    $sessionTransportIds,
+                                                                )
+                                                                : $day->items->where('item_type', 'transport')->map
+                                                                    ->transport;
+                                                        @endphp
+
+                                                        @if ($transports->count())
+                                                            <div class="accordion accordion-flush mb-3"
+                                                                id="transportAccordion{{ $day->id }}">
+
+                                                                <div
+                                                                    class="accordion-item border rounded pkg-details__accordion-item">
+
+                                                                    <div class="accordion-header">
+                                                                        <div
+                                                                            class="d-flex justify-content-between align-items-center">
+                                                                            <div
+                                                                                class="d-flex align-items-center gap-2">
+                                                                                <div class="accordion-icon"
+                                                                                    data-bs-toggle="collapse"
+                                                                                    data-bs-target="#transportCollapse{{ $day->id }}">
+                                                                                    <i
+                                                                                        class="fa-solid fa-chevron-down"></i>
+                                                                                </div>
+                                                                                <p class="p-small fw-600">Transport</p>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div
+                                                                            class="d-flex gap-2 pkg-details__accordion-actions">
+                                                                            {{-- edit button if needed --}}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div id="transportCollapse{{ $day->id }}"
+                                                                        class="accordion-collapse collapse show"
+                                                                        data-bs-parent="#transportAccordion{{ $day->id }}">
+
+                                                                        <div class="accordion-body"
+                                                                            id="day-{{ $day->id }}-transport-list">
+
+                                                                            @php
+                                                                                $transport_slot = 0;
+                                                                            @endphp
+
+                                                                            @foreach ($transports as $index => $transport)
+                                                                                <div class="day-item-slot d-flex position-relative"
+                                                                                    data-day-id="{{ $day->id }}"
+                                                                                    data-type="transport"
+                                                                                    data-index="{{ $transport_slot }}">
+
+                                                                                    <div class="day-item-wrapper"
+                                                                                        data-day-id="{{ $day->id }}"
+                                                                                        data-type="transport"
+                                                                                        data-item-id="{{ $transport->id }}"
+                                                                                        data-index="{{ $transport_slot }}">
+
+                                                                                        <div class="d-flex gap-3 mb-3">
+                                                                                            <img src="{{ $transport->thumb
+                                                                                                ? asset('storage/' . $transport->thumb->image_path)
+                                                                                                : asset('frontend/assets/transport-placeholder.jpg') }}"
+                                                                                                class="pkg-details__tr-ht-img">
+
+                                                                                            <div>
+                                                                                                <p class="fw-600">
+                                                                                                    {{ $transport->translation->name }}
+                                                                                                </p>
+
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                        <input type="hidden"
+                                                                                            name="extra_price"
+                                                                                            value="{{ $dayWiseOptions[$day->id]['transport'][$transport->id]['extra_price'] ?? 0 }}">
+                                                                                    </div>
+
+
+                                                                                    @php $transport_slot++; @endphp
+                                                                                </div>
+                                                                            @endforeach
+
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                        @endif
+
+
                                                             </div>
                                                         </div>
                                                     @endforeach

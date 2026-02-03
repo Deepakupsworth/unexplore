@@ -7,6 +7,7 @@ use App\Models\Event;
 use App\Models\Hotel;
 use App\Models\Package;
 use App\Models\ThingToDo;
+use App\Models\Transport;
 use App\Models\Traveller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -72,6 +73,8 @@ class CheckoutController extends Controller
             'days.options.todo.thumb',
             'days.options.event.translation' => fn($q) => $q->where('language_code', $language),
             'days.options.event.thumb',
+            'days.options.transport.translation' => fn($q) => $q->where('language_code', $language),
+            'days.options.transport.thumb',
             'availabilities',
             'translation',
             'days.city.translation',
@@ -95,6 +98,7 @@ class CheckoutController extends Controller
                         if ($type !== 'hotel') unset($option['hotel']);
                         if ($type !== 'todo')  unset($option['todo']);
                         if ($type !== 'event') unset($option['event']);
+                        if ($type !== 'transport') unset($option['transport']);
 
                         return $option;
                     })
@@ -110,6 +114,7 @@ class CheckoutController extends Controller
     $hotelIds = [];
     $eventIds = [];
     $todoIds  = [];
+    $transportIds = [];
 
     foreach ($package->days as $day) {
 
@@ -133,6 +138,10 @@ class CheckoutController extends Controller
             if ($type === 'todo') {
                 $todoIds[] = $selectedItemId;
             }
+
+            if ($type === 'transport') {
+                $transportIds[] = $selectedItemId;
+            }
         }
     }
 
@@ -144,6 +153,8 @@ class CheckoutController extends Controller
     //print_r($hotelIds);die;
     $eventIds = array_unique($eventIds);
     $todoIds  = array_unique($todoIds);
+    $transportIds = array_unique($transportIds);
+
 
 
     // ✅ MASTER LIST (POPUP)
@@ -163,7 +174,10 @@ class CheckoutController extends Controller
         ->keyBy('id');
 
 
-
+    $allTransports = Transport::with(['translation', 'thumb'])
+        ->whereIn('id', $transportIds)
+        ->get()
+        ->keyBy('id');
         /* ================= COUNTS (🔥 FIXED) ================= */
         $adults        = (int) ($checkout['adults'] ?? 0);
         $totalPersons = (int) ($checkout['total_persons'] ?? $adults);
@@ -226,6 +240,7 @@ class CheckoutController extends Controller
             'allHotels',
             'allTodos',
             'allEvents',
+            'allTransports',
             'dayWiseOptions',
             'sessionItems'
         ));
