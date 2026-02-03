@@ -230,6 +230,15 @@
                 </div>
                 <div class="package-listing__results">
                     <div class="package-listing__results-header gap-2">
+
+                         {{-- ALL --}}
+                        <a href="{{ route('things.to.do') }}"
+                        class="text-decoration-none">
+                            <div class="package-listing__results-applied-fil
+                                {{ empty(request('categories')) ? 'success' : '' }}">
+                                <p class="p-small">All To Do Things</p>
+                            </div>
+                        </a
                         @foreach($categories as $category)
                         <a href="{{route('things.to.do')}}?categories[]={{$category->id}}" style="text-decoration: none;">
                         <div class="package-listing__results-applied-fil {{ in_array($category->id, (array) request('categories')) ? 'success' : '' }} ">

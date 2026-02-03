@@ -93,7 +93,7 @@ class AuthController extends Controller
             return redirect()->intended(
                 $user->role === 'admin'
                     ? route('admin.dashboard')
-                    : route('user.profile.index')
+                    : route('packages.index')
             )->with('success', 'Welcome back ' . $user->first_name . ' 👋');
 
         } catch (Throwable $e) {

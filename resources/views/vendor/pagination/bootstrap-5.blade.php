@@ -1,4 +1,17 @@
 @if ($paginator->hasPages())
+<style>
+.pagination .page-item.active .page-link {
+    background-color: #169754 !important;
+    border-color: #169754 !important;
+    color: #fff !important;
+}
+.pagination .page-item .page-link {
+   color: #169754 !important;
+   
+}
+
+</style>
+
     <nav class="d-flex justify-items-center justify-content-between">
         <div class="d-flex justify-content-between flex-fill d-sm-none">
             <ul class="pagination">

@@ -49,6 +49,8 @@ class CheckoutController extends Controller
     {
         $checkout = session('checkout');
 
+        // dd($checkout);
+
         if (!$checkout || empty($checkout['slug'])) {
             abort(404, 'Checkout session expired');
         }
@@ -76,6 +78,91 @@ class CheckoutController extends Controller
         ])
             ->where('slug', $checkout['slug'])
             ->firstOrFail();
+
+    // ===== ✅ DAY WISE OPTIONS (FINAL STRUCTURE) =====
+    $dayWiseOptions = [];
+
+    foreach ($package->days as $day) {
+        $dayWiseOptions[$day->id] = $day->options
+            ->groupBy('item_type')
+            ->map(function ($items, $type) {
+
+                return $items
+                    ->keyBy('item_id')
+                    ->map(function ($option) use ($type) {
+
+                        // remove unrelated relations
+                        if ($type !== 'hotel') unset($option['hotel']);
+                        if ($type !== 'todo')  unset($option['todo']);
+                        if ($type !== 'event') unset($option['event']);
+
+                        return $option;
+                    })
+                    ->toArray();
+            })
+            ->toArray();
+    }
+
+    //print_r($dayWiseOptions);die;
+    $sessionItems = session("package_day_items.{$package->id}", []);
+    //print_r($sessionItems);
+
+    $hotelIds = [];
+    $eventIds = [];
+    $todoIds  = [];
+
+    foreach ($package->days as $day) {
+
+        foreach ($day->items as $index => $item) {
+
+            $type = $item->item_type;
+
+            // 🔑 SESSION OVERRIDE → else DEFAULT
+            $selectedItemId =
+                $sessionItems[$day->id][$type][$index]
+                ?? $item->item_id;
+
+            if ($type === 'hotel') {
+                $hotelIds[] = $selectedItemId;
+            }
+
+            if ($type === 'event') {
+                $eventIds[] = $selectedItemId;
+            }
+
+            if ($type === 'todo') {
+                $todoIds[] = $selectedItemId;
+            }
+        }
+    }
+
+
+
+    // remove duplicates
+    $hotelIds = array_unique($hotelIds);
+
+    //print_r($hotelIds);die;
+    $eventIds = array_unique($eventIds);
+    $todoIds  = array_unique($todoIds);
+
+
+    // ✅ MASTER LIST (POPUP)
+    $allHotels = Hotel::with(['translation', 'thumb'])
+        ->whereIn('id', $hotelIds)
+        ->get()
+        ->keyBy('id');
+
+    $allEvents = Event::with(['translation', 'thumb'])
+        ->whereIn('id', $eventIds)
+        ->get()
+        ->keyBy('id');
+
+    $allTodos = ThingToDo::with(['translation', 'thumb'])
+        ->whereIn('id', $todoIds)
+        ->get()
+        ->keyBy('id');
+
+
 
         /* ================= COUNTS (🔥 FIXED) ================= */
         $adults        = (int) ($checkout['adults'] ?? 0);
@@ -136,6 +223,10 @@ class CheckoutController extends Controller
             'package',
             'travellers',
             'checkout',
+            'allHotels',
+            'allTodos',
+            'allEvents',
+            'dayWiseOptions',
             'sessionItems'
         ));
     }

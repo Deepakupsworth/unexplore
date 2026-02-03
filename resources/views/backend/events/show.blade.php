@@ -24,12 +24,13 @@
 
         {{-- HEADER --}}
         <div class="px-6 py-4 border-b dark:border-slate-700">
-            <h2 class="text-xl font-semibold">
+            <h2 class="text-xl font-semibold capitalize">
                 {{ $event->translations->first()->title ?? 'Event' }}
             </h2>
             <p class="text-sm text-slate-500">
-                {{ $event->city?->slug }} · {{ $event->category?->translation?->name }}
+                {{ $event->city?->slug }}
             </p>
+
         </div>
 
         {{-- MAIN GRID --}}
@@ -39,7 +40,17 @@
             <div class="col-span-12 xl:col-span-6">
                 <div class="card h-full">
                     <div class="card-body grid grid-cols-2 gap-6 p-4">
-
+                        <div>
+                            <p class="text-sm text-slate-500">Categories</p>
+                                @forelse ($event->eventCategories as $index => $eventCategory)
+                                <span class="badge bg-slate-900 text-white capitalize rounded-3xl">{{  $eventCategory->category?->translation?->name }} </span>
+                                    @if (!$loop->last)
+                                        ,
+                                    @endif
+                                @empty
+                                    —
+                                @endforelse
+                        </div>
                         <div>
                             <p class="text-xs text-slate-500">Start Date</p>
                             <p class="font-medium">{{ $event->start_date ?? '—' }}</p>

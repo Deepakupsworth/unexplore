@@ -23,7 +23,16 @@ class AccountController extends Controller
         $tab = $request->get('tab', 'dashboard');
        
         return match ($tab) {
-            'dashboard' => view('frontend.account.tabs.dashboard'),
+            'dashboard' => view('frontend.account.tabs.dashboard', [
+                'stats' => Booking::where('user_id', auth()->user()->id)
+                    ->selectRaw('
+                        COUNT(*) as total_bookings,
+                        SUM(status = "completed") as completed_bookings,
+                        SUM(status = "cancelled") as cancelled_bookings,
+                        SUM(status IN ("pending", "confirmed")) as upcoming_bookings
+                    ')
+                    ->first()
+            ]),
             'profile'   => view('frontend.account.tabs.profile', [
                 'user' => auth()->user(),
                 'profileImage' => auth()->user()->profileImage ?? null
