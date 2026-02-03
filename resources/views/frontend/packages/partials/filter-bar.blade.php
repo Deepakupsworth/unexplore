@@ -9,31 +9,50 @@
     <script>
         window.PACKAGE = {
             basePersons: {{ (int) $package->base_persons }},
-            originalPrice : {{ (float) $package->price->original_price }},
+            originalPrice: {{ (float) optional($package->price)->original_price }},
             maxPersons: {{ (int) $package->max_persons }},
-            pricePerPerson: {{ (float) $package->price->per_person_price }},
+            pricePerPerson: {{ (float) optional($package->price)->per_person_price }},
 
+            /* ================= EXTRA ADULT RULES ================= */
             extraAdultRules: {!! json_encode(
-                $package->price->increasePersons->map(function ($r) {
+                optional($package->price?->increasePersons)->count() > 0
+                    ? $package->price->increasePersons->map(function ($r) {
                         return [
                             'person_number' => (int) $r->person_number,
                             'price' => (float) $r->additional_price,
                         ];
-                    })->values(),
+                    })->values()->toArray()
+                    : [
+                        [
+                            'person_number' => 1,
+                            'price' => (float) optional($package->price)->per_person_price,
+                        ]
+                    ]
             ) !!},
 
+            /* ================= CHILD RULES ================= */
             childRules: {!! json_encode(
-                $package->price->childPrices->map(function ($c) {
+                optional($package->price?->childPrices)->count() > 0
+                    ? $package->price->childPrices->map(function ($c) {
                         return [
                             'min_age' => (int) $c->min_age,
                             'max_age' => (int) $c->max_age,
-                            'type' => $c->price_type, // fixed | percentage
+                            'type' => $c->price_type,
                             'value' => (float) $c->price_value,
                         ];
-                    })->values(),
+                    })->values()->toArray()
+                    : [
+                        [
+                            'min_age' => 0,
+                            'max_age' => 18,
+                            'type' => 'fixed',
+                            'value' => (float) optional($package->price)->per_person_price,
+                        ]
+                    ]
             ) !!}
         };
-    </script>
+        </script>
+
 
 
 
@@ -247,7 +266,6 @@
 
         })();
 
-        console.log('Package Filter Bar Loaded', window.PACKAGE);
     </script>
 
 </section>
