@@ -142,6 +142,7 @@ class BookingController extends Controller
                 'snapshot_json' => [
                     'checkout' => $checkout,
                     'package'  => $package->toArray(),
+                    'thumb' => $package->thumb ?? null,
                     'created'  => now()->toDateTimeString(),
                 ],
             ]);

@@ -30,7 +30,7 @@
                             ->where('item_type', $item->item_type)
                             ->values();
                     @endphp
-
+{{-- @dd($options) --}}
                     @forelse ($options as $opt)
 
                         @php
@@ -39,6 +39,7 @@
                                 'hotel' => $opt->hotel,
                                 'event' => $opt->event,
                                 'todo'  => $opt->todo,
+                                'transport'  => $opt->transport,
                                 default => null,
                             };
                         @endphp

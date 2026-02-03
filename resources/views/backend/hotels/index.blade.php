@@ -4,9 +4,9 @@
     <div class="mb-5">
         <ul class="m-0 p-0 list-none flex items-center gap-2">
             <li class="text-primary-500">
-                <a href="{{ route('admin.dashboard') }}">
+                <a href="#">
                     <iconify-icon icon="heroicons-outline:home"></iconify-icon>
-                </a>
+                </a
             </li>
             <li class="text-slate-400">/</li>
             <li class="text-slate-700 font-medium">Hotels</li>

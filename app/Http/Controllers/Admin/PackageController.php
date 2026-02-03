@@ -112,6 +112,9 @@ class PackageController extends Controller
             'days.options.event.translation',
             'days.options.event.thumb',
 
+            'days.options.transport.translation',
+            'days.options.transport.thumb',
+
             'price',
             'price.childPrices',          // ✅ FIX
             'price.increasePersons',
@@ -169,6 +172,14 @@ class PackageController extends Controller
             ]),
 
             'todos' => \App\Models\ThingToDo::with([
+                'translations' => fn($q) =>
+                $q->where('language_code', $lang)
+            ])->get()->map(fn($t) => [
+                'id'   => $t->id,
+                'name' => $t->translations->first()->name ?? 'Todo #' . $t->id,
+            ]),
+
+            'transports' => \App\Models\Transport::with([
                 'translations' => fn($q) =>
                 $q->where('language_code', $lang)
             ])->get()->map(fn($t) => [
@@ -449,7 +460,7 @@ class PackageController extends Controller
     {
         $request->validate([
             'package_day_id' => 'required|exists:package_days,id',
-            'item_type'      => 'required|in:hotel,event,todo',
+            'item_type'      => 'required|in:hotel,event,todo,transport',
             'item_id'        => 'required|integer',
             'extra_price'    => 'nullable|numeric|min:0',
             'is_default'     => 'nullable|boolean',

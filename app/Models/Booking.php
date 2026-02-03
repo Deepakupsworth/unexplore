@@ -9,6 +9,7 @@ class Booking extends Model
 {
     use HasFactory;
 
+
     protected $fillable = [
         'booking_code',
         'user_id',
@@ -39,6 +40,7 @@ class Booking extends Model
 
         'travel_start_date' => 'date',
         'travel_end_date'   => 'date',
+        'snapshot_json' => 'array',
     ];
 
     /* ================= RELATIONS ================= */

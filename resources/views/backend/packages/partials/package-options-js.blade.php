@@ -15,6 +15,7 @@
             hotel: @json($hotels),
             event: @json($events),
             todo:  @json($todos),
+            transport: @json($transports),
         };
 
         let currentDayId = null;
