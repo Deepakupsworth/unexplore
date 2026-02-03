@@ -45,12 +45,12 @@
                         </a>
                     </li>
 
-                    <li>
+                    <!-- <li>
                         <a href="javascript:void(0)" class="nav-link account-tab" data-tab="wishlist">
                             <i class="fa-solid fa-heart p-large"></i>
                             Wishlist
                         </a>
-                    </li>
+                    </li> -->
 
                 </ul>
             </div>

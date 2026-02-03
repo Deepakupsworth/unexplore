@@ -35,6 +35,8 @@
         };
     </script>
 
+
+
     <div class="container">
 
         {{-- ================= UI (UNCHANGED) ================= --}}
@@ -244,6 +246,8 @@
             updateUI();
 
         })();
+
+        console.log('Package Filter Bar Loaded', window.PACKAGE);
     </script>
 
 </section>

@@ -47,9 +47,7 @@ Route::get('/lang/{locale}', function ($locale) {
 
 Route::get('/', [PageController::class, 'index'])->name('home');
 
-Route::get('/admin/dashboard', function () {
-    return view('backend.admin.dashboard');
-});
+
 
 Route::get('/signup', function () {
     return view('backend.pages.signup');
@@ -149,9 +147,13 @@ Route::get('/events-filter', [FrontendEventController::class, 'filter'])->name('
 
 Route::middleware(['auth', 'admin'])->group(function () {
 
+    Route::get('/admin/dashboard', function () {
+        return view('backend.admin.dashboard');
+    });
+
     Route::prefix('admin')->group(function () {
 
-
+     
         Route::resource('coupon', AdminCouponController::class);
         Route::post('coupon/{coupon}/status', [AdminCouponController::class, 'status'])
             ->name('coupon.status');
@@ -376,20 +378,18 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
 
 Route::middleware(['auth','user'])->prefix('user')->group(function () {
-    Route::get('/profile', [FrontendProfileController::class, 'index'])
-        ->name('user.profile.index');
-
+    
     Route::post('/profile', [FrontendProfileController::class, 'update'])
+            ->name('user.profile.update');
+
+    Route::post('/profile/update', [FrontendProfileController::class, 'update'])
         ->name('user.profile.update');
 
-        Route::post('/profile/update', [FrontendProfileController::class, 'update'])
-    ->name('user.profile.update');
+    Route::post('/profile/image/upload', [FrontendProfileController::class, 'uploadProfileImage'])
+        ->name('profile.image.upload');
 
-Route::post('/profile/image/upload', [FrontendProfileController::class, 'uploadProfileImage'])
-    ->name('profile.image.upload');
-
-Route::post('/profile/image/delete', [FrontendProfileController::class, 'deleteProfileImage'])
-    ->name('profile.image.delete');
+    Route::post('/profile/image/delete', [FrontendProfileController::class, 'deleteProfileImage'])
+        ->name('profile.image.delete');
 
 });
 
@@ -428,8 +428,6 @@ Route::get('/package-day-option/{id}/{type}', [FrontendPackageController::class,
 
 Route::post('/save-package-day-item-session', [FrontendPackageController::class, 'savePackageDayItemSession'])->name('package.day.item.option.session');
 
-
-Route::get('/profile', [FrontendProfileController::class, 'index'])->name('profile.view');
 
 Route::post(
     '/package/day-items/session',
