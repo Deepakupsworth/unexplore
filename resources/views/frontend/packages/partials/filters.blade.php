@@ -1,4 +1,4 @@
-<form class="package-filter">
+
 
     <div class="package-listing__filter-section">
 
@@ -202,4 +202,3 @@
         </div>
     </div>
 
-</form>

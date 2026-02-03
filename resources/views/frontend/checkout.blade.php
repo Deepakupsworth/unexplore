@@ -938,6 +938,25 @@ $childCount = $travellerSlots->where('type', 'child')->count();
                             </div>
                         @endif
 
+                        @if($checkout['day_items_extra'] > 0)
+                            {{-- DAY ITEMS EXTRA COST --}}
+                            <div
+                                class="pkg-details__additional-info-item p-2 d-flex align-items-start gap-2 mb-2 justify-content-between">
+                                <div>
+                                    <p class="fw-600 p-small">Add-On Cost</p>
+                                    <p class="p-small text-light2">
+                                        Additional cost for selected add-on items
+                                    </p>
+                                </div>
+                                <div class="d-flex align-items-center gap-1">
+                                    <img src="{{ asset('/frontend/assets/icons/riyal-light.svg') }}" alt="Riyal">
+                                    <p class="fw-600 text-light2">
+                                        {{ number_format($checkout['day_items_extra']) }}
+                                    </p>
+                                </div>
+                            </div>
+                        @endif
+
                         {{-- FINAL TOTAL --}}
                         <div
                             class="pkg-details__additional-info-item p-2 d-flex align-items-start gap-2 mb-2 justify-content-between">

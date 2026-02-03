@@ -31,20 +31,17 @@ class PackageController extends Controller
      */
     public function index(Request $request)
     {
-        // 🌍 Cities (filter sidebar)
+        /* ================= LEFT FILTER DATA ================= */
+
+        // 🌍 Cities
         $cities = City::orderBy('slug')->get();
 
-        // 📦 Package type counts
-        $packageTypes = Package::select('package_type')
-            ->selectRaw('COUNT(*) as total')
-            ->groupBy('package_type')
-            ->pluck('total', 'package_type');
-
-        // 👥 Persons (default = 1)
+        // 👥 Persons
         $persons = max((int) $request->get('persons', 1), 1);
 
-        // 📦 Main Query
-        $packages = Package::query()
+        /* ================= MAIN QUERY ================= */
+
+        $packagesQuery = Package::query()
             ->with([
                 'translations',
                 'cities.city.translations',
@@ -53,7 +50,7 @@ class PackageController extends Controller
                 'days.items.hotel',
             ])
 
-            // 🔍 SEARCH (Package title + City name)
+            /* 🔍 SEARCH */
             ->when($request->search, function ($q) use ($request) {
                 $q->where(function ($qq) use ($request) {
                     $qq->whereHas(
@@ -69,118 +66,149 @@ class PackageController extends Controller
                 });
             })
 
-            // ✈️ FLIGHT FILTER
+            /* ✈️ FLIGHT */
             ->when(
                 $request->flight === 'with',
                 fn($q) =>
-                $q->whereHas(
-                    'days.items.transport',
-                    fn($t) => $t->where('type', 'flight')
-                )
+                $q->whereHas('days.items.transport', fn($t) => $t->where('type', 'flight'))
             )
             ->when(
                 $request->flight === 'without',
                 fn($q) =>
-                $q->whereDoesntHave(
-                    'days.items.transport',
-                    fn($t) => $t->where('type', 'flight')
-                )
+                $q->whereDoesntHave('days.items.transport', fn($t) => $t->where('type', 'flight'))
             )
 
-            // 💰 PRICE FILTER (PER PERSON ONLY)
-            ->when(
-                $request->price_min || $request->price_max,
-                function ($q) use ($request) {
-                    $min = $request->price_min ?? 0;
-                    $max = $request->price_max ?? 99999999;
+            /* 💰 PRICE */
+            ->when($request->price_min || $request->price_max, function ($q) use ($request) {
+                $q->whereHas(
+                    'price',
+                    fn($p) =>
+                    $p->whereBetween(
+                        'per_person_price',
+                        [
+                            $request->price_min ?? 0,
+                            $request->price_max ?? 99999999
+                        ]
+                    )
+                );
+            })
 
-                    $q->whereHas(
-                        'price',
-                        fn($p) =>
-                        $p->whereBetween('per_person_price', [$min, $max])
-                    );
-                }
-            )
-
-            // ⭐ HOTEL RATING
+            /* ⭐ HOTEL RATING */
             ->when(
                 $request->rating,
                 fn($q) =>
                 $q->whereHas(
                     'days.items.hotel',
-                    fn($h) => $h->whereIn('star_rating', $request->rating)
+                    fn($h) =>
+                    $h->whereIn('star_rating', (array) $request->rating)
                 )
             )
 
-            // 🌍 CITY FILTER
+            /* 🌍 CITY */
             ->when(
                 $request->cities,
                 fn($q) =>
                 $q->whereHas(
                     'cities',
-                    fn($c) => $c->whereIn('city_id', $request->cities)
+                    fn($c) =>
+                    $c->whereIn('city_id', (array) $request->cities)
                 )
             )
 
-            // 📦 PACKAGE TYPE
+            /* 📦 PACKAGE TYPE */
             ->when(
                 $request->package_type,
                 fn($q) =>
-                $q->whereIn('package_type', $request->package_type)
+                $q->whereIn('package_type', (array) $request->package_type)
             )
-            // ?todo_category=ID
-            // /packages?todo_id=12
-            // /packages?event_id=8
-            // <a href="{{ route('packages.index', ['event_id' => $event->id]) }}">
-            // <a href="{{ route('packages.index', ['todo_id' => $todo->id]) }}">
-            // <a href="{{ route('packages.index', ['todo_category' => $category->id]) }}">
 
+            /* 🎯 TODO / EVENT FILTERS */
+            ->when(
+                $request->todo_category,
+                fn($q) =>
+                $q->whereHas(
+                    'days.items.todo',
+                    fn($t) =>
+                    $t->where('category_id', $request->todo_category)
+                )
+            )
+            ->when(
+                $request->todo_id,
+                fn($q) =>
+                $q->whereHas(
+                    'days.items',
+                    fn($i) =>
+                    $i->where('item_type', 'todo')
+                        ->where('item_id', $request->todo_id)
+                )
+            )
+            ->when(
+                $request->event_id,
+                fn($q) =>
+                $q->whereHas(
+                    'days.items',
+                    fn($i) =>
+                    $i->where('item_type', 'event')
+                        ->where('item_id', $request->event_id)
+                )
+            );
 
-            //this is filter to do category
-            ->when($request->todo_category, function ($q) use ($request) {
-                $q->whereHas('days.items', function ($item) use ($request) {
-                    $item->where('item_type', 'todo')
-                        ->whereHas('todo', function ($todo) use ($request) {
-                            $todo->where('category_id', $request->todo_category);
-                        });
-                });
-            })
-            ->when($request->todo_id, function ($q) use ($request) {
-                $q->whereHas('days.items', function ($item) use ($request) {
-                    $item->where('item_type', 'todo')
-                        ->where('item_id', $request->todo_id);
-                });
-            })
-            ->when($request->event_id, function ($q) use ($request) {
-                $q->whereHas('days.items', function ($item) use ($request) {
-                    $item->where('item_type', 'event')
-                        ->where('item_id', $request->event_id);
-                });
-            })
+        /* ================= SORT ================= */
+        if (in_array($request->sort, ['price_low', 'price_high'])) {
 
-            ->latest()
+            // join only once for sorting
+            $packagesQuery
+                ->leftJoin('package_prices', 'packages.id', '=', 'package_prices.package_id')
+                ->select('packages.*');
+
+            if ($request->sort === 'price_low') {
+                $packagesQuery->orderBy('package_prices.per_person_price', 'asc');
+            } else {
+                $packagesQuery->orderBy('package_prices.per_person_price', 'desc');
+            }
+        } else {
+            $packagesQuery->latest('packages.created_at');
+        }
+
+        /* ================= PAGINATION ================= */
+
+        $packages = $packagesQuery
             ->paginate(20)
             ->withQueryString();
 
-        // 🔥 Price calculation for cards
+        /* ================= PRICE CALCULATION ================= */
+
         $packages->getCollection()->transform(function ($pkg) use ($persons) {
             $price = PriceCalculator::calculate($pkg->price, $persons);
-
             $pkg->price_per_person = $price['per_person'];
-            $pkg->total_price = $price['total'];
-
+            $pkg->total_price      = $price['total'];
             return $pkg;
         });
+
+        /* ================= HEADER COUNTS (🔥 FIXED) ================= */
+
+        $packageTypes = Package::query()
+            ->select('package_type')
+            ->selectRaw('COUNT(*) as total')
+            ->groupBy('package_type')
+            ->pluck('total', 'package_type');
+
+        /* ================= HEADER CATEGORIES ================= */
 
         $headerCategories = Category::whereHas('packageCategories')
             ->withCount('packageCategories')
             ->with('translation')
             ->get();
 
-        return view(
-            'frontend.packages.index',
-            compact('packages', 'cities', 'packageTypes', 'persons', 'headerCategories')
-        );
+        /* ================= VIEW ================= */
+
+        return view('frontend.packages.index', compact(
+            'packages',
+            'cities',
+            'packageTypes',
+            'persons',
+            'headerCategories'
+        ));
     }
 
     /**
@@ -189,124 +217,144 @@ class PackageController extends Controller
      * =========================
      */
     public function ajax(Request $request)
-{
-    // 👥 Persons (default = 1)
-    $persons = max((int) $request->get('persons', 1), 1);
+    {
+        // 👥 Persons
+        $persons = max((int) $request->get('persons', 1), 1);
 
-    $packages = Package::query()
-        ->with([
-            'translations',
-            'cities.city.translations',
-            'price',
-            'days.items.transport',
-            'days.items.hotel',
-        ])
+        /* ================= MAIN QUERY ================= */
+        $packagesQuery = Package::query()
+            ->with([
+                'translations',
+                'cities.city.translations',
+                'price',
+                'days.items.transport',
+                'days.items.hotel',
+            ])
 
-        /* ================= SEARCH ================= */
-        ->when($request->search, function ($q) use ($request) {
-            $q->where(function ($qq) use ($request) {
-                $qq->whereHas(
-                    'translations',
-                    fn ($t) =>
+            /* 🔍 SEARCH */
+            ->when($request->search, function ($q) use ($request) {
+                $q->where(function ($qq) use ($request) {
+                    $qq->whereHas(
+                        'translations',
+                        fn($t) =>
                         $t->where('title', 'like', "%{$request->search}%")
+                    )
+                        ->orWhereHas(
+                            'cities.city.translations',
+                            fn($ct) =>
+                            $ct->where('name', 'like', "%{$request->search}%")
+                        );
+                });
+            })
+
+            /* ✈️ FLIGHT */
+            ->when(
+                $request->flight === 'with',
+                fn($q) =>
+                $q->whereHas(
+                    'days.items.transport',
+                    fn($t) =>
+                    $t->where('type', 'flight')
                 )
-                ->orWhereHas(
-                    'cities.city.translations',
-                    fn ($ct) =>
-                        $ct->where('name', 'like', "%{$request->search}%")
-                );
-            });
-        })
+            )
+            ->when(
+                $request->flight === 'without',
+                fn($q) =>
+                $q->whereDoesntHave(
+                    'days.items.transport',
+                    fn($t) =>
+                    $t->where('type', 'flight')
+                )
+            )
 
-        /* ================= FLIGHT ================= */
-        ->when($request->flight === 'with', function ($q) {
-            $q->whereHas(
-                'days.items.transport',
-                fn ($t) => $t->where('type', 'flight')
-            );
-        })
-
-        ->when($request->flight === 'without', function ($q) {
-            $q->whereDoesntHave(
-                'days.items.transport',
-                fn ($t) => $t->where('type', 'flight')
-            );
-        })
-
-        /* ================= PRICE ================= */
-        ->when(
-            $request->price_min || $request->price_max,
-            function ($q) use ($request) {
+            /* 💰 PRICE */
+            ->when($request->price_min || $request->price_max, function ($q) use ($request) {
                 $min = $request->price_min ?? 0;
                 $max = $request->price_max ?? 99999999;
 
                 $q->whereHas(
                     'price',
-                    fn ($p) =>
-                        $p->whereBetween('per_person_price', [$min, $max])
+                    fn($p) =>
+                    $p->whereBetween('per_person_price', [$min, $max])
                 );
-            }
-        )
+            })
 
-        /* ================= HOTEL RATING ================= */
-        ->when($request->rating, function ($q) use ($request) {
-            $q->whereHas(
-                'days.items.hotel',
-                fn ($h) =>
+            /* ⭐ HOTEL RATING */
+            ->when(
+                $request->rating,
+                fn($q) =>
+                $q->whereHas(
+                    'days.items.hotel',
+                    fn($h) =>
                     $h->whereIn('star_rating', (array) $request->rating)
-            );
-        })
+                )
+            )
 
-        /* ================= CITIES ================= */
-        ->when($request->cities, function ($q) use ($request) {
-            $q->whereHas(
-                'cities',
-                fn ($c) =>
+            /* 🌍 CITIES */
+            ->when(
+                $request->cities,
+                fn($q) =>
+                $q->whereHas(
+                    'cities',
+                    fn($c) =>
                     $c->whereIn('city_id', (array) $request->cities)
-            );
-        })
+                )
+            )
 
-        /* ================= PACKAGE TYPE ================= */
-        ->when($request->package_type, function ($q) use ($request) {
-            $q->whereIn('package_type', (array) $request->package_type);
-        })
+            /* 📦 PACKAGE TYPE */
+            ->when(
+                $request->package_type,
+                fn($q) =>
+                $q->whereIn('package_type', (array) $request->package_type)
+            );
 
         /* ================= SORT ================= */
-        ->when($request->sort === 'price_low', function ($q) {
-            $q->orderBy(
-                Package::select('per_person_price')
-                    ->join('package_prices', 'packages.id', '=', 'package_prices.package_id')
-                    ->whereColumn('package_prices.package_id', 'packages.id'),
-                'asc'
-            );
-        })
+        if (in_array($request->sort, ['price_low', 'price_high'])) {
 
-        ->when($request->sort === 'price_high', function ($q) {
-            $q->orderBy(
-                Package::select('per_person_price')
-                    ->join('package_prices', 'packages.id', '=', 'package_prices.package_id')
-                    ->whereColumn('package_prices.package_id', 'packages.id'),
-                'desc'
-            );
-        })
+            // join only once for sorting
+            $packagesQuery
+                ->leftJoin('package_prices', 'packages.id', '=', 'package_prices.package_id')
+                ->select('packages.*');
 
-        ->latest()
-        ->paginate(20)
-        ->withQueryString();
+            if ($request->sort === 'price_low') {
+                $packagesQuery->orderBy('package_prices.per_person_price', 'asc');
+            } else {
+                $packagesQuery->orderBy('package_prices.per_person_price', 'desc');
+            }
+        } else {
+            $packagesQuery->latest('packages.created_at');
+        }
 
-    /* ================= PRICE CALCULATION ================= */
-    $packages->getCollection()->transform(function ($pkg) use ($persons) {
-        $price = PriceCalculator::calculate($pkg->price, $persons);
 
-        $pkg->price_per_person = $price['per_person'];
-        $pkg->total_price      = $price['total'];
+        /* ================= PAGINATION ================= */
+        $packages = $packagesQuery
+            ->paginate(20)
+            ->withQueryString();
 
-        return $pkg;
-    });
+        /* ================= PRICE CALC ================= */
+        $packages->getCollection()->transform(function ($pkg) use ($persons) {
+            $price = PriceCalculator::calculate($pkg->price, $persons);
 
-    /* ================= RETURN PARTIAL ================= */
-    return view('frontend.packages.partials.list', compact('packages'));
-}
+            $pkg->price_per_person = $price['per_person'];
+            $pkg->total_price      = $price['total'];
+
+            return $pkg;
+        });
+
+        /* ================= HEADER COUNTS (🔥 IMPORTANT) ================= */
+        $packageTypes = Package::query()
+            ->select('package_type')
+            ->selectRaw('COUNT(*) as total')
+            ->groupBy('package_type')
+            ->pluck('total', 'package_type');
+
+        /* ================= RETURN FULL RESULTS ================= */
+        return view('frontend.packages.partials.results', compact(
+            'packages',
+            'packageTypes'
+        ));
+    }
+
 
 
     /**

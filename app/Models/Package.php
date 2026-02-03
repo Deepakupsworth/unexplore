@@ -178,6 +178,6 @@ class Package extends Model
             'category_id'
         );
     }
-    
+
 
 }
