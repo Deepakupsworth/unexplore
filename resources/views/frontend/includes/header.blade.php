@@ -24,22 +24,51 @@
                                 <!-- Left column: Links -->
                                 <div class="col-lg-7">
                                     <div class="nav-menu__left">
-                                        <p class="fw-bold p-large nav-menu__heading">Explore Events</p>
+                                        <p class="fw-bold p-large nav-menu__heading">Explore Saudi</p>
                                         <div class="sub-menu-section">
                                             <ul class="list-unstyled">
-                                                <li><a href="#" class="">
-                                                        About Saudi
+                                            @foreach (header_destinations() as $cities)
+                                    
+                                                        <li>
+                                                    <a class="" href="{{ route('destinations.show', [
+                                                                        'slug' => $cities->slug,
+                                                                    ]) }}">
+                                                        <span> {{ $cities->translationData?->name }}
+                                                        </span>
                                                         <i
                                                             class="fa-solid fa-angles-right primary-text flex-v-center"></i>
-                                                    </a></li>
-                                                <li>
-
-                                                <li><a href="#">Riyadh <i
-                                                            class="fa-solid fa-angles-right primary-text flex-v-center"></i></a>
+                                                    </a>
                                                 </li>
+                                                        
+                                            
+                                                @endforeach
+                                                <li>
+                                                <a class="" href="{{ route('destinations.index') }}">
+                                                    <span> All Destination
+                                                    </span>
+                                                    <i
+                                                                        class="fa-solid fa-angles-right primary-text flex-v-center"></i>
+                                                </a>
+                                            </li>
+                                                
                                             </ul>
                                             <ul class="list-unstyled">
-                                                <li><a href="#">Traditions in Saudi <i
+                                            
+                                            <!-- @foreach (header_destination_categories() as $cities)
+                                    
+                                                    <li>
+                                                <a class="" href="#">
+                                                    <span> {{ $cities->translationData?->name }}
+                                                    </span>
+                                                    <i
+                                                        class="fa-solid fa-angles-right primary-text flex-v-center"></i>
+                                                </a>
+                                            </li>
+                                                    
+                                        
+                                            @endforeach -->
+                            
+                                                <!-- <li><a href="#">Traditions in Saudi <i
                                                             class="fa-solid fa-angles-right primary-text flex-v-center"></i></a>
                                                 </li>
                                                 <li><a href="#">Sports in Saudi <i
@@ -50,7 +79,7 @@
                                                 </li>
                                                 <li><a href="#">Wildlife <i
                                                             class="fa-solid fa-angles-right primary-text flex-v-center"></i></a>
-                                                </li>
+                                                </li> -->
                                             </ul>
                                         </div>
                                     </div>
@@ -199,10 +228,30 @@
                                 <!-- Left column: Links -->
                                 <div class="col-lg-7">
                                     <div class="nav-menu__left">
-                                        <p class="fw-bold p-large nav-menu__heading">Explore Events</p>
+                                        <p class="fw-bold p-large nav-menu__heading">Explore packages</p>
                                         <div class="sub-menu-section">
                                             <ul class="list-unstyled">
-                                                <li><a href="#" class="">
+                                            @foreach (header_packages() as $category)
+                                                    @if ($category->packages_count > 0)
+                                                        <li>
+                                                            <a
+                                                                href="{{ route('packages.index', [
+                                                                    'categories[]' => $category->id,
+                                                                ]) }}" class="">
+                                                                {{ $category->translationData?->name }}
+                                                                ({{ $category->packages_count }})
+                                                                <i
+                                                                    class="fa-solid fa-angles-right primary-text flex-v-center"></i>
+                                                            </a>
+                                                        </li>
+                                                    @endif
+                                                @endforeach
+                                                <li><a href="{{ route('packages.index') }}" class="">
+                                                                All Packages
+                                                                <i class="fa-solid fa-angles-right primary-text flex-v-center"></i>
+                                                </a>
+                                                </li>
+                                                <!-- <li><a href="#" class="">
                                                         About Saudi
                                                         <i
                                                             class="fa-solid fa-angles-right primary-text flex-v-center"></i>
@@ -224,21 +273,25 @@
                                                 </li>
                                                 <li><a href="#">Riyadh <i
                                                             class="fa-solid fa-angles-right primary-text flex-v-center"></i></a>
-                                                </li>
+                                                </li> -->
                                             </ul>
                                             <ul class="list-unstyled">
-                                                <li><a href="#">Traditions in Saudi <i
+                                                <li><a  href="{{ route('packages.index', [
+                                                                    'package_type[]' => 'customized',
+                                                                ]) }}" >Customizable <i
                                                             class="fa-solid fa-angles-right primary-text flex-v-center"></i></a>
                                                 </li>
-                                                <li><a href="#">Sports in Saudi <i
+                                                <li><a  href="{{ route('packages.index', [
+                                                                    'package_type[]' => 'fixed',
+                                                                ]) }}" >Group Package <i
                                                             class="fa-solid fa-angles-right primary-text flex-v-center"></i></a>
                                                 </li>
-                                                <li><a href="#">Thc local cuisine of Saudi <i
+                                                <!-- <li><a href="#">Thc local cuisine of Saudi <i
                                                             class="fa-solid fa-angles-right primary-text flex-v-center"></i></a>
                                                 </li>
                                                 <li><a href="#">Wildlife <i
                                                             class="fa-solid fa-angles-right primary-text flex-v-center"></i></a>
-                                                </li>
+                                                </li> -->
                                             </ul>
                                         </div>
                                     </div>
@@ -376,7 +429,27 @@
                             <div id="collapseNavOne" class="accordion-collapse collapse"
                                 data-bs-parent="#navbarAccordion">
                                 <ul class="navbar-nav pt-2 mt-1 ps-3">
-                                    <li>
+
+                                @foreach (header_destinations() as $cities)
+                                    
+                                        <li>
+                                    <a class="nav-link" href="{{ route('destinations.show', [
+                                                        'slug' => $cities->slug,
+                                                    ]) }}">
+                                        <span> {{ $cities->translationData?->name }}
+                                        </span>
+                                    </a>
+                                </li>
+                                        
+                               
+                                @endforeach
+                                <li>
+                                    <a class="nav-link" href="{{ route('destinations.index') }}">
+                                        <span> All Destination
+                                        </span>
+                                    </a>
+                                </li>
+                                    <!-- <li>
                                         <a href="#" class="nav-link">
                                             About Saudi
 
@@ -395,7 +468,7 @@
                                     <li><a href="#" class="nav-link">Traditions in Saudi</a></li>
                                     <li><a href="#" class="nav-link">Sports in Saudi</a></li>
                                     <li><a href="#" class="nav-link">Thc local cuisine of Saudi</a></li>
-                                    <li><a href="#" class="nav-link">Wildlife</a></li>
+                                    <li><a href="#" class="nav-link">Wildlife</a></li> -->
                                 </ul>
                             </div>
                         </div>
@@ -408,26 +481,28 @@
                             <div id="collapseNavTwo" class="accordion-collapse collapse"
                                 data-bs-parent="#navbarAccordion">
                                 <ul class="navbar-nav pt-2 mt-1 ps-3">
-                                    <li>
-                                        <a href="#" class="nav-link">
-                                            About Saudi
+                                @foreach (header_todos() as $category)
+                                                    @if ($category->things_count > 0)
+                                                    <li>
+                                        <a href="{{ route('things.to.do', [
+                                                                'categories[]' => $category->id
+                                                            ]) }}" class="nav-link">
+                                                            {{ $category->translation?->name }}
+                                                            ({{ $category->things_count }})
 
                                         </a>
                                     </li>
-                                    <li>
-                                        <a href="#" class="nav-link">
-                                            Geography of Saudi
-
-                                        </a>
-                                    </li>
-                                    <li><a href="#" class="nav-link">History of Saudi</a></li>
-                                    <li><a href="#" class="nav-link">Saudi's climate</a></li>
-                                    <li><a href="#" class="nav-link">Towns &amp; cities in Saudi</a></li>
-                                    <li><a href="#" class="nav-link">Riyadh</a></li>
-                                    <li><a href="#" class="nav-link">Traditions in Saudi</a></li>
-                                    <li><a href="#" class="nav-link">Sports in Saudi</a></li>
-                                    <li><a href="#" class="nav-link">Thc local cuisine of Saudi</a></li>
-                                    <li><a href="#" class="nav-link">Wildlife</a></li>
+                                                       
+                                                    @endif
+                                                @endforeach
+                                                <li>
+                                                    <a href="{{ route('things.to.do') }}" class="nav-link">
+                                                        All Things to Do
+                                                      
+                                                    </a>
+                                                </li>
+                                   
+                                   
                                 </ul>
                             </div>
                         </div>
@@ -437,19 +512,30 @@
                                 aria-controls="collapseNavThree">
                                 Events & Festivals
                             </button>
+                            
                             <div id="collapseNavThree" class="accordion-collapse collapse"
                                 data-bs-parent="#navbarAccordion">
                                 <ul class="navbar-nav pt-2 mt-1 ps-3">
-                                    <li>
-                                        <a class="nav-link" href="#">
-                                            <span>Explore Saudi</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="nav-link" href="#">
-                                            <span>Explore Saudi</span>
-                                        </a>
-                                    </li>
+                                @foreach (header_event_categories() as $category)
+                                    @if ($category->events_count > 0)
+                                        <li>
+                                    <a class="nav-link" href="{{ route('event.listing', [
+                                                        'categories[]' => $category->id,
+                                                    ]) }}">
+                                        <span> {{ $category->translationData?->name }}
+                                        ({{ $category->events_count }})</span>
+                                    </a>
+                                </li>
+                                        
+                                @endif
+                                @endforeach
+                                <li class="fw-bold">
+                                <a href="{{ route('event.listing') }}" class="nav-link">
+                                    All Events
+                                    
+                                </a>
+                            </li>
+                                   
                                 </ul>
                             </div>
                         </div>
@@ -462,7 +548,26 @@
                             <div id="collapseNavFour" class="accordion-collapse collapse"
                                 data-bs-parent="#navbarAccordion">
                                 <ul class="navbar-nav pt-2 mt-1 ps-3">
-                                    <li>
+                                @foreach (header_packages() as $category)
+                                                    @if ($category->packages_count > 0)
+                                                        <li>
+                                                            <a class="nav-link"
+                                                                href="{{ route('packages.index', [
+                                                                    'categories[]' => $category->id,
+                                                                ]) }}">
+                                                                {{ $category->translationData?->name }}
+                                                                ({{ $category->packages_count }})
+                                                               
+                                                            </a>
+                                                        </li>
+                                                    @endif
+                                                @endforeach
+                                                <li><a href="{{ route('packages.index') }}" class="nav-link">
+                                                                All Packages
+                                                                
+                                                </a>
+                                                </li>
+                                    <!-- <li>
                                         <a class="nav-link" href="#">
                                             <span>Explore Saudi</span>
                                         </a>
@@ -471,7 +576,7 @@
                                         <a class="nav-link" href="#">
                                             <span>Explore Saudi</span>
                                         </a>
-                                    </li>
+                                    </li> -->
                                 </ul>
                             </div>
                         </div>
