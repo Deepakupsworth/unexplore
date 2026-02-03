@@ -1,29 +1,26 @@
 @extends('frontend.layout')
 
 @section('content')
+    <style>
+        .selectable-card {
+            cursor: pointer;
+        }
+
+        .selectable-card.active {
+            border-color: #198754;
+            background-color: #f6fffa;
+        }
 
 
-<style>
-    .selectable-card {
-        cursor: pointer;
-    }
+        .selectable-card-wrapper {
+            cursor: pointer;
+        }
 
-    .selectable-card.active {
-        border-color: #198754;
-        background-color: #f6fffa;
-    }
-
-
-    .selectable-card-wrapper{
-        cursor: pointer;
-    }
-
-    .selectable-card-wrapper.active {
-        border-color: #198754;
-        background-color: #f6fffa;
-    }
-</style>
-
+        .selectable-card-wrapper.active {
+            border-color: #198754;
+            background-color: #f6fffa;
+        }
+    </style>
     @php
 
         $t = $package->translations->first();
@@ -44,10 +41,22 @@
 
         $startDate = Carbon::parse($package->start_date); // MUST EXIST
         $endDate = $startDate->copy()->addDays($package->duration_nights);
-
     @endphp
 
     <section>
+
+        <script>
+            window.PRICE_STATE = {
+                persons: {
+                    adults: {{ $package->base_persons }},
+                    children: 0
+                },
+                extras: {
+                    dayItems: 0
+                }
+            };
+        </script>
+
         <div class="container">
             <div class="gallery-wrapper swiper">
                 <div class="swiper-wrapper  gallery-grid">
@@ -101,7 +110,7 @@
     </section>
     {{-- @dd($package) --}}
     @include('frontend.packages.partials.filter-bar', [
-        'package' => $package
+        'package' => $package,
     ])
     <section>
         <div class="container">
@@ -180,11 +189,15 @@
 
                                                             {{-- ================= HOTEL ================= --}}
                                                             @php
-                                                                $sessionHotelIds = $sessionItems[$day->id]['hotel'] ?? null;
+                                                                $sessionHotelIds =
+                                                                    $sessionItems[$day->id]['hotel'] ?? null;
 
                                                                 if ($sessionHotelIds) {
                                                                     // session exists → show selected
-                                                                    $hotels = $allHotels->whereIn('id', array_values($sessionHotelIds));
+                                                                    $hotels = $allHotels->whereIn(
+                                                                        'id',
+                                                                        array_values($sessionHotelIds),
+                                                                    );
                                                                 } else {
                                                                     // first time → show package default
                                                                     $hotels = $day->items
@@ -217,17 +230,6 @@
                                                                             <div
                                                                                 class="d-flex gap-2 pkg-details__accordion-actions">
 
-                                                                                <!-- <button
-                                                                                type="button"
-                                                                                class="btn btn-primary btn-sm editDayItemsBtn"
-                                                                                data-day-id="{{ $day->id }}"
-                                                                                data-type="hotel"
-                                     >
-                                                                                <i class="fa-solid fa-pencil"></i>
-                                                                            </button> -->
-
-
-
 
                                                                             </div>
                                                                         </div>
@@ -239,11 +241,9 @@
                                                                             <div class="accordion-body"
                                                                                 id="day-{{ $day->id }}-hotel-list">
                                                                                 @php
-                                                                                $hotel_slot = 0;
-                                                                                 @endphp
+                                                                                    $hotel_slot = 0;
+                                                                                @endphp
                                                                                 @foreach ($hotels as $index => $hotel)
-
-
                                                                                     @php
                                                                                         $hotelImage = $hotel?->thumb
                                                                                             ? asset(
@@ -258,58 +258,58 @@
                                                                                     <div class="day-item-slot d-flex position-relative"
                                                                                         data-day-id="{{ $day->id }}"
                                                                                         data-type="hotel"
-                                                                                        data-index="{{ $hotel_slot  }}">
-                                                                                    <div
-                                                                                        class="day-item-wrapper"
-                                                                                        data-day-id="{{ $day->id }}"
-                                                                                        data-type="hotel"
-                                                                                        data-item-id="{{ $hotel->id }}"
-                                                                                        data-default-item-id="{{ $hotel->id }}"
-                                                                                        data-index="{{ $hotel_slot }}"
-                                                                                        >
-                                                                                    <div
-                                                                                        class="d-flex align-items-center gap-3 mb-3 ">
-                                                                                        <img src="{{ $hotelImage }}"
-                                                                                            class="pkg-details__tr-ht-img">
-
-                                                                                        <div>
+                                                                                        data-index="{{ $hotel_slot }}">
+                                                                                        <div class="day-item-wrapper"
+                                                                                            data-day-id="{{ $day->id }}"
+                                                                                            data-type="hotel"
+                                                                                            data-item-id="{{ $hotel->id }}"
+                                                                                            data-default-item-id="{{ $hotel->id }}"
+                                                                                            data-index="{{ $hotel_slot }}">
                                                                                             <div
-                                                                                                class="pkg-details__star-ratings">
-                                                                                                @for ($i = 1; $i <= 5; $i++)
-                                                                                                    <i
-                                                                                                        class="fa-solid fa-star {{ $i <= $hotel->star_rating ? 'active' : 'text-muted' }}"></i>
-                                                                                                @endfor
+                                                                                                class="d-flex align-items-center gap-3 mb-3 ">
+                                                                                                <img src="{{ $hotelImage }}"
+                                                                                                    class="pkg-details__tr-ht-img">
+
+                                                                                                <div>
+                                                                                                    <div
+                                                                                                        class="pkg-details__star-ratings">
+                                                                                                        @for ($i = 1; $i <= 5; $i++)
+                                                                                                            <i
+                                                                                                                class="fa-solid fa-star {{ $i <= $hotel->star_rating ? 'active' : 'text-muted' }}"></i>
+                                                                                                        @endfor
+                                                                                                    </div>
+
+                                                                                                    <p class="fw-600 my-1">
+                                                                                                        {{ $hotel->translation?->name }}
+                                                                                                    </p>
+
+                                                                                                    <p
+                                                                                                        class="p-small text-light2">
+                                                                                                        <i
+                                                                                                            class="fa-solid fa-location-dot"></i>
+                                                                                                        {{ $hotel->location }}
+                                                                                                    </p>
+                                                                                                </div>
                                                                                             </div>
-
-                                                                                            <p class="fw-600 my-1">
-                                                                                                {{ $hotel->translation?->name }}
-                                                                                            </p>
-
-                                                                                            <p class="p-small text-light2">
-                                                                                                <i
-                                                                                                    class="fa-solid fa-location-dot"></i>
-                                                                                                {{ $hotel->location }}
-                                                                                            </p>
+                                                                                            <input type="hidden"
+                                                                                                name="extra_price"
+                                                                                                value="{{ $dayWiseOptions[$day->id]['hotel'][$hotel->id]['extra_price'] ?? 0 }}">
                                                                                         </div>
+                                                                                        @if ($package->package_type !== 'fixed')
+                                                                                            <button type="button"
+                                                                                                class="btn btn-primary btn-sm position-absolute top-0 end-0 m-2 editDayItemsBtn"
+                                                                                                data-day-id="{{ $day->id }}"
+                                                                                                data-type="hotel"
+                                                                                                data-item-id="{{ $hotel->id }}"
+                                                                                                data-index="{{ $hotel_slot }}">
+                                                                                                <i
+                                                                                                    class="fa-solid fa-pencil"></i>
+                                                                                            </button>
+                                                                                        @endif
                                                                                     </div>
-                                                                                    <input type="hidden" name="extra_price" value="{{$dayWiseOptions[$day->id]['hotel'][$hotel->id]['extra_price'] ?? 0 }}">
-                                                                                 </div>
-                                                                                 @if($package->package_type !== 'fixed')
-                                                                                 <button
-                                                                            type="button"
-                                                                            class="btn btn-primary btn-sm position-absolute top-0 end-0 m-2 editDayItemsBtn"
-                                                                            data-day-id="{{ $day->id }}"
-                                                                            data-type="hotel"
-                                                                            data-item-id="{{ $hotel->id }}"
-                                                                            data-index="{{ $hotel_slot }}"
-                                                                        >
-                                                                            <i class="fa-solid fa-pencil"></i>
-                                                                        </button>
-                                                                        @endif
-                                                            </div>
-                                                            @php
-                                                                                $hotel_slot++;
-                                                                                 @endphp
+                                                                                    @php
+                                                                                        $hotel_slot++;
+                                                                                    @endphp
                                                                                 @endforeach
 
                                                                             </div>
@@ -354,12 +354,12 @@
                                                                             <div
                                                                                 class="d-flex gap-2 pkg-details__accordion-actions">
                                                                                 <!-- <button type="button"
-                                                                                    class="btn btn-primary btn-sm editDayItemsBtn"
-                                                                                    data-day-id="{{ $day->id }}"
-                                                                                    data-type="todo"
-                                                                                    data-selected="{{ $todos->pluck('id')->join(',') }}">
-                                                                                    <i class="fa-solid fa-pencil"></i>
-                                                                                </button> -->
+                                                                                                                    class="btn btn-primary btn-sm editDayItemsBtn"
+                                                                                                                    data-day-id="{{ $day->id }}"
+                                                                                                                    data-type="todo"
+                                                                                                                    data-selected="{{ $todos->pluck('id')->join(',') }}">
+                                                                                                                    <i class="fa-solid fa-pencil"></i>
+                                                                                                                </button> -->
 
                                                                             </div>
                                                                         </div>
@@ -372,56 +372,57 @@
                                                                                 id="day-{{ $day->id }}-todo-list">
 
                                                                                 @php
-                                                                                $todo_slot = 0;
-                                                                                 @endphp
+                                                                                    $todo_slot = 0;
+                                                                                @endphp
 
                                                                                 @foreach ($todos as $index => $todo)
-                                                                                <div class="day-item-slot d-flex position-relative"
+                                                                                    <div class="day-item-slot d-flex position-relative"
                                                                                         data-day-id="{{ $day->id }}"
                                                                                         data-type="todo"
-                                                                                        data-index="{{ $todo_slot  }}">
-                                                                                <div
-                                                                                        class="day-item-wrapper"
-                                                                                        data-day-id="{{ $day->id }}"
-                                                                                        data-type="todo"
-                                                                                        data-item-id="{{ $todo->id }}"
-                                                                                        data-index="{{ $todo_slot }}"
-                                                                                    >
+                                                                                        data-index="{{ $todo_slot }}">
+                                                                                        <div class="day-item-wrapper"
+                                                                                            data-day-id="{{ $day->id }}"
+                                                                                            data-type="todo"
+                                                                                            data-item-id="{{ $todo->id }}"
+                                                                                            data-index="{{ $todo_slot }}">
                                                                                             <div class="d-flex gap-3 mb-3">
-                                                                                                    <img src="{{ $todo->thumb ? asset('storage/' . $todo->thumb->image_path) : asset('frontend/assets/hotel-placeholder.jpg') }}"
-                                                                                                        class="pkg-details__tr-ht-img">
+                                                                                                <img src="{{ $todo->thumb ? asset('storage/' . $todo->thumb->image_path) : asset('frontend/assets/hotel-placeholder.jpg') }}"
+                                                                                                    class="pkg-details__tr-ht-img">
 
-                                                                                                    <div>
-                                                                                                        <p class="fw-600">
-                                                                                                            {{ $todo->translation->name }}
-                                                                                                        </p>
-                                                                                                        <p class="p-small text-light2">
-                                                                                                            <i class="fa fa-clock"></i>
-                                                                                                            {{ $todo->opening_time }} -
-                                                                                                            {{ $todo->closing_time }}
-                                                                                                        </p>
-                                                                                                    </div>
+                                                                                                <div>
+                                                                                                    <p class="fw-600">
+                                                                                                        {{ $todo->translation->name }}
+                                                                                                    </p>
+                                                                                                    <p
+                                                                                                        class="p-small text-light2">
+                                                                                                        <i
+                                                                                                            class="fa fa-clock"></i>
+                                                                                                        {{ $todo->opening_time }}
+                                                                                                        -
+                                                                                                        {{ $todo->closing_time }}
+                                                                                                    </p>
                                                                                                 </div>
-                                                                                                <input type="hidden" name="extra_price" value="{{$dayWiseOptions[$day->id]['todo'][$todo->id]['extra_price'] ?? 0 }}">
+                                                                                            </div>
+                                                                                            <input type="hidden"
+                                                                                                name="extra_price"
+                                                                                                value="{{ $dayWiseOptions[$day->id]['todo'][$todo->id]['extra_price'] ?? 0 }}">
 
-                                                                                </div>
-                                                                                @if($package->package_type !== 'fixed')
-                                                                                <button
-                                                                            type="button"
-                                                                            class="btn btn-primary btn-sm position-absolute top-0 end-0 m-2 editDayItemsBtn"
-                                                                            data-day-id="{{ $day->id }}"
-                                                                            data-type="todo"
-                                                                            data-item-id="{{ $todo->id }}"
-                                                                            data-index="{{ $todo_slot }}"
-                                                                        >
-                                                                            <i class="fa-solid fa-pencil"></i>
-                                                                        </button>
-                                                                        @endif
-                                                                    </div>
-                                                                    @php
-                                                                                $todo_slot++;
-                                                                                 @endphp
-
+                                                                                        </div>
+                                                                                        @if ($package->package_type !== 'fixed')
+                                                                                            <button type="button"
+                                                                                                class="btn btn-primary btn-sm position-absolute top-0 end-0 m-2 editDayItemsBtn"
+                                                                                                data-day-id="{{ $day->id }}"
+                                                                                                data-type="todo"
+                                                                                                data-item-id="{{ $todo->id }}"
+                                                                                                data-index="{{ $todo_slot }}">
+                                                                                                <i
+                                                                                                    class="fa-solid fa-pencil"></i>
+                                                                                            </button>
+                                                                                        @endif
+                                                                                    </div>
+                                                                                    @php
+                                                                                        $todo_slot++;
+                                                                                    @endphp
                                                                                 @endforeach
                                                                             </div>
                                                                         </div>
@@ -464,12 +465,12 @@
                                                                             <div
                                                                                 class="d-flex gap-2 pkg-details__accordion-actions">
                                                                                 <!-- <button type="button"
-                                                                                    class="btn btn-primary btn-sm editDayItemsBtn"
-                                                                                    data-day-id="{{ $day->id }}"
-                                                                                    data-type="event"
-                                                                                    data-selected="{{ $events->pluck('id')->join(',') }}">
-                                                                                    <i class="fa-solid fa-pencil"></i>
-                                                                                </button> -->
+                                                                                                                    class="btn btn-primary btn-sm editDayItemsBtn"
+                                                                                                                    data-day-id="{{ $day->id }}"
+                                                                                                                    data-type="event"
+                                                                                                                    data-selected="{{ $events->pluck('id')->join(',') }}">
+                                                                                                                    <i class="fa-solid fa-pencil"></i>
+                                                                                                                </button> -->
 
                                                                             </div>
                                                                         </div>
@@ -481,56 +482,56 @@
                                                                             <div class="accordion-body"
                                                                                 id="day-{{ $day->id }}-event-list">
                                                                                 @php
-                                                                                $event_slot = 0;
-                                                                                 @endphp
+                                                                                    $event_slot = 0;
+                                                                                @endphp
 
                                                                                 @foreach ($events as $index => $event)
-                                                                                <div class="day-item-slot d-flex position-relative"
+                                                                                    <div class="day-item-slot d-flex position-relative"
                                                                                         data-day-id="{{ $day->id }}"
                                                                                         data-type="event"
-                                                                                        data-index="{{ $event_slot  }}">
-                                                                                <div
-                                                                                        class="day-item-wrapper"
-                                                                                        data-day-id="{{ $day->id }}"
-                                                                                        data-type="event"
-                                                                                        data-item-id="{{ $event->id }}"
-                                                                                        data-index="{{ $event_slot }}"
-                                                                                    >
-                                                                                    <div class="d-flex gap-3 mb-3">
-                                                                                        <img src="{{ $event->thumb ? asset('storage/' . $event->thumb->image_path) : asset('frontend/assets/hotel-placeholder.jpg') }}"
-                                                                                            class="pkg-details__tr-ht-img">
+                                                                                        data-index="{{ $event_slot }}">
+                                                                                        <div class="day-item-wrapper"
+                                                                                            data-day-id="{{ $day->id }}"
+                                                                                            data-type="event"
+                                                                                            data-item-id="{{ $event->id }}"
+                                                                                            data-index="{{ $event_slot }}">
+                                                                                            <div class="d-flex gap-3 mb-3">
+                                                                                                <img src="{{ $event->thumb ? asset('storage/' . $event->thumb->image_path) : asset('frontend/assets/hotel-placeholder.jpg') }}"
+                                                                                                    class="pkg-details__tr-ht-img">
 
-                                                                                        <div>
-                                                                                            <p class="fw-600">
-                                                                                                {{ $event->translation->title }}
-                                                                                            </p>
-                                                                                            <p class="p-small text-light2">
-                                                                                                <i
-                                                                                                    class="fa fa-calendar"></i>
-                                                                                                {{ \App\Helpers\DateHelper::format($event->start_date) }}
-                                                                                            </p>
+                                                                                                <div>
+                                                                                                    <p class="fw-600">
+                                                                                                        {{ $event->translation->title }}
+                                                                                                    </p>
+                                                                                                    <p
+                                                                                                        class="p-small text-light2">
+                                                                                                        <i
+                                                                                                            class="fa fa-calendar"></i>
+                                                                                                        {{ \App\Helpers\DateHelper::format($event->start_date) }}
+                                                                                                    </p>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <input type="hidden"
+                                                                                                name="extra_price"
+                                                                                                value="{{ $dayWiseOptions[$day->id]['event'][$event->id]['extra_price'] ?? 0 }}">
+
                                                                                         </div>
+                                                                                        @if ($package->package_type !== 'fixed')
+                                                                                            <button type="button"
+                                                                                                class="btn btn-primary position-absolute top-0 end-0 m-2 editDayItemsBtn"
+                                                                                                data-day-id="{{ $day->id }}"
+                                                                                                data-type="event"
+                                                                                                data-item-id="{{ $event->id }}"
+                                                                                                data-index="{{ $event_slot }}">
+                                                                                                <i
+                                                                                                    class="fa-solid fa-pencil"></i>
+                                                                                            </button>
+                                                                                        @endif
+
+                                                                                        @php
+                                                                                            $event_slot++;
+                                                                                        @endphp
                                                                                     </div>
-                                                                                    <input type="hidden" name="extra_price" value="{{$dayWiseOptions[$day->id]['event'][$event->id]['extra_price'] ?? 0 }}">
-
-                                                                                </div>
-                                                                                @if($package->package_type !== 'fixed')
-                                                                                    <button
-                                                                            type="button"
-                                                                            class="btn btn-primary position-absolute top-0 end-0 m-2 editDayItemsBtn"
-                                                                            data-day-id="{{ $day->id }}"
-                                                                            data-type="event"
-                                                                            data-item-id="{{ $event->id }}"
-                                                                            data-index="{{ $event_slot }}"
-                                                                        >
-                                                                            <i class="fa-solid fa-pencil"></i>
-                                                                        </button>
-                                                                        @endif
-
-                                                                        @php
-                                                                                $event_slot++;
-                                                                                 @endphp
-                                                                </div>
                                                                                 @endforeach
                                                                             </div>
                                                                         </div>
@@ -538,6 +539,121 @@
                                                                     </div>
                                                                 </div>
                                                             @endif
+
+
+                                                            {{-- ================= TRANSPORT ================= --}}
+                                                            @php
+                                                                $sessionTransportIds =
+                                                                    $sessionItems[$day->id]['transport'] ?? null;
+
+                                                                if ($sessionTransportIds) {
+                                                                    // session exists → show selected
+                                                                    $transports = $allTransports->whereIn(
+                                                                        'id',
+                                                                        array_values($sessionTransportIds),
+                                                                    );
+                                                                } else {
+                                                                    // first time → show package default
+                                                                    $transports = $day->items
+                                                                        ->where('item_type', 'transport')
+                                                                        ->map(fn($i) => $i->transport);
+                                                                }
+
+                                                            @endphp
+
+                                                            @if ($transports->count())
+                                                                <div class="accordion accordion-flush mb-3"
+                                                                    id="transportAccordion{{ $day->id }}">
+
+                                                                    <div
+                                                                        class="accordion-item border rounded pkg-details__accordion-item">
+
+                                                                        <div class="accordion-header">
+                                                                            <div
+                                                                                class="d-flex justify-content-between align-items-center">
+                                                                                <div
+                                                                                    class="d-flex align-items-center gap-2">
+                                                                                    <div class="accordion-icon"
+                                                                                        data-bs-toggle="collapse"
+                                                                                        data-bs-target="#transportCollapse{{ $day->id }}">
+                                                                                        <i
+                                                                                            class="fa-solid fa-chevron-down"></i>
+                                                                                    </div>
+                                                                                    <p class="p-small fw-600">Transport</p>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div
+                                                                                class="d-flex gap-2 pkg-details__accordion-actions">
+                                                                                {{-- edit button if needed --}}
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div id="transportCollapse{{ $day->id }}"
+                                                                            class="accordion-collapse collapse show"
+                                                                            data-bs-parent="#transportAccordion{{ $day->id }}">
+
+                                                                            <div class="accordion-body"
+                                                                                id="day-{{ $day->id }}-transport-list">
+
+                                                                                @php
+                                                                                    $transport_slot = 0;
+                                                                                @endphp
+
+                                                                                @foreach ($transports as $index => $transport)
+                                                                                    <div class="day-item-slot d-flex position-relative"
+                                                                                        data-day-id="{{ $day->id }}"
+                                                                                        data-type="transport"
+                                                                                        data-index="{{ $transport_slot }}">
+
+                                                                                        <div class="day-item-wrapper"
+                                                                                            data-day-id="{{ $day->id }}"
+                                                                                            data-type="transport"
+                                                                                            data-item-id="{{ $transport->id }}"
+                                                                                            data-index="{{ $transport_slot }}">
+
+                                                                                            <div class="d-flex gap-3 mb-3">
+                                                                                                <img src="{{ $transport->thumb
+                                                                                                    ? asset('storage/' . $transport->thumb->image_path)
+                                                                                                    : asset('frontend/assets/transport-placeholder.jpg') }}"
+                                                                                                    class="pkg-details__tr-ht-img">
+
+                                                                                                <div>
+                                                                                                    <p class="fw-600">
+                                                                                                        {{ $transport->translation->name }}
+                                                                                                    </p>
+
+                                                                                                </div>
+                                                                                            </div>
+
+                                                                                            <input type="hidden"
+                                                                                                name="extra_price"
+                                                                                                value="{{ $dayWiseOptions[$day->id]['transport'][$transport->id]['extra_price'] ?? 0 }}">
+                                                                                        </div>
+
+                                                                                        @if ($package->package_type !== 'fixed')
+                                                                                            <button type="button"
+                                                                                                class="btn btn-primary position-absolute top-0 end-0 m-2 editDayItemsBtn"
+                                                                                                data-day-id="{{ $day->id }}"
+                                                                                                data-type="transport"
+                                                                                                data-item-id="{{ $transport->id }}"
+                                                                                                data-index="{{ $transport_slot }}">
+                                                                                                <i
+                                                                                                    class="fa-solid fa-pencil"></i>
+                                                                                            </button>
+                                                                                        @endif
+
+                                                                                        @php $transport_slot++; @endphp
+                                                                                    </div>
+                                                                                @endforeach
+
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+                                                            @endif
+
 
                                                         </div>
                                                     </div>
@@ -618,8 +734,10 @@
                             {{-- 🔒 CSRF not required for GET, but ok if POST --}}
                             @csrf
                             <input type="hidden" name="slug" value="{{ $package->slug }}">
-                            <button
-                                type="submit"
+
+                            <input type="hidden" name="day_items_extra" id="dayItemsExtraInput"
+                                form="packageCheckoutForm">
+                            <button type="submit"
                                 class="btn btn-primary justify-content-center pkg-details__book-now-btn my-2">
                                 Book Now
                             </button>
@@ -630,7 +748,8 @@
                         <div class="fw-500 text-light2 d-flex align-items-center gap-1">
                             <p>Total Price: </p>
                             <img src="{{ asset('frontend/assets/icons/riyal-light.svg') }}" alt="Riyal">
-                            <p>{{ $package->price->original_price }}</p>
+                            <p id="liveTotalPrice">{{ $package->price->original_price }}</p>
+
                         </div>
 
                         <!-- Decorative line -->
@@ -1027,19 +1146,20 @@
 
 
     <div class="offcanvas offcanvas-end" id="dayItemModal" tabindex="-1">
-            <div class="modal-header">
-                <h5 class="modal-title" id="dayItemModalTitle"></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
+        <div class="modal-header">
+            <h5 class="modal-title" id="dayItemModalTitle"></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
 
-            <div class="offcanvas-body side-drawer__booking-body">
-                <div id="dayItemList" class="row g-3"></div>
-            </div>
-            <div class="offcanvas-footer border-top text-end p-3">
-                <button id="saveDayItems" class="btn btn-outline-secondary rounded-pill" data-bs-dismiss="offcanvas">Save</button>
-            </div>
+        <div class="offcanvas-body side-drawer__booking-body">
+            <div id="dayItemList" class="row g-3"></div>
+        </div>
+        <div class="offcanvas-footer border-top text-end p-3">
+            <button id="saveDayItems" class="btn btn-outline-secondary rounded-pill"
+                data-bs-dismiss="offcanvas">Save</button>
+        </div>
 
-</div>
+    </div>
 
 
     <!-- Modal -->
@@ -1146,577 +1266,355 @@
                             </div>
                         </div>
                     </div>
-                    <button
-                        class="btn btn-primary mt-3 w-100 btn-lg justify-content-center rounded-pill">Search</button>
+                    <button class="btn btn-primary mt-3 w-100 btn-lg justify-content-center rounded-pill">Search</button>
                 </div>
             </div>
         </div>
     </div>
     @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
 
-<!-- <script>
-document.addEventListener('DOMContentLoaded', () => {
+                let activeSlot = null; // stable container
+                let activeWrapper = null; // replaceable wrapper
+                let selectedClone = null;
 
-    let activeSlot    = null; // stable container
-    let activeWrapper = null; // replaceable
-    let selectedClone = null;
+                /* =====================================================
+                   OPEN EDIT MODAL
+                ===================================================== */
+                document.addEventListener('click', e => {
 
-    /* ================= OPEN MODAL ================= */
-    document.addEventListener('click', e => {
+                    const btn = e.target.closest('.editDayItemsBtn');
+                    if (!btn) return;
 
-        const btn = e.target.closest('.editDayItemsBtn');
-        if (!btn) return;
+                    activeSlot = btn.closest('.day-item-slot');
+                    if (!activeSlot) return;
 
-        activeSlot = btn.closest('.day-item-slot');
-        if (!activeSlot) return;
+                    activeWrapper = activeSlot.querySelector('.day-item-wrapper');
+                    if (!activeWrapper) return;
 
-        activeWrapper = activeSlot.querySelector('.day-item-wrapper');
-        if (!activeWrapper) return;
+                    const dayId = activeSlot.dataset.dayId;
+                    const type = activeSlot.dataset.type;
+                    const index = activeSlot.dataset.index;
+                    const itemId = activeWrapper.dataset.itemId;
 
-        const dayId  = activeSlot.dataset.dayId;
-        const type   = activeSlot.dataset.type;
-        const index  = activeSlot.dataset.index;
-        const itemId = activeWrapper.dataset.itemId;
+                    const list = document.getElementById('dayItemList');
+                    list.innerHTML = '';
+                    selectedClone = null;
 
-        const list = document.getElementById('dayItemList');
-        list.innerHTML = '';
-        selectedClone = null;
+                    /* ================= CURRENT ITEM ================= */
+                    const currentWrapper = activeWrapper.cloneNode(true);
+                    currentWrapper.dataset.index = index;
 
-        /* CURRENT ITEM */
-        const currentWrapper = activeWrapper.cloneNode(true);
-        currentWrapper.dataset.index = index; // 🔒 FORCE SLOT INDEX
+                    // ❌ remove price from main clone (safety)
+                    currentWrapper.querySelectorAll('.extra-price').forEach(p => p.remove());
+                    currentWrapper.querySelectorAll('input[name="extra_price"]').forEach(i => i.remove());
 
-        const currentCard = document.createElement('div');
-        currentCard.className = 'col-md-4 selectable-card-wrapper active';
-        currentCard.appendChild(currentWrapper);
+                    const currentCard = document.createElement('div');
+                    currentCard.className = 'selectable-card-wrapper active';
+                    currentCard.appendChild(currentWrapper);
 
-        selectedClone = currentWrapper.cloneNode(true);
+                    selectedClone = currentWrapper.cloneNode(true);
 
-        currentCard.onclick = () => {
-            document.querySelectorAll('.selectable-card-wrapper')
-                .forEach(c => c.classList.remove('active'));
-            currentCard.classList.add('active');
-            selectedClone = currentWrapper.cloneNode(true);
-        };
-
-        list.appendChild(currentCard);
-
-        /* OPTIONS */
-        fetch(`/package-day-option/${dayId}/${type}`)
-            .then(r => r.json())
-            .then(res => {
-
-                res.data.forEach(item => {
-                    const model = item[type];
-                    if (!model || model.id == itemId) return;
-
-                    const wrapper = activeWrapper.cloneNode(true);
-                    wrapper.dataset.itemId = model.id;
-                    wrapper.dataset.index  = index; // 🔒 FORCE SLOT INDEX
-
-                    const img = wrapper.querySelector('img');
-                    if (img && model.thumb?.image_path) {
-                        img.src = `/storage/${model.thumb.image_path}`;
-                    }
-
-                    const title = wrapper.querySelector('.fw-600');
-                    if (title) {
-                        title.innerText =
-                            model.translation?.name ||
-                            model.translation?.title || '';
-                    }
-
-                    const card = document.createElement('div');
-                    card.className = 'col-md-4 selectable-card-wrapper';
-                    card.appendChild(wrapper);
-
-                    card.onclick = () => {
+                    currentCard.onclick = () => {
                         document.querySelectorAll('.selectable-card-wrapper')
                             .forEach(c => c.classList.remove('active'));
-                        card.classList.add('active');
-                        selectedClone = wrapper.cloneNode(true);
+                        currentCard.classList.add('active');
+                        selectedClone = currentWrapper.cloneNode(true);
                     };
 
-                    list.appendChild(card);
+                    list.appendChild(currentCard);
+
+                    /* ================= OPTIONS ================= */
+                    fetch(`/package-day-option/${dayId}/${type}`)
+                        .then(r => r.json())
+                        .then(res => {
+
+                            res.data.forEach(option => {
+
+                                const model = option[type];
+                                if (!model || model.id == itemId) return;
+
+                                const wrapper = activeWrapper.cloneNode(true);
+                                wrapper.dataset.itemId = model.id;
+                                wrapper.dataset.index = index;
+
+                                /* image */
+                                const img = wrapper.querySelector('img');
+                                if (img && model.thumb?.image_path) {
+                                    img.src = `/storage/${model.thumb.image_path}`;
+                                }
+
+                                /* title */
+                                const title = wrapper.querySelector('.fw-600');
+                                if (title) {
+                                    title.innerText =
+                                        model.translation?.name ||
+                                        model.translation?.title || '';
+                                }
+
+                                /* ================= EXTRA PRICE (POPUP ONLY) ================= */
+                                wrapper.querySelectorAll('.extra-price').forEach(p => p.remove());
+                                wrapper.querySelectorAll('input[name="extra_price"]').forEach(i => i
+                                    .remove());
+
+                                const extraPrice = parseFloat(option.extra_price || 0);
+
+                                if (extraPrice > 0) {
+
+                                    /* visible price (popup only) */
+                                    const priceEl = document.createElement('div');
+                                    priceEl.className = 'extra-price text-success fw-600 mt-1';
+                                    priceEl.innerText = `+ ${extraPrice}`;
+                                    title.after(priceEl);
+
+                                    /* hidden input (for calculation later) */
+                                    const hiddenInput = document.createElement('input');
+                                    hiddenInput.type = 'hidden';
+                                    hiddenInput.name = 'extra_price';
+                                    hiddenInput.value = extraPrice;
+                                    wrapper.appendChild(hiddenInput);
+                                }
+
+                                const card = document.createElement('div');
+                                card.className = 'col-md-12 selectable-card-wrapper';
+                                card.appendChild(wrapper);
+
+                                card.onclick = () => {
+                                    document.querySelectorAll('.selectable-card-wrapper')
+                                        .forEach(c => c.classList.remove('active'));
+                                    card.classList.add('active');
+                                    selectedClone = wrapper.cloneNode(true);
+                                };
+
+                                list.appendChild(card);
+                            });
+
+                            // new bootstrap.Modal(
+                            //     document.getElementById('dayItemModal')
+                            // ).show();
+
+                            new bootstrap.Offcanvas(
+                                document.getElementById('dayItemModal')
+                            ).show();
+                        });
                 });
 
-                new bootstrap.Modal(
-                    document.getElementById('dayItemModal')
-                ).show();
+                /* =====================================================
+                   SAVE SELECTION
+                ===================================================== */
+                document.getElementById('saveDayItems').onclick = () => {
+
+                    if (!activeSlot || !selectedClone) return;
+
+                    const dayId = activeSlot.dataset.dayId;
+                    const type = activeSlot.dataset.type;
+                    const index = activeSlot.dataset.index;
+                    const itemId = selectedClone.dataset.itemId;
+
+                    /* 🔒 lock index */
+                    selectedClone.dataset.index = index;
+
+                    /* ❌ REMOVE price text from MAIN list */
+                    selectedClone.querySelectorAll('.extra-price').forEach(p => p.remove());
+
+                    /* replace wrapper only */
+                    const oldWrapper = activeSlot.querySelector('.day-item-wrapper');
+                    if (oldWrapper) oldWrapper.remove();
+
+                    activeSlot.prepend(selectedClone);
+
+                    /* update edit button */
+                    const editBtn = activeSlot.querySelector('.editDayItemsBtn');
+                    if (editBtn) editBtn.dataset.itemId = itemId;
+
+                    /* SAVE TO SESSION */
+                    fetch('/save-package-day-item-session', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            package_id: {{ $package->id }},
+                            day_id: dayId,
+                            type: type,
+                            index: index,
+                            item_id: itemId
+                        })
+                    });
+
+                    let totalExtra = 0;
+
+                    document.querySelectorAll(
+                        '.day-item-slot > .day-item-wrapper:first-child'
+                    ).forEach(wrapper => {
+
+                        const input = wrapper.querySelector('input[name="extra_price"]');
+                        if (!input) return;
+
+                        const value = parseFloat(input.value || 0);
+
+                        // 🔒 only count if actually extra
+                        if (value > 0) {
+                            totalExtra += value;
+                        }
+                    });
+
+
+                    console.log('Total Extra Price from Day Items:', totalExtra);
+
+                    window.PRICE_STATE.extras.dayItems = totalExtra;
+
+                    updatePricing();
+
+
+                    bootstrap.Offcanvas.getInstance(
+                        document.getElementById('dayItemModal')
+                    ).hide();
+                };
+
+                syncDayItemExtrasFromDOM();
+                updatePricing();
             });
-    });
+        </script>
+        <script>
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.travellers-dropdown')) {
+                    e.stopPropagation();
+                }
+            });
+        </script>
 
-    /* ================= SAVE ================= */
-    document.getElementById('saveDayItems').onclick = () => {
+        <script>
+            document.addEventListener('click', e => {
+                const chip = e.target.closest('.traveller-chip');
+                if (!chip) return;
 
-        if (!activeSlot || !selectedClone) return;
+                chip.closest('.travellers-dropdown')
+                    .querySelectorAll('.traveller-chip')
+                    .forEach(c => c.classList.remove('active'));
 
-        const dayId  = activeSlot.dataset.dayId;
-        const type   = activeSlot.dataset.type;
-        const index  = activeSlot.dataset.index;
-        const itemId = selectedClone.dataset.itemId;
+                chip.classList.add('active');
 
-        selectedClone.dataset.index = index; // 🔒 SAFETY LOCK
+            });
+        </script>
 
-        const oldWrapper = activeSlot.querySelector('.day-item-wrapper');
-        if (oldWrapper) oldWrapper.remove();
 
-        activeSlot.prepend(selectedClone);
 
-        const editBtn = activeSlot.querySelector('.editDayItemsBtn');
-        if (editBtn) editBtn.dataset.itemId = itemId;
+        <script>
+            function updatePricing() {
+                // alert('Updating pricing...');
+                /* ================= CONFIG & STATE ================= */
+                const pkg = window.PACKAGE;
+                const state = window.PRICE_STATE;
 
-        fetch('/save-package-day-item-session', {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                package_id: {{ $package->id }},
-                day_id: dayId,
-                type: type,
-                index: index,
-                item_id: itemId
-            })
-        });
+                const adults = state.persons.adults;
+                const children = state.persons.children;
 
-        bootstrap.Modal.getInstance(
-            document.getElementById('dayItemModal')
-        ).hide();
-    };
-});
-</script> -->
+                /* ================= BASE PRICE ================= */
+                const basePrice = pkg.originalPrice;
 
-<!-- <script>
-document.addEventListener('DOMContentLoaded', () => {
+                /* ================= EXTRA ADULT ================= */
+                const extraAdults =
+                    Math.max(0, adults - pkg.basePersons);
 
-    let activeSlot    = null;
-    let activeWrapper = null;
-    let selectedClone = null;
+                let extraAdultPerPrice = 0;
 
-    /* ================= OPEN MODAL ================= */
-    document.addEventListener('click', e => {
-
-        const btn = e.target.closest('.editDayItemsBtn');
-        if (!btn) return;
-
-        activeSlot = btn.closest('.day-item-slot');
-        if (!activeSlot) return;
-
-        activeWrapper = activeSlot.querySelector('.day-item-wrapper');
-        if (!activeWrapper) return;
-
-        const dayId  = activeSlot.dataset.dayId;
-        const type   = activeSlot.dataset.type;
-        const index  = activeSlot.dataset.index;
-        const itemId = activeWrapper.dataset.itemId;
-
-        const list = document.getElementById('dayItemList');
-        list.innerHTML = '';
-        selectedClone = null;
-
-        /* ================= CURRENT ITEM ================= */
-        const currentWrapper = activeWrapper.cloneNode(true);
-        currentWrapper.dataset.index = index;
-
-        const currentCard = document.createElement('div');
-        currentCard.className = 'col-md-4 selectable-card-wrapper active';
-        currentCard.appendChild(currentWrapper);
-
-        selectedClone = currentWrapper.cloneNode(true);
-
-        currentCard.onclick = () => {
-            document.querySelectorAll('.selectable-card-wrapper')
-                .forEach(c => c.classList.remove('active'));
-            currentCard.classList.add('active');
-            selectedClone = currentWrapper.cloneNode(true);
-        };
-
-        list.appendChild(currentCard);
-
-        /* ================= FETCH OPTIONS ================= */
-        fetch(`/package-day-option/${dayId}/${type}`)
-            .then(r => r.json())
-            .then(res => {
-
-                res.data.forEach(option => {
-
-                    const model = option[type];
-                    if (!model) return;
-                    if (model.id == itemId) return;
-
-                    const wrapper = activeWrapper.cloneNode(true);
-                    wrapper.dataset.itemId = model.id;
-                    wrapper.dataset.index  = index;
-
-                    /* image */
-                    const img = wrapper.querySelector('img');
-                    if (img && model.thumb?.image_path) {
-                        img.src = `/storage/${model.thumb.image_path}`;
+                pkg.extraAdultRules.forEach(rule => {
+                    if (extraAdults >= rule.person_number) {
+                        extraAdultPerPrice = rule.price;
                     }
-
-                    /* title */
-                    const title = wrapper.querySelector('.fw-600');
-                    if (title) {
-                        title.innerText =
-                            model.translation?.name ||
-                            model.translation?.title || '';
-                    }
-
-                    /* ================= EXTRA PRICE (POPUP ONLY) ================= */
-                    let priceEl = wrapper.querySelector('.extra-price');
-
-                    if (!priceEl) {
-                        priceEl = document.createElement('div');
-                        priceEl.className = 'extra-price text-success fw-600 mt-1';
-                        title.after(priceEl);
-                    }
-
-                    if (parseFloat(option.extra_price) > 0) {
-                        priceEl.innerText = `+ ${option.extra_price}`;
-
-
-
-                    } else {
-                        priceEl.remove();
-                    }
-
-                    const card = document.createElement('div');
-                    card.className = 'col-md-4 selectable-card-wrapper';
-                    card.appendChild(wrapper);
-
-                    card.onclick = () => {
-                        document.querySelectorAll('.selectable-card-wrapper')
-                            .forEach(c => c.classList.remove('active'));
-                        card.classList.add('active');
-                        selectedClone = wrapper.cloneNode(true);
-                    };
-
-
-
-                    list.appendChild(card);
                 });
 
-                new bootstrap.Modal(
-                    document.getElementById('dayItemModal')
-                ).show();
-            });
-    });
+                const extraAdultTotal =
+                    extraAdults * extraAdultPerPrice;
 
-    /* ================= SAVE ================= */
-    document.getElementById('saveDayItems').onclick = () => {
+                /* ================= CHILD PRICE ================= */
+                let childPerPrice = 0;
+                let childTotal = 0;
 
-        if (!activeSlot || !selectedClone) return;
+                if (children && pkg.childRules.length) {
 
-        const dayId  = activeSlot.dataset.dayId;
-        const type   = activeSlot.dataset.type;
-        const index  = activeSlot.dataset.index;
-        const itemId = selectedClone.dataset.itemId;
+                    const rule = pkg.childRules[0];
 
-        selectedClone.dataset.index = index;
+                    childPerPrice =
+                        rule.type === 'fixed' ?
+                        rule.value :
+                        (pkg.pricePerPerson * rule.value) / 100;
 
-        const oldWrapper = activeSlot.querySelector('.day-item-wrapper');
-        if (oldWrapper) oldWrapper.remove();
+                    childTotal = childPerPrice * children;
+                }
 
-        removeExtraPrice(selectedClone);
+                /* ================= DAY ITEM EXTRA ================= */
+                const dayItemExtra =
+                    parseFloat(state.extras.dayItems || 0);
 
-        activeSlot.prepend(selectedClone);
+                /* ================= FINAL TOTAL ================= */
+                const finalTotal =
+                    basePrice +
+                    extraAdultTotal +
+                    childTotal +
+                    dayItemExtra;
 
-        const editBtn = activeSlot.querySelector('.editDayItemsBtn');
-        if (editBtn) editBtn.dataset.itemId = itemId;
+                /* ================= UPDATE RIGHT PRICE UI ================= */
+                const priceEl = document.getElementById('liveTotalPrice');
+                if (priceEl) {
+                    priceEl.innerText = finalTotal.toFixed(2);
+                }
 
-        fetch('/save-package-day-item-session', {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                package_id: {{ $package->id }},
-                day_id: dayId,
-                type: type,
-                index: index,
-                item_id: itemId
-            })
-        });
+                /* ================= UPDATE HIDDEN INPUTS ================= */
+                document.getElementById('adultsInput').value = adults;
+                document.getElementById('childrenInput').value = children;
+                document.getElementById('totalPersonsInput').value =
+                    adults + children;
 
-        bootstrap.Modal.getInstance(
-            document.getElementById('dayItemModal')
-        ).hide();
-    };
-});
+                document.getElementById('basePriceInput').value = basePrice;
 
-function removeExtraPrice(el) {
-    const price = el.querySelector('.extra-price');
-    if (price) price.remove();
-}
+                document.getElementById('extraAdultsInput').value = extraAdults;
+                document.getElementById('extraAdultPerPriceInput').value =
+                    extraAdultPerPrice;
+                document.getElementById('extraAdultTotalPriceInput').value =
+                    extraAdultTotal;
 
-function addExtraPrice(wrapper, price) {
-    if (!price || price == 0) return;
+                document.getElementById('childPerPriceInput').value =
+                    childPerPrice;
+                document.getElementById('childTotalPriceInput').value =
+                    childTotal;
 
-    const priceEl = document.createElement('div');
-    priceEl.className = 'extra-price text-success fw-bold mt-1';
-    priceEl.innerText = `+ ₹${price}`;
+                document.getElementById('finalTotalInput').value =
+                    finalTotal;
 
-    wrapper.appendChild(priceEl);
-}
-</script> -->
+                /* ================= HIDDEN INPUTS ================= */
+                document.getElementById('dayItemsExtraInput').value =
+                    dayItemExtra;
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-
-    let activeSlot    = null; // stable container
-    let activeWrapper = null; // replaceable wrapper
-    let selectedClone = null;
-
-    /* =====================================================
-       OPEN EDIT MODAL
-    ===================================================== */
-    document.addEventListener('click', e => {
-
-        const btn = e.target.closest('.editDayItemsBtn');
-        if (!btn) return;
-
-        activeSlot = btn.closest('.day-item-slot');
-        if (!activeSlot) return;
-
-        activeWrapper = activeSlot.querySelector('.day-item-wrapper');
-        if (!activeWrapper) return;
-
-        const dayId  = activeSlot.dataset.dayId;
-        const type   = activeSlot.dataset.type;
-        const index  = activeSlot.dataset.index;
-        const itemId = activeWrapper.dataset.itemId;
-
-        const list = document.getElementById('dayItemList');
-        list.innerHTML = '';
-        selectedClone = null;
-
-        /* ================= CURRENT ITEM ================= */
-        const currentWrapper = activeWrapper.cloneNode(true);
-        currentWrapper.dataset.index = index;
-
-        // ❌ remove price from main clone (safety)
-        currentWrapper.querySelectorAll('.extra-price').forEach(p => p.remove());
-        currentWrapper.querySelectorAll('input[name="extra_price"]').forEach(i => i.remove());
-
-        const currentCard = document.createElement('div');
-        currentCard.className = 'selectable-card-wrapper active';
-        currentCard.appendChild(currentWrapper);
-
-        selectedClone = currentWrapper.cloneNode(true);
-
-        currentCard.onclick = () => {
-            document.querySelectorAll('.selectable-card-wrapper')
-                .forEach(c => c.classList.remove('active'));
-            currentCard.classList.add('active');
-            selectedClone = currentWrapper.cloneNode(true);
-        };
-
-        list.appendChild(currentCard);
-
-        /* ================= OPTIONS ================= */
-        fetch(`/package-day-option/${dayId}/${type}`)
-            .then(r => r.json())
-            .then(res => {
-
-                res.data.forEach(option => {
-
-                    const model = option[type];
-                    if (!model || model.id == itemId) return;
-
-                    const wrapper = activeWrapper.cloneNode(true);
-                    wrapper.dataset.itemId = model.id;
-                    wrapper.dataset.index  = index;
-
-                    /* image */
-                    const img = wrapper.querySelector('img');
-                    if (img && model.thumb?.image_path) {
-                        img.src = `/storage/${model.thumb.image_path}`;
-                    }
-
-                    /* title */
-                    const title = wrapper.querySelector('.fw-600');
-                    if (title) {
-                        title.innerText =
-                            model.translation?.name ||
-                            model.translation?.title || '';
-                    }
-
-                    /* ================= EXTRA PRICE (POPUP ONLY) ================= */
-                    wrapper.querySelectorAll('.extra-price').forEach(p => p.remove());
-                    wrapper.querySelectorAll('input[name="extra_price"]').forEach(i => i.remove());
-
-                    const extraPrice = parseFloat(option.extra_price || 0);
-
-                    if (extraPrice > 0) {
-
-                        /* visible price (popup only) */
-                        const priceEl = document.createElement('div');
-                        priceEl.className = 'extra-price text-success fw-600 mt-1';
-                        priceEl.innerText = `+ ${extraPrice}`;
-                        title.after(priceEl);
-
-                        /* hidden input (for calculation later) */
-                        const hiddenInput = document.createElement('input');
-                        hiddenInput.type  = 'hidden';
-                        hiddenInput.name  = 'extra_price';
-                        hiddenInput.value = extraPrice;
-                        wrapper.appendChild(hiddenInput);
-                    }
-
-                    const card = document.createElement('div');
-                    card.className = 'col-md-12 selectable-card-wrapper';
-                    card.appendChild(wrapper);
-
-                    card.onclick = () => {
-                        document.querySelectorAll('.selectable-card-wrapper')
-                            .forEach(c => c.classList.remove('active'));
-                        card.classList.add('active');
-                        selectedClone = wrapper.cloneNode(true);
-                    };
-
-                    list.appendChild(card);
+                /* ================= DEBUG (OPTIONAL) ================= */
+                console.log({
+                    basePrice,
+                    extraAdultTotal,
+                    childTotal,
+                    dayItemExtra,
+                    finalTotal
                 });
-
-                // new bootstrap.Modal(
-                //     document.getElementById('dayItemModal')
-                // ).show();
-
-                new bootstrap.Offcanvas(
-    document.getElementById('dayItemModal')
-).show();
-            });
-    });
-
-    /* =====================================================
-       SAVE SELECTION
-    ===================================================== */
-    document.getElementById('saveDayItems').onclick = () => {
-
-        if (!activeSlot || !selectedClone) return;
-
-        const dayId  = activeSlot.dataset.dayId;
-        const type   = activeSlot.dataset.type;
-        const index  = activeSlot.dataset.index;
-        const itemId = selectedClone.dataset.itemId;
-
-        /* 🔒 lock index */
-        selectedClone.dataset.index = index;
-
-        /* ❌ REMOVE price text from MAIN list */
-        selectedClone.querySelectorAll('.extra-price').forEach(p => p.remove());
-
-        /* replace wrapper only */
-        const oldWrapper = activeSlot.querySelector('.day-item-wrapper');
-        if (oldWrapper) oldWrapper.remove();
-
-        activeSlot.prepend(selectedClone);
-
-        /* update edit button */
-        const editBtn = activeSlot.querySelector('.editDayItemsBtn');
-        if (editBtn) editBtn.dataset.itemId = itemId;
-
-        /* SAVE TO SESSION */
-        fetch('/save-package-day-item-session', {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                package_id: {{ $package->id }},
-                day_id: dayId,
-                type: type,
-                index: index,
-                item_id: itemId
-            })
-        });
-
-        // bootstrap.Modal.getInstance(
-        //     document.getElementById('dayItemModal')
-        // ).hide();
-
-        bootstrap.Offcanvas.getInstance(
-            document.getElementById('dayItemModal')
-        ).hide();
-    };
-});
-</script>
-<script>
-document.addEventListener('click', function (e) {
-    if (e.target.closest('.travellers-dropdown')) {
-        e.stopPropagation();
-    }
-});
-</script>
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-
-    document.querySelectorAll('.travellers-dropdown').forEach(dropdown => {
-
-        dropdown.addEventListener('click', e => {
-            const btn = e.target.closest('.traveller-counter-btn');
-            if (!btn) return;
-
-            e.preventDefault();
-            e.stopPropagation();
-
-            const counter = btn.closest('.traveller-counter');
-            const countEl = counter.querySelector('.count');
-
-            let count = parseInt(countEl.innerText) || 0;
-
-            if (btn.classList.contains('plus')) {
-                count++;
             }
+        </script>
 
-            if (btn.classList.contains('minus') && count > 0) {
-                count--;
+        <script>
+            function syncDayItemExtrasFromDOM() {
+                let totalExtra = 0;
+
+                document.querySelectorAll(
+                    '.day-item-slot > .day-item-wrapper:first-child input[name="extra_price"]'
+                ).forEach(input => {
+                    const value = parseFloat(input.value || 0);
+                    if (value > 0) {
+                        totalExtra += value;
+                    }
+                });
+
+                window.PRICE_STATE.extras.dayItems = totalExtra;
             }
-
-            countEl.innerText = count;
-
-            updateTravellerSummary(dropdown);
-        });
-
-    });
-
-    function updateTravellerSummary(dropdown) {
-        const rows = dropdown.querySelectorAll('.traveller-row');
-        let adults = 0, children = 0, infants = 0;
-
-        rows.forEach(row => {
-            const label = row.querySelector('strong').innerText.toLowerCase();
-            const count = parseInt(row.querySelector('.count').innerText) || 0;
-
-            if (label.includes('adult')) adults = count;
-            if (label.includes('child')) children = count;
-            if (label.includes('infant')) infants = count;
-        });
-
-        const text = `${adults} Adults${children ? ', ' + children + ' Children' : ''}${infants ? ', ' + infants + ' Infants' : ''}`;
-
-        // Update visible text
-        document.querySelectorAll('[data-bs-toggle="dropdown"] p')
-            .forEach(p => p.innerText = text);
-    }
-
-});
-</script>
-<script>
-document.addEventListener('click', e => {
-    const chip = e.target.closest('.traveller-chip');
-    if (!chip) return;
-
-    chip.closest('.travellers-dropdown')
-        .querySelectorAll('.traveller-chip')
-        .forEach(c => c.classList.remove('active'));
-
-    chip.classList.add('active');
-});
-</script>
-
+        </script>
     @endpush
 @endsection

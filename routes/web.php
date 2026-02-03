@@ -153,7 +153,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::prefix('admin')->group(function () {
 
-     
+
         Route::resource('coupon', AdminCouponController::class);
         Route::post('coupon/{coupon}/status', [AdminCouponController::class, 'status'])
             ->name('coupon.status');
@@ -378,7 +378,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
 
 Route::middleware(['auth','user'])->prefix('user')->group(function () {
-    
+
     Route::post('/profile', [FrontendProfileController::class, 'update'])
             ->name('user.profile.update');
 

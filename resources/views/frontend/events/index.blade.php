@@ -157,6 +157,15 @@
 
                 <!-- APPLIED CATEGORY PILLS -->
                 <div class="package-listing__results-header gap-2">
+                    {{-- ALL --}}
+                    <a href="{{ route('event.listing') }}"
+                            class="text-decoration-none">
+                            <div class="package-listing__results-applied-fil
+                                {{ empty(request('categories')) ? 'success' : '' }}">
+                                <p class="p-small">All Events</p>
+                            </div>
+                    </a>
+
                     @foreach($categories as $category)
                         <a href="{{ route('event.listing') }}?categories[]={{ $category->id }}"
                            class="text-decoration-none">
