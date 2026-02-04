@@ -40,12 +40,21 @@
     $extraCitiesCount = max(0, $cities->count() - 1);
 @endphp
 
+@php
+    $thumbPath =
+        isset($booking->snapshot->snapshot_json['thumb']) &&
+        isset($booking->snapshot->snapshot_json['thumb']['image_path'])
+            ? $booking->snapshot->snapshot_json['thumb']['image_path']
+            : 'defaults/package.jpg';
+@endphp
+
 
 <div class="col-md-6 col-lg-6 col-xl-4">
     <div class="exclusive-offers__carousel-item user-bookings__card h-100">
 
         <div class="exclusive-offers__carousel-item-img">
-            <img src="{{asset('storage/' .$booking->snapshot->snapshot_json['thumb']['image_path'])}}" class="img-fluid">
+
+            <img src="{{ asset('storage/' . $thumbPath) }}">
 
             <div class="badge carousel-badge">
                 <i class="fa-solid fa-location-dot"></i>
@@ -104,7 +113,7 @@
                         class="btn btn-outline-primary user-bookings__view-details-btn gap-0 px-2 rounded-pill fw-500"
                         data-bs-toggle="offcanvas" data-bs-target="#viewBookingDetailsSideDrawer"
                         data-label="{{ $label }}"
-                        data-thumb="{{ asset('storage/' . $booking->snapshot->snapshot_json['thumb']['image_path']) }}"
+                        data-thumb="{{ asset('storage/' . $thumbPath) }}"
                         data-title="{{ $booking->package?->translation?->title }}"
                         data-route="{{ $cityRouteText }}"
                         data-total="{{ number_format($booking->booking_total_amount) }}"
