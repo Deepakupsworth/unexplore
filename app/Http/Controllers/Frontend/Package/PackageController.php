@@ -372,24 +372,34 @@ class PackageController extends Controller
         $language = current_lang();
 
         $package = Package::with([
+            'thumb',
+            'gallery',
+            'translation',
             'days.items.hotel.translation' => fn($q) => $q->where('language_code', $language),
             'days.items.hotel.thumb',
+            'days.items.hotel.gallery',
 
             'days.items.todo.translation' => fn($q) => $q->where('language_code', $language),
             'days.items.todo.thumb',
+            'days.items.todo.gallery',
 
             'days.items.event.translation' => fn($q) => $q->where('language_code', $language),
             'days.items.event.thumb',
+            'days.items.event.gallery',
 
             // ===== ✅ ADD THIS ONLY =====
             'days.options.hotel.translation' => fn($q) => $q->where('language_code', $language),
             'days.options.hotel.thumb',
+            'days.options.hotel.gallery',
 
             'days.options.todo.translation' => fn($q) => $q->where('language_code', $language),
             'days.options.todo.thumb',
+            'days.options.todo.gallery',
+            
 
             'days.options.event.translation' => fn($q) => $q->where('language_code', $language),
             'days.options.event.thumb',
+            'days.options.event.gallery',
             'availabilities',
 
             'days.options.transport.translation' => fn($q) => $q->where('language_code', $language),
@@ -421,6 +431,13 @@ class PackageController extends Controller
                 })
                 ->toArray();
         }
+
+        
+
+       //use of this array for gallery images
+       $finalArray =  $this->finalArray($package);
+       // print_r($finalArray);die;
+
 
         //print_r($dayWiseOptions);die;
         $sessionItems = session("package_day_items.{$package->id}", []);
@@ -493,6 +510,17 @@ class PackageController extends Controller
             ->keyBy('id');
 
 
+        $filter_data = [];
+        $session_id_filter = "filter_package_".$package->id;
+        if(!empty(session($session_id_filter)))
+        {
+            $filter_data = session($session_id_filter);
+        }
+
+        //print_r($filter_data);die;
+            
+          
+
         return view('frontend.packages.show', compact(
             'package',
             'allHotels',
@@ -500,9 +528,57 @@ class PackageController extends Controller
             'allEvents',
             'allTransports',
             'dayWiseOptions',
-            'sessionItems'
+            'sessionItems',
+            'filter_data',
+            'finalArray'
         ));
     }
+
+    public function finalArray($package)
+    {
+        $finalArray = [
+            'package' => [
+                'name'    => $package->title,
+                'thumb'   => $package->thumb ?? null,
+                'gallery' => $package->gallery ?? [],
+            ],
+            'hotel'     => [],
+            'todo'      => [],
+            'event'     => [],
+            'transport' => [],
+        ];
+        
+        $added = [
+            'hotel'     => [],
+            'todo'      => [],
+            'event'     => [],
+            'transport' => [],
+        ];
+        
+        foreach ($package->days as $day) {
+            foreach ($day->items as $item) {
+        
+                $type = $item->item_type; // hotel | todo | event | transport
+                $data = $item->{$type} ?? null;
+        
+                if (!$data || isset($added[$type][$data->id])) {
+                    continue; // avoid duplicates across days
+                }
+        
+                $finalArray[$type][] = [
+                    'name'       => $data->translation->name ?? $data->translation->title,
+                    'video_url'  => $data->video_url ?? null, // mostly for event
+                    'thumb'      => $data->thumb ?? null,
+                    'gallery'    => $data->gallery ?? [],
+                ];
+        
+                $added[$type][$data->id] = true;
+            }
+        }
+
+        return $finalArray;
+    }
+
 
 
 
@@ -673,4 +749,37 @@ class PackageController extends Controller
             'status' => true
         ]);
     }
+
+    public function storeSession(Request $request)
+    {
+        $packageId = (int)$request->filter_package_unique_id;
+    
+        session([
+            "filter_package_{$packageId}" => [
+                'adults'   => (int) $request->adults,
+                'children' => (int) $request->children,
+                'date'     => $request->date,
+            ]
+        ]);
+    
+        return response()->json([
+            'success' => true
+        ]);
+    }
+
+
+    public function gallery($slug)
+    {
+        $package = Package::where('slug', $slug)->firstOrFail();
+
+          //use of this array for gallery images
+        $finalArray =  $this->finalArray($package);
+
+        return view('frontend.package.partials.gallery-modal-content', compact(
+            'package',
+            'finalArray'
+        ));
+    }
+
+    
 }

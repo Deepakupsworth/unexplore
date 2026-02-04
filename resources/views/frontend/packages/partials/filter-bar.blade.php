@@ -5,6 +5,8 @@
 
 <section class="mb-2 mt-4 package-filter-bar-section" id="packageFilterBar">
 
+
+
     {{-- ================= PHP → JS DATA ================= --}}
     <script>
         window.PACKAGE = {
@@ -57,14 +59,13 @@
 
 
     <div class="container">
-
-        {{-- ================= UI (UNCHANGED) ================= --}}
+ {{-- ================= UI (UNCHANGED) ================= --}}
         <div class="package-filter-bar package-filter-bar__desktop d-flex flex-wrap gap-2">
 
             {{-- DATE --}}
             <div class="pkg-fil-bar__input-wrapper flex-center">
                 <label>Starting From</label>
-                <input type="date" id="packageDate" value="{{ $minDate }}" min="{{ $minDate }}">
+                <input type="date" id="packageDate" value="{{ $filter_data['date'] ?? $minDate }}" min="{{ $minDate }}">
             </div>
 
             {{-- PERSONS --}}
@@ -78,6 +79,7 @@
 
                 <div class="dropdown-menu travellers-dropdown p-3 shadow-lg">
 
+                
                     {{-- ADULTS --}}
                     <div class="traveller-row d-flex justify-content-between align-items-center mb-3">
                         <div>
@@ -141,8 +143,11 @@
 
             const config = window.PACKAGE;
 
-            let adults = config.basePersons;
-            let children = 0;
+            // let adults = 5
+            // let children = 2;
+            let adults = Number('{{ $filter_data['adults'] ?? $package->base_persons }}');
+            let children = Number('{{ $filter_data['children'] ?? 0 }}');
+
 
             const adultEl = document.getElementById('adultCount');
             const childEl = document.getElementById('childCount');

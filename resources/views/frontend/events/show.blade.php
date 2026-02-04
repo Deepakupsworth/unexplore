@@ -1,6 +1,10 @@
 @extends('frontend.layout')
 @section('content')
-    {{-- @dd($relatedPackages) --}}
+    {{-- @dd($event) --}}
+    @php
+    $currentEvent = $event;
+    @endphp
+
     <!-- 1. EVENT DETAILS: BANNER  -->
     <section class="hero-banner hero-banner-fullscreen">
         @if ($event->video_url)
@@ -20,6 +24,13 @@
             <div class="dest-details-banner__content flex-column gap-3 text-center">
                 <h1 class="text-white w-100">{{ $event->translation->title }}</h1>
                 <h5>{{ $event->translation->sub_title }}.</h5>
+
+                <div class="dest-details-banner__btn-group">
+                    @if ($currentEvent?->gallery && $currentEvent?->gallery->count() > 0)
+                        <button class="btn btn-primary rounded-pill" data-bs-toggle="modal"
+                            data-bs-target="#eventGalleryModal">{{ __('thing_detail.banner.see_images') }}</button>
+                    @endif
+                </div>
             </div>
         </div>
     </section>
@@ -273,4 +284,6 @@
             </div>
         </div>
     </section>
+
+    @include('frontend.events.partials.event-gallery-modal')
 @endsection
