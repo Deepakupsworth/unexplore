@@ -32,7 +32,7 @@ class ThingtodoController extends Controller
         return view('backend.thingtodos.index', compact(
             'thingstodos',
             'cities',
-            'categories'
+            'categories',
         ));
     }
 

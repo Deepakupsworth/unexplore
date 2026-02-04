@@ -36,7 +36,7 @@
                     <p class="text-slate-500 mb-2">Category</p>
                     <p class="font-semibold">
                         @forelse ($package->packageCategories as $pc)
-                        <span class="badge bg-slate-900 text-white capitalize rounded-3xl">{{ $pc->category?->translation?->name }}
+                        <span class="badge bg-success-500 text-success-500 bg-opacity-30 capitalize rounded-3xl">{{ $pc->category?->translation?->name }}
                             @if (!$loop->last)</span>
                                 ,
                             @endif

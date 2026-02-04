@@ -20,6 +20,7 @@ class ThingToDoRepository implements ThingToDoRepositoryInterface
             'translations',
             'city.translations',
             'category.translations',
+            'thingCategories.category.translation',
             'gallery'
         ]);
 

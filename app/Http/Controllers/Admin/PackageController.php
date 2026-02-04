@@ -32,6 +32,7 @@ class PackageController extends Controller
             ->with([
                 'translations',
                 'category.translation',
+                'packageCategories.category.translation',
                 'thumb',
             ])
 
