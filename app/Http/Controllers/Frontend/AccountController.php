@@ -1,13 +1,11 @@
 <?php
+
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Booking;
-use App\Models\User;
 use App\Models\UserAddress;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use App\Models\Traveller;
 
 
@@ -21,7 +19,7 @@ class AccountController extends Controller
     public function loadTab(Request $request)
     {
         $tab = $request->get('tab', 'dashboard');
-       
+
         return match ($tab) {
             'dashboard' => view('frontend.account.tabs.dashboard', [
                 'stats' => Booking::where('user_id', auth()->user()->id)
@@ -37,14 +35,35 @@ class AccountController extends Controller
                 'user' => auth()->user(),
                 'profileImage' => auth()->user()->profileImage ?? null
             ]),
-            'bookings'  => view('frontend.account.tabs.bookings'),
+            /* ================= BOOKINGS (🔥 FIXED) ================= */
+            'bookings' => view('frontend.account.tabs.bookings', [
+
+                'upcomingBookings' => Booking::with('snapshot')
+                    ->where('user_id', auth()->user()->id)
+                    ->whereIn('status', ['pending', 'confirmed'])
+                    ->latest()
+                    ->get(),
+
+                'cancelledBookings' => Booking::with('snapshot')
+                    ->where('user_id', auth()->user()->id)
+                    ->where('status', 'cancelled')
+                    ->latest()
+                    ->get(),
+
+                'completedBookings' => Booking::with('snapshot')
+                    ->where('user_id', auth()->user()->id)
+                    ->where('status', 'completed')
+                    ->latest()
+                    ->get(),
+            ]),
+
             'addresses' => view('frontend.account.tabs.addresses', [
-                                'addresses' => UserAddress::where('user_id', auth()->id())->latest()->get()
-                            ]),
+                'addresses' => UserAddress::where('user_id', auth()->id())->latest()->get()
+            ]),
             'travellers' => view('frontend.account.tabs.travellers', [
                 'travellers' => Traveller::where('user_id', auth()->id())
-                ->latest()
-                ->get()
+                    ->latest()
+                    ->get()
             ]),
             'wishlist'  => view('frontend.account.tabs.wishlist'),
             default     => abort(404),
