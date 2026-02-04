@@ -79,7 +79,7 @@
 
                 <div class="dropdown-menu travellers-dropdown p-3 shadow-lg">
 
-                
+
                     {{-- ADULTS --}}
                     <div class="traveller-row d-flex justify-content-between align-items-center mb-3">
                         <div>
@@ -115,7 +115,6 @@
                 </div>
             </div>
 
-            <button class="btn btn-dark px-4 rounded-pill">Search</button>
         </div>
 
         {{-- ================= HIDDEN INPUTS (SERVER READY) ================= --}}

@@ -63,7 +63,7 @@
                     <!-- LEFT LARGE IMAGE -->
                     <div class="gallery-item gallery-item--large swiper-slide open-gallery">
                         <img class="img-fluid" src="{{ asset('storage/' . $package->thumb->image_path) }}" alt="">
-                        <button class="view-gallery-btn" data-bs-toggle="modal" data-bs-target="#galleryModal"  >
+                        <button class="view-gallery-btn" data-bs-toggle="modal" data-bs-target="#galleryModal">
                             <i class="fa-regular fa-image"></i>
                             VIEW GALLERY →
                         </button>
@@ -73,117 +73,110 @@
                     <div class="gallery-middle swiper-slide">
                         <div class="d-flex flex-column gap-2">
                             <div class="gallery-item full open-gallery" data-open-tab="galleryTabsActivities"
-                                data-bs-toggle="modal" data-bs-target="#galleryModal" >
+                                data-bs-toggle="modal" data-bs-target="#galleryModal">
 
                                 <?php
                                 //print_r($finalArray['todo'][0]['thumb']);die;
                                 $imagePathToDo = match (true) {
-                                    !empty($finalArray['todo'][0]['thumb'])
-                                        => asset('storage/' . $finalArray['todo'][0]['thumb']->image_path),
+                                    !empty($finalArray['todo'][0]['thumb']) => asset('storage/' . $finalArray['todo'][0]['thumb']->image_path),
 
-                                    !empty($finalArray['event'][0]['thumb'])
-                                        => asset('storage/' . $finalArray['event'][0]['thumb']->image_path),
+                                    !empty($finalArray['event'][0]['thumb']) => asset('storage/' . $finalArray['event'][0]['thumb']->image_path),
 
-                                    !empty($finalArray['hotel'][0]['thumb'])
-                                        => asset('storage/' . $finalArray['hotel'][0]['thumb']->image_path),
+                                    !empty($finalArray['hotel'][0]['thumb']) => asset('storage/' . $finalArray['hotel'][0]['thumb']->image_path),
 
-                                    !empty($package->thumb)
-                                        => asset('storage/' . $package->thumb->image_path),
+                                    !empty($package->thumb) => asset('storage/' . $package->thumb->image_path),
 
-                                    default
-                                        => asset('frontend/assets/package-banner.png'),
+                                    default => asset('frontend/assets/package-banner.png'),
                                 };
-                            ?>
+                                ?>
 
 
 
 
-                                <img class="img-fluid" src="{{$imagePathToDo}}"
-                                    alt="">
+                                <img class="img-fluid" src="{{ $imagePathToDo }}" alt="">
                                 <p class="p-small">Activities & Sightseeing</p>
                             </div>
                         </div>
 
                         <div class="d-flex flex-column gap-2">
-                        @php
-                        $imagePathEvent = match (true) {
-                            !empty($finalArray['event'][0]['thumb'])
-                                => asset('storage/' . $finalArray['event'][0]['thumb']->image_path),
+                            @php
+                                $imagePathEvent = match (true) {
+                                    !empty($finalArray['event'][0]['thumb']) => asset(
+                                        'storage/' . $finalArray['event'][0]['thumb']->image_path,
+                                    ),
 
-                            !empty($finalArray['todo'][0]['thumb'])
-                                => asset('storage/' . $finalArray['todo'][0]['thumb']->image_path),
+                                    !empty($finalArray['todo'][0]['thumb']) => asset(
+                                        'storage/' . $finalArray['todo'][0]['thumb']->image_path,
+                                    ),
 
-                            !empty($finalArray['hotel'][0]['thumb'])
-                                => asset('storage/' . $finalArray['hotel'][0]['thumb']->image_path),
+                                    !empty($finalArray['hotel'][0]['thumb']) => asset(
+                                        'storage/' . $finalArray['hotel'][0]['thumb']->image_path,
+                                    ),
 
-                            !empty($package->thumb)
-                                => asset('storage/' . $package->thumb->image_path),
+                                    !empty($package->thumb) => asset('storage/' . $package->thumb->image_path),
 
-                            default
-                                => asset('frontend/assets/package-banner.png'),
-                        };
+                                    default => asset('frontend/assets/package-banner.png'),
+                                };
 
-                        $videoUrl = match (true) {
-                            !empty($finalArray['event'][0]['video_url'])
-                                => $finalArray['event'][0]['video_url'],
+                                $videoUrl = match (true) {
+                                    !empty($finalArray['event'][0]['video_url']) => $finalArray['event'][0][
+                                        'video_url'
+                                    ],
 
-                            default => null,
-                        };
-                    @endphp
+                                    default => null,
+                                };
+                            @endphp
 
 
-                            @if($videoUrl)
-                            <div class="gallery-item half">
+                            @if ($videoUrl)
+                                <div class="gallery-item half">
 
-                                <video controls>
-                                    <source src="{{$videoUrl}}"
-                                        type="video/mp4">
-                                </video>
-                            </div>
+                                    <video controls>
+                                        <source src="{{ $videoUrl }}" type="video/mp4">
+                                    </video>
+                                </div>
 
-                            <div class="gallery-item  half open-gallery" data-open-tab="galleryTabsHighlights"
-                                data-bs-toggle="modal" data-bs-target="#galleryModal" >
-                                <img class="img-fluid" src="{{$imagePathEvent}}" alt="">
-                                <p class="p-small">Events</p>
-                            </div>
+                                <div class="gallery-item  half open-gallery" data-open-tab="galleryTabsHighlights"
+                                    data-bs-toggle="modal" data-bs-target="#galleryModal">
+                                    <img class="img-fluid" src="{{ $imagePathEvent }}" alt="">
+                                    <p class="p-small">Events</p>
+                                </div>
                             @else
-
-                            <div class="gallery-item full open-gallery" data-open-tab="galleryTabsActivities"
-                                data-bs-toggle="modal" data-bs-target="#galleryModal">
-                                <img class="img-fluid" src="{{$imagePathEvent}}"
-                                    alt="">
-                                <p class="p-small">Events</p>
-                            </div>
+                                <div class="gallery-item full open-gallery" data-open-tab="galleryTabsActivities"
+                                    data-bs-toggle="modal" data-bs-target="#galleryModal">
+                                    <img class="img-fluid" src="{{ $imagePathEvent }}" alt="">
+                                    <p class="p-small">Events</p>
+                                </div>
                             @endif
 
                         </div>
                     </div>
 
                     <div class="gallery-item gallery-item--large swiper-slide open-gallery"
-                        data-open-tab="galleryTabsProperty" data-bs-toggle="modal" data-bs-target="#galleryModal" >
+                        data-open-tab="galleryTabsProperty" data-bs-toggle="modal" data-bs-target="#galleryModal">
                         @php
                             $imagePathHotel = match (true) {
-                                !empty($finalArray['hotel'][0]['thumb'])
-                                    => asset('storage/' . $finalArray['hotel'][0]['thumb']->image_path),
+                                !empty($finalArray['hotel'][0]['thumb']) => asset(
+                                    'storage/' . $finalArray['hotel'][0]['thumb']->image_path,
+                                ),
 
-                                !empty($finalArray['event'][0]['thumb'])
-                                    => asset('storage/' . $finalArray['event'][0]['thumb']->image_path),
+                                !empty($finalArray['event'][0]['thumb']) => asset(
+                                    'storage/' . $finalArray['event'][0]['thumb']->image_path,
+                                ),
 
-                                !empty($finalArray['todo'][0]['thumb'])
-                                    => asset('storage/' . $finalArray['todo'][0]['thumb']->image_path),
+                                !empty($finalArray['todo'][0]['thumb']) => asset(
+                                    'storage/' . $finalArray['todo'][0]['thumb']->image_path,
+                                ),
 
-                                !empty($package->thumb)
-                                    => asset('storage/' . $package->thumb->image_path),
+                                !empty($package->thumb) => asset('storage/' . $package->thumb->image_path),
 
-                                default
-                                    => asset('frontend/assets/package-banner.png'),
+                                default => asset('frontend/assets/package-banner.png'),
                             };
                         @endphp
 
 
 
-                        <img class="img-fluid" src="{{$imagePathHotel}}"
-                            alt="">
+                        <img class="img-fluid" src="{{ $imagePathHotel }}" alt="">
                         <p class="p-small">Hotels</p>
                     </div>
                 </div>
@@ -436,12 +429,12 @@
                                                                             <div
                                                                                 class="d-flex gap-2 pkg-details__accordion-actions">
                                                                                 <!-- <button type="button"
-                                                                                                                    class="btn btn-primary btn-sm editDayItemsBtn"
-                                                                                                                    data-day-id="{{ $day->id }}"
-                                                                                                                    data-type="todo"
-                                                                                                                    data-selected="{{ $todos->pluck('id')->join(',') }}">
-                                                                                                                    <i class="fa-solid fa-pencil"></i>
-                                                                                                                </button> -->
+                                                                                                                        class="btn btn-primary btn-sm editDayItemsBtn"
+                                                                                                                        data-day-id="{{ $day->id }}"
+                                                                                                                        data-type="todo"
+                                                                                                                        data-selected="{{ $todos->pluck('id')->join(',') }}">
+                                                                                                                        <i class="fa-solid fa-pencil"></i>
+                                                                                                                    </button> -->
 
                                                                             </div>
                                                                         </div>
@@ -547,12 +540,12 @@
                                                                             <div
                                                                                 class="d-flex gap-2 pkg-details__accordion-actions">
                                                                                 <!-- <button type="button"
-                                                                                                                    class="btn btn-primary btn-sm editDayItemsBtn"
-                                                                                                                    data-day-id="{{ $day->id }}"
-                                                                                                                    data-type="event"
-                                                                                                                    data-selected="{{ $events->pluck('id')->join(',') }}">
-                                                                                                                    <i class="fa-solid fa-pencil"></i>
-                                                                                                                </button> -->
+                                                                                                                        class="btn btn-primary btn-sm editDayItemsBtn"
+                                                                                                                        data-day-id="{{ $day->id }}"
+                                                                                                                        data-type="event"
+                                                                                                                        data-selected="{{ $events->pluck('id')->join(',') }}">
+                                                                                                                        <i class="fa-solid fa-pencil"></i>
+                                                                                                                    </button> -->
 
                                                                             </div>
                                                                         </div>
@@ -853,11 +846,23 @@
                         <!-- Places to Visit -->
                         <div class="pkg-details__additional-info-item py-2 px-3 d-flex align-items-center gap-2 mt-2">
                             <i class="fa-solid fa-location-dot primary-text"></i>
-                            <div class="">
-                                <p class="text-light2">Places to Visit:</p>
-                                <p class="fw-600 p-large">2N Bujairi</p>
+
+                            <div>
+                                <p class="text-light2 mb-0">Places to Visit:</p>
+
+                                <p class="fw-600 p-large mb-0" style="font-size: 15px">
+                                    @foreach ($places as $place)
+                                        {{ $place['nights'] }}N {{ $place['city'] }}
+                                        @if (!$loop->last)
+                                .
+                                        @endif
+                                    @endforeach
+                                </p>
                             </div>
                         </div>
+
+
+
                     </div>
 
                     <div class="card pkg-details__pricing-card mt-3">
@@ -1233,21 +1238,21 @@
         </script>
 
 
-<script>
-document.addEventListener('DOMContentLoaded', function () {
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
 
-    const dropdownEl = document.querySelector('.pkg-fil-bar__input-wrapper.dropdown');
+                const dropdownEl = document.querySelector('.pkg-fil-bar__input-wrapper.dropdown');
 
-    dropdownEl.addEventListener('hidden.bs.dropdown', function () {
+                dropdownEl.addEventListener('hidden.bs.dropdown', function() {
 
-        // 🔥 DROPDOWN CLOSED
-        alert('close time');
+                    // 🔥 DROPDOWN CLOSED
+                    // alert('close time');
 
-        storeTravellerSession();
-    });
+                    storeTravellerSession();
+                });
 
-});
-</script>
+            });
+        </script>
 
 
         <script>
@@ -1277,24 +1282,24 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         </script>
         <script>
-function storeTravellerSession() {
-    console.log('testing');
+            function storeTravellerSession() {
+                console.log('testing');
 
-    fetch('/store-traveller-session', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': '{{csrf_token()}}'
-        },
-        body: JSON.stringify({
-            adults: document.getElementById('adultCount')?.innerText ?? 0,
-            children: document.getElementById('childCount')?.innerText ?? 0,
-            date: document.getElementById('startDateInput')?.value ?? null,
-            filter_package_unique_id: '{{ $package->id }}'
-        })
-    });
-}
-</script>
+                fetch('/store-traveller-session', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        adults: document.getElementById('adultCount')?.innerText ?? 0,
+                        children: document.getElementById('childCount')?.innerText ?? 0,
+                        date: document.getElementById('startDateInput')?.value ?? null,
+                        filter_package_unique_id: '{{ $package->id }}'
+                    })
+                });
+            }
+        </script>
 
 
 
@@ -1417,10 +1422,5 @@ function storeTravellerSession() {
                 window.PRICE_STATE.extras.dayItems = totalExtra;
             }
         </script>
-
-
-
-
-
     @endpush
 @endsection
