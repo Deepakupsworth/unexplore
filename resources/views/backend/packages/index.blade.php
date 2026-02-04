@@ -101,7 +101,14 @@
 
                             {{-- Category --}}
                             <td class="table-td">
-                                {{ $package->category?->translation?->name ?? '—' }}
+                                @forelse($package->packageCategories as $tc)
+                                    <span class="badge bg-success-500 text-success-500 bg-opacity-30 capitalize rounded-3xl">
+                                        {{ $tc->category?->translation?->name ?? '—' }}
+                                    </span>
+                                @empty
+                                    —
+                                @endforelse
+                                {{-- {{ $package->category?->translation?->name ?? '—' }} --}}
                             </td>
 
                             {{-- Type --}}

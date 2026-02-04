@@ -43,7 +43,7 @@
                         <div>
                             <p class="text-sm text-slate-500">Categories</p>
                                 @forelse ($event->eventCategories as $index => $eventCategory)
-                                <span class="badge bg-slate-900 text-white capitalize rounded-3xl">{{  $eventCategory->category?->translation?->name }} </span>
+                                <span class="badge bg-success-500 text-success-500 bg-opacity-30 capitalize rounded-3xl">{{  $eventCategory->category?->translation?->name }} </span>
                                     @if (!$loop->last)
                                         ,
                                     @endif
