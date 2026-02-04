@@ -74,30 +74,30 @@
                         <div class="d-flex flex-column gap-2">
                             <div class="gallery-item full open-gallery" data-open-tab="galleryTabsActivities"
                                 data-bs-toggle="modal" data-bs-target="#galleryModal" >
-                               
+
                                 <?php
                                 //print_r($finalArray['todo'][0]['thumb']);die;
                                 $imagePathToDo = match (true) {
                                     !empty($finalArray['todo'][0]['thumb'])
                                         => asset('storage/' . $finalArray['todo'][0]['thumb']->image_path),
-                            
+
                                     !empty($finalArray['event'][0]['thumb'])
                                         => asset('storage/' . $finalArray['event'][0]['thumb']->image_path),
-                            
+
                                     !empty($finalArray['hotel'][0]['thumb'])
                                         => asset('storage/' . $finalArray['hotel'][0]['thumb']->image_path),
-                            
+
                                     !empty($package->thumb)
                                         => asset('storage/' . $package->thumb->image_path),
-                            
+
                                     default
                                         => asset('frontend/assets/package-banner.png'),
                                 };
                             ?>
-                            
-                          
-                             
-                             
+
+
+
+
                                 <img class="img-fluid" src="{{$imagePathToDo}}"
                                     alt="">
                                 <p class="p-small">Activities & Sightseeing</p>
@@ -134,7 +134,7 @@
 
                             @if($videoUrl)
                             <div class="gallery-item half">
-                             
+
                                 <video controls>
                                     <source src="{{$videoUrl}}"
                                         type="video/mp4">
@@ -147,7 +147,7 @@
                                 <p class="p-small">Events</p>
                             </div>
                             @else
-                           
+
                             <div class="gallery-item full open-gallery" data-open-tab="galleryTabsActivities"
                                 data-bs-toggle="modal" data-bs-target="#galleryModal">
                                 <img class="img-fluid" src="{{$imagePathEvent}}"
@@ -893,7 +893,7 @@
         </div>
     </section>
 
-   
+
 
 
     <div class="offcanvas offcanvas-end" id="dayItemModal" tabindex="-1">
@@ -913,7 +913,7 @@
     </div>
 
 
-    @include('frontend.packages.partials.gallery-modal-content') 
+    @include('frontend.packages.partials.gallery-modal-content')
 
     <!-- Modal -->
     <div class="modal fade" id="packageFilterModal" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -1253,7 +1253,7 @@ document.addEventListener('DOMContentLoaded', function () {
         <script>
             document.addEventListener('click', function(e) {
                 if (e.target.closest('.travellers-dropdown')) {
-                   
+
                     e.stopPropagation();
                 }
             });
@@ -1268,7 +1268,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     .querySelectorAll('.traveller-chip')
                     .forEach(c => c.classList.remove('active'));
 
-                
+
 
                 chip.classList.add('active');
 
@@ -1279,7 +1279,7 @@ document.addEventListener('DOMContentLoaded', function () {
         <script>
 function storeTravellerSession() {
     console.log('testing');
-   
+
     fetch('/store-traveller-session', {
         method: 'POST',
         headers: {
@@ -1296,7 +1296,7 @@ function storeTravellerSession() {
 }
 </script>
 
-        
+
 
 
 
@@ -1417,8 +1417,8 @@ function storeTravellerSession() {
                 window.PRICE_STATE.extras.dayItems = totalExtra;
             }
         </script>
-      
-   
+
+
 
 
 
