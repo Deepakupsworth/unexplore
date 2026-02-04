@@ -422,7 +422,11 @@ Route::get('/package-listing', [FrontendPackageController::class, 'list'])->name
 Route::get('/package-details', [FrontendPackageController::class, 'details'])->name('package.details');
 Route::get('/package-day-option/{id}/{type}', [FrontendPackageController::class, 'packageDayOption'])->name('package.details.options');
 
+Route::post('/store-traveller-session', [FrontendPackageController::class, 'storeSession'])
+     ->name('store.traveller.session');
 
+Route::get('/package/{slug}/gallery', [FrontendPackageController::class, 'gallery'])
+->name('package.gallery');
 
 Route::get('/package-day-option/{id}/{type}', [FrontendPackageController::class, 'packageDayOption'])->name('package.details.option');
 

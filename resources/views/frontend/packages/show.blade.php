@@ -23,7 +23,7 @@
     </style>
     @php
 
-        $t = $package->translations->first();
+        $t = $package->translation;
         $price = $package->price;
         $persons = request('persons', 1);
 
@@ -63,7 +63,7 @@
                     <!-- LEFT LARGE IMAGE -->
                     <div class="gallery-item gallery-item--large swiper-slide open-gallery">
                         <img class="img-fluid" src="{{ asset('storage/' . $package->thumb->image_path) }}" alt="">
-                        <button class="view-gallery-btn" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                        <button class="view-gallery-btn" data-bs-toggle="modal" data-bs-target="#galleryModal"  >
                             <i class="fa-regular fa-image"></i>
                             VIEW GALLERY →
                         </button>
@@ -73,36 +73,118 @@
                     <div class="gallery-middle swiper-slide">
                         <div class="d-flex flex-column gap-2">
                             <div class="gallery-item full open-gallery" data-open-tab="galleryTabsActivities"
-                                data-bs-toggle="modal" data-bs-target="#galleryModal">
-                                <img class="img-fluid" src="{{ asset('frontend/assets/package-banner.png') }}"
+                                data-bs-toggle="modal" data-bs-target="#galleryModal" >
+                               
+                                <?php
+                                //print_r($finalArray['todo'][0]['thumb']);die;
+                                $imagePathToDo = match (true) {
+                                    !empty($finalArray['todo'][0]['thumb'])
+                                        => asset('storage/' . $finalArray['todo'][0]['thumb']->image_path),
+                            
+                                    !empty($finalArray['event'][0]['thumb'])
+                                        => asset('storage/' . $finalArray['event'][0]['thumb']->image_path),
+                            
+                                    !empty($finalArray['hotel'][0]['thumb'])
+                                        => asset('storage/' . $finalArray['hotel'][0]['thumb']->image_path),
+                            
+                                    !empty($package->thumb)
+                                        => asset('storage/' . $package->thumb->image_path),
+                            
+                                    default
+                                        => asset('frontend/assets/package-banner.png'),
+                                };
+                            ?>
+                            
+                          
+                             
+                             
+                                <img class="img-fluid" src="{{$imagePathToDo}}"
                                     alt="">
                                 <p class="p-small">Activities & Sightseeing</p>
                             </div>
                         </div>
 
                         <div class="d-flex flex-column gap-2">
+                        @php
+                        $imagePathEvent = match (true) {
+                            !empty($finalArray['event'][0]['thumb'])
+                                => asset('storage/' . $finalArray['event'][0]['thumb']->image_path),
+
+                            !empty($finalArray['todo'][0]['thumb'])
+                                => asset('storage/' . $finalArray['todo'][0]['thumb']->image_path),
+
+                            !empty($finalArray['hotel'][0]['thumb'])
+                                => asset('storage/' . $finalArray['hotel'][0]['thumb']->image_path),
+
+                            !empty($package->thumb)
+                                => asset('storage/' . $package->thumb->image_path),
+
+                            default
+                                => asset('frontend/assets/package-banner.png'),
+                        };
+
+                        $videoUrl = match (true) {
+                            !empty($finalArray['event'][0]['video_url'])
+                                => $finalArray['event'][0]['video_url'],
+
+                            default => null,
+                        };
+                    @endphp
+
+
+                            @if($videoUrl)
                             <div class="gallery-item half">
-                                <!-- <img class="img-fluid" src="../assets/package-banner.png" alt=""> -->
+                             
                                 <video controls>
-                                    <source src="{{ asset('frontend/assets/videos/seekers-entry-video.mp4') }}"
+                                    <source src="{{$videoUrl}}"
                                         type="video/mp4">
                                 </video>
                             </div>
 
-                            <div class="gallery-item half open-gallery" data-open-tab="galleryTabsHighlights"
-                                data-bs-toggle="modal" data-bs-target="#galleryModal">
-                                <img class="img-fluid" src="{{ asset('frontend/assets/about-saudi.png') }}" alt="">
-                                <p class="p-small">Package Highlights</p>
+                            <div class="gallery-item  half open-gallery" data-open-tab="galleryTabsHighlights"
+                                data-bs-toggle="modal" data-bs-target="#galleryModal" >
+                                <img class="img-fluid" src="{{$imagePathEvent}}" alt="">
+                                <p class="p-small">Events</p>
                             </div>
+                            @else
+                           
+                            <div class="gallery-item full open-gallery" data-open-tab="galleryTabsActivities"
+                                data-bs-toggle="modal" data-bs-target="#galleryModal">
+                                <img class="img-fluid" src="{{$imagePathEvent}}"
+                                    alt="">
+                                <p class="p-small">Events</p>
+                            </div>
+                            @endif
 
                         </div>
                     </div>
 
                     <div class="gallery-item gallery-item--large swiper-slide open-gallery"
-                        data-open-tab="galleryTabsProperty" data-bs-toggle="modal" data-bs-target="#galleryModal">
-                        <img class="img-fluid" src="{{ asset('frontend/assets/package-details-banner.png') }}"
+                        data-open-tab="galleryTabsProperty" data-bs-toggle="modal" data-bs-target="#galleryModal" >
+                        @php
+                            $imagePathHotel = match (true) {
+                                !empty($finalArray['hotel'][0]['thumb'])
+                                    => asset('storage/' . $finalArray['hotel'][0]['thumb']->image_path),
+
+                                !empty($finalArray['event'][0]['thumb'])
+                                    => asset('storage/' . $finalArray['event'][0]['thumb']->image_path),
+
+                                !empty($finalArray['todo'][0]['thumb'])
+                                    => asset('storage/' . $finalArray['todo'][0]['thumb']->image_path),
+
+                                !empty($package->thumb)
+                                    => asset('storage/' . $package->thumb->image_path),
+
+                                default
+                                    => asset('frontend/assets/package-banner.png'),
+                            };
+                        @endphp
+
+
+
+                        <img class="img-fluid" src="{{$imagePathHotel}}"
                             alt="">
-                        <p class="p-small">Property photos</p>
+                        <p class="p-small">Hotels</p>
                     </div>
                 </div>
             </div>
@@ -811,338 +893,7 @@
         </div>
     </section>
 
-    <!-- VIEW GALLERY MODAL -->
-    <div class="modal fade" id="galleryModal" tabindex="-1">
-        <div class="modal-dialog modal-fullscreen">
-            <div class="modal-content gallery-modal">
-                <div class="container">
-                    <!-- HEADER -->
-                    <div class="modal-header border-0 px-0 pt-5 pb-0">
-                        <h4 class="fw-bold mb-0">Andaman with Freebies</h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-
-                    <div class="gallery-sticky-header pt-4">
-                        <!-- CATEGORY TABS -->
-                        <ul class="nav nav-tabs gallery-tabs" id="galleryTabs" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link active" data-target="galleryTabsDestination" type="button"
-                                    role="tab">
-                                    Around the Destination
-                                    <small class="d-block text-light2 fw-normal">9 Photos</small>
-                                </button>
-                            </li>
-
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" data-target="galleryTabsProperty" type="button"
-                                    role="tab">
-                                    Property Photos
-                                    <small class="d-block text-light2 fw-normal">170 Photos</small>
-                                </button>
-                            </li>
-
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" data-target="galleryTabsActivities" type="button"
-                                    role="tab">
-                                    Activities & Sightseeing
-                                    <small class="d-block text-light2 fw-normal">20 Photos</small>
-                                </button>
-                            </li>
-
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" data-target="galleryTabsHighlights" type="button"
-                                    role="tab">
-                                    Package Highlights
-                                    <small class="d-block text-light2 fw-normal">3 Photos</small>
-                                </button>
-                            </li>
-                        </ul>
-
-                        <hr class="my-3">
-
-                        <!-- FILTER PILLS -->
-                        <!-- PILLS FOR TAB 1 -->
-                        <div class="gallery-section-pills" data-tab="galleryTabsDestination">
-                            <button class="filter-pill active" data-section="video">Video</button>
-                            <button class="filter-pill" data-section="port-blair">Port Blair</button>
-                            <button class="filter-pill" data-section="havelock">Havelock</button>
-                            <button class="filter-pill" data-section="neil">Neil Island</button>
-                        </div>
-
-                        <!-- PILLS FOR TAB 2 -->
-                        <div class="gallery-section-pills d-none" data-tab="galleryTabsProperty">
-                            <button class="filter-pill active" data-section="rooms">Rooms</button>
-                            <button class="filter-pill" data-section="lobby">Lobby</button>
-                        </div>
-
-                        <!-- PILLS FOR TAB 3 -->
-                        <div class="gallery-section-pills d-none" data-tab="galleryTabsActivities">
-                            <button class="filter-pill active" data-section="scuba">Scuba</button>
-                            <button class="filter-pill" data-section="sightseeing">Sightseeing</button>
-                            <button class="filter-pill" data-section="boat">Boat Ride</button>
-                        </div>
-
-                        <!-- PILLS FOR TAB 4 -->
-                        <div class="gallery-section-pills d-none" data-tab="galleryTabsHighlights">
-                            <button class="filter-pill active" data-section="meals">Meals</button>
-                            <button class="filter-pill" data-section="hotel">Hotel</button>
-                        </div>
-
-                        <hr class="my-3">
-                    </div>
-
-                    <!-- CONTENT -->
-                    <div class="modal-body px-0 pt-0 gallery-tab-content-wrapper">
-                        <div class="gallery-tab-content active" id="galleryTabsDestination">
-                            <div class="gallery-modal-section" data-section="video">
-                                <!-- VIDEO SECTION -->
-                                <h5 class="fw-bold">Around the Destination</h5>
-                                <p class="text-muted small mt-1 mb-3">Video</p>
-
-                                <div class="gallery-video mb-4">
-                                    <video controls>
-                                        <source src="../assets/videos/seekers-entry-video.mp4" type="video/mp4">
-                                    </video>
-                                </div>
-                            </div>
-
-                            <div class="gallery-modal-section" data-section="port-blair">
-                                <!-- IMAGE GRID PLACEHOLDER -->
-                                <h5 class="fw-bold">Around the Destination</h5>
-                                <p class="text-muted small mt-1 mb-3">Port Blair</p>
-
-                                <div class="gallery-image-grid">
-                                    <div class="gallery-img-box">
-                                        <img class="img-fluid" src="{{ asset('frontend/assets/attraction-1.png') }}"
-                                            alt="">
-                                    </div>
-                                    <div class="gallery-img-box">
-                                        <img class="img-fluid" src="{{ asset('frontend/assets/attraction-1.png') }}"
-                                            alt="">
-                                    </div>
-                                    <div class="gallery-img-box">
-                                        <img class="img-fluid" src="{{ asset('frontend/assets/attraction-1.png') }}"
-                                            alt="">
-                                    </div>
-                                    <div class="gallery-img-box">
-                                        <img class="img-fluid" src="{{ asset('frontend/assets/attraction-1.png') }}"
-                                            alt="">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="gallery-modal-section" data-section="havelock">
-                                <!-- IMAGE GRID PLACEHOLDER -->
-                                <h5 class="fw-bold">Around the Destination</h5>
-                                <p class="text-muted small mt-1 mb-3">Havelock</p>
-
-                                <div class="three-gallery-image">
-                                    <div class="gallery-img-box">
-                                        <img class="img-fluid" src="{{ asset('frontend/assets/attraction-1.png') }}"
-                                            alt="">
-                                    </div>
-                                    <div class="gallery-img-box">
-                                        <img class="img-fluid" src="{{ asset('frontend/assets/attraction-1.png') }}"
-                                            alt="">
-                                    </div>
-                                    <div class="gallery-img-box">
-                                        <img class="img-fluid" src="{{ asset('frontend/assets/attraction-1.png') }}"
-                                            alt="">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="gallery-modal-section" data-section="neil">
-                                <!-- IMAGE GRID PLACEHOLDER -->
-                                <h5 class="fw-bold">Around the Destination</h5>
-                                <p class="text-muted small mt-1 mb-3">Port Blair</p>
-
-                                <div class="five-gallery-image">
-                                    <div class="gallery-img-box">
-                                        <img class="img-fluid" src="{{ asset('frontend/assets/attraction-1.png') }}"
-                                            alt="">
-                                    </div>
-                                    <div class="gallery-img-box">
-                                        <img class="img-fluid" src="{{ asset('frontend/assets/attraction-1.png') }}"
-                                            alt="">
-                                    </div>
-                                    <div class="gallery-img-box">
-                                        <img class="img-fluid" src="{{ asset('frontend/assets/attraction-1.png') }}"
-                                            alt="">
-                                    </div>
-                                    <div class="gallery-img-box">
-                                        <img class="img-fluid" src="{{ asset('frontend/assets/attraction-1.png') }}"
-                                            alt="">
-                                    </div>
-                                    <div class="gallery-img-box">
-                                        <img class="img-fluid" src="{{ asset('frontend/assets/attraction-1.png') }}"
-                                            alt="">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="gallery-tab-content" id="galleryTabsProperty">
-                            <div class="gallery-modal-section" data-section="rooms">
-                                <!-- VIDEO SECTION -->
-                                <h5 class="fw-bold">Around the Destination</h5>
-                                <p class="text-muted small mt-1 mb-3">Video</p>
-
-                                <div class="gallery-video mb-4">
-                                    <video controls>
-                                        <source src="{{ asset('frontend/assets/videos/seekers-entry-video.mp4') }}"
-                                            type="video/mp4">
-                                    </video>
-                                </div>
-                            </div>
-
-                            <div class="gallery-modal-section" data-section="lobby">
-                                <!-- IMAGE GRID PLACEHOLDER -->
-                                <h5 class="fw-bold">Around the Destination</h5>
-                                <p class="text-muted small mt-1 mb-3">Lobby</p>
-
-                                <div class="gallery-image-grid">
-                                    <div class="gallery-img-box">
-                                        <img class="img-fluid" src="{{ asset('frontend/assets/attraction-1.png') }}"
-                                            alt="">
-                                    </div>
-                                    <div class="gallery-img-box">
-                                        <img class="img-fluid" src="{{ asset('frontend/assets/attraction-1.png') }}"
-                                            alt="">
-                                    </div>
-                                    <div class="gallery-img-box">
-                                        <img class="img-fluid" src="{{ asset('frontend/assets/attraction-1.png') }}"
-                                            alt="">
-                                    </div>
-                                    <div class="gallery-img-box">
-                                        <img class="img-fluid" src="{{ asset('frontend/assets/attraction-1.png') }}"
-                                            alt="">
-                                    </div>
-                                    <div class="gallery-img-box">
-                                        <img class="img-fluid" src="{{ asset('frontend/assets/attraction-1.png') }}"
-                                            alt="">
-                                    </div>
-                                    <div class="gallery-img-box">
-                                        <img class="img-fluid" src="{{ asset('frontend/assets/attraction-1.png') }}"
-                                            alt="">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="gallery-tab-content" id="galleryTabsActivities">
-                            <div class="gallery-modal-section" data-section="scuba">
-                                <!-- VIDEO SECTION -->
-                                <h5 class="fw-bold">Around the Destination</h5>
-                                <p class="text-muted small mt-1 mb-3">Video</p>
-
-                                <div class="gallery-video mb-4">
-                                    <video controls>
-                                        <source src="../assets/videos/seekers-entry-video.mp4" type="video/mp4">
-                                    </video>
-                                </div>
-                            </div>
-
-                            <div class="gallery-modal-section" data-section="sightseeing">
-                                <!-- IMAGE GRID PLACEHOLDER -->
-                                <h5 class="fw-bold">Around the Destination</h5>
-                                <p class="text-muted small mt-1 mb-3">Lobby</p>
-
-                                <div class="gallery-image-grid">
-                                    <div class="gallery-img-box">
-                                        <img class="img-fluid" src="../assets/attraction-1.png" alt="">
-                                    </div>
-                                    <div class="gallery-img-box">
-                                        <img class="img-fluid" src="../assets/attraction-1.png" alt="">
-                                    </div>
-                                    <div class="gallery-img-box">
-                                        <img class="img-fluid" src="../assets/attraction-1.png" alt="">
-                                    </div>
-                                    <div class="gallery-img-box">
-                                        <img class="img-fluid" src="../assets/attraction-1.png" alt="">
-                                    </div>
-                                    <div class="gallery-img-box">
-                                        <img class="img-fluid" src="../assets/attraction-1.png" alt="">
-                                    </div>
-                                    <div class="gallery-img-box">
-                                        <img class="img-fluid" src="../assets/attraction-1.png" alt="">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="gallery-modal-section" data-section="boat">
-                                <!-- IMAGE GRID PLACEHOLDER -->
-                                <h5 class="fw-bold">Around the Destination</h5>
-                                <p class="text-muted small mt-1 mb-3">Lobby</p>
-
-                                <div class="gallery-image-grid">
-                                    <div class="gallery-img-box">
-                                        <img class="img-fluid" src="../assets/attraction-1.png" alt="">
-                                    </div>
-                                    <div class="gallery-img-box">
-                                        <img class="img-fluid" src="../assets/attraction-1.png" alt="">
-                                    </div>
-                                    <div class="gallery-img-box">
-                                        <img class="img-fluid" src="../assets/attraction-1.png" alt="">
-                                    </div>
-                                    <div class="gallery-img-box">
-                                        <img class="img-fluid" src="../assets/attraction-1.png" alt="">
-                                    </div>
-                                    <div class="gallery-img-box">
-                                        <img class="img-fluid" src="../assets/attraction-1.png" alt="">
-                                    </div>
-                                    <div class="gallery-img-box">
-                                        <img class="img-fluid" src="../assets/attraction-1.png" alt="">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="gallery-tab-content" id="galleryTabsHighlights">
-                            <div class="gallery-modal-section" data-section="meals">
-                                <!-- VIDEO SECTION -->
-                                <h5 class="fw-bold">Around the Destination</h5>
-                                <p class="text-muted small mt-1 mb-3">Video</p>
-
-                                <div class="gallery-video mb-4">
-                                    <video controls>
-                                        <source src="../assets/videos/seekers-entry-video.mp4" type="video/mp4">
-                                    </video>
-                                </div>
-                            </div>
-
-                            <div class="gallery-modal-section" data-section="hotel">
-                                <!-- IMAGE GRID PLACEHOLDER -->
-                                <h5 class=" fw-bold">Around the Destination</h5>
-                                <p class="text-muted small mt-1 mb-3">Lobby</p>
-
-                                <div class="gallery-image-grid">
-                                    <div class="gallery-img-box">
-                                        <img class="img-fluid" src="../assets/attraction-1.png" alt="">
-                                    </div>
-                                    <div class="gallery-img-box">
-                                        <img class="img-fluid" src="../assets/attraction-1.png" alt="">
-                                    </div>
-                                    <div class="gallery-img-box">
-                                        <img class="img-fluid" src="../assets/attraction-1.png" alt="">
-                                    </div>
-                                    <div class="gallery-img-box">
-                                        <img class="img-fluid" src="../assets/attraction-1.png" alt="">
-                                    </div>
-                                    <div class="gallery-img-box">
-                                        <img class="img-fluid" src="../assets/attraction-1.png" alt="">
-                                    </div>
-                                    <div class="gallery-img-box">
-                                        <img class="img-fluid" src="../assets/attraction-1.png" alt="">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+   
 
 
     <div class="offcanvas offcanvas-end" id="dayItemModal" tabindex="-1">
@@ -1161,6 +912,8 @@
 
     </div>
 
+
+    @include('frontend.packages.partials.gallery-modal-content') 
 
     <!-- Modal -->
     <div class="modal fade" id="packageFilterModal" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -1478,9 +1231,29 @@
                 updatePricing();
             });
         </script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const dropdownEl = document.querySelector('.pkg-fil-bar__input-wrapper.dropdown');
+
+    dropdownEl.addEventListener('hidden.bs.dropdown', function () {
+
+        // 🔥 DROPDOWN CLOSED
+        alert('close time');
+
+        storeTravellerSession();
+    });
+
+});
+</script>
+
+
         <script>
             document.addEventListener('click', function(e) {
                 if (e.target.closest('.travellers-dropdown')) {
+                   
                     e.stopPropagation();
                 }
             });
@@ -1495,10 +1268,38 @@
                     .querySelectorAll('.traveller-chip')
                     .forEach(c => c.classList.remove('active'));
 
+                
+
                 chip.classList.add('active');
+
+
 
             });
         </script>
+        <script>
+function storeTravellerSession() {
+    console.log('testing');
+   
+    fetch('/store-traveller-session', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{csrf_token()}}'
+        },
+        body: JSON.stringify({
+            adults: document.getElementById('adultCount')?.innerText ?? 0,
+            children: document.getElementById('childCount')?.innerText ?? 0,
+            date: document.getElementById('startDateInput')?.value ?? null,
+            filter_package_unique_id: '{{ $package->id }}'
+        })
+    });
+}
+</script>
+
+        
+
+
+
 
 
 
@@ -1616,5 +1417,10 @@
                 window.PRICE_STATE.extras.dayItems = totalExtra;
             }
         </script>
+      
+   
+
+
+
     @endpush
 @endsection
