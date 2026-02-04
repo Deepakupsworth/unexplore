@@ -101,9 +101,9 @@
                     </thead>
 
                     <tbody class="bg-white dark:bg-slate-800 divide-y divide-slate-100 dark:divide-slate-700">
-                        @forelse ($coupons as $coupon)
+                        @forelse ($coupons as $index => $coupon)
                             <tr>
-                                <td class="table-td">{{ $coupon->id }}</td>
+                                <td class="table-td">{{ $coupons->firstItem() + $index  }}</td>
 
                                 <td class="table-td font-medium text-slate-700 dark:text-white">
                                     {{ $coupon->code }}

@@ -107,9 +107,9 @@
 
                     <tbody class="bg-white dark:bg-slate-800 divide-y divide-slate-100 dark:divide-slate-700">
 
-                        @forelse($hotels as $hotel)
+                        @forelse($hotels as $index => $hotel)
                             <tr>
-                                <td class="table-td">{{ $hotel->id }}</td>
+                                <td class="table-td">{{ $hotels->firstItem() + $index }}</td>
                                 <td class="table-td">
                                     @if ($hotel->thumb)
                                         <img src="{{ asset('storage/' . $hotel->thumb->image_path) }}"

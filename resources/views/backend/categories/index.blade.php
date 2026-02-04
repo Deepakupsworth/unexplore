@@ -61,10 +61,10 @@
                 {{-- TABLE BODY --}}
                 <x-admin.table.tbody>
 
-                    @forelse($categories as $key => $cat)
+                    @forelse($categories as $index => $cat)
                         <x-admin.table.tr>
 
-                            <x-admin.table.td>{{ $key + 1 }}</x-admin.table.td>
+                            <x-admin.table.td>{{ $categories->firstItem() + $index }}</x-admin.table.td>
                             <x-admin.table.td>
                                 @if ($cat->thumb_image)
                                     <img src="{{ asset('storage/' . $cat->thumb_image) }}"
