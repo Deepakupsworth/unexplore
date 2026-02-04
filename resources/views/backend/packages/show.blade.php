@@ -168,21 +168,24 @@
                                                 default => 'border-slate-400',
                                             };
                                         @endphp
-                                        {{-- ITEM CARD --}}
+                                        {{-- ITEM HEADER --}}
                                         <div class="bg-white border {{ $border }} rounded-xl p-5 shadow-sm mb-4">
 
-                                            {{-- ITEM HEADER --}}
+                                            @php
+                                                $detail = match ($item->item_type) {
+                                                    'hotel'     => $item->hotel,
+                                                    'event'     => $item->event,
+                                                    'todo'      => $item->todo,
+                                                    'transport' => $item->transport,
+                                                    default     => null,
+                                                };
+                                            @endphp
+
+                                            {{-- HEADER --}}
                                             <div class="flex justify-between items-start mb-3">
                                                 <div>
+
                                                     <p class="text-base font-semibold text-slate-800 flex items-center gap-2">
-
-                                                        {{-- ICON --}}
-                                                        @if($item->item_type === 'hotel') 🏨 @endif
-                                                        @if($item->item_type === 'event') 🎉 @endif
-                                                        @if($item->item_type === 'todo') 📝 @endif
-                                                        @if($item->item_type === 'transport') 🚗 @endif
-
-                                                        {{-- TITLE --}}
                                                         {{ $detail?->translation?->title
                                                             ?? $detail?->translation?->name
                                                             ?? $detail?->name
@@ -193,13 +196,18 @@
                                                         </span>
                                                     </p>
 
-
-
                                                     <p class="text-sm text-slate-500 mt-1">
                                                         {{ $item->start_time ? Carbon::parse($item->start_time)->format('h:i A') : '—' }}
                                                         →
                                                         {{ $item->end_time ? Carbon::parse($item->end_time)->format('h:i A') : '—' }}
                                                     </p>
+
+                                                    @if($detail?->thumb)
+                                                        <img
+                                                            src="{{ asset('storage/' . $detail->thumb->image_path) }}"
+                                                            class="w-16 h-16 rounded-lg object-cover border mt-3"
+                                                        >
+                                                    @endif
                                                 </div>
                                             </div>
 
@@ -210,7 +218,6 @@
                                                     'item' => $item,
                                                 ])
                                             </div>
-
                                         </div>
 
                                     @empty

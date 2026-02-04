@@ -28,7 +28,7 @@
                                         <div class="sub-menu-section">
                                             <ul class="list-unstyled">
                                             @foreach (header_destinations() as $cities)
-                                    
+
                                                         <li>
                                                     <a class="" href="{{ route('destinations.show', [
                                                                         'slug' => $cities->slug,
@@ -39,8 +39,8 @@
                                                             class="fa-solid fa-angles-right primary-text flex-v-center"></i>
                                                     </a>
                                                 </li>
-                                                        
-                                            
+
+
                                                 @endforeach
                                                 <li>
                                                 <a class="" href="{{ route('destinations.index') }}">
@@ -50,12 +50,12 @@
                                                                         class="fa-solid fa-angles-right primary-text flex-v-center"></i>
                                                 </a>
                                             </li>
-                                                
+
                                             </ul>
                                             <ul class="list-unstyled">
-                                            
+
                                             <!-- @foreach (header_destination_categories() as $cities)
-                                    
+
                                                     <li>
                                                 <a class="" href="#">
                                                     <span> {{ $cities->translationData?->name }}
@@ -64,10 +64,10 @@
                                                         class="fa-solid fa-angles-right primary-text flex-v-center"></i>
                                                 </a>
                                             </li>
-                                                    
-                                        
+
+
                                             @endforeach -->
-                            
+
                                                 <!-- <li><a href="#">Traditions in Saudi <i
                                                             class="fa-solid fa-angles-right primary-text flex-v-center"></i></a>
                                                 </li>
@@ -385,12 +385,19 @@
                     </li>
                 </ul>
                 <div class="d-flex flex-wrap align-items-center gap-2 navbar__buttons">
-                    <!-- When user is not logged in -->
-                    <!-- <a href="#" class="btn btn-outline-light rounded-pill">Login / Sign Up</a>
-     <a href="#" class="btn btn-primary rounded-pill">
-      Book Now
-      <i class="fa-solid fa-angles-right"></i>
-     </a> -->
+
+                {{-- When user is NOT logged in --}}
+                    @guest
+                    <a href="{{ route('login') }}" class="btn btn-outline-light rounded-pill">
+                        Login / Sign Up
+                    </a>
+
+                    {{-- <a href="#" class="btn btn-primary rounded-pill">
+                        Book Now
+                        <i class="fa-solid fa-angles-right"></i>
+                    </a> --}}
+                @endguest
+
                     @if (!empty(@auth()->user()->id))
                         <!-- When user is logged in -->
                         <div class="dropdown">
@@ -431,7 +438,7 @@
                                 <ul class="navbar-nav pt-2 mt-1 ps-3">
 
                                 @foreach (header_destinations() as $cities)
-                                    
+
                                         <li>
                                     <a class="nav-link" href="{{ route('destinations.show', [
                                                         'slug' => $cities->slug,
@@ -440,8 +447,8 @@
                                         </span>
                                     </a>
                                 </li>
-                                        
-                               
+
+
                                 @endforeach
                                 <li>
                                     <a class="nav-link" href="{{ route('destinations.index') }}">
@@ -492,17 +499,17 @@
 
                                         </a>
                                     </li>
-                                                       
+
                                                     @endif
                                                 @endforeach
                                                 <li>
                                                     <a href="{{ route('things.to.do') }}" class="nav-link">
                                                         All Things to Do
-                                                      
+
                                                     </a>
                                                 </li>
-                                   
-                                   
+
+
                                 </ul>
                             </div>
                         </div>
@@ -512,7 +519,7 @@
                                 aria-controls="collapseNavThree">
                                 Events & Festivals
                             </button>
-                            
+
                             <div id="collapseNavThree" class="accordion-collapse collapse"
                                 data-bs-parent="#navbarAccordion">
                                 <ul class="navbar-nav pt-2 mt-1 ps-3">
@@ -526,16 +533,16 @@
                                         ({{ $category->events_count }})</span>
                                     </a>
                                 </li>
-                                        
+
                                 @endif
                                 @endforeach
                                 <li class="fw-bold">
                                 <a href="{{ route('event.listing') }}" class="nav-link">
                                     All Events
-                                    
+
                                 </a>
                             </li>
-                                   
+
                                 </ul>
                             </div>
                         </div>
@@ -557,14 +564,14 @@
                                                                 ]) }}">
                                                                 {{ $category->translationData?->name }}
                                                                 ({{ $category->packages_count }})
-                                                               
+
                                                             </a>
                                                         </li>
                                                     @endif
                                                 @endforeach
                                                 <li><a href="{{ route('packages.index') }}" class="nav-link">
                                                                 All Packages
-                                                                
+
                                                 </a>
                                                 </li>
                                     <!-- <li>
