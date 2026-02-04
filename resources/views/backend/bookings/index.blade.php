@@ -84,10 +84,10 @@
                 {{-- TABLE BODY --}}
                 <x-admin.table.tbody>
 
-                    @forelse($bookings as $key => $booking)
+                    @forelse($bookings as $index => $booking)
                         <x-admin.table.tr>
-{{-- @dd($booking); --}}
-                            <x-admin.table.td>{{ $key + 1 }}</x-admin.table.td>
+
+                            <x-admin.table.td>{{ $bookings->firstItem() + $index }}</x-admin.table.td>
 
                             <x-admin.table.td class="font-medium">
                                 {{ $booking->booking_code }}

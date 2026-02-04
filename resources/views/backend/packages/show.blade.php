@@ -174,13 +174,25 @@
                                             {{-- ITEM HEADER --}}
                                             <div class="flex justify-between items-start mb-3">
                                                 <div>
-                                                    <p class="text-base font-semibold capitalize text-slate-800">
+                                                    <p class="text-base font-semibold text-slate-800 flex items-center gap-2">
 
-                                                        {{ $item->item_type }}
-                                                        <span class="text-xs text-slate-400">
-                                                            (#{{ $item->item_id }})
+                                                        {{-- ICON --}}
+                                                        @if($item->item_type === 'hotel') 🏨 @endif
+                                                        @if($item->item_type === 'event') 🎉 @endif
+                                                        @if($item->item_type === 'todo') 📝 @endif
+                                                        @if($item->item_type === 'transport') 🚗 @endif
+
+                                                        {{-- TITLE --}}
+                                                        {{ $detail?->translation?->title
+                                                            ?? $detail?->translation?->name
+                                                            ?? $detail?->name
+                                                            ?? '—' }}
+
+                                                        <span class="text-xs text-slate-400 capitalize">
+                                                            ({{ $item->item_type }})
                                                         </span>
                                                     </p>
+
 
 
                                                     <p class="text-sm text-slate-500 mt-1">

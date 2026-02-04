@@ -81,9 +81,9 @@
                             </thead>
                             <tbody class="bg-white divide-y divide-slate-100 dark:bg-slate-800 dark:divide-slate-700">
 
-                                @forelse($cities as $city)
+                                @forelse($cities as $index => $city)
                                     <tr>
-                                        <td class="table-td">{{ $city->id }}</td>
+                                        <td class="table-td">{{ $cities->firstItem() + $index  }}</td>
 
                                         <td class="table-td">
 
