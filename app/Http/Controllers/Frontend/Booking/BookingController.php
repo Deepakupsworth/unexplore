@@ -146,6 +146,7 @@ class BookingController extends Controller
             BookingSnapshot::create([
                 'booking_id' => $booking->id,
                 'snapshot_json' => [
+                    'thumb' => $package->thumb ?? null,
                     'checkout' => $checkout,
                     'coupon' => [
                         'code'     => $couponCode,
