@@ -25,6 +25,9 @@ class Booking extends Model
         'exchange_rate',
         'booking_total_amount',
 
+        'coupon_code',
+        'coupon_discount',
+
         'travel_start_date',
         'travel_end_date',
 

@@ -32,7 +32,7 @@ use App\Http\Controllers\Frontend\ToDoThings\ToDoThingsController;
 use App\Models\Event;
 use App\Http\Controllers\Frontend\Profile\ProfileController as FrontendProfileController;
 use App\Http\Controllers\Frontend\Destination\DestinationController AS FrontendDestinationController;
-use App\Http\Controllers\Frontend\{TravellerController,AddressController,AccountController};
+use App\Http\Controllers\Frontend\{TravellerController,AddressController,AccountController, CouponApplyController};
 use App\Http\Controllers\Frontend\Booking\BookingController;
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 
@@ -134,10 +134,6 @@ Route::middleware(['auth', RoleMiddleware::class . ':user'])->group(function () 
         ->name('user.dashboard');
 });
 
-Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function () {
-    Route::get('/admin/dashboard', fn() => view('backend.admin.dashboard'))
-        ->name('admin.dashboard');
-});
 
 Route::get('/events', [FrontendEventController::class, 'index'])->name('event.listing');
 Route::get('/events/{slug?}', [FrontendEventController::class, 'show'])->name('event.show');
@@ -147,9 +143,8 @@ Route::get('/events-filter', [FrontendEventController::class, 'filter'])->name('
 
 Route::middleware(['auth', 'admin'])->group(function () {
 
-    Route::get('/admin/dashboard', function () {
-        return view('backend.admin.dashboard');
-    });
+    Route::get('/admin/dashboard', fn() => view('backend.admin.dashboard'))
+    ->name('admin.dashboard');
 
     Route::prefix('admin')->group(function () {
 
@@ -392,6 +387,9 @@ Route::middleware(['auth','user'])->prefix('user')->group(function () {
         ->name('profile.image.delete');
 
 });
+
+Route::post('/apply-coupon', [CouponApplyController::class, 'apply'])
+    ->name('coupon.apply');
 
 
 Route::get('/basic_form', function () {

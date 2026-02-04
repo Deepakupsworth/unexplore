@@ -1,5 +1,8 @@
 <?php
+
 namespace App\Http\Controllers\Frontend;
+
+use Illuminate\Support\Facades\Log;
 
 use App\Http\Controllers\Controller;
 use App\Models\Coupon;
@@ -11,76 +14,135 @@ use Illuminate\Support\Str;
 
 class CouponApplyController extends Controller
 {
+
     public function apply(Request $request)
     {
-        $request->validate([
-            'code'       => 'required',
-            'package_id' => 'required|exists:packages,id',
-        ]);
+        try {
 
-        $coupon = Coupon::where('code', $request->code)
-            ->where('is_active', true)
-            ->first();
+            /* ================= VALIDATION ================= */
+            $request->validate([
+                'code'       => 'required',
+                'package_id' => 'required|exists:packages,id',
+            ]);
 
-        if (!$coupon) {
-            return response()->json(['message' => 'Invalid coupon'], 422);
-        }
+            /* ================= COUPON ================= */
+            $coupon = Coupon::with(['categories', 'packages', 'usages'])
+                ->where('code', $request->code)
+                ->where('is_active', true)
+                ->first();
 
-        // date check
-        if (
-            ($coupon->starts_at && now()->lt($coupon->starts_at)) ||
-            ($coupon->ends_at && now()->gt($coupon->ends_at))
-        ) {
-            return response()->json(['message' => 'Coupon expired'], 422);
-        }
+            if (!$coupon) {
+                return response()->json([
+                    'message' => 'Invalid coupon'
+                ], 422);
+            }
 
-        $package = Package::with('category')->findOrFail($request->package_id);
+            /* ================= DATE CHECK ================= */
+            if (
+                ($coupon->starts_at && now()->lt($coupon->starts_at)) ||
+                ($coupon->ends_at && now()->gt($coupon->ends_at))
+            ) {
+                return response()->json([
+                    'message' => 'Coupon expired'
+                ], 422);
+            }
 
-        /* ================= Scope Validation ================= */
+            /* ================= PACKAGE ================= */
+            $package = Package::with('category')->find($request->package_id);
 
-        if ($coupon->applies_to === 'category' &&
-            !$coupon->categories->contains($package->category_id)) {
-            return response()->json(['message' => 'Coupon not valid for this category'], 422);
-        }
+            if (!$package) {
+                return response()->json([
+                    'message' => 'Package not found'
+                ], 422);
+            }
 
-        if ($coupon->applies_to === 'package' &&
-            !$coupon->packages->contains($package->id)) {
-            return response()->json(['message' => 'Coupon not valid for this package'], 422);
-        }
+            /* ================= SCOPE VALIDATION ================= */
 
-        /* ================= Usage Limits ================= */
+            if (
+                $coupon->applies_to === 'category' &&
+                (!$package->category_id ||
+                    !$coupon->categories->pluck('id')->contains($package->category_id))
+            ) {
+                return response()->json([
+                    'message' => 'Coupon not valid for this category'
+                ], 422);
+            }
 
-        if ($coupon->usage_limit &&
-            $coupon->usages()->count() >= $coupon->usage_limit) {
-            return response()->json(['message' => 'Coupon usage limit reached'], 422);
-        }
+            if (
+                $coupon->applies_to === 'package' &&
+                !$coupon->packages->pluck('id')->contains($package->id)
+            ) {
+                return response()->json([
+                    'message' => 'Coupon not valid for this package'
+                ], 422);
+            }
 
-        if (
-            auth()->check() &&
-            $coupon->usage_per_user &&
-            $coupon->usages()
+            /* ================= USAGE LIMIT ================= */
+
+            if (
+                $coupon->usage_limit &&
+                $coupon->usages->count() >= $coupon->usage_limit
+            ) {
+                return response()->json([
+                    'message' => 'Coupon usage limit reached'
+                ], 422);
+            }
+
+            if (
+                auth()->check() &&
+                $coupon->usage_per_user &&
+                $coupon->usages
                 ->where('user_id', auth()->id())
                 ->count() >= $coupon->usage_per_user
-        ) {
-            return response()->json(['message' => 'Coupon already used'], 422);
+            ) {
+                return response()->json([
+                    'message' => 'Coupon already used'
+                ], 422);
+            }
+
+            /* ================= PRICE SOURCE ================= */
+            // IMPORTANT: avoid $package->price crash
+            $checkout = session('checkout');
+
+            if (!$checkout || !isset($checkout['final_total'])) {
+                return response()->json([
+                    'message' => 'Checkout session expired'
+                ], 422);
+            }
+
+            $basePrice = (float) $checkout['final_total'];
+
+            /* ================= DISCOUNT ================= */
+            if ($coupon->discount_type === 'percentage') {
+                $discount = ($basePrice * $coupon->discount_value) / 100;
+            } else {
+                $discount = $coupon->discount_value;
+            }
+
+            if ($coupon->max_discount) {
+                $discount = min($discount, $coupon->max_discount);
+            }
+
+            return response()->json([
+                'coupon_id'     => $coupon->id,
+                'code'          => $coupon->code,
+                'discount_text' => $coupon->discount_text,
+                'discount'      => round($discount, 2),
+                'final_price'   => max(0, $basePrice - $discount),
+            ]);
+        } catch (\Throwable $e) {
+
+            // 🔥 LOG REAL ERROR (for debugging)
+            Log::error('Coupon Apply Error', [
+                'message' => $e->getMessage(),
+                'line'    => $e->getLine(),
+                'file'    => $e->getFile(),
+            ]);
+
+            // 🔒 SAFE JSON RESPONSE (no HTML)
+            return response()->json([
+                'message' => 'Something went wrong. Please try again.'
+            ], 500);
         }
-
-        /* ================= Discount Calculation ================= */
-
-        $discount = $coupon->discount_type === 'percentage'
-            ? ($package->price * $coupon->discount_value / 100)
-            : $coupon->discount_value;
-
-        if ($coupon->max_discount) {
-            $discount = min($discount, $coupon->max_discount);
-        }
-
-        return response()->json([
-            'coupon_id'     => $coupon->id,
-            'code'          => $coupon->code,
-            'discount_text' => $coupon->discount_text,
-            'discount'      => round($discount, 2),
-            'final_price'   => max(0, $package->price - $discount),
-        ]);
     }
 }
