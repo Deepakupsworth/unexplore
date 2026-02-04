@@ -54,10 +54,10 @@
                         </div>
 
                         {{-- DEFAULT --}}
-                        <div class="flex items-center gap-2">
+                        {{-- <div class="flex items-center gap-2">
                             <input type="checkbox" name="is_default" value="1">
                             <span class="text-sm">Default Option</span>
-                        </div>
+                        </div> --}}
 
                     </div>
 
