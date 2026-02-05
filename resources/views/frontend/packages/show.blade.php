@@ -229,7 +229,7 @@
                             @include('frontend.packages.partials.tabs.overview')
 
                             {{-- ADDITIONAL INFO TAB --}}
-                            @include('frontend.packages.partials.tabs.additional-info')
+                            @include('frontend.packages.partials.tabs.additional-info-tabs')
                         </div>
 
                         <div class="tab-pane fade mt-4" id="additional">
