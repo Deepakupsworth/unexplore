@@ -29,7 +29,7 @@
                 <div class="contact-box p-3 p-md-4 rounded-5">
                     <h5 class="fw-bold mb-4">{{ __('contact.form.title') }}</h5>
 
-                    <form action="{{ route('contact.send') }}" method="POST">
+                    <form action="{{ route('contact.store') }}" method="POST">
                         @csrf
                         <div class="row g-3">
 
@@ -72,7 +72,7 @@
                                 <label class="form-label small fw-semibold">{{ __('contact.form.message') }}</label>
                                 <textarea rows="4" class="form-control contact-input"
                                           placeholder="{{ __('contact.form.message_placeholder') }}"
-                                          name="message_new"></textarea>
+                                          name="message"></textarea>
                             </div>
                         </div>
 

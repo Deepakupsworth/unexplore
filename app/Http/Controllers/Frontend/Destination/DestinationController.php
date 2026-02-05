@@ -62,6 +62,7 @@ class DestinationController extends Controller
             'translation' => fn ($q) =>
                 $q->where('language_code', $language),
             'thumb',
+            'gallery'
         ])
         ->withCount([
             'packageCities as package_count' => function ($q) {

@@ -253,8 +253,8 @@ class CityController extends Controller
             }
 
             /** ---------------- GALLERY ---------------- */
-            if ($request->hasFile('gallery_images')) {
-                foreach ($request->file('gallery_images') as $file) {
+            if ($request->hasFile('gallery')) {
+                foreach ($request->file('gallery') as $file) {
                     storeImage($city, $file, 'cities/gallery', 'gallery');
                 }
             }

@@ -64,7 +64,7 @@
 
             {{-- DATE --}}
             <div class="pkg-fil-bar__input-wrapper flex-center">
-                <label>Starting From</label>
+                <label>{{ __('package.pricing.starting_from') }}</label>
                 <input type="date" id="packageDate" value="{{ $filter_data['date'] ?? $minDate }}" min="{{ $minDate }}">
             </div>
 
@@ -73,7 +73,7 @@
                 <label>Persons</label>
 
                 <div class="w-100 d-flex justify-content-between align-items-center" data-bs-toggle="dropdown">
-                    <p id="personSummary">{{ $package->base_persons }} Adults</p>
+                    <p id="personSummary">{{ $package->base_persons }} {{ __('package.traveller.adults') }}</p>
                     <i class="fa-solid fa-angle-down"></i>
                 </div>
 
@@ -83,8 +83,8 @@
                     {{-- ADULTS --}}
                     <div class="traveller-row d-flex justify-content-between align-items-center mb-3">
                         <div>
-                            <strong>Adults</strong>
-                            <p class="text-muted small m-0">12+ Years</p>
+                            <strong>{{ __('package.traveller.adults') }}</strong>
+                            <p class="text-muted small m-0">{{ __('package.traveller.adults_age') }}</p>
                         </div>
 
                         <div class="traveller-counter d-flex gap-2">
@@ -99,8 +99,8 @@
                     {{-- CHILDREN --}}
                     <div class="traveller-row d-flex justify-content-between align-items-center">
                         <div>
-                            <strong>Children</strong>
-                            <p class="text-muted small m-0">2–12 Years</p>
+                            <strong>{{ __('package.traveller.children') }}</strong>
+                            <p class="text-muted small m-0">{{ __('package.traveller.children_age') }}</p>
                         </div>
 
                         <div class="traveller-counter d-flex gap-2">

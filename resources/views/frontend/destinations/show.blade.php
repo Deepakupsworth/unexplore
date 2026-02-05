@@ -1,5 +1,9 @@
 @extends('frontend.layout')
 @section('content')
+
+@php
+$currentCity = $city;
+@endphp
     {{-- @dd($events) --}}
     <!-- 1. DESTINATION DETAILS BANNER SECTION  -->
     <section class="hero-banner dest-details-banner">
@@ -24,10 +28,10 @@
                         {{ __('destination_details.banner.related_packages') }}
                         <strong>({{ $city->package_count }})</strong>
                     </a>
-
-                    <button class="btn btn-primary rounded-pill">
-                        {{ __('destination_details.banner.see_images') }}
-                    </button>
+                    @if ($city?->gallery && $city?->gallery->count() > 0)
+                    <button class="btn btn-primary rounded-pill" data-bs-toggle="modal"
+                        data-bs-target="#galleryModal"> {{ __('destination_details.banner.see_images') }}</button>
+                    @endif
                 </div>
             </div>
         </div>
@@ -329,4 +333,6 @@
             </div>
         </div>
     </section>
+
+    @include('frontend.destinations.partials.destination-gallery-modal')
 @endsection
