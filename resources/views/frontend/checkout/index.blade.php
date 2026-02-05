@@ -62,7 +62,6 @@
                         {{-- ================= CANCELLATION & DATE CHANGE ================= --}}
                         @include('frontend.checkout.partials.accordion.cancellation')
 
-
                     </div>
                     <div class="col-lg-3">
                         {{-- ================= PRICE CARD ================= --}}

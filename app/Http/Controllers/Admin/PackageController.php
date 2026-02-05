@@ -18,6 +18,7 @@ use App\Models\Event;
 use App\Models\PackageCategory;
 use App\Models\PackageDayItem;
 use App\Models\PackageDayItemOption;
+use App\Models\PackagePolicy;
 use App\Models\ThingToDo;
 use App\Models\Transport;
 use Illuminate\Support\Facades\Storage;
@@ -96,6 +97,7 @@ class PackageController extends Controller
 
         $package->load([
             'translations',
+            'policies.translation',
             'category.translation',
             'packageCategories.category.translation',
             'availabilities',
@@ -129,6 +131,14 @@ class PackageController extends Controller
 
         $languages = Language::select('id', 'code')->get();
 
+         // 🔥 ALL ACTIVE POLICIES (for checkbox list)
+        $policies = PackagePolicy::with([
+            'translation' => fn ($q) => $q->where('language_code', $lang)
+        ])
+        ->where('status', 1)
+        ->get();
+
+
         // Already used MAIN day items (hotel/todo/event)
         $dayItems = \App\Models\PackageDayItem::select(
             'package_day_id',
@@ -153,6 +163,7 @@ class PackageController extends Controller
             'dayItems'    => $dayItems,
             'usedOptions' => $usedOptions,
             'languages'   => $languages,
+            'policies'    => $policies,
 
             // ================= MODAL DATA =================
 
@@ -558,5 +569,17 @@ class PackageController extends Controller
         }
 
         return redirect()->back()->with('success', 'Additional info saved');
+    }
+
+
+    public function savePolicies(Request $request, Package $package)
+    {
+        // checkbox se aayega: policies[] = [1,2,3]
+        $policyIds = $request->input('policies', []);
+
+        // attach / detach automatically
+        $package->policies()->sync($policyIds);
+
+        return back()->with('success', 'Package policies updated successfully.');
     }
 }

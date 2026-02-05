@@ -148,7 +148,7 @@
                 </x-admin.table.tbody>
 
             </x-admin.table.table>
-
+            <div class="mt-6">{{ $thingstodos->links() }}</div>
         </div>
     </div>
 @endsection

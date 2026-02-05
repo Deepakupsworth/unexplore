@@ -77,6 +77,7 @@ class CheckoutController extends Controller
             'availabilities',
             'translation',
             'days.city.translation',
+            'policies.translation',
         ])
             ->where('slug', $checkout['slug'])
             ->firstOrFail();

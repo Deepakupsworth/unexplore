@@ -1,3 +1,16 @@
+@php
+    $hotelCount = 0;
+    $todoCount = 0;
+    $eventCount = 0;
+    $transportCount = 0;
+
+    foreach ($package->days as $day) {
+        $hotelCount     += $day->items->where('item_type', 'hotel')->count();
+        $todoCount      += $day->items->where('item_type', 'todo')->count();
+        $eventCount     += $day->items->where('item_type', 'event')->count();
+        $transportCount += $day->items->where('item_type', 'transport')->count();
+    }
+@endphp
 <div class="accordion accordion-flush mt-3 checkout-accordion" id="checkoutItinerary">
     <div class="accordion-item border rounded mb-3 pkg-details__accordion-item">
         <div class="accordion-header" data-bs-toggle="collapse" data-bs-target="#checkoutItineraryOnCollapse"
@@ -20,7 +33,12 @@
                 <p class="fw-600">Package Features</p>
                 <div class="d-flex align-items-center gap-2">
                     <p class="fw-600 mb-1">Itinerary:</p>
-                    <p class="p-small">2 Flights / 3 Hotels / 6 Transfers / 1 Activity</p>
+                    <p class="p-small">
+                        {{ $hotelCount }} Hotels /
+                        {{ $transportCount }} Transfers /
+                        {{ $eventCount }} Events /
+                        {{ $todoCount }} Activities
+                    </p>
                 </div>
                 <div class="pkg-details__content-wrapper">
                     <div class="pkg-details__day-plan">

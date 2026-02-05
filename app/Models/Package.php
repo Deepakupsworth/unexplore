@@ -180,4 +180,14 @@ class Package extends Model
     }
 
 
+    public function policies()
+    {
+        return $this->belongsToMany(
+            PackagePolicy::class,
+            'package_package_policy',      // pivot table name
+            'package_id',
+            'package_policy_id'
+        );
+    }
+
 }
