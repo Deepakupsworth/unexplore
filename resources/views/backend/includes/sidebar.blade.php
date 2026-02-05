@@ -215,6 +215,14 @@
                     </span>
                 </x-sidebar-link>
             </li>
+            <li>
+                <x-sidebar-link href="{{ route('admin.package-policies.index') }}">
+                    <span class="flex items-center">
+                        <iconify-icon class="nav-icon" icon="heroicons-outline:document-text"></iconify-icon>
+                        <span>Package Policies</span>
+                    </span>
+                </x-sidebar-link>
+            </li>
 
             <li>
                 <x-sidebar-link href="{{ url('/admin/coupon') }}">

@@ -16,7 +16,6 @@
     <p id="couponError" class="text-danger p-small mt-2 d-none"></p>
 </div>
 
-
 {{-- ================= COUPON LIST ================= --}}
 @if ($coupons->count())
     <div class="checkout-coupon-section mb-3">

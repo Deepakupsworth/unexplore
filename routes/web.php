@@ -35,6 +35,7 @@ use App\Http\Controllers\Frontend\Destination\DestinationController AS FrontendD
 use App\Http\Controllers\Frontend\{TravellerController,AddressController,AccountController, CouponApplyController};
 use App\Http\Controllers\Frontend\Booking\BookingController;
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
+use App\Http\Controllers\Admin\PackagePolicyController;
 
 // routes/web.php
 Route::get('/lang/{locale}', function ($locale) {
@@ -334,6 +335,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
                 [AdminPackageController::class, 'saveAdditionalInfo']
             )->name('additional-info.save');
 
+            Route::post(
+                'admin/packages/{package}/policies',
+                [AdminPackageController::class, 'savePolicies']
+            )->name('policies.save');
+
         });
     });
 
@@ -368,6 +374,21 @@ Route::middleware(['auth', 'admin'])->group(function () {
         });
 
     });
+
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::get('package-policies', [PackagePolicyController::class, 'index'])
+            ->name('package-policies.index');
+
+        Route::get('package-policies/form/{id?}', [PackagePolicyController::class, 'form'])
+            ->name('package-policies.form');
+
+        Route::post('package-policies/save', [PackagePolicyController::class, 'save'])
+            ->name('package-policies.save');
+
+        Route::delete('package-policies/{id}', [PackagePolicyController::class, 'destroy'])
+            ->name('package-policies.destroy');
+    });
+
 
 });
 
