@@ -36,6 +36,7 @@ use App\Http\Controllers\Frontend\{TravellerController,AddressController,Account
 use App\Http\Controllers\Frontend\Booking\BookingController;
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 use App\Http\Controllers\Admin\PackagePolicyController;
+use App\Http\Controllers\ContactController;
 
 // routes/web.php
 Route::get('/lang/{locale}', function ($locale) {
@@ -389,7 +390,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
             ->name('package-policies.destroy');
     });
 
-
 });
 
 
@@ -514,3 +514,6 @@ Route::get('/destination-details-json', [DemoJsonController::class, 'destination
 
 Route::post('/checkout/init', [CheckoutController::class, 'init'])
     ->name('checkout.init');
+
+Route::post('/contact', [ContactController::class, 'store'])
+    ->name('contact.store');

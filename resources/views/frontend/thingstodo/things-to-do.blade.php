@@ -7,7 +7,7 @@
     <section class="hero-banner hero-banner-fullscreen">
         <video class="hero-banner__video" autoplay muted loop playsinline poster="../assets/hero-banner-bg.png">
             <source src="{{ asset('frontend/assets/videos/seekers-entry-video.mp4') }}" type="video/mp4">
-            Your browser does not support the video tag.
+                {{ __('common.video_not_supported') }}
         </video>
         <!-- <img class="hero-banner__image" src="../assets/hero-banner-bg.png" alt="Banner"> -->
         <div class="container">

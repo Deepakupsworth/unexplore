@@ -259,6 +259,7 @@
     "packages.listing.loading": "Loading packages...",
     "common.ajax_error": "Ajax error – check console",
     "packages.filters.title": "Filters",
+    "package.sort.label": "Sort by:",
     "packages.filters.search": "Search",
     "packages.filters.search_placeholder": "Browse Package, Locations",
     "packages.filters.flights": "Flights",
@@ -276,5 +277,119 @@
     "packages.filters.customizable": "Customizable",
     "packages.banner.title": "Explore Packages",
     "packages.banner.description": "Discover the full range of amazing things to see and do across Saudi.",
-    "header.my_profile": "My Profile"
+    "header.my_profile": "My Profile",
+    "header.explore_saudi": "Explore Saudi",
+    "header.things_to_do": "Things to do",
+    "header.events_festivals": "Events & Festivals",
+    "header.deals_offers": "Deals & Offers",
+    "header.saudi_calendar": "Saudi Calendar",
+    "header.all_destinations": "All Destinations",
+    "header.all_things_to_do": "All Things to Do",
+    "header.all_events": "All Events",
+    "header.all_packages": "All Packages",
+    "header.about_saudi": "About Saudi",
+    "header.about_saudi_short": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt...",
+    "header.explore_things_title": "Explore Things to do",
+    "header.explore_events_title": "Explore Events",
+    "header.explore_packages_title": "Explore Packages",
+    "header.package.customizable": "Customizable",
+    "header.package.group": "Group Package",
+    "header.login_signup": "Login / Sign Up",
+    "header.book_now": "Book Now",
+    "header.logout": "Logout",
+    "header.feedback": "Feedback",
+    "header.mobile.explore_saudi": "Explore Saudi",
+    "header.mobile.things_to_do": "Things to do",
+    "header.mobile.events_festivals": "Events & Festivals",
+    "header.mobile.deals_offers": "Deals & Offers",
+    "header.mobile.saudi_calendar": "Saudi Calendar",
+    "header.about.about_saudi": "About Saudi",
+    "header.about.geography": "Geography of Saudi",
+    "header.about.history": "History of Saudi",
+    "header.about.climate": "Saudi's climate",
+    "header.about.towns_cities": "Towns & cities in Saudi",
+    "header.about.riyadh": "Riyadh",
+    "header.about.traditions": "Traditions in Saudi",
+    "header.about.sports": "Sports in Saudi",
+    "header.about.cuisine": "The local cuisine of Saudi",
+    "header.about.wildlife": "Wildlife",
+    "auth.forgot.title": "Forgot Your Password?",
+    "auth.forgot.subtitle": "Reset password with Unxplord",
+    "auth.forgot.send_email": "Send Recovery Email",
+    "auth.forgot.remember_password": "Remember password?",
+    "auth.forgot.sign_in": "Sign In",
+
+    "auth.back_to_site": "Go back to the website",
+    "auth.email.placeholder": "Your Email",
+
+    "auth.reset.title": "Reset Your Password",
+    "auth.reset.subtitle": "Enter your registered email and create a new password to regain access.",
+
+    "auth.reset.email_label": "Email Address",
+    "auth.reset.email_placeholder": "Enter your email",
+
+    "auth.reset.new_password_label": "New Password",
+    "auth.reset.new_password_placeholder": "Enter new password",
+
+    "auth.reset.confirm_password_label": "Confirm Password",
+    "auth.reset.confirm_password_placeholder": "Re-enter new password",
+
+    "auth.reset.submit": "Reset Password",
+
+    "auth.reset.remember_password": "Remember your password?",
+    "auth.reset.sign_in": "Sign In",
+
+    "package.gallery.view": "View Gallery",
+    "package.gallery.activities": "Activities & Sightseeing",
+    "package.gallery.events": "Events",
+    "package.gallery.hotels": "Hotels",
+
+    "package.tabs.overview": "Overview",
+    "package.tabs.additional_info": "Additional Info",
+
+    "package.day_plan.title": "Day Plan",
+    "package.day": "Day",
+
+    "package.item.hotel": "Hotel",
+    "package.item.todo": "To Do Thing",
+    "package.item.event": "Events",
+    "package.item.transport": "Transport",
+
+    "package.pricing.starting_from": "Starting from",
+    "package.pricing.per_person": "Per Person",
+    "package.pricing.person": "Person",
+    "package.pricing.book_now": "Book Now",
+    "package.pricing.total_price": "Total Price",
+
+    "package.duration.label": "Duration",
+    "package.places_to_visit": "Places to Visit",
+
+    "package.help.title": "Do you have questions or need more information?",
+    "package.help.cta": "Get More Help",
+
+    "package.share": "Share",
+
+    "package.modal.edit_search": "Edit Your Search",
+    "package.modal.starting_from": "Starting From",
+    "package.modal.going_to": "Going to",
+    "package.modal.starting_date": "Starting Date",
+    "package.modal.search": "Search",
+
+    "package.traveller.adults": "Adults",
+    "package.traveller.children": "Children",
+    "package.traveller.infants": "Infants",
+
+    "package.traveller.adults_age": "12+ Years",
+    "package.traveller.children_age": "2–12 Years",
+    "package.traveller.infants_age": "Below 2 Years",
+
+    "package.traveller.economy": "Economy",
+    "package.traveller.business": "Business Class",
+    "package.traveller.first": "First Class",
+    "package.traveller.premium": "Premium Economy",
+
+    "package.save": "Save",
+    "common.clearAll" : "Clear All",
+    "packages.empty": "No packages found"
+
 }

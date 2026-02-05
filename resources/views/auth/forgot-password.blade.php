@@ -18,8 +18,8 @@
         <div>
             <img src="{{ asset('/frontend/assets/logo.png') }}" alt="" style="width: 150px;">
 
-            <h1 class="mt-4 fw-600 h5">Forgot Your Password?</h1>
-            <p class="text-light2"> Reset password with Unexplord</p>
+            <h1 class="mt-4 fw-600 h5">{{ __('auth.forgot.title') }}</h1>
+            <p class="text-light2"> {{ __('auth.forgot.subtitle') }}</p>
 
             <form method="POST" action="{{ route('password.email') }}" class="space-y-4 mt-4">
                 @csrf
@@ -34,14 +34,14 @@
                 @error('email') <small class="text-danger">{{ $message }}</small> @enderror
 
                 <button type="submit" class="btn btn-primary justify-content-center btn-lg btn-submit w-100 rounded-pill">
-                    Send Recovery Email
+                    {{ __('auth.forgot.send_email') }}
                 </button>
             </form>
 
             <p class="text-center mt-3">
-                Remember password?
+                {{ __('auth.forgot.remember_password') }}
                 <a href="{{ route('login') }}" class="text-decoration-none primary-text fw-500">
-                    Sign In
+                    {{ __('auth.forgot.sign_in') }}
                 </a>
             </p>
 

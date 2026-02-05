@@ -5,7 +5,7 @@
                 @include('frontend.packages.partials.card', ['package' => $package])
             </div>
         @empty
-            <p class="text-muted">No packages found</p>
+            <p class="text-muted">{{__('packages.empty')}}</p>
         @endforelse
     </div>
 
