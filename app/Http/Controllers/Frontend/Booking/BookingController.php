@@ -253,6 +253,7 @@ class BookingController extends Controller
 
         // fake relations
         $booking->setRelation('user', auth()->user());
+
         $booking->setRelation('package', (object)[
             'translation' => (object)[
                 'title' => 'Test Holiday Package'
