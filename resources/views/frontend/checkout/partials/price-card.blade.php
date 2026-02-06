@@ -135,7 +135,15 @@
             </p>
         </div>
     </div>
-
+    <div class="mt-3">
+        <p class="fw-600 mb-2">Payment Method</p>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" value="bank" name="payment_method" id="bankTransfer" required>
+            <label class="form-check-label" for="bankTransfer">
+                Bank Transfer
+            </label>
+        </div>
+    </div>
     {{-- T&C --}}
     <div class="mt-3">
         <p class="fw-600">Important Information</p>

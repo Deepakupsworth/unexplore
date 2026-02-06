@@ -31,7 +31,8 @@
             'things-to-do',
             'account',
             'events*',
-            'booking*'
+            'booking*',
+            'products'
         ];
     @endphp
 

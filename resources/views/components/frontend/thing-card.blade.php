@@ -4,7 +4,7 @@
     <img src="{{ asset('storage/' . $thing->thumb->image_path) }}" alt="Adventure Image 1" class="img-fluid">
     <div class="dis-adventure__carousel-item-content">
         <div class="dis-adventure__carousel-item-top">
-            {{-- <div class="badge carousel-badge"><i class="fa-solid fa-location-dot"></i> Macca</div> --}}
+            <div class="badge carousel-badge"><i class="fa-solid fa-location-dot"></i> {{$thing?->city?->translationData?->name}}</div>
         </div>
         <div class="dis-adventure__carousel-item-bottom">
             <a href="{{ route('things-to-do.show', $thing->slug) }}" class="text-white">

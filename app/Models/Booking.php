@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\BookingStatus;
+use App\Enums\PaymentStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -44,9 +46,12 @@ class Booking extends Model
         'travel_start_date' => 'date',
         'travel_end_date'   => 'date',
         'snapshot_json' => 'array',
+
+        // 'payment_status' => PaymentStatus::class,
+        // 'status' => BookingStatus::class,
     ];
 
-    /* ================= RELATIONS ================= */
+    /* ================= RELATIONS ======s=========== */
 
     public function user()
     {
@@ -74,5 +79,10 @@ class Booking extends Model
             BookingDayItem::class,
             BookingDay::class
         );
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(\App\Models\BookingPayment::class);
     }
 }

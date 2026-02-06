@@ -2,7 +2,6 @@
 @section('title', 'Dashboard')
 @section('content')
 
-
     <div>
         <div class="flex justify-between flex-wrap items-center mb-6">
             <h4
@@ -60,10 +59,10 @@
                                 </div>
                                 <div class="flex-1">
                                     <div class="text-slate-800 dark:text-slate-300 text-sm mb-1 font-medium">
-                                        Totel revenue
+                                        Totel Packages
                                     </div>
                                     <div class="text-slate-900 dark:text-white text-lg font-medium">
-                                        3,564
+                                        {{ $stats['packages']['active'] }}
                                     </div>
                                 </div>
                             </div>
@@ -76,10 +75,10 @@
                                 </div>
                                 <div class="flex-1">
                                     <div class="text-slate-800 dark:text-slate-300 text-sm mb-1 font-medium">
-                                        Products sold
+                                        ToDo Things
                                     </div>
                                     <div class="text-slate-900 dark:text-white text-lg font-medium">
-                                        564
+                                        {{ $stats['todos'] }}
                                     </div>
                                 </div>
                             </div>
@@ -92,15 +91,46 @@
                                 </div>
                                 <div class="flex-1">
                                     <div class="text-slate-800 dark:text-slate-300 text-sm mb-1 font-medium">
-                                        Growth
+                                        Events
                                     </div>
                                     <div class="text-slate-900 dark:text-white text-lg font-medium">
-                                        +5.0%
+                                        {{ $stats['events'] }}
                                     </div>
                                 </div>
                             </div>
                         </div>
 
+                        {{-- <div class="py-[18px] px-4 rounded-[6px] bg-[#EAE5FF] dark:bg-slate-900	 ">
+                            <div class="flex items-center space-x-6 rtl:space-x-reverse">
+                                <div class="flex-none">
+                                    <div id="wline3"></div>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="text-slate-800 dark:text-slate-300 text-sm mb-1 font-medium">
+                                        Hotels
+                                    </div>
+                                    <div class="text-slate-900 dark:text-white text-lg font-medium">
+                                        {{ $stats['hotels'] }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="py-[18px] px-4 rounded-[6px] bg-[#EAE5FF] dark:bg-slate-900	 ">
+                            <div class="flex items-center space-x-6 rtl:space-x-reverse">
+                                <div class="flex-none">
+                                    <div id="wline3"></div>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="text-slate-800 dark:text-slate-300 text-sm mb-1 font-medium">
+                                        Transports
+                                    </div>
+                                    <div class="text-slate-900 dark:text-white text-lg font-medium">
+                                        {{ $stats['transports'] }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div> --}}
                         <!-- END: Group Chart2 -->
                     </div>
                 </div>

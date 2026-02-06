@@ -52,11 +52,14 @@ if (! function_exists('status_badge')) {
             'pending'
             => ui_badge('Pending', 'warning'),
 
-            'confirmed', 'completed'
+            'confirmed'
             => ui_badge('Confirmed', 'success'),
 
             'cancelled'
             => ui_badge('Cancelled', 'danger'),
+
+            'completed'
+            => ui_badge('Completed', 'success'),
 
             /* ✅ PAYMENT STATUS */
             'paid'

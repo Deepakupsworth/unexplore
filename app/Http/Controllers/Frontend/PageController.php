@@ -41,7 +41,8 @@ class PageController extends Controller
                     ->with([
                         'translation' => fn($q) =>
                         $q->where('language_code', $language),
-                        'thumb'
+                        'thumb',
+                        'city.translationData',
                     ])
                     ->withCount([
                         'packageDayItems as package_count' => function ($q) {
@@ -51,6 +52,8 @@ class PageController extends Controller
                         }
                     ])
                     ->orderByDesc('package_count')
+                    ->having('package_count','>',0)
+                    ->take(12)
                     ->get();
 
                 $events = Event::with([
@@ -81,8 +84,6 @@ class PageController extends Controller
                 return compact('things', 'events', 'packages', 'cities');
             }
         );
-
-        // dd($homeData);
 
         return view('frontend.home', [
             'things'   => $homeData['things'],

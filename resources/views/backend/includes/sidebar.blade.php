@@ -234,7 +234,7 @@
             </li>
 
 
-            <li class="sidebar-menu-title">SETTINGS</li>
+            {{-- <li class="sidebar-menu-title">SETTINGS</li>
 
             <li>
                 <x-sidebar-link href="{{ url('/admin/languages') }}">
@@ -243,7 +243,7 @@
                         <span>Languages</span>
                     </span>
                 </x-sidebar-link>
-            </li>
+            </li> --}}
 
         </ul>
 
