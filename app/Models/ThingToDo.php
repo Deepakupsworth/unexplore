@@ -105,4 +105,9 @@ class ThingToDo extends Model
         return $this->hasMany(PackageDayItem::class, 'item_id')
             ->where('item_type', 'todo');
     }
+
+    public function tags()
+    {
+        return $this->morphMany(Tag::class, 'taggable');
+    }
 }

@@ -1,10 +1,16 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
+use App\Services\BookingPaymentService;
+use App\Enums\PaymentMethod;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Exception;
+
+use App\Enums\BookingStatus;
+use App\Enums\PaymentStatus;
 
 class BookingController extends Controller
 {
@@ -37,8 +43,10 @@ class BookingController extends Controller
     {
         $booking->load([
             'package.translation',
-            'travellers'
+            'travellers',
+            'snapshot',
         ]);
+
         return view('backend.bookings.show', compact('booking'));
     }
 
@@ -63,4 +71,46 @@ class BookingController extends Controller
 
         return back()->with('success', 'Status updated successfully');
     }
+
+
+    public function storeManualPayment(
+        Request $request,
+        Booking $booking,
+        BookingPaymentService $service
+    ) {
+        $request->validate([
+            'payment_method' => ['required'],
+            'amount'         => 'required|numeric|min:1',
+            'transaction_id' => 'nullable|string',
+            'bank_name'      => 'nullable|string',
+            'note'           => 'nullable|string',
+            'payment_id'     => 'nullable|integer',
+            'status'         => ['required', Rule::in([
+                'pending',
+                'paid',
+                'failed',
+                'refunded',
+                'partial_refund',
+            ])],
+        ]);
+
+        try {
+            $service->addOrUpdatePayment(
+                booking: $booking,
+                method: PaymentMethod::from($request->payment_method),
+                amount: (float) $request->amount,
+                transactionId: $request->transaction_id,
+                note: $request->note,
+                paymentId: $request->payment_id,
+                bankName: $request->bank_name,
+                status: PaymentStatus::from($request->status),
+            );
+
+            return back()->with('success', 'Payment saved successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['payment' => $e->getMessage()]);
+        }
+    }
+
+
 }

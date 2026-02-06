@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Frontend\Booking;
 
+use App\Enums\PaymentMethod;
+use App\Enums\PaymentStatus;
 use App\Http\Controllers\Controller;
 use App\Models\{
     Booking,
@@ -19,12 +21,13 @@ use Illuminate\Support\Str;
 use Carbon\Carbon;
 
 use App\Mail\BookingConfirmationMail;
+use App\Services\BookingPaymentService;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 
 class BookingController extends Controller
 {
-    public function store(Request $request)
+    public function store(Request $request, BookingPaymentService $paymentService)
     {
         /* =========================
        1️⃣ CHECKOUT SESSION
@@ -67,7 +70,9 @@ class BookingController extends Controller
             $endDate,
             $couponCode,
             $couponDiscount,
-            $finalPayable
+            $finalPayable,
+            $request,          // ✅ ADD
+            $paymentService
         ) {
 
             /* ===== BOOKING ===== */
@@ -157,6 +162,20 @@ class BookingController extends Controller
                     'created' => now()->toDateTimeString(),
                 ],
             ]);
+
+            /* =========================
+            💳 BANK TRANSFER PAYMENT ENTRY
+            ========================= */
+            $paymentService->addOrUpdatePayment(
+                booking: $booking,
+                method: PaymentMethod::BANK,
+                amount: $finalPayable,
+                transactionId: $request->transaction_id ?? null,
+                note: 'Bank transfer initiated by user',
+                paymentId: null,                      // ➕ new payment
+                bankName: $request->bank_name ?? null,
+                status: PaymentStatus::PENDING        // ⏳ bank = pending
+            );
 
             return $booking;
         });
