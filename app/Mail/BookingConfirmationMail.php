@@ -14,15 +14,14 @@ class BookingConfirmationMail extends Mailable
 
     public function __construct($booking)
     {
-        $this->booking = $booking->load([
-            'user',
-            'package.translation'
-        ]);
+        $this->booking = $booking;
     }
 
     public function build()
     {
         return $this->subject('Booking Confirmation')
-            ->view('emails.booking-confirmation');
+            ->view('emails.booking-confirmation')->with([
+                'booking' => $this->booking,
+            ]);
     }
 }

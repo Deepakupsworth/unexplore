@@ -8,10 +8,9 @@
 
 <body style="font-family: Arial, sans-serif">
 
-    {{-- @dd($booking) --}}
     <h2>Booking Confirmation 🎉</h2>
 
-    <p>Hello {{ $booking->user->first_name ?? 'Guest' }} {{$booking->user->last_name}},</p>
+    <p>Hello {{ $booking?->user->first_name ?? 'Guest' }} {{$booking?->user?->last_name}},</p>
 
     <p>Your booking has been successfully placed.</p>
 
