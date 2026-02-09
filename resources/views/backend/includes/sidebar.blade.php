@@ -225,6 +225,19 @@
             </li>
 
             <li>
+                <x-sidebar-link href="{{ route('admin.tags.index') }}">
+                    <span class="flex items-center">
+                        <iconify-icon
+                            class="nav-icon"
+                            icon="heroicons-outline:tag">
+                        </iconify-icon>
+                        <span>Tags</span>
+                    </span>
+                </x-sidebar-link>
+            </li>
+
+
+            <li>
                 <x-sidebar-link href="{{ url('/admin/coupon') }}">
                     <span class="flex items-center">
                         <iconify-icon class="nav-icon" icon="heroicons-outline:ticket"></iconify-icon>
