@@ -12,6 +12,5 @@
 @endforelse
 
 <div class="col-md-12 col-lg-12 col-xl-12">
-{{ $events->withQueryString()->links() }}
+    {{ $events->withQueryString()->links('vendor.pagination.bootstrap-5') }}
 </div>
-
