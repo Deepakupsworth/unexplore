@@ -6,7 +6,7 @@
         <div class="upcoming-event__carousel-item-dates">
             <p>
                 @if ($event->start_date)
-                    {{ \App\Helpers\DateHelper::badge($event->start_date) }}
+                    {{ \App\Helpers\DateHelper::badge($event?->start_date) }}
                 @endif
 
             </p>
@@ -14,7 +14,7 @@
             <p>
                 @if ($event->end_date)
                     <span class="date-badge">
-                        {{ \App\Helpers\DateHelper::badge($event->end_date) }}
+                        {{ \App\Helpers\DateHelper::badge($event?->end_date) }}
                     </span>
                 @endif
             </p>
