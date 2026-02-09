@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use App\Helpers\TimeHelper;
 use App\Models\EventCategory;
+use App\Models\Tag;
 use Throwable;
 
 class EventController extends Controller
@@ -68,7 +69,7 @@ class EventController extends Controller
      ========================= */
     public function form($id = null)
     {
-        $model = Event::with(['translations', 'gallery', 'thumb'])
+        $model = Event::with(['translations', 'gallery', 'thumb','tags'])
             ->find($id) ?? new Event();
 
         return view('backend.events.form', [
@@ -78,6 +79,7 @@ class EventController extends Controller
             'categories' => Category::where('type', CategoryType::EVENT)
                 ->with('translation')
                 ->get(),
+            'tags' => Tag::orderBy('name')->get()
         ]);
     }
 
@@ -354,6 +356,14 @@ class EventController extends Controller
                     storeImage($event, $img, 'events/gallery', 'gallery');
                 }
             }
+
+            /* ================= TAGS ================= */
+            if ($request->filled('tags')) {
+                $event->tags()->sync($request->tags);
+            } else {
+                $event->tags()->detach();
+            }
+
 
             DB::commit();
 

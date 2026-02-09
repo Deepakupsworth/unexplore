@@ -19,6 +19,7 @@ use App\Models\PackageCategory;
 use App\Models\PackageDayItem;
 use App\Models\PackageDayItemOption;
 use App\Models\PackagePolicy;
+use App\Models\Tag;
 use App\Models\ThingToDo;
 use App\Models\Transport;
 use Illuminate\Support\Facades\Storage;
@@ -87,6 +88,7 @@ class PackageController extends Controller
             'infos.translations',
             'thumb',
             'gallery',
+            'tags'
         ]);
         return $this->editForm($package);
     }
@@ -131,12 +133,12 @@ class PackageController extends Controller
 
         $languages = Language::select('id', 'code')->get();
 
-         // 🔥 ALL ACTIVE POLICIES (for checkbox list)
+        // 🔥 ALL ACTIVE POLICIES (for checkbox list)
         $policies = PackagePolicy::with([
-            'translation' => fn ($q) => $q->where('language_code', $lang)
+            'translation' => fn($q) => $q->where('language_code', $lang)
         ])
-        ->where('status', 1)
-        ->get();
+            ->where('status', 1)
+            ->get();
 
 
         // Already used MAIN day items (hotel/todo/event)
@@ -267,6 +269,8 @@ class PackageController extends Controller
                 'name' => optional($t->translations->first())->name
                     ?? 'Transport #' . $t->id,
             ]),
+
+            'tags' => Tag::orderBy('name')->get()
         ];
     }
 
@@ -287,6 +291,8 @@ class PackageController extends Controller
     private function persist(Request $request, Package $package)
     {
         $request->validate([
+            'tags'   => 'nullable|array',
+            'tags.*' => 'exists:tags,id',
             'category_ids'   => 'required|array|min:1',
             'category_ids.*' => 'exists:categories,id',
 
@@ -443,6 +449,15 @@ class PackageController extends Controller
                 }
             }
 
+
+            /* ================= TAGS ================= */
+            if ($request->has('tags')) {
+                $package->tags()->sync($request->tags);
+            } else {
+                $package->tags()->detach();
+            }
+
+
             DB::commit();
 
             return redirect()
@@ -464,9 +479,6 @@ class PackageController extends Controller
                 ->with('error', 'Something went wrong while saving the package.');
         }
     }
-
-
-
 
     public function packageDayOptionsStore(Request $request)
     {

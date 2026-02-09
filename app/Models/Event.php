@@ -112,4 +112,9 @@ class Event extends Model
             'category_id'
         );
     }
+
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
+    }
 }

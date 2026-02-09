@@ -370,7 +370,7 @@
                                                 </li>
 
                                                 <li>
-                                                    <a href="#">
+                                                    <a href="{{ route('golf.view') }}">
                                                         {{ __('header.about.sports') }}
                                                         <i class="fa-solid fa-angles-right primary-text flex-v-center"></i>
                                                     </a>

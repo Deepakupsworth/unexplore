@@ -59,6 +59,7 @@ class ThingToDoRepository implements ThingToDoRepositoryInterface
             'translations',
             'gallery',
             'thingCategories.category.translation',
+            'tags'
         ])->find($id);
     }
 
@@ -168,6 +169,13 @@ class ThingToDoRepository implements ThingToDoRepositoryInterface
                         'category_id' => $categoryId,
                     ]);
                 }
+            }
+
+              /* ===================== TAGS (SAVE + UPDATE) ===================== */
+            if (!empty($data['tags']) && is_array($data['tags'])) {
+                $thing->tags()->sync($data['tags']);   // create / update
+            } else {
+                $thing->tags()->detach();              // remove all
             }
 
             /* ===================== THUMB ===================== */

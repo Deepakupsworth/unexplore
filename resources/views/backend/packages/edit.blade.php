@@ -13,6 +13,10 @@
         </div>
     @endif
 
+    @php
+    $selectedTags = $package?->tags->pluck('id')->toArray() ?? [];
+    @endphp
+
     <style>
         .form-label {
             font-size: 13px;
@@ -248,39 +252,24 @@
                                         </div>
                                     </div>
 
-                                    {{-- ================= ADDITIONAL INFO ================= --}}
-                                    {{-- <h3 class="text-lg font-semibold">Additional Information</h3>
+                                    {{-- Tags --}}
 
-                        <div class="flex gap-2 border-b pb-2 mb-4">
-                            @foreach ($languages as $lang)
-                                <button type="button" class="lang-btn {{ $loop->first ? 'active' : '' }}"
-                                    data-info="{{ strtolower($lang->code) }}">
-                                    {{ strtoupper($lang->code) }}
-                                </button>
-                            @endforeach
-                        </div>
+                                    <div class="mb-6">
+                                        <label class="form-label mb-2 block">Tags</label>
 
-                        @foreach ($languages as $lang)
-                            @php $code=strtolower($lang->code); @endphp
-                            <div class="info-lang-section {{ $loop->first ? 'active' : '' }}" id="info-{{ $code }}">
+                                        <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                            @foreach ($tags as $tag)
+                                                <x-admin.form.checkbox
+                                                    name="tags[]"
+                                                    :value="$tag->id"
+                                                    :checked="in_array($tag->id, $selectedTags)"
+                                                    :label="$tag->name"
+                                                />
+                                            @endforeach
+                                        </div>
 
-                                @foreach (['cancellation', 'visa', 'season'] as $type)
-                                    @php
-                                        $info = $package->infos->firstWhere('type', $type);
-                                        $it = $info?->translations->firstWhere('language_code', $code);
-                                    @endphp
+                                    </div>
 
-                                    <label class="form-label">{{ ucfirst($type) }} Title</label>
-                                    <input class="form-control mb-2"
-                                        name="infos[{{ $type }}][translations][{{ $code }}][title]"
-                                        value="{{ old("infos.$type.translations.$code.title", $it->title ?? '') }}">
-
-                                    <label class="form-label">{{ ucfirst($type) }} Content</label>
-                                    <textarea class="form-control h-24 mb-4"
-                                        name="infos[{{ $type }}][translations][{{ $code }}][content]">{{ old("infos.$type.translations.$code.content", $it->content ?? '') }}</textarea>
-                                @endforeach
-                            </div>
-                        @endforeach --}}
 
                                     {{-- ================= THUMBNAIL ================= --}}
                                     <div>
@@ -371,8 +360,8 @@
                     <option value="">Select City</option>
                     ${cities.map(c =>
                         `<option value="${c.id}" ${c.id == row.city_id ? 'selected' : ''}>
-                                                                            ${c.slug}
-                                                                        </option>`
+                                                                                    ${c.slug}
+                                                                                </option>`
                     ).join('')}
                 </select>
 
@@ -409,8 +398,8 @@
                 <option value="">Activity Type</option>
                 ${['hotel','event','todo','transport'].map(t =>
                     `<option value="${t}" ${item.item_type === t ? 'selected' : ''}>
-                                                                        ${t.charAt(0).toUpperCase()+t.slice(1)}
-                                                                    </option>`
+                                                                                ${t.charAt(0).toUpperCase()+t.slice(1)}
+                                                                            </option>`
                 ).join('')}
             </select>
 
@@ -465,8 +454,8 @@
                     <option value="">Select City</option>
                     ${cities.map(c =>
                         `<option value="${c.id}" ${c.id == dayData.city_id ? 'selected' : ''}>
-                                                                            ${c.slug}
-                                                                        </option>`
+                                                                                    ${c.slug}
+                                                                                </option>`
                     ).join('')}
                 </select>
 
