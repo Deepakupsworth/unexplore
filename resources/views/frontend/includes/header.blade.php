@@ -198,7 +198,7 @@
                                     </div>
                                 </div>
                                 <!-- Right column: About -->
-                                <div class="col-lg-5">
+                                {{-- <div class="col-lg-5">
                                     <div class="nav-menu__right">
                                         <p class="fw-bold p-large">{{__('header.about_saudi')}}</p>
                                         <p class="text-muted small">{{__('header.about_saudi_short')}}</p>
@@ -207,7 +207,7 @@
                                         <img src="frontend/assets/nav-dropdown-side.png" alt="Image"
                                             class="nav-menu__right-side-img">
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                     </li>
@@ -291,7 +291,7 @@
                                     </div>
                                 </div>
                                 <!-- Right column: About -->
-                                <div class="col-lg-5">
+                                {{-- <div class="col-lg-5">
                                     <div class="nav-menu__right">
                                         <p class="fw-bold p-large">{{__('header.about_saudi')}}</p>
                                         <p class="text-muted small">{{__('header.about_saudi_short')}}</p>
@@ -300,7 +300,7 @@
                                         <img src="frontend/assets/nav-dropdown-side.png" alt="Image"
                                             class="nav-menu__right-side-img">
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                     </li>
@@ -395,7 +395,7 @@
                                     </div>
                                 </div>
                                 <!-- Right column: About -->
-                                <div class="col-lg-5">
+                                {{-- <div class="col-lg-5">
                                     <div class="nav-menu__right">
                                         <p class="fw-bold p-large">{{ __('header.about_saudi') }}</p>
                                         <p class="text-muted small">{{ __('header.about_saudi_short') }}</p>
@@ -404,7 +404,7 @@
                                         <img src="frontend/assets/nav-dropdown-side.png" alt="Image"
                                             class="nav-menu__right-side-img">
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                     </li>

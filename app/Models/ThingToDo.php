@@ -22,6 +22,7 @@ class ThingToDo extends Model
         'closing_time',
         'latitude',
         'longitude',
+        'video_url',
     ];
 
     /* =======================================================
