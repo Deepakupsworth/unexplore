@@ -94,4 +94,9 @@ class City extends Model
             ->filter()
             ->implode(', ');
     }
+
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
+    }
 }

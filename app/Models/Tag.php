@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tag extends Model
 {
-    protected $fillable = ['name','slug'];
+    protected $fillable = ['name', 'slug'];
 
     public function packages()
     {
@@ -23,5 +23,9 @@ class Tag extends Model
     {
         return $this->morphedByMany(Thingtodo::class, 'taggable');
     }
-    
+
+    public function cities()
+    {
+        return $this->morphedByMany(City::class, 'taggable');
+    }
 }

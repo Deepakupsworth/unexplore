@@ -64,13 +64,7 @@
                         <select name="category_ids[]" class="form-control select2" multiple required>
                             @foreach ($categories as $category)
                                 <option value="{{ $category->id }}"
-                                    {{ in_array(
-                                        $category->id,
-                                        old(
-                                            'category_ids',
-                                            $model->categories->pluck('id')->toArray()
-                                        )
-                                    ) ? 'selected' : '' }}>
+                                    {{ in_array($category->id, old('category_ids', $model->categories->pluck('id')->toArray())) ? 'selected' : '' }}>
                                     {{ $category->translation?->name }}
                                 </option>
                             @endforeach
@@ -125,10 +119,24 @@
                 <input type="hidden" name="slug" value="{{ old('slug', $model->slug) }}">
 
                 {{-- Media --}}
-                <div class="input-area mt-4">
+                <div class="input-area mt-4 mb-4">
                     <label class="form-label">Video URL</label>
                     <input type="url" name="video_url" class="form-control"
                         value="{{ old('video_url', $model->video_url) }}">
+                </div>
+
+                @php
+                    $selectedTags = $model?->tags->pluck('id')->toArray() ?? [];
+                @endphp
+
+                <div class="mb-6">
+                    <label class="form-label mb-2 block">Tags</label>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                        @foreach ($tags as $tag)
+                            <x-admin.form.checkbox name="tags[]" :value="$tag->id" :checked="in_array($tag->id, $selectedTags)" :label="$tag->name" />
+                        @endforeach
+                    </div>
+
                 </div>
 
                 <div class="input-area mt-4">
