@@ -22,10 +22,10 @@
                                 {{ __('footer.popular_links') }}
                             </p>
                             <ul class="list-unstyled">
-                                <li><a href="#" class="footer-link">{{ __('footer.link.explore_saudi') }}</a></li>
-                                <li><a href="#" class="footer-link">{{ __('footer.link.things_to_do') }}</a></li>
-                                <li><a href="#" class="footer-link">{{ __('footer.link.plan_trip') }}</a></li>
-                                <li><a href="#" class="footer-link">{{ __('footer.link.events_festivals') }}</a>
+                                <li><a href="{{ route('destinations.index') }}" class="footer-link">{{ __('footer.link.explore_saudi') }}</a></li>
+                                <li><a href="{{ route('things.to.do') }}" class="footer-link">{{ __('footer.link.things_to_do') }}</a></li>
+                                <li><a href="{{route('packages.index')}}" class="footer-link">{{ __('footer.link.plan_trip') }}</a></li>
+                                <li><a href="{{ route('event.listing') }}" class="footer-link">{{ __('footer.link.events_festivals') }}</a>
                                 </li>
                                 <li><a href="#" class="footer-link">{{ __('footer.link.saudi_calendar') }}</a>
                                 </li>

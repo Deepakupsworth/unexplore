@@ -110,8 +110,8 @@
                         <div class="section__header">
                             <div class="section__header-content">
                                 <h2 class="section__heading"><span
-                                        class="fw-normal">{{ __('home.plan.title_light') }}</span>
-                                    {{ __('home.plan.title_bold') }} </h2>
+                                        class="fw-normal">{{ __('home.plan.title_light') }} <strong> {{__('home.plan.title_bold')}}</strong></span>
+                                </h2>
                                 <p class="section__description">{{ __('home.plan.description') }}</p>
                             </div>
                         </div>
@@ -162,7 +162,7 @@
             <div class="container">
                 <div class="section__header">
                     <div class="section__header-content">
-                        <h2 class="section__heading">{{ __('home.exclusive.title') }}</h2>
+                        <h2 class="section__heading">{!! __('home.exclusive.title') !!}</h2>
                         <p class="section__description">{{ __('home.exclusive.description') }}</p>
                     </div>
                     <div class="section__header-CTA">
@@ -283,7 +283,7 @@
             <div class="container">
                 <div class="section__header">
                     <div class="section__header-content">
-                        <h2 class="section__heading">{{ __('destination_details.exclusive_offers.title') }}</h2>
+                        <h2 class="section__heading">{!! __('destination_details.exclusive_offers.title') !!}</h2>
                         <p class="section__description">{{ __('home.plan.description') }}</p>
                     </div>
                     <div class="section__header-CTA">
@@ -321,8 +321,8 @@
             <div class="container">
                 <div class="section__header">
                     <div class="section__header-content">
-                        <h2 class="section__heading"> {{ __('destination_details.upcoming_events.title') }}</h2>
-                        <p class="section__description">{{ __('destination_details.upcoming_events.description') }}</p>
+                        <h2 class="section__heading"> {!! __('home.events.title') !!}</h2>
+                        <p class="section__description">{{ __('home.events.description') }}</p>
                     </div>
                     <div class="section__header-CTA">
                         <a href="{{ route('event.listing') }}" class="btn btn-primary rounded-pill">
@@ -407,7 +407,7 @@
                 <div class="col-md-4 d-flex align-items-center">
                     <div class="section__header flex-column align-items-start gap-4">
                         <div class="section__header-content">
-                            <h2 class="section__heading">{{ __('home.news.title') }}</h2>
+                            <h2 class="section__heading">{!!__('home.news.title') !!}</h2>
                             <p class="section__description">{{ __('home.news.description') }}</p>
                         </div>
                         <div class="section__header-CTA">
