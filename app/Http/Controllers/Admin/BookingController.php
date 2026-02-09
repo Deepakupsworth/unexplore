@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+
 use App\Services\BookingPaymentService;
 use App\Enums\PaymentMethod;
 use App\Http\Controllers\Controller;
@@ -11,6 +12,9 @@ use Exception;
 
 use App\Enums\BookingStatus;
 use App\Enums\PaymentStatus;
+use App\Mail\BookingCancelledMail;
+use App\Mail\BookingCompletedMail;
+use Illuminate\Support\Facades\Mail;
 
 class BookingController extends Controller
 {
@@ -53,23 +57,37 @@ class BookingController extends Controller
     public function updateStatus(Request $request, Booking $booking)
     {
         $request->validate([
-            'type'   => 'required|in:booking,payment',
-            'status' => 'required|string',
+            'status' => 'required|in:pending,confirmed,cancelled,completed',
+            'reason' => 'nullable|string|max:255',
         ]);
 
-        if ($request->type === 'booking') {
-            $booking->update([
-                'status' => $request->status,
-            ]);
+        $oldStatus = $booking->status;
+
+        $booking->update([
+            'status' => $request->status
+        ]);
+
+        /*
+    |--------------------------------------------------------------------------
+    | 🔔 STATUS BASED EMAILS
+    |--------------------------------------------------------------------------
+    */
+
+        // ❌ Cancellation Mail
+        if ($oldStatus !== 'cancelled' && $request->status === 'cancelled') {
+            Mail::to($booking->user->email)
+                ->send(new BookingCancelledMail(
+                    $booking,
+                    $request->reason ?? null
+                ));
         }
 
-        if ($request->type === 'payment') {
-            $booking->update([
-                'payment_status' => $request->status,
-            ]);
+        // ✅ Completion Mail
+        if ($oldStatus !== 'completed' && $request->status === 'completed') {
+            Mail::to($booking->user->email)
+                ->send(new BookingCompletedMail($booking));
         }
-
-        return back()->with('success', 'Status updated successfully');
+        return back()->with('success', 'Booking status updated successfully.');
     }
 
 
@@ -111,6 +129,4 @@ class BookingController extends Controller
             return back()->withErrors(['payment' => $e->getMessage()]);
         }
     }
-
-
 }

@@ -118,7 +118,7 @@
                                     Cancelled
                                 </option>
 
-                                <option value="cancelled" @selected($booking->status === 'completed')>
+                                <option value="completed" @selected($booking->status === 'completed')>
                                     Completed
                                 </option>
                             </select>
