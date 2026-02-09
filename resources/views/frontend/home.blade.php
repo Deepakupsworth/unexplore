@@ -8,6 +8,12 @@
         .explore-saudi__map {
             width: 250px;
         }
+
+        .hero-banne {
+            width: 100% !important;
+            height: 100vh !important;
+            object-fit: cover !important;
+        }
     </style>
     <!-- HEADER -->
     <div id="header"></div>
@@ -152,30 +158,30 @@
 
     <!-- 3. DISCOVER ADVENTURE SECTION  -->
     @if ($things->count() > 0)
-    <section class="dis-adventure section-padding">
-        <div class="container">
-            <div class="section__header">
-                <div class="section__header-content">
-                    <h2 class="section__heading">{{ __('home.exclusive.title') }}</h2>
-                    <p class="section__description">{{ __('home.exclusive.description') }}</p>
+        <section class="dis-adventure section-padding">
+            <div class="container">
+                <div class="section__header">
+                    <div class="section__header-content">
+                        <h2 class="section__heading">{{ __('home.exclusive.title') }}</h2>
+                        <p class="section__description">{{ __('home.exclusive.description') }}</p>
+                    </div>
+                    <div class="section__header-CTA">
+                        <a href="{{ route('things.to.do') }}" class="btn btn-primary rounded-pill">
+                            {{ __('home.exclusive.view_all') }}
+                            <i class="fa-solid fa-angles-right"></i>
+                        </a>
+                    </div>
                 </div>
-                <div class="section__header-CTA">
-                    <a href="{{ route('things.to.do') }}" class="btn btn-primary rounded-pill">
-                        {{ __('home.exclusive.view_all') }}
-                        <i class="fa-solid fa-angles-right"></i>
-                    </a>
+                <div class="dis-adventure__carousel swiper">
+                    <div class="swiper-wrapper">
+                        @foreach ($things as $thing)
+                            <x-frontend.thing-card :thing="$thing" />
+                        @endforeach
+                    </div>
+                    <div class="custom__carousel-pagination"></div>
                 </div>
             </div>
-            <div class="dis-adventure__carousel swiper">
-                <div class="swiper-wrapper">
-                    @foreach ($things as $thing)
-                        <x-frontend.thing-card :thing="$thing" />
-                    @endforeach
-                </div>
-                <div class="custom__carousel-pagination"></div>
-            </div>
-        </div>
-    </section>
+        </section>
     @endif
 
     <!-- 4. EXPLORE SAUDI -->
