@@ -36,14 +36,31 @@ class PageController extends Controller
                 $favouriteTagId = Tag::where('slug', 'favourite')->value('id');
 
                 /* ================= CITIES ================= */
-                $cities = City::with([
+
+                $citiesBaseQuery = City::with([
                     'translation' => fn($q) =>
                     $q->where('language_code', $language),
                     'thumb'
-                ])
-                    ->latest()
+                ]);
+
+                $cities = $favouriteTagId
+                    ? (clone $citiesBaseQuery)
+                    ->whereHas(
+                        'tags',
+                        fn($q) =>
+                        $q->where('tags.id', $favouriteTagId)
+                    )
                     ->take(6)
-                    ->get();
+                    ->get()
+                    : collect();
+
+                if ($cities->isEmpty()) {
+                    $cities = $citiesBaseQuery
+                        ->latest()
+                        ->take(6)
+                        ->get();
+                }
+
 
                 /* ================= THINGS TO DO ================= */
                 $thingsBaseQuery = ThingToDo::with([
