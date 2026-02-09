@@ -172,7 +172,7 @@
             <div class="golf-highlights__carousel swiper">
                 <div class="swiper-wrapper">
                     <div class="golf-highlights__item swiper-slide">
-                        <img class="img-fluid" src=".{{ asset('frontend/assets/golf-highlight.webp')}}" alt="Highlight">
+                        <img class="img-fluid" src="{{ asset('frontend/assets/golf-highlight.webp')}}" alt="Highlight">
                         <div class="golf-highlights__item-content">
                             <div class="badge carousel-badge">Macca</div>
                             <p class="p-large mt-2 fw-600">Photos: Ryder Cup Day 3</p>

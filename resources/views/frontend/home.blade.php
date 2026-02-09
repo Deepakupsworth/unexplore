@@ -277,8 +277,8 @@
             <div class="container">
                 <div class="section__header">
                     <div class="section__header-content">
-                        <h2 class="section__heading">{{ __('home.exclusive.title') }}</h2>
-                        <p class="section__description">{{ __('home.exclusive.description') }}</p>
+                        <h2 class="section__heading">{{ __('destination_details.exclusive_offers.title') }}</h2>
+                        <p class="section__description">{{ __('home.plan.description') }}</p>
                     </div>
                     <div class="section__header-CTA">
                         <a href="{{ route('packages.index') }}" class="btn btn-primary rounded-pill">
@@ -315,8 +315,8 @@
             <div class="container">
                 <div class="section__header">
                     <div class="section__header-content">
-                        <h2 class="section__heading"> {{ __('home.events.title') }}</h2>
-                        <p class="section__description">{{ __('home.events.description') }}</p>
+                        <h2 class="section__heading"> {{ __('destination_details.upcoming_events.title') }}</h2>
+                        <p class="section__description">{{ __('destination_details.upcoming_events.description') }}</p>
                     </div>
                     <div class="section__header-CTA">
                         <a href="{{ route('event.listing') }}" class="btn btn-primary rounded-pill">

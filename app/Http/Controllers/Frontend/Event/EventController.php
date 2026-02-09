@@ -53,7 +53,7 @@ class EventController extends Controller
     /* AJAX filter */
     public function filter(Request $request)
     {
-      
+
         $lang = current_lang();
 
         $events = $this->applyFilters(
@@ -75,7 +75,8 @@ class EventController extends Controller
             'translation',
             'thumb',
             'city.translationData',
-            'category.translationData'
+            'category.translationData',
+            'eventCategories.category.translationData'
         ]);
 
         /* 🔎 Search */

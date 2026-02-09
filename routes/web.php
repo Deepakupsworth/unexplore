@@ -39,6 +39,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PackagePolicyController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\NewsletterController;
 
 // routes/web.php
 Route::get('/lang/{locale}', function ($locale) {
@@ -541,3 +542,10 @@ Route::get('/golf', function () {
 Route::get('/products', function () {
     return view('frontend.products.index');
 })->name('products.view');
+
+
+Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])
+    ->name('newsletter.subscribe');
+
+Route::post('/newsletter/unsubscribe', [NewsletterController::class, 'unsubscribe'])
+    ->name('newsletter.unsubscribe');

@@ -23,4 +23,5 @@ class Tag extends Model
     {
         return $this->morphedByMany(Thingtodo::class, 'taggable');
     }
+    
 }

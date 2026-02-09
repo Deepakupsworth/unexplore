@@ -227,6 +227,24 @@
                                 <p class="error-text">{{ $message }}</p>
                             @enderror
                         </div>
+                        @php
+                         $selectedTags = $model?->tags->pluck('id')->toArray() ?? [];
+                        @endphp
+
+                        <div class="mb-6">
+                            <label class="form-label mb-2 block">Tags</label>
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                @foreach ($tags as $tag)
+                                    <x-admin.form.checkbox
+                                        name="tags[]"
+                                        :value="$tag->id"
+                                        :checked="in_array($tag->id, $selectedTags)"
+                                        :label="$tag->name"
+                                    />
+                                @endforeach
+                            </div>
+
+                        </div>
 
                         <button class="btn btn-dark w-full mt-4">
                             {{ $model->id ? 'Update Event' : 'Create Event' }}
