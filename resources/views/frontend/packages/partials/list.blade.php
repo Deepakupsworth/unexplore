@@ -5,11 +5,11 @@
                 @include('frontend.packages.partials.card', ['package' => $package])
             </div>
         @empty
-            <p class="text-muted">{{__('packages.empty')}}</p>
+            <p class="text-muted">{{ __('packages.empty') }}</p>
         @endforelse
     </div>
 
-    <div class="mt-4">
-        {{ $packages->links() }}
+    <div class="col-md-12 col-lg-12 col-xl-12">
+        {{ $packages->withQueryString()->links('vendor.pagination.bootstrap-5') }}
     </div>
 </div>
