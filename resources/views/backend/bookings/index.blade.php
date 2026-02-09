@@ -94,7 +94,8 @@
                             </x-admin.table.td>
 
                             <x-admin.table.td>
-                                {{ $booking->user->name ?? 'Guest' }}
+                                {{ $booking->user->first_name ?? '' }}
+                                {{$booking->user->last_name ?? '' }}
                                 <div class="text-xs text-slate-500">
                                     {{ $booking->user->email ?? '' }}
                                 </div>

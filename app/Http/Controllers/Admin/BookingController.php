@@ -46,13 +46,32 @@ class BookingController extends Controller
     public function show(Booking $booking)
     {
         $booking->load([
-            'package.translation',
+            'package.translation', // meta info
             'travellers',
-            'snapshot',
+            'snapshot',            // ✅ real relation
         ]);
 
-        return view('backend.bookings.show', compact('booking'));
+        // Snapshot JSON (safe)
+        $snapshot = $booking->snapshot?->snapshot_json ?? [];
+
+        // Extract snapshot data
+        $package   = $snapshot['package'] ?? [];
+        $days      = $package['days'] ?? [];
+        $coupon    = $snapshot['coupon'] ?? null;
+        $checkout  = $snapshot['checkout'] ?? null;
+        $thumb     = $snapshot['thumb'] ?? null;
+
+        return view('backend.bookings.show', compact(
+            'booking',
+            'snapshot',
+            'package',
+            'days',
+            'coupon',
+            'checkout',
+            'thumb'
+        ));
     }
+
 
     public function updateStatus(Request $request, Booking $booking)
     {

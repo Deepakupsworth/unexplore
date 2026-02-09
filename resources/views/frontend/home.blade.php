@@ -8,12 +8,6 @@
         .explore-saudi__map {
             width: 250px;
         }
-
-        .hero-banne {
-            width: 100% !important;
-            height: 100vh !important;
-            object-fit: cover !important;
-        }
     </style>
     <!-- HEADER -->
     <div id="header"></div>

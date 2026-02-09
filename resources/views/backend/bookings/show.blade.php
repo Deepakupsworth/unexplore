@@ -30,50 +30,88 @@
                 <h4 class="card-title">Booking Information</h4>
             </header>
 
-            <div class="card-body grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+            <div class="card-body space-y-6 p-4">
 
-                <div>
-                    <p class="text-sm text-slate-500">Booking Code</p>
-                    <p class="font-medium">{{ $booking->booking_code }}</p>
+                {{-- ================= BASIC INFO ================= --}}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                    <div>
+                        <p class="text-sm text-slate-500">Booking Code</p>
+                        <p class="font-medium">{{ $booking->booking_code }}</p>
+                    </div>
+
+                    <div>
+                        <p class="text-sm text-slate-500">Booking Date</p>
+                        <p class="font-medium">{{ $booking->created_at->format('d M Y, h:i A') }}</p>
+                    </div>
+
+                    <div>
+                        <p class="text-sm text-slate-500">Travel Dates</p>
+                        <p class="font-medium">
+                            {{ \App\Helpers\DateHelper::range($booking->travel_start_date, $booking->travel_end_date) }}
+                        </p>
+                    </div>
+
+                    <div>
+                        <p class="text-sm text-slate-500">Package</p>
+                        <p class="font-medium">
+                            {{ $booking->package->translation->title ?? '—' }}
+                        </p>
+                    </div>
+
+                    <div>
+                        <p class="text-sm text-slate-500">Total Travellers</p>
+                        <p class="font-medium">
+                            {{ $booking->total_person }}
+                            ({{ $booking->total_adult }} Adult,
+                            {{ $booking->total_child }} Child)
+                        </p>
+                    </div>
+
+                    <div>
+                        <p class="text-sm text-slate-500">Total Amount</p>
+                        <p class="font-semibold text-primary-600">
+                            ₹{{ number_format($booking->booking_total_amount) }}
+                        </p>
+                    </div>
+
                 </div>
 
-                <div>
-                    <p class="text-sm text-slate-500">Booking Date</p>
-                    <p class="font-medium">{{ $booking->created_at->format('d M Y, h:i A') }}</p>
-                </div>
+                {{-- ================= ITINERARY DETAILS ================= --}}
+                <div class="border-t pt-4">
+                    <h5 class="font-semibold text-base mb-3">Itinerary Details</h5>
 
-                <div>
-                    <p class="text-sm text-slate-500">Travel Dates</p>
-                    <p class="font-medium">
-                        {{ \App\Helpers\DateHelper::range($booking->travel_start_date, $booking->travel_end_date) }}
-                    </p>
-                </div>
+                    @foreach($days as $day)
+                        <div class="mb-4 border rounded-lg p-3">
 
-                <div>
-                    <p class="text-sm text-slate-500">Package</p>
-                    <p class="font-medium">
-                        {{ $booking->package->translation->title ?? '—' }}
-                    </p>
-                </div>
+                            <p class="font-medium mb-2">
+                                Day {{ $day['day_number'] }} –
+                                {{ $day['city']['translation']['name'] ?? '—' }}
+                            </p>
 
-                <div>
-                    <p class="text-sm text-slate-500">Total Travellers</p>
-                    <p class="font-medium">
-                        {{ $booking->total_person }}
-                        ({{ $booking->total_adult }} Adult,
-                        {{ $booking->total_child }} Child)
-                    </p>
-                </div>
+                            <div class="space-y-2 text-sm">
 
-                <div>
-                    <p class="text-sm text-slate-500">Total Amount</p>
-                    <p class="font-semibold text-primary-600">
-                        ₹{{ number_format($booking->booking_total_amount) }}
-                    </p>
+                                @foreach($day['items'] as $item)
+                                    <div class="flex justify-between items-center bg-slate-50 px-3 py-2 rounded">
+                                        <div class="capitalize font-medium">
+                                            {{ $item['item_type'] }}
+                                        </div>
+
+                                        <div class="text-slate-600">
+                                            {{ $item['start_time'] }} → {{ $item['end_time'] }}
+                                        </div>
+                                    </div>
+                                @endforeach
+
+                            </div>
+                        </div>
+                    @endforeach
+
                 </div>
 
             </div>
         </div>
+
 
         {{-- RIGHT : STATUS --}}
         <div class="card">
@@ -208,23 +246,6 @@
 
                             </div>
                         </div>
-
-
-                        {{-- OPTIONAL ACTIONS --}}
-                        {{--
-                    <a href="{{ route('admin.bookings.invoice.download', $booking->id) }}"
-                       class="btn btn-outline-secondary w-full">
-                        Download Invoice
-                    </a>
-
-                    <form method="POST"
-                          action="{{ route('admin.bookings.resend-mail', $booking->id) }}">
-                        @csrf
-                        <button class="btn btn-outline-primary w-full">
-                            Resend Confirmation Mail
-                        </button>
-                    </form>
-                    --}}
                     </div>
                 </div>
 
