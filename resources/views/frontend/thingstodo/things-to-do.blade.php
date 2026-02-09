@@ -1,15 +1,44 @@
 @extends('frontend.layout')
 @section('content')
     @php
+        use Illuminate\Support\Str;
         $currentThing = $thing;
+
+        $videoUrl = $currentThing->video_url ?? null;
+
     @endphp
     <!-- 1. THING TO DO NATURE: BANNER SECTION  -->
     <section class="hero-banner hero-banner-fullscreen">
-        <video class="hero-banner__video" autoplay muted loop playsinline poster="../assets/hero-banner-bg.png">
-            <source src="{{ asset('frontend/assets/videos/seekers-entry-video.mp4') }}" type="video/mp4">
+
+        {{-- YouTube / Vimeo --}}
+        {{-- @if ($videoUrl && Str::contains($videoUrl, ['youtube', 'youtu.be', 'vimeo']))
+        <iframe
+            class="hero-banner__video"
+            src="{{ $videoUrl }}"
+            frameborder="0"
+            allow="autoplay; fullscreen"
+            allowfullscreen>
+        </iframe>
+        @endif --}}
+        @if ($videoUrl)
+            {{-- Any other video URL (MP4, CDN, S3, etc.) --}}
+            <video class="hero-banner__video" autoplay muted loop playsinline>
+                <source src="{{ $videoUrl }}">
                 {{ __('common.video_not_supported') }}
-        </video>
-        <!-- <img class="hero-banner__image" src="../assets/hero-banner-bg.png" alt="Banner"> -->
+            </video>
+        @elseif ($thing->thumb)
+            {{-- Thumbnail fallback --}}
+            <img class="hero-banner__image" src="{{ asset('storage/' . $thing->thumb->image_path) }}"
+                alt="{{ $thing->translation?->name ?? 'Banner' }}">
+        @else
+            {{-- Final fallback --}}
+            <video class="hero-banner__video" autoplay muted loop playsinline
+                poster="{{ asset('frontend/assets/hero-banner-bg.png') }}">
+                <source src="{{ asset('frontend/assets/videos/seekers-entry-video.mp4') }}">
+                {{ __('common.video_not_supported') }}
+            </video>
+        @endif
+
         <div class="container">
             <div class="dest-details-banner__content">
                 <h1 class="text-white"><strong>{{ $thing->translation->name }}</strong></h1>
@@ -326,25 +355,25 @@
 
                 <!-- Main Image -->
                 <!-- <div class="gallery-main">
-                          <img id="galleryMainImg" src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200"
-                            class="img-fluid">
-                        </div> -->
+                              <img id="galleryMainImg" src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200"
+                                class="img-fluid">
+                            </div> -->
 
                 <!-- Thumbnails + Arrows -->
                 <!-- <div class="gallery-thumbs-wrapper">
 
-                          <button class="gallery-arrow" id="prevImg">&#10094;</button>
+                              <button class="gallery-arrow" id="prevImg">&#10094;</button>
 
-                          <div class="gallery-thumbs">
-                            <img class="thumb active" src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=300">
-                            <img class="thumb" src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=300">
-                            <img class="thumb" src="https://images.unsplash.com/photo-1519681393784-d120267933ba?w=300">
-                            <img class="thumb" src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=300">
-                            <img class="thumb" src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=300">
-                          </div>
+                              <div class="gallery-thumbs">
+                                <img class="thumb active" src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=300">
+                                <img class="thumb" src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=300">
+                                <img class="thumb" src="https://images.unsplash.com/photo-1519681393784-d120267933ba?w=300">
+                                <img class="thumb" src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=300">
+                                <img class="thumb" src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=300">
+                              </div>
 
-                          <button class="gallery-arrow" id="nextImg">&#10095;</button>
-                        </div> -->
+                              <button class="gallery-arrow" id="nextImg">&#10095;</button>
+                            </div> -->
 
             </div>
         </div>

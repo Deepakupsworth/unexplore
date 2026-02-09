@@ -95,6 +95,7 @@ class ThingtodoController extends Controller
             'category_ids'         => 'required|array|min:1',
             'category_ids.*'       => 'exists:categories,id',
 
+            'video_url'            => 'nullable|url|max:255',
             // 'thumb_image' => 'nullable|image|max:2048',
         ]);
 
