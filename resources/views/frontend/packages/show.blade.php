@@ -61,9 +61,11 @@
             <div class="gallery-wrapper swiper">
                 <div class="swiper-wrapper  gallery-grid">
                     <!-- LEFT LARGE IMAGE -->
-                    <div class="gallery-item gallery-item--large swiper-slide open-gallery">
+                    <div class="gallery-item gallery-item--large swiper-slide open-gallery" data-open-tab="galleryTabsDestination"
+                    data-bs-toggle="modal"
+                    data-bs-target="#galleryModal">
                         <img class="img-fluid" src="{{ asset('storage/' . $package->thumb->image_path) }}" alt="">
-                        <button class="view-gallery-btn" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                        <button class="view-gallery-btn stretched-link" data-bs-toggle="modal" data-bs-target="#galleryModal" data-open-tab="galleryTabsDestination">
                             <i class="fa-regular fa-image"></i>
                             {{ __('package.gallery.view') }} →
                         </button>
@@ -72,7 +74,7 @@
                     <!-- RIGHT GRID -->
                     <div class="gallery-middle swiper-slide">
                         <div class="d-flex flex-column gap-2">
-                            <div class="gallery-item full open-gallery" data-open-tab="galleryTabsActivities"
+                            <div class="gallery-item full open-gallery" data-open-tab="galleryTabsProperty"
                                 data-bs-toggle="modal" data-bs-target="#galleryModal">
 
                                 <?php
@@ -136,7 +138,7 @@
                                     </video>
                                 </div>
 
-                                <div class="gallery-item  half open-gallery" data-open-tab="galleryTabsHighlights"
+                                <div class="gallery-item  half open-gallery" data-open-tab="galleryTabsActivities"
                                     data-bs-toggle="modal" data-bs-target="#galleryModal">
                                     <img class="img-fluid" src="{{ $imagePathEvent }}" alt="">
                                     <p class="p-small">{{ __('package.gallery.events') }}</p>
@@ -153,7 +155,7 @@
                     </div>
 
                     <div class="gallery-item gallery-item--large swiper-slide open-gallery"
-                        data-open-tab="galleryTabsProperty" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                        data-open-tab="galleryTabsHighlights" data-bs-toggle="modal" data-bs-target="#galleryModal">
                         @php
                             $imagePathHotel = match (true) {
                                 !empty($finalArray['hotel'][0]['thumb']) => asset(

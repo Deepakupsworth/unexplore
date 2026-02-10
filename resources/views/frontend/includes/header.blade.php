@@ -24,39 +24,37 @@
                                 <!-- Left column: Links -->
                                 <div class="col-lg-7">
                                     <div class="nav-menu__left">
-                                        <p class="fw-bold p-large nav-menu__heading">{{ __('header.explore_saudi') }}</p>
+                                        <p class="fw-bold p-large nav-menu__heading">{{ __('header.explore_saudi') }}
+                                        </p>
                                         <div class="sub-menu-section">
                                             <ul class="list-unstyled">
-                                            @foreach (header_destinations() as $cities)
-
-                                                        <li>
-                                                    <a class="" href="{{ route('destinations.show', [
-                                                                        'slug' => $cities->slug,
-                                                                    ]) }}">
-                                                        <span> {{ $cities->translationData?->name }}
+                                                @foreach (header_destinations() as $cities)
+                                                    <li>
+                                                        <a class=""
+                                                            href="{{ route('destinations.show', [
+                                                                'slug' => $cities->slug,
+                                                            ]) }}">
+                                                            <span> {{ $cities->translationData?->name }}
+                                                            </span>
+                                                            <i
+                                                                class="fa-solid fa-angles-right primary-text flex-v-center"></i>
+                                                        </a>
+                                                    </li>
+                                                @endforeach
+                                                <li>
+                                                    <a class="" href="{{ route('destinations.index') }}">
+                                                        <span> {{ __('header.all_destinations') }}
                                                         </span>
                                                         <i
                                                             class="fa-solid fa-angles-right primary-text flex-v-center"></i>
                                                     </a>
                                                 </li>
 
-
-                                                @endforeach
-                                                <li>
-                                                <a class="" href="{{ route('destinations.index') }}">
-                                                    <span> {{ __('header.all_destinations')}}
-                                                    </span>
-                                                    <i
-                                                                        class="fa-solid fa-angles-right primary-text flex-v-center"></i>
-                                                </a>
-                                            </li>
-
                                             </ul>
                                             <ul class="list-unstyled">
 
-                                            <!-- @foreach (header_destination_categories() as $cities)
-
-                                                    <li>
+                                                <!-- @foreach (header_destination_categories() as $cities)
+<li>
                                                 <a class="" href="#">
                                                     <span> {{ $cities->translationData?->name }}
                                                     </span>
@@ -64,9 +62,7 @@
                                                         class="fa-solid fa-angles-right primary-text flex-v-center"></i>
                                                 </a>
                                             </li>
-
-
-                                            @endforeach -->
+@endforeach -->
 
                                                 <!-- <li><a href="#">Traditions in Saudi <i
                                                             class="fa-solid fa-angles-right primary-text flex-v-center"></i></a>
@@ -87,12 +83,12 @@
                                 <!-- Right column: About -->
                                 <div class="col-lg-5">
                                     <div class="nav-menu__right">
-                                        <p class="fw-bold p-large">{{__('header.about_saudi')}}</p>
-                                        <p class="text-muted small">{{__('header.about_saudi_short')}}</p>
-                                        <img src="frontend/assets//about-saudi.png" alt="Saudi"
+                                        {{-- <p class="fw-bold p-large">{{ __('header.about_saudi') }}</p> --}}
+                                        {{-- <p class="text-muted small">{{ __('header.about_saudi_short') }}</p> --}}
+                                        <img src="frontend/assets/header_saudi.jpg" alt="Saudi"
                                             class="img-fluid about-image">
-                                        <img src="frontend/assets/nav-dropdown-side.png" alt="Image"
-                                            class="nav-menu__right-side-img">
+                                        {{-- <img src="frontend/assets/about_header.jpg" alt="Image"
+                                            class="nav-menu__right-side-img"> --}}
                                     </div>
                                 </div>
                             </div>
@@ -103,7 +99,7 @@
                         {{-- <a class="nav-link" href="{{route('things.to.do')}}" --}}
                         <a class="nav-link" href="#" id="thingsToDoDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            <span>{{ __('header.things_to_do')}} </span>
+                            <span>{{ __('header.things_to_do') }} </span>
                             <i class="fa-solid fa-angle-down"></i>
                         </a>
 
@@ -112,15 +108,17 @@
                                 <!-- Left column: Links -->
                                 <div class="col-lg-7">
                                     <div class="nav-menu__left">
-                                        <p class="fw-bold p-large nav-menu__heading">{{ __('header.explore_things_title')}}</p>
+                                        <p class="fw-bold p-large nav-menu__heading">
+                                            {{ __('header.explore_things_title') }}</p>
                                         <div class="sub-menu-section">
                                             <ul class="list-unstyled">
                                                 @foreach (header_todos() as $category)
                                                     @if ($category->things_count > 0)
                                                         <li>
-                                                            <a href="{{ route('things.to.do', [
-                                                                'categories[]' => $category->id
-                                                            ]) }}">
+                                                            <a
+                                                                href="{{ route('things.to.do', [
+                                                                    'categories[]' => $category->id,
+                                                                ]) }}">
                                                                 {{ $category->translation?->name }}
                                                                 ({{ $category->things_count }})
                                                                 <i
@@ -131,7 +129,7 @@
                                                 @endforeach
                                                 <li class="fw-bold">
                                                     <a href="{{ route('things.to.do') }}">
-                                                        {{ __('header.all_things_to_do')}}
+                                                        {{ __('header.all_things_to_do') }}
                                                         <i class="fa-solid fa-angles-right primary-text"></i>
                                                     </a>
                                                 </li>
@@ -143,81 +141,29 @@
                                 <!-- Right column: About -->
                                 <div class="col-lg-5">
                                     <div class="nav-menu__right">
-                                        <p class="fw-bold p-large">{{__('header.about_saudi')}}</p>
-                                        <p class="text-muted small">{{__('header.about_saudi_short')}}</p>
-                                        <img src="frontend/assets/about-saudi.png" alt="Saudi"
+                                        {{-- <p class="fw-bold p-large">{{ __('header.about_saudi') }}</p> --}}
+                                        {{-- <p class="text-muted small">{{ __('header.about_saudi_short') }}</p> --}}
+                                        <img src="frontend/assets/header_things.jpg" alt="Saudi"
                                             class="img-fluid about-image">
-                                        <img src="frontend/assets/nav-dropdown-side.png" alt="Image"
-                                            class="nav-menu__right-side-img">
+                                        {{-- <img src="frontend/assets/about_header.jpg" alt="Image"
+                                            class="nav-menu__right-side-img"> --}}
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link" href="#" id="eventsDropdown" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            <span>{{ __('header.events_festivals')}}</span>
-                            <i class="fa-solid fa-angle-down"></i>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('event.listing') }}">
+                            <span>{{ __('header.events_festivals') }}</span>
                         </a>
-                        <div class="dropdown-menu nav-menu-dropdown" aria-labelledby="eventsDropdown">
-                            <div class="row">
-                                <!-- Left column: Links -->
-                                <div class="col-lg-7">
-                                    <div class="nav-menu__left">
-                                        <p class="fw-bold p-large nav-menu__heading">{{__('header.explore_events_title')}}</p>
-                                        <div class="sub-menu-section">
-                                            <ul class="list-unstyled">
 
-                                                @foreach (header_event_categories() as $category)
-                                                    @if ($category->events_count > 0)
-                                                        <li>
-                                                            <a
-                                                                href="{{ route('event.listing', [
-                                                                    'categories[]' => $category->id,
-                                                                ]) }}">
-                                                                {{ $category->translationData?->name }}
-                                                                ({{ $category->events_count }})
-                                                                <i
-                                                                    class="fa-solid fa-angles-right primary-text flex-v-center"></i>
-                                                            </a>
-                                                        </li>
-                                                    @endif
-                                                @endforeach
-
-                                                {{-- 🔥 ALL EVENTS (Professional default) --}}
-                                                <li class="fw-bold">
-                                                    <a href="{{ route('event.listing') }}">
-                                                        {{__('header.all_events')}}
-                                                        <i class="fa-solid fa-angles-right primary-text flex-v-center"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Right column: About -->
-                                {{-- <div class="col-lg-5">
-                                    <div class="nav-menu__right">
-                                        <p class="fw-bold p-large">{{__('header.about_saudi')}}</p>
-                                        <p class="text-muted small">{{__('header.about_saudi_short')}}</p>
-                                        <img src="frontend/assets//about-saudi.png" alt="Saudi"
-                                            class="img-fluid about-image">
-                                        <img src="frontend/assets/nav-dropdown-side.png" alt="Image"
-                                            class="nav-menu__right-side-img">
-                                    </div>
-                                </div> --}}
-                            </div>
-                        </div>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link" href="#" id="dealsDropdown" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            <span>{{ __('header.deals_offers')}}</span>
-                            <i class="fa-solid fa-angle-down"></i>
+                        <a class="nav-link" href="{{ route('packages.index') }}">
+                            <span>{{ __('header.deals_offers') }}</span>
                         </a>
-                        <div class="dropdown-menu nav-menu-dropdown" aria-labelledby="dealsDropdown">
+                        {{-- <div class="dropdown-menu nav-menu-dropdown" aria-labelledby="dealsDropdown">
                             <div class="row">
                                 <!-- Left column: Links -->
                                 <div class="col-lg-7">
@@ -291,7 +237,7 @@
                                     </div>
                                 </div>
                                 <!-- Right column: About -->
-                                {{-- <div class="col-lg-5">
+                                <div class="col-lg-5">
                                     <div class="nav-menu__right">
                                         <p class="fw-bold p-large">{{__('header.about_saudi')}}</p>
                                         <p class="text-muted small">{{__('header.about_saudi_short')}}</p>
@@ -300,17 +246,16 @@
                                         <img src="frontend/assets/nav-dropdown-side.png" alt="Image"
                                             class="nav-menu__right-side-img">
                                     </div>
-                                </div> --}}
+                                </div>
                             </div>
-                        </div>
+                        </div> --}}
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link" href="#" id="calendarDropdown" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            <span>{{ __('header.saudi_calendar')}} </span>
-                            <i class="fa-solid fa-angle-down"></i>
+                        <a class="nav-link" href="{{ route('golf.view') }}">
+                            <span>{{ __('header.golf') }} </span>
+                            {{-- <i class="fa-solid fa-angle-down"></i> --}}
                         </a>
-                        <div class="dropdown-menu nav-menu-dropdown" aria-labelledby="calendarDropdown">
+                        {{-- <div class="dropdown-menu nav-menu-dropdown" aria-labelledby="calendarDropdown">
                             <div class="row">
                                 <!-- Left column: Links -->
                                 <div class="col-lg-7">
@@ -395,7 +340,7 @@
                                     </div>
                                 </div>
                                 <!-- Right column: About -->
-                                {{-- <div class="col-lg-5">
+                                <div class="col-lg-5">
                                     <div class="nav-menu__right">
                                         <p class="fw-bold p-large">{{ __('header.about_saudi') }}</p>
                                         <p class="text-muted small">{{ __('header.about_saudi_short') }}</p>
@@ -404,24 +349,24 @@
                                         <img src="frontend/assets/nav-dropdown-side.png" alt="Image"
                                             class="nav-menu__right-side-img">
                                     </div>
-                                </div> --}}
+                                </div>
                             </div>
-                        </div>
+                        </div> --}}
                     </li>
                 </ul>
                 <div class="d-flex flex-wrap align-items-center gap-2 navbar__buttons">
 
-                {{-- When user is NOT logged in --}}
+                    {{-- When user is NOT logged in --}}
                     @guest
-                    <a href="{{ route('login') }}" class="btn btn-outline-light rounded-pill">
-                        {{ __('header.login_signup') }}
-                    </a>
+                        <a href="{{ route('login') }}" class="btn btn-outline-light rounded-pill">
+                            {{ __('header.login_signup') }}
+                        </a>
 
-                    {{-- <a href="#" class="btn btn-primary rounded-pill">
+                        {{-- <a href="#" class="btn btn-primary rounded-pill">
                         Book Now
                         <i class="fa-solid fa-angles-right"></i>
                     </a> --}}
-                @endguest
+                    @endguest
 
                     @if (!empty(@auth()->user()->id))
                         <!-- When user is logged in -->
@@ -432,7 +377,9 @@
                                 {{ Auth()?->user()->first_name }}
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                <li><a class="dropdown-item" href="{{url('/account')}}?tab=profile">{{ __('header.my_profile') }}</a></li>
+                                <li><a class="dropdown-item"
+                                        href="{{ url('/account') }}?tab=profile">{{ __('header.my_profile') }}</a>
+                                </li>
 
                                 <li>
                                     <form method="POST" action="/logout">
@@ -462,25 +409,23 @@
                                 data-bs-parent="#navbarAccordion">
                                 <ul class="navbar-nav pt-2 mt-1 ps-3">
 
-                                @foreach (header_destinations() as $cities)
-
+                                    @foreach (header_destinations() as $cities)
                                         <li>
-                                    <a class="nav-link" href="{{ route('destinations.show', [
-                                                        'slug' => $cities->slug,
-                                                    ]) }}">
-                                        <span> {{ $cities->translationData?->name }}
-                                        </span>
-                                    </a>
-                                </li>
-
-
-                                @endforeach
-                                <li>
-                                    <a class="nav-link" href="{{ route('destinations.index') }}">
-                                        <span> {{ __('header.all_destinations')}}
-                                        </span>
-                                    </a>
-                                </li>
+                                            <a class="nav-link"
+                                                href="{{ route('destinations.show', [
+                                                    'slug' => $cities->slug,
+                                                ]) }}">
+                                                <span> {{ $cities->translationData?->name }}
+                                                </span>
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                    <li>
+                                        <a class="nav-link" href="{{ route('destinations.index') }}">
+                                            <span> {{ __('header.all_destinations') }}
+                                            </span>
+                                        </a>
+                                    </li>
                                     <!-- <li>
                                         <a href="#" class="nav-link">
                                             About Saudi
@@ -508,95 +453,90 @@
                             <button href="{{ route('things.to.do') }}" class="accordion-button collapsed"
                                 data-bs-toggle="collapse" data-bs-target="#collapseNavTwo" aria-expanded="true"
                                 aria-controls="collapseNavTwo">
-                                {{ __('header.things_to_do')}}
+                                {{ __('header.things_to_do') }}
                             </button>
                             <div id="collapseNavTwo" class="accordion-collapse collapse"
                                 data-bs-parent="#navbarAccordion">
                                 <ul class="navbar-nav pt-2 mt-1 ps-3">
-                                @foreach (header_todos() as $category)
-                                                    @if ($category->things_count > 0)
-                                                    <li>
-                                        <a href="{{ route('things.to.do', [
-                                                                'categories[]' => $category->id
-                                                            ]) }}" class="nav-link">
-                                                            {{ $category->translation?->name }}
-                                                            ({{ $category->things_count }})
-
+                                    @foreach (header_todos() as $category)
+                                        @if ($category->things_count > 0)
+                                            <li>
+                                                <a href="{{ route('things.to.do', [
+                                                    'categories[]' => $category->id,
+                                                ]) }}"
+                                                    class="nav-link">
+                                                    {{ $category->translation?->name }}
+                                                    ({{ $category->things_count }})
+                                                </a>
+                                            </li>
+                                        @endif
+                                    @endforeach
+                                    <li>
+                                        <a href="{{ route('things.to.do') }}" class="nav-link">
+                                            {{ __('header.all_things_to_do') }}
                                         </a>
                                     </li>
 
-                                                    @endif
-                                                @endforeach
-                                                <li>
-                                                    <a href="{{ route('things.to.do') }}" class="nav-link">
-                                                        {{ __('header.all_things_to_do')}}
-                                                    </a>
-                                                </li>
-
 
                                 </ul>
                             </div>
                         </div>
                         <div class="accordion-item mt-3">
-                            <button href="#" class="accordion-button collapsed" data-bs-toggle="collapse"
-                                data-bs-target="#collapseNavThree" aria-expanded="true"
-                                aria-controls="collapseNavThree">
-                                {{ __('header.events_festivals')}}
-                            </button>
+                            <a href="{{ route('event.listing') }}" class="text-white text-decoration-none">
+                                {{ __('header.events_festivals') }}
+                            </a>
 
-                            <div id="collapseNavThree" class="accordion-collapse collapse"
+                            {{-- <div id="collapseNavThree" class="accordion-collapse collapse"
                                 data-bs-parent="#navbarAccordion">
                                 <ul class="navbar-nav pt-2 mt-1 ps-3">
-                                @foreach (header_event_categories() as $category)
-                                    @if ($category->events_count > 0)
-                                        <li>
-                                    <a class="nav-link" href="{{ route('event.listing', [
+                                    @foreach (header_event_categories() as $category)
+                                        @if ($category->events_count > 0)
+                                            <li>
+                                                <a class="nav-link"
+                                                    href="{{ route('event.listing', [
                                                         'categories[]' => $category->id,
                                                     ]) }}">
-                                        <span> {{ $category->translationData?->name }}
-                                        ({{ $category->events_count }})</span>
-                                    </a>
-                                </li>
-
-                                @endif
-                                @endforeach
-                                <li class="fw-bold">
-                                <a href="{{ route('event.listing') }}" class="nav-link">
-                                    {{ __('header.all_events')}}
-                                </a>
-                            </li>
+                                                    <span> {{ $category->translationData?->name }}
+                                                        ({{ $category->events_count }})
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        @endif
+                                    @endforeach
+                                    <li class="fw-bold">
+                                        <a href="{{ route('event.listing') }}" class="nav-link">
+                                            {{ __('header.all_events') }}
+                                        </a>
+                                    </li>
 
                                 </ul>
-                            </div>
+                            </div> --}}
                         </div>
                         <div class="accordion-item mt-3">
-                            <button href="#" class="accordion-button collapsed" data-bs-toggle="collapse"
-                                data-bs-target="#collapseNavFour" aria-expanded="true"
-                                aria-controls="collapseNavFour">
-                                {{ __('header.deals_offers')}}
-                            </button>
-                            <div id="collapseNavFour" class="accordion-collapse collapse"
+                            <a href="{{ route('packages.index') }}" class="text-white text-decoration-none">
+                                {{ __('header.deals_offers') }}
+                            </a>
+                            {{-- <div id="collapseNavFour" class="accordion-collapse collapse"
                                 data-bs-parent="#navbarAccordion">
                                 <ul class="navbar-nav pt-2 mt-1 ps-3">
-                                @foreach (header_packages() as $category)
-                                                    @if ($category->packages_count > 0)
-                                                        <li>
-                                                            <a class="nav-link"
-                                                                href="{{ route('packages.index', [
-                                                                    'categories[]' => $category->id,
-                                                                ]) }}">
-                                                                {{ $category->translationData?->name }}
-                                                                ({{ $category->packages_count }})
-
-                                                            </a>
-                                                        </li>
-                                                    @endif
-                                                @endforeach
-                                                <li><a href="{{ route('packages.index') }}" class="nav-link">
-                                                    {{ __('header.all_packages')}}
-
+                                    @foreach (header_packages() as $category)
+                                        @if ($category->packages_count > 0)
+                                            <li>
+                                                <a class="nav-link"
+                                                    href="{{ route('packages.index', [
+                                                        'categories[]' => $category->id,
+                                                    ]) }}">
+                                                    {{ $category->translationData?->name }}
+                                                    ({{ $category->packages_count }})
                                                 </a>
-                                                </li>
+                                            </li>
+                                        @endif
+                                    @endforeach
+                                    <li><a href="{{ route('packages.index') }}" class="nav-link">
+                                            {{ __('header.all_packages') }}
+
+                                        </a>
+                                    </li>
                                     <!-- <li>
                                         <a class="nav-link" href="#">
                                             <span>Explore Saudi</span>
@@ -608,29 +548,27 @@
                                         </a>
                                     </li> -->
                                 </ul>
-                            </div>
+                            </div> --}}
                         </div>
                         <div class="accordion-item mt-3">
-                            <button href="#" class="accordion-button collapsed" data-bs-toggle="collapse"
-                                data-bs-target="#collapseNavFive" aria-expanded="true"
-                                aria-controls="collapseNavFive">
-                                {{ __('header.saudi_calendar')}}
-                            </button>
-                            <div id="collapseNavFive" class="accordion-collapse collapse"
+                            <a href="{{ route('golf.view') }}" class="text-white text-decoration-none">
+                                {{ __('header.golf') }}
+                            </a>
+                            {{-- <div id="collapseNavFive" class="accordion-collapse collapse"
                                 data-bs-parent="#navbarAccordion">
                                 <ul class="navbar-nav pt-2 mt-1 ps-3">
                                     <li>
                                         <a class="nav-link" href="#">
-                                            <span>{{ __('header.explore_saudi')}}</span>
+                                            <span>{{ __('header.explore_saudi') }}</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a class="nav-link" href="#">
-                                            <span>{{ __('header.explore_saudi')}}</span>
+                                            <span>{{ __('header.explore_saudi') }}</span>
                                         </a>
                                     </li>
                                 </ul>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>

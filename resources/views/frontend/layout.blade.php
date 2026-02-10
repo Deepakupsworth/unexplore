@@ -14,6 +14,29 @@
             overflow: hidden !important;
             text-overflow: ellipsis !important;
         }
+
+        .swiper-slide .exclusive-offers__carousel-item {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            width: 100%;
+        }
+
+        .exclusive-offers__carousel-item.swiper-slide {
+            height: auto !important;
+        }
+
+        .exclusive-offers__carousel-item-info {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: space-around;
+        }
+
+        .exclusive-offers__carousel-price-box {
+            margin-top: auto;
+        }
     </style>
     {{-- HEADER --}}
     @php
@@ -32,7 +55,7 @@
             'account',
             'events*',
             'booking*',
-            'products'
+            'products',
         ];
     @endphp
 

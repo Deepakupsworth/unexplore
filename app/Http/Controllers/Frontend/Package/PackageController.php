@@ -375,6 +375,7 @@ class PackageController extends Controller
             'thumb',
             'gallery',
             'translation',
+            'cities',
             'days.items.hotel.translation' => fn($q) => $q->where('language_code', $language),
             'days.items.hotel.thumb',
             'days.items.hotel.gallery',

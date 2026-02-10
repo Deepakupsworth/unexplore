@@ -28,10 +28,12 @@
                         <h1 class="hero-banner__heading text-white">{!! __('home.hero.title') !!}</h1>
                         <h2 class="text-white h4">{{ __('home.hero.subtitle') }}</h2>
                         <p class="hero-banner__desc"> {{ __('home.hero.description') }}</p>
+                        <a href="{{ route('packages.index') }}" class="text-decoration-none">
                         <button class="btn btn-light rounded-pill hero-banner__explore-btn">
                             {{ __('home.hero.explore_btn') }}
                             <i class="fa-solid fa-angles-right"></i>
                         </button>
+                    </a>
                     </div>
                 </div>
             </div>
@@ -44,7 +46,7 @@
             </div>
             <div class="hero-banner__scroll-down d-none-sm">
                 <div class="down-arrow">
-                    <i class="fa-solid fa-arrow-left"></i>
+                    <a href="#plan-trip" class="text-decoration-none text-white"><i class="fa-solid fa-arrow-left"></i></a>
                 </div>
                 <p class="small">{{ __('home.hero.scroll') }}</p>
             </div>
@@ -93,7 +95,7 @@
     </section>
 
     <!-- 2. PLAN TRIP SECTION  -->
-    <section class="plan-trip section-padding">
+    <section class="plan-trip section-padding" id="plan-trip">
         <div class="container">
             <div class="row gap-4-sm gap-4-md">
                 <div class="col-sm-12 col-lg-6">
@@ -104,7 +106,7 @@
                         <div class="section__header">
                             <div class="section__header-content">
                                 <h2 class="section__heading"><span
-                                        class="fw-normal">{{ __('home.plan.title_light') }} <strong> {{__('home.plan.title_bold')}}</strong></span>
+                                        class="fw-normal">{{ __('home.plan.title_light') }} </span> {{__('home.plan.title_bold')}}
                                 </h2>
                                 <p class="section__description">{{ __('home.plan.description') }}</p>
                             </div>
@@ -112,7 +114,7 @@
                         <div class="plan-trip__features">
                             <div class="plan-trip__feature">
                                 <div class="plan-trip__feature-icon">
-                                    <img src="{{ asset('frontend/assets/icons/hidden-gems.svg') }}" alt="Hidden gems"
+                                    <img src="{{ asset('frontend/assets/icons/__Choose Your Destination.svg') }}" alt="Hidden gems"
                                         class="img-fluid">
                                 </div>
                                 <div class="plan-trip__feature-text">
@@ -122,7 +124,7 @@
                             </div>
                             <div class="plan-trip__feature">
                                 <div class="plan-trip__feature-icon">
-                                    <img src="{{ asset('frontend/assets/icons/hidden-gems.svg') }}" alt="Hidden gems"
+                                    <img src="{{ asset('frontend/assets/icons/__Experience Culture & Adventure.svg') }}" alt="Hidden gems"
                                         class="img-fluid">
                                 </div>
                                 <div class="plan-trip__feature-text">
@@ -132,7 +134,7 @@
                             </div>
                             <div class="plan-trip__feature">
                                 <div class="plan-trip__feature-icon">
-                                    <img src="{{ asset('frontend/assets/icons/hidden-gems.svg') }}" alt="Hidden gems"
+                                    <img src="{{ asset('frontend/assets/icons/__Travel With Confidence.svg') }}" alt="Hidden gems"
                                         class="img-fluid">
                                 </div>
                                 <div class="plan-trip__feature-text">
@@ -184,8 +186,8 @@
             <div class="section-padding explore-saudi__container">
                 <div class="row gap-4-sm gap-4-md">
                     <div class="col-md-12 col-lg-6">
-                        <img src="{{ asset('frontend/assets/vertical-shot-people-riding-camels-sand-dune-desert.jpg') }}"
-                            alt="Explore Saudi" class="explore-saudi__image">
+                        <img src="{{ asset('frontend/assets/explore__image1.jpg') }}"
+                            alt="Explore Saudi" class="explore-saudi__image" id="exploreMainImage">
                     </div>
                     <div class="col-md-12 col-lg-6 explore-saudi__content">
                         <div class="section__header">
@@ -195,26 +197,46 @@
                         </div>
                         <ul class="nav nav-pills mt-3 explore-saudi__tabs" role="tablist">
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="explore-saudi__riyad-tab" data-bs-toggle="pill"
+
+                                <button class="nav-link active" id="explore-saudi__madinah-tab" data-bs-toggle="pill"
+                                    data-bs-target="#explore-saudi__madinah-tab-content" type="button" role="tab"
+                                    aria-controls="explore-saudi__madinah-tab-content"
+                                    aria-selected="false" data-image="{{ asset('frontend/assets/explore__image1.jpg') }}">{{ __('home.explore.tab.alula') }}</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="explore-saudi__riyad-tab" data-bs-toggle="pill"
                                     data-bs-target="#explore-saudi__riyad-tab-content" type="button" role="tab"
                                     aria-controls="explore-saudi__riyad-tab-content"
-                                    aria-selected="true">{{ __('home.explore.tab.riyadh') }}</button>
+                                    aria-selected="true"
+                                    data-image="{{ asset('frontend/assets/explore__image2.jpg') }}"
+                                    >{{ __('home.explore.tab.riyadh') }}</button>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="explore-saudi__makkah-tab" data-bs-toggle="pill"
                                     data-bs-target="#explore-saudi__makkah-tab-content" type="button" role="tab"
-                                    aria-controls="explore-saudi__makkah-tab-content" aria-selected="false">
+                                    aria-controls="explore-saudi__makkah-tab-content" aria-selected="false" data-image="{{ asset('frontend/assets/explore__image3.jpg') }}">
                                     {{ __('home.explore.tab.jeddah') }}</button>
                             </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="explore-saudi__madinah-tab" data-bs-toggle="pill"
-                                    data-bs-target="#explore-saudi__madinah-tab-content" type="button" role="tab"
-                                    aria-controls="explore-saudi__madinah-tab-content"
-                                    aria-selected="false">{{ __('home.explore.tab.alula') }}</button>
-                            </li>
+
                         </ul>
                         <div class="tab-content">
-                            <div class="tab-pane fade show active" id="explore-saudi__riyad-tab-content" role="tabpanel"
+                            <div class="tab-pane fade show active" id="explore-saudi__madinah-tab-content" role="tabpanel"
+                                aria-labelledby="explore-saudi__madinah-tab">
+                                <div class="explore-saudi__tab-content">
+                                    <div class="explore-saudi__tab-content-map">
+                                        <img src="{{ asset('frontend/assets/city_map/AIYIA_Tabuk.svg') }}"
+                                            alt="Explore Riyad" class="img-fluid explore-saudi__map">
+                                    </div>
+                                    <div class="explore-saudi__tab-content-info">
+                                        <h5 class="fw-bold">{{ __('home.explore.alula.title') }}</h5>
+                                        <p>{{ __('home.explore.alula.desc') }}</p>
+                                        <a href="{{ route('destinations.show', 'alula') }}"
+                                            class="btn btn-primary rounded-pill">{{ __('home.explore.alula.btn') }} <i
+                                                class="fa-solid fa-angles-right"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="explore-saudi__riyad-tab-content" role="tabpanel"
                                 aria-labelledby="explore-saudi__riyad-tab">
                                 <div class="explore-saudi__tab-content">
                                     <div class="explore-saudi__tab-content-map">
@@ -224,7 +246,7 @@
                                     <div class="explore-saudi__tab-content-info">
                                         <h5 class="fw-bold">{{ __('home.explore.riyadh.title') }}</h5>
                                         <p>{{ __('home.explore.riyadh.desc') }}</p>
-                                        <a href="#" class="btn btn-primary rounded-pill">
+                                        <a href="{{ route('destinations.show', 'riyadh') }}" class="btn btn-primary rounded-pill">
                                             {{ __('home.explore.riyadh.btn') }} <i
                                                 class="fa-solid fa-angles-right"></i></a>
                                     </div>
@@ -240,28 +262,13 @@
                                     <div class="explore-saudi__tab-content-info">
                                         <h5 class="fw-bold">{{ __('home.explore.jeddah.title') }}</h5>
                                         <p>{{ __('home.explore.jeddah.desc') }}</p>
-                                        <a href="#" class="btn btn-primary rounded-pill">
+                                        <a href="{{ route('destinations.show', 'jeddah') }}" class="btn btn-primary rounded-pill">
                                             {{ __('home.explore.jeddah.btn') }} <i
                                                 class="fa-solid fa-angles-right"></i></a>
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="explore-saudi__madinah-tab-content" role="tabpanel"
-                                aria-labelledby="explore-saudi__madinah-tab">
-                                <div class="explore-saudi__tab-content">
-                                    <div class="explore-saudi__tab-content-map">
-                                        <img src="{{ asset('frontend/assets/city_map/AIYIA_Tabuk.svg') }}"
-                                            alt="Explore Riyad" class="img-fluid explore-saudi__map">
-                                    </div>
-                                    <div class="explore-saudi__tab-content-info">
-                                        <h5 class="fw-bold">{{ __('home.explore.alula.title') }}</h5>
-                                        <p>{{ __('home.explore.alula.desc') }}</p>
-                                        <a href="#"
-                                            class="btn btn-primary rounded-pill">{{ __('home.explore.alula.btn') }} <i
-                                                class="fa-solid fa-angles-right"></i></a>
-                                    </div>
-                                </div>
-                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -353,7 +360,7 @@
                         <div class="card-body d-flex flex-column gap-1 justify-content-center p-0">
                             <h5 class="fw-bold">{!! __('home.know.about') !!}</h5>
                             <a href="#"
-                                class="primary-text fw-semibold p-large">{{ __('home.know.learn_more') }}</a>
+                                class="primary-text fw-semibold p-large text-decoration-none">{{ __('home.know.learn_more') }}</a>
                         </div>
                     </div>
                 </div>
@@ -364,7 +371,7 @@
                         <div class="card-body d-flex flex-column gap-1 justify-content-center p-0">
                             <h5 class="fw-bold">{{ __('home.know.visa') }}</h5>
                             <a href="#"
-                                class="primary-text fw-semibold p-large">{{ __('home.know.learn_more') }}</a>
+                                class="primary-text fw-semibold p-large text-decoration-none">{{ __('home.know.learn_more') }}</a>
                         </div>
                     </div>
                 </div>
@@ -375,7 +382,7 @@
                         <div class="card-body d-flex flex-column gap-1 justify-content-center p-0">
                             <h5 class="fw-bold">{{ __('home.know.guide') }}</h5>
                             <a href="#"
-                                class="primary-text fw-semibold p-large">{{ __('home.know.learn_more') }}</a>
+                                class="primary-text fw-semibold p-large text-decoration-none">{{ __('home.know.learn_more') }}</a>
                         </div>
                     </div>
                 </div>
@@ -385,7 +392,7 @@
                             alt="About Saudi">
                         <div class="card-body d-flex flex-column gap-1 justify-content-center p-0">
                             <h5 class="fw-bold">{{ __('home.know.transport') }}</h5>
-                            <a href="#" class="primary-text fw-semibold p-large">
+                            <a href="#" class="primary-text fw-semibold p-large text-decoration-none">
                                 {{ __('home.know.learn_more') }}</a>
                         </div>
                     </div>
@@ -504,5 +511,22 @@
             </div>
         </div>
     </section>
+
+    @push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const mainImage = document.getElementById('exploreMainImage');
+
+            document.querySelectorAll('.explore-saudi__tabs .nav-link').forEach(tab => {
+                tab.addEventListener('shown.bs.tab', function (event) {
+                    const newImage = event.target.getAttribute('data-image');
+                    if (newImage) {
+                        mainImage.src = newImage;
+                    }
+                });
+            });
+        });
+        </script>
+    @endpush
 
 @endsection

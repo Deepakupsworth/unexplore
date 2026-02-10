@@ -11,7 +11,7 @@
         <div class="container-fluid">
             <div class="dest-banner__carousel swiper">
                 <div class="swiper-wrapper">
-                    @foreach($cities as $cites)
+                    @foreach($favouriteCities as $cites)
                         <div class="dest-banner__carousel-item swiper-slide">
                             <div class="position-relative">
                                 <img src="{{ asset('storage/' . $cites->thumb_image) }}" alt="Destination">
@@ -55,7 +55,7 @@
                 </div>
             </div>
             <div class="row gy-xl-5 gy-lg-3 gy-3 gx-4 explore-destinations__items">
-                @foreach($cities as $cites)
+                @foreach($otherCities as $cites)
                 <div class="col-md-6 col-lg-4">
                     <div class="explore-destinations__item">
                         <div class="position-relative explore-destinations__item-image">

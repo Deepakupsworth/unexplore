@@ -11,14 +11,20 @@
     $subTitle = $translation->sub_title ?? '';
 
     // City translation already resolved in controller
-    $city = $package->current_city ?? null;
+    $city = $cityTranslation = optional(
+        optional($package->cities->first()?->city)
+            ->translations
+            ->where('language_code', app()->getLocale())
+            ->first()
+    );
 
     // Pricing
     $perPersonPrice =$package->price->per_person_price ?? 0;
 
 @endphp
 
-{{-- @dd($package) --}}
+
+{{-- @dd($city) --}}
 
 <a href="{{ route('packages.show', $package->slug) }}"
    class="text-decoration-none text-dark">
