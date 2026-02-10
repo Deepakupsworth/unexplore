@@ -90,11 +90,9 @@ class AuthController extends Controller
 
             $user = Auth::user();
 
-            return redirect()->intended(
-                $user->role === 'admin'
-                    ? route('admin.dashboard')
-                    : route('packages.index')
-            )->with('success', 'Welcome back ' . $user->first_name . ' 👋');
+            return $user->role === 'admin'
+            ? redirect()->route('admin.dashboard')->with('success', 'Welcome back ' . $user->first_name . ' 👋')
+            : redirect()->intended(route('home'))->with('success', 'Welcome back ' . $user->first_name . ' 👋');
 
         } catch (Throwable $e) {
             Log::error('Login failed', ['error' => $e->getMessage()]);
