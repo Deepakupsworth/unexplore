@@ -3744,8 +3744,11 @@
   }
 
   .golf-booking-cta {
-    background-image: url("../assets/golf-ground.jpg");
+    background-image: url("../assets/lpegasu-golf-3216250.jpg");
     background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+
   }
 
   .golf-booking-cta__content {
