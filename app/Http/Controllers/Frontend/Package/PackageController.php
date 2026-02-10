@@ -395,7 +395,7 @@ class PackageController extends Controller
             'days.options.todo.translation' => fn($q) => $q->where('language_code', $language),
             'days.options.todo.thumb',
             'days.options.todo.gallery',
-            
+
 
             'days.options.event.translation' => fn($q) => $q->where('language_code', $language),
             'days.options.event.thumb',
@@ -405,6 +405,20 @@ class PackageController extends Controller
             'days.options.transport.translation' => fn($q) => $q->where('language_code', $language),
             'days.options.transport.thumb',
         ])->where('slug', $slug)->firstOrFail();
+
+
+         // 🔥 CITY → NIGHTS CALCULATION
+        $places = collect($package->days)
+        ->groupBy('city_id')
+        ->map(function ($days) {
+            $city = $days->first()->city;
+
+            return [
+                'city'   => $city?->translation?->name ?? 'Unknown',
+                'nights' => max(1, $days->count() - 1),
+            ];
+        })
+        ->values();
 
         //print_r($package->toArray());die;
 
@@ -432,7 +446,7 @@ class PackageController extends Controller
                 ->toArray();
         }
 
-        
+
 
        //use of this array for gallery images
        $finalArray =  $this->finalArray($package);
@@ -518,8 +532,8 @@ class PackageController extends Controller
         }
 
         //print_r($filter_data);die;
-            
-          
+
+
 
         return view('frontend.packages.show', compact(
             'package',
@@ -530,7 +544,8 @@ class PackageController extends Controller
             'dayWiseOptions',
             'sessionItems',
             'filter_data',
-            'finalArray'
+            'finalArray',
+            'places'
         ));
     }
 
@@ -547,31 +562,31 @@ class PackageController extends Controller
             'event'     => [],
             'transport' => [],
         ];
-        
+
         $added = [
             'hotel'     => [],
             'todo'      => [],
             'event'     => [],
             'transport' => [],
         ];
-        
+
         foreach ($package->days as $day) {
             foreach ($day->items as $item) {
-        
+
                 $type = $item->item_type; // hotel | todo | event | transport
                 $data = $item->{$type} ?? null;
-        
+
                 if (!$data || isset($added[$type][$data->id])) {
                     continue; // avoid duplicates across days
                 }
-        
+
                 $finalArray[$type][] = [
                     'name'       => $data->translation->name ?? $data->translation->title,
                     'video_url'  => $data->video_url ?? null, // mostly for event
                     'thumb'      => $data->thumb ?? null,
                     'gallery'    => $data->gallery ?? [],
                 ];
-        
+
                 $added[$type][$data->id] = true;
             }
         }
@@ -753,7 +768,7 @@ class PackageController extends Controller
     public function storeSession(Request $request)
     {
         $packageId = (int)$request->filter_package_unique_id;
-    
+
         session([
             "filter_package_{$packageId}" => [
                 'adults'   => (int) $request->adults,
@@ -761,7 +776,7 @@ class PackageController extends Controller
                 'date'     => $request->date,
             ]
         ]);
-    
+
         return response()->json([
             'success' => true
         ]);
@@ -781,5 +796,5 @@ class PackageController extends Controller
         ));
     }
 
-    
+
 }

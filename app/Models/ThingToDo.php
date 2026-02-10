@@ -22,6 +22,7 @@ class ThingToDo extends Model
         'closing_time',
         'latitude',
         'longitude',
+        'video_url',
     ];
 
     /* =======================================================
@@ -104,5 +105,10 @@ class ThingToDo extends Model
     {
         return $this->hasMany(PackageDayItem::class, 'item_id')
             ->where('item_type', 'todo');
+    }
+
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
     }
 }

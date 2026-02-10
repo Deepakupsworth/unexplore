@@ -27,6 +27,9 @@
     </style>
 
 
+    @php
+        $selectedTags = $model?->tags->pluck('id')->toArray() ?? [];
+    @endphp
 
     {{-- Breadcrumb --}}
     <div class="mb-6">
@@ -128,7 +131,14 @@
 
                             <x-admin.form.category-select label="Categories" :categories="$categories" name="category_ids"
                                 :selected="$model?->thingCategories->pluck('category_id')->toArray()" multiple required />
-
+                            <div>
+                                <label class="form-label">Video URL</label>
+                                <input class="form-control @error('video_url') error-input @enderror" name="video_url"
+                                    value="{{ old('video_url', $model->video_url) }}">
+                                @error('video_url')
+                                    <p class="error-text">{{ $message }}</p>
+                                @enderror
+                            </div>
                         </div>
                     </div>
 
@@ -176,6 +186,18 @@
                                 value="{{ old('closing_time', $model->closing_time) }}" class="form-control">
                         </div>
                     </div>
+                </div>
+
+                {{-- Tags --}}
+                <div class="bg-slate-50 border rounded-xl p-5 mb-6">
+                    <label class="form-label mb-2 block">Tags</label>
+
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                        @foreach ($tags as $tag)
+                            <x-admin.form.checkbox name="tags[]" :value="$tag->id" :checked="in_array($tag->id, $selectedTags)" :label="$tag->name" />
+                        @endforeach
+                    </div>
+
                 </div>
 
                 {{-- MEDIA --}}

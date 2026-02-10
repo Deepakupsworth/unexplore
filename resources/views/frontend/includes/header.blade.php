@@ -16,7 +16,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link" href="#" id="exploreDropdown" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
-                            <span>Explore Saudi</span>
+                            <span>{{ __('header.explore_saudi') }}</span>
                             <i class="fa-solid fa-angle-down"></i>
                         </a>
                         <div class="dropdown-menu nav-menu-dropdown" aria-labelledby="exploreDropdown">
@@ -24,11 +24,11 @@
                                 <!-- Left column: Links -->
                                 <div class="col-lg-7">
                                     <div class="nav-menu__left">
-                                        <p class="fw-bold p-large nav-menu__heading">Explore Saudi</p>
+                                        <p class="fw-bold p-large nav-menu__heading">{{ __('header.explore_saudi') }}</p>
                                         <div class="sub-menu-section">
                                             <ul class="list-unstyled">
                                             @foreach (header_destinations() as $cities)
-                                    
+
                                                         <li>
                                                     <a class="" href="{{ route('destinations.show', [
                                                                         'slug' => $cities->slug,
@@ -39,23 +39,23 @@
                                                             class="fa-solid fa-angles-right primary-text flex-v-center"></i>
                                                     </a>
                                                 </li>
-                                                        
-                                            
+
+
                                                 @endforeach
                                                 <li>
                                                 <a class="" href="{{ route('destinations.index') }}">
-                                                    <span> All Destination
+                                                    <span> {{ __('header.all_destinations')}}
                                                     </span>
                                                     <i
                                                                         class="fa-solid fa-angles-right primary-text flex-v-center"></i>
                                                 </a>
                                             </li>
-                                                
+
                                             </ul>
                                             <ul class="list-unstyled">
-                                            
+
                                             <!-- @foreach (header_destination_categories() as $cities)
-                                    
+
                                                     <li>
                                                 <a class="" href="#">
                                                     <span> {{ $cities->translationData?->name }}
@@ -64,10 +64,10 @@
                                                         class="fa-solid fa-angles-right primary-text flex-v-center"></i>
                                                 </a>
                                             </li>
-                                                    
-                                        
+
+
                                             @endforeach -->
-                            
+
                                                 <!-- <li><a href="#">Traditions in Saudi <i
                                                             class="fa-solid fa-angles-right primary-text flex-v-center"></i></a>
                                                 </li>
@@ -87,10 +87,8 @@
                                 <!-- Right column: About -->
                                 <div class="col-lg-5">
                                     <div class="nav-menu__right">
-                                        <p class="fw-bold p-large">About Saudi</p>
-                                        <p class="text-muted small">Lorem ipsum dolor sit amet, consectetur adipiscing
-                                            elit, sed do eiusmod
-                                            tempor incididunt...</p>
+                                        <p class="fw-bold p-large">{{__('header.about_saudi')}}</p>
+                                        <p class="text-muted small">{{__('header.about_saudi_short')}}</p>
                                         <img src="frontend/assets//about-saudi.png" alt="Saudi"
                                             class="img-fluid about-image">
                                         <img src="frontend/assets/nav-dropdown-side.png" alt="Image"
@@ -105,7 +103,7 @@
                         {{-- <a class="nav-link" href="{{route('things.to.do')}}" --}}
                         <a class="nav-link" href="#" id="thingsToDoDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            <span>Things to do </span>
+                            <span>{{ __('header.things_to_do')}} </span>
                             <i class="fa-solid fa-angle-down"></i>
                         </a>
 
@@ -114,7 +112,7 @@
                                 <!-- Left column: Links -->
                                 <div class="col-lg-7">
                                     <div class="nav-menu__left">
-                                        <p class="fw-bold p-large nav-menu__heading">Explore Things to do</p>
+                                        <p class="fw-bold p-large nav-menu__heading">{{ __('header.explore_things_title')}}</p>
                                         <div class="sub-menu-section">
                                             <ul class="list-unstyled">
                                                 @foreach (header_todos() as $category)
@@ -133,7 +131,7 @@
                                                 @endforeach
                                                 <li class="fw-bold">
                                                     <a href="{{ route('things.to.do') }}">
-                                                        All Things to Do
+                                                        {{ __('header.all_things_to_do')}}
                                                         <i class="fa-solid fa-angles-right primary-text"></i>
                                                     </a>
                                                 </li>
@@ -145,10 +143,8 @@
                                 <!-- Right column: About -->
                                 <div class="col-lg-5">
                                     <div class="nav-menu__right">
-                                        <p class="fw-bold p-large">About Saudi</p>
-                                        <p class="text-muted small">Lorem ipsum dolor sit amet, consectetur adipiscing
-                                            elit, sed do eiusmod
-                                            tempor incididunt...</p>
+                                        <p class="fw-bold p-large">{{__('header.about_saudi')}}</p>
+                                        <p class="text-muted small">{{__('header.about_saudi_short')}}</p>
                                         <img src="frontend/assets/about-saudi.png" alt="Saudi"
                                             class="img-fluid about-image">
                                         <img src="frontend/assets/nav-dropdown-side.png" alt="Image"
@@ -162,7 +158,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link" href="#" id="eventsDropdown" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
-                            <span>Events & Festivals</span>
+                            <span>{{ __('header.events_festivals')}}</span>
                             <i class="fa-solid fa-angle-down"></i>
                         </a>
                         <div class="dropdown-menu nav-menu-dropdown" aria-labelledby="eventsDropdown">
@@ -170,7 +166,7 @@
                                 <!-- Left column: Links -->
                                 <div class="col-lg-7">
                                     <div class="nav-menu__left">
-                                        <p class="fw-bold p-large nav-menu__heading">Explore Events</p>
+                                        <p class="fw-bold p-large nav-menu__heading">{{__('header.explore_events_title')}}</p>
                                         <div class="sub-menu-section">
                                             <ul class="list-unstyled">
 
@@ -193,7 +189,7 @@
                                                 {{-- 🔥 ALL EVENTS (Professional default) --}}
                                                 <li class="fw-bold">
                                                     <a href="{{ route('event.listing') }}">
-                                                        All Events
+                                                        {{__('header.all_events')}}
                                                         <i class="fa-solid fa-angles-right primary-text flex-v-center"></i>
                                                     </a>
                                                 </li>
@@ -202,25 +198,23 @@
                                     </div>
                                 </div>
                                 <!-- Right column: About -->
-                                <div class="col-lg-5">
+                                {{-- <div class="col-lg-5">
                                     <div class="nav-menu__right">
-                                        <p class="fw-bold p-large">About Saudi</p>
-                                        <p class="text-muted small">Lorem ipsum dolor sit amet, consectetur adipiscing
-                                            elit, sed do eiusmod
-                                            tempor incididunt...</p>
+                                        <p class="fw-bold p-large">{{__('header.about_saudi')}}</p>
+                                        <p class="text-muted small">{{__('header.about_saudi_short')}}</p>
                                         <img src="frontend/assets//about-saudi.png" alt="Saudi"
                                             class="img-fluid about-image">
                                         <img src="frontend/assets/nav-dropdown-side.png" alt="Image"
                                             class="nav-menu__right-side-img">
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link" href="#" id="dealsDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            <span>Deals & Offers</span>
+                            <span>{{ __('header.deals_offers')}}</span>
                             <i class="fa-solid fa-angle-down"></i>
                         </a>
                         <div class="dropdown-menu nav-menu-dropdown" aria-labelledby="dealsDropdown">
@@ -228,7 +222,7 @@
                                 <!-- Left column: Links -->
                                 <div class="col-lg-7">
                                     <div class="nav-menu__left">
-                                        <p class="fw-bold p-large nav-menu__heading">Explore packages</p>
+                                        <p class="fw-bold p-large nav-menu__heading">{{ __('header.explore_packages_title')}}</p>
                                         <div class="sub-menu-section">
                                             <ul class="list-unstyled">
                                             @foreach (header_packages() as $category)
@@ -247,7 +241,7 @@
                                                     @endif
                                                 @endforeach
                                                 <li><a href="{{ route('packages.index') }}" class="">
-                                                                All Packages
+                                                    {{ __('header.all_packages')}}
                                                                 <i class="fa-solid fa-angles-right primary-text flex-v-center"></i>
                                                 </a>
                                                 </li>
@@ -278,12 +272,12 @@
                                             <ul class="list-unstyled">
                                                 <li><a  href="{{ route('packages.index', [
                                                                     'package_type[]' => 'customized',
-                                                                ]) }}" >Customizable <i
+                                                                ]) }}" >{{ __('header.package.customizable')}} <i
                                                             class="fa-solid fa-angles-right primary-text flex-v-center"></i></a>
                                                 </li>
                                                 <li><a  href="{{ route('packages.index', [
                                                                     'package_type[]' => 'fixed',
-                                                                ]) }}" >Group Package <i
+                                                                ]) }}" >{{ __('header.package.group')}} <i
                                                             class="fa-solid fa-angles-right primary-text flex-v-center"></i></a>
                                                 </li>
                                                 <!-- <li><a href="#">Thc local cuisine of Saudi <i
@@ -297,25 +291,23 @@
                                     </div>
                                 </div>
                                 <!-- Right column: About -->
-                                <div class="col-lg-5">
+                                {{-- <div class="col-lg-5">
                                     <div class="nav-menu__right">
-                                        <p class="fw-bold p-large">About Saudi</p>
-                                        <p class="text-muted small">Lorem ipsum dolor sit amet, consectetur adipiscing
-                                            elit, sed do eiusmod
-                                            tempor incididunt...</p>
+                                        <p class="fw-bold p-large">{{__('header.about_saudi')}}</p>
+                                        <p class="text-muted small">{{__('header.about_saudi_short')}}</p>
                                         <img src="frontend/assets//about-saudi.png" alt="Saudi"
                                             class="img-fluid about-image">
                                         <img src="frontend/assets/nav-dropdown-side.png" alt="Image"
                                             class="nav-menu__right-side-img">
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link" href="#" id="calendarDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            <span>Saudi Calendar</span>
+                            <span>{{ __('header.saudi_calendar')}} </span>
                             <i class="fa-solid fa-angle-down"></i>
                         </a>
                         <div class="dropdown-menu nav-menu-dropdown" aria-labelledby="calendarDropdown">
@@ -323,74 +315,114 @@
                                 <!-- Left column: Links -->
                                 <div class="col-lg-7">
                                     <div class="nav-menu__left">
-                                        <p class="fw-bold p-large nav-menu__heading">Explore Events</p>
+                                        <p class="fw-bold p-large nav-menu__heading">{{ __('header.explore_saudi')}}</p>
                                         <div class="sub-menu-section">
                                             <ul class="list-unstyled">
-                                                <li><a href="#" class="">
-                                                        About Saudi
-                                                        <i
-                                                            class="fa-solid fa-angles-right primary-text flex-v-center"></i>
-                                                    </a></li>
                                                 <li>
-                                                <li><a href="#" class="">
-                                                        Geography of Saudi
-                                                        <i
-                                                            class="fa-solid fa-angles-right primary-text flex-v-center"></i>
-                                                    </a></li>
-                                                <li><a href="#">History of Saudi <i
-                                                            class="fa-solid fa-angles-right primary-text flex-v-center"></i></a>
+                                                    <a href="#">
+                                                        {{ __('header.about.about_saudi') }}
+                                                        <i class="fa-solid fa-angles-right primary-text flex-v-center"></i>
+                                                    </a>
                                                 </li>
-                                                <li><a href="#">Saudi's climate <i
-                                                            class="fa-solid fa-angles-right primary-text flex-v-center"></i></a>
+
+                                                <li>
+                                                    <a href="#">
+                                                        {{ __('header.about.geography') }}
+                                                        <i class="fa-solid fa-angles-right primary-text flex-v-center"></i>
+                                                    </a>
                                                 </li>
-                                                <li><a href="#">Towns & cities in Saudi <i
-                                                            class="fa-solid fa-angles-right primary-text flex-v-center"></i></a>
+
+                                                <li>
+                                                    <a href="#">
+                                                        {{ __('header.about.history') }}
+                                                        <i class="fa-solid fa-angles-right primary-text flex-v-center"></i>
+                                                    </a>
                                                 </li>
-                                                <li><a href="#">Riyadh <i
-                                                            class="fa-solid fa-angles-right primary-text flex-v-center"></i></a>
+
+                                                <li>
+                                                    <a href="#">
+                                                        {{ __('header.about.climate') }}
+                                                        <i class="fa-solid fa-angles-right primary-text flex-v-center"></i>
+                                                    </a>
+                                                </li>
+
+                                                <li>
+                                                    <a href="#">
+                                                        {{ __('header.about.towns_cities') }}
+                                                        <i class="fa-solid fa-angles-right primary-text flex-v-center"></i>
+                                                    </a>
+                                                </li>
+
+                                                <li>
+                                                    <a href="#">
+                                                        {{ __('header.about.riyadh') }}
+                                                        <i class="fa-solid fa-angles-right primary-text flex-v-center"></i>
+                                                    </a>
                                                 </li>
                                             </ul>
+
                                             <ul class="list-unstyled">
-                                                <li><a href="#">Traditions in Saudi <i
-                                                            class="fa-solid fa-angles-right primary-text flex-v-center"></i></a>
+                                                <li>
+                                                    <a href="#">
+                                                        {{ __('header.about.traditions') }}
+                                                        <i class="fa-solid fa-angles-right primary-text flex-v-center"></i>
+                                                    </a>
                                                 </li>
-                                                <li><a href="#">Sports in Saudi <i
-                                                            class="fa-solid fa-angles-right primary-text flex-v-center"></i></a>
+
+                                                <li>
+                                                    <a href="{{ route('golf.view') }}">
+                                                        {{ __('header.about.sports') }}
+                                                        <i class="fa-solid fa-angles-right primary-text flex-v-center"></i>
+                                                    </a>
                                                 </li>
-                                                <li><a href="#">Thc local cuisine of Saudi <i
-                                                            class="fa-solid fa-angles-right primary-text flex-v-center"></i></a>
+
+                                                <li>
+                                                    <a href="#">
+                                                        {{ __('header.about.cuisine') }}
+                                                        <i class="fa-solid fa-angles-right primary-text flex-v-center"></i>
+                                                    </a>
                                                 </li>
-                                                <li><a href="#">Wildlife <i
-                                                            class="fa-solid fa-angles-right primary-text flex-v-center"></i></a>
+
+                                                <li>
+                                                    <a href="#">
+                                                        {{ __('header.about.wildlife') }}
+                                                        <i class="fa-solid fa-angles-right primary-text flex-v-center"></i>
+                                                    </a>
                                                 </li>
                                             </ul>
                                         </div>
+
                                     </div>
                                 </div>
                                 <!-- Right column: About -->
-                                <div class="col-lg-5">
+                                {{-- <div class="col-lg-5">
                                     <div class="nav-menu__right">
-                                        <p class="fw-bold p-large">About Saudi</p>
-                                        <p class="text-muted small">Lorem ipsum dolor sit amet, consectetur adipiscing
-                                            elit, sed do eiusmod
-                                            tempor incididunt...</p>
+                                        <p class="fw-bold p-large">{{ __('header.about_saudi') }}</p>
+                                        <p class="text-muted small">{{ __('header.about_saudi_short') }}</p>
                                         <img src="frontend/assets//about-saudi.png" alt="Saudi"
                                             class="img-fluid about-image">
                                         <img src="frontend/assets/nav-dropdown-side.png" alt="Image"
                                             class="nav-menu__right-side-img">
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                     </li>
                 </ul>
                 <div class="d-flex flex-wrap align-items-center gap-2 navbar__buttons">
-                    <!-- When user is not logged in -->
-                    <!-- <a href="#" class="btn btn-outline-light rounded-pill">Login / Sign Up</a>
-     <a href="#" class="btn btn-primary rounded-pill">
-      Book Now
-      <i class="fa-solid fa-angles-right"></i>
-     </a> -->
+
+                {{-- When user is NOT logged in --}}
+                    @guest
+                    <a href="{{ route('login') }}" class="btn btn-outline-light rounded-pill">
+                        {{ __('header.login_signup') }}
+                    </a>
+
+                    {{-- <a href="#" class="btn btn-primary rounded-pill">
+                        Book Now
+                        <i class="fa-solid fa-angles-right"></i>
+                    </a> --}}
+                @endguest
+
                     @if (!empty(@auth()->user()->id))
                         <!-- When user is logged in -->
                         <div class="dropdown">
@@ -400,13 +432,13 @@
                                 {{ Auth()?->user()->first_name }}
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                <li><a class="dropdown-item" href="{{url('/account')}}?tab=profile">{{__('myProfile')}}</a></li>
+                                <li><a class="dropdown-item" href="{{url('/account')}}?tab=profile">{{ __('header.my_profile') }}</a></li>
 
                                 <li>
                                     <form method="POST" action="/logout">
                                         @csrf
                                         <button type="submit" class="dropdown-item">
-                                            Logout
+                                            {{ __('header.logout') }}
                                         </button>
                                     </form>
                                 </li>
@@ -424,14 +456,14 @@
                         <div class="accordion-item">
                             <button href="#" class="accordion-button collapsed" data-bs-toggle="collapse"
                                 data-bs-target="#collapseNavOne" aria-expanded="true" aria-controls="collapseNavOne">
-                                Explore Saudi
+                                {{ __('header.explore_saudi') }}
                             </button>
                             <div id="collapseNavOne" class="accordion-collapse collapse"
                                 data-bs-parent="#navbarAccordion">
                                 <ul class="navbar-nav pt-2 mt-1 ps-3">
 
                                 @foreach (header_destinations() as $cities)
-                                    
+
                                         <li>
                                     <a class="nav-link" href="{{ route('destinations.show', [
                                                         'slug' => $cities->slug,
@@ -440,12 +472,12 @@
                                         </span>
                                     </a>
                                 </li>
-                                        
-                               
+
+
                                 @endforeach
                                 <li>
                                     <a class="nav-link" href="{{ route('destinations.index') }}">
-                                        <span> All Destination
+                                        <span> {{ __('header.all_destinations')}}
                                         </span>
                                     </a>
                                 </li>
@@ -476,7 +508,7 @@
                             <button href="{{ route('things.to.do') }}" class="accordion-button collapsed"
                                 data-bs-toggle="collapse" data-bs-target="#collapseNavTwo" aria-expanded="true"
                                 aria-controls="collapseNavTwo">
-                                Things to do
+                                {{ __('header.things_to_do')}}
                             </button>
                             <div id="collapseNavTwo" class="accordion-collapse collapse"
                                 data-bs-parent="#navbarAccordion">
@@ -492,17 +524,16 @@
 
                                         </a>
                                     </li>
-                                                       
+
                                                     @endif
                                                 @endforeach
                                                 <li>
                                                     <a href="{{ route('things.to.do') }}" class="nav-link">
-                                                        All Things to Do
-                                                      
+                                                        {{ __('header.all_things_to_do')}}
                                                     </a>
                                                 </li>
-                                   
-                                   
+
+
                                 </ul>
                             </div>
                         </div>
@@ -510,9 +541,9 @@
                             <button href="#" class="accordion-button collapsed" data-bs-toggle="collapse"
                                 data-bs-target="#collapseNavThree" aria-expanded="true"
                                 aria-controls="collapseNavThree">
-                                Events & Festivals
+                                {{ __('header.events_festivals')}}
                             </button>
-                            
+
                             <div id="collapseNavThree" class="accordion-collapse collapse"
                                 data-bs-parent="#navbarAccordion">
                                 <ul class="navbar-nav pt-2 mt-1 ps-3">
@@ -526,16 +557,15 @@
                                         ({{ $category->events_count }})</span>
                                     </a>
                                 </li>
-                                        
+
                                 @endif
                                 @endforeach
                                 <li class="fw-bold">
                                 <a href="{{ route('event.listing') }}" class="nav-link">
-                                    All Events
-                                    
+                                    {{ __('header.all_events')}}
                                 </a>
                             </li>
-                                   
+
                                 </ul>
                             </div>
                         </div>
@@ -543,7 +573,7 @@
                             <button href="#" class="accordion-button collapsed" data-bs-toggle="collapse"
                                 data-bs-target="#collapseNavFour" aria-expanded="true"
                                 aria-controls="collapseNavFour">
-                                Deals & Offers
+                                {{ __('header.deals_offers')}}
                             </button>
                             <div id="collapseNavFour" class="accordion-collapse collapse"
                                 data-bs-parent="#navbarAccordion">
@@ -557,14 +587,14 @@
                                                                 ]) }}">
                                                                 {{ $category->translationData?->name }}
                                                                 ({{ $category->packages_count }})
-                                                               
+
                                                             </a>
                                                         </li>
                                                     @endif
                                                 @endforeach
                                                 <li><a href="{{ route('packages.index') }}" class="nav-link">
-                                                                All Packages
-                                                                
+                                                    {{ __('header.all_packages')}}
+
                                                 </a>
                                                 </li>
                                     <!-- <li>
@@ -584,19 +614,19 @@
                             <button href="#" class="accordion-button collapsed" data-bs-toggle="collapse"
                                 data-bs-target="#collapseNavFive" aria-expanded="true"
                                 aria-controls="collapseNavFive">
-                                Saudi Calendar
+                                {{ __('header.saudi_calendar')}}
                             </button>
                             <div id="collapseNavFive" class="accordion-collapse collapse"
                                 data-bs-parent="#navbarAccordion">
                                 <ul class="navbar-nav pt-2 mt-1 ps-3">
                                     <li>
                                         <a class="nav-link" href="#">
-                                            <span>Explore Saudi</span>
+                                            <span>{{ __('header.explore_saudi')}}</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a class="nav-link" href="#">
-                                            <span>Explore Saudi</span>
+                                            <span>{{ __('header.explore_saudi')}}</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -622,7 +652,7 @@
                         <a href="#" class="text-white d-flex gap-2 align-items-center text-decoration-none"
                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             <i class="fa-solid fa-right-from-bracket"></i>
-                            Logout
+                            {{ __('header.logout') }}
                         </a>
 
                         <form id="logout-form" method="POST" action="{{ route('logout') }}" class="d-none">
@@ -638,6 +668,7 @@
 
 <div class="feedback-button">
     <a href="#" class="feedback-button__link d-flex align-items-center">
-        <span class="feedback-button__text">Feedback</span>
+        <span class="feedback-button__text">{{ __('header.feedback') }}
+        </span>
     </a>
 </div>

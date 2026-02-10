@@ -8,6 +8,7 @@ use App\Models\ThingToDo;
 use App\Models\Language;
 use App\Models\City;
 use App\Models\Category;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use App\Repositories\ThingToDo\ThingToDoRepositoryInterface;
 
@@ -32,7 +33,7 @@ class ThingtodoController extends Controller
         return view('backend.thingtodos.index', compact(
             'thingstodos',
             'cities',
-            'categories'
+            'categories',
         ));
     }
 
@@ -71,16 +72,22 @@ class ThingtodoController extends Controller
             ->with('translation')
             ->get();
 
+        $tags = Tag::orderBy('name')->get();
+
         return view('backend.thingtodos.form', compact(
             'model',
             'languages',
             'cities',
-            'categories'
+            'categories',
+            'tags'
         ));
     }
     public function save(Request $request)
     {
         $request->validate([
+            'tags'   => 'nullable|array',
+            'tags.*' => 'exists:tags,id',
+
             'translations.en.name' => 'required|string|max:255',
             'city_id'              => 'required|exists:cities,id',
 
@@ -88,6 +95,7 @@ class ThingtodoController extends Controller
             'category_ids'         => 'required|array|min:1',
             'category_ids.*'       => 'exists:categories,id',
 
+            'video_url'            => 'nullable|url|max:255',
             // 'thumb_image' => 'nullable|image|max:2048',
         ]);
 

@@ -215,6 +215,27 @@
                     </span>
                 </x-sidebar-link>
             </li>
+            <li>
+                <x-sidebar-link href="{{ route('admin.package-policies.index') }}">
+                    <span class="flex items-center">
+                        <iconify-icon class="nav-icon" icon="heroicons-outline:document-text"></iconify-icon>
+                        <span>Package Policies</span>
+                    </span>
+                </x-sidebar-link>
+            </li>
+
+            <li>
+                <x-sidebar-link href="{{ route('admin.tags.index') }}">
+                    <span class="flex items-center">
+                        <iconify-icon
+                            class="nav-icon"
+                            icon="heroicons-outline:tag">
+                        </iconify-icon>
+                        <span>Tags</span>
+                    </span>
+                </x-sidebar-link>
+            </li>
+
 
             <li>
                 <x-sidebar-link href="{{ url('/admin/coupon') }}">
@@ -226,7 +247,7 @@
             </li>
 
 
-            <li class="sidebar-menu-title">SETTINGS</li>
+            {{-- <li class="sidebar-menu-title">SETTINGS</li>
 
             <li>
                 <x-sidebar-link href="{{ url('/admin/languages') }}">
@@ -235,7 +256,7 @@
                         <span>Languages</span>
                     </span>
                 </x-sidebar-link>
-            </li>
+            </li> --}}
 
         </ul>
 

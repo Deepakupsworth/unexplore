@@ -91,6 +91,7 @@
                             <th scope="col" class="table-th">Thumb</th>
                             <th class="table-th">Title</th>
                             <th class="table-th">City</th>
+                            <th class="table-th">Category</th>
                             <th class="table-th">Dates</th>
                             <th class="table-th">Status</th>
                             <th class="table-th text-right">Action</th>
@@ -99,9 +100,9 @@
 
                     <tbody class="bg-white dark:bg-slate-800 divide-y divide-slate-100 dark:divide-slate-700">
 
-                        @forelse($events as $event)
+                        @forelse($events as $index => $event)
                             <tr>
-                                <td class="table-td">{{ $event->id }}</td>
+                                <td class="table-td">{{ $events->firstItem() + $index }}</td>
                                 <td class="table-td">
                                     @if ($event->thumb)
                                     <img src="{{ asset('storage/' . $event->thumb->image_path) }}"
@@ -118,6 +119,18 @@
                                 <td class="table-td">
                                     {{ $event->city->slug ?? '—' }}
                                 </td>
+
+                                  {{-- CATEGORY --}}
+                            <x-admin.table.td>
+                                @forelse($event->eventCategories as $tc)
+                                    <span class="badge bg-success-500 text-success-500 bg-opacity-30 capitalize rounded-3xl">
+                                        {{ $tc->category?->translation?->name ?? '—' }}
+                                    </span>
+                                @empty
+                                    —
+                                @endforelse
+
+                            </x-admin.table.td>
 
                                 <td class="table-td">
                                     @if ($event->start_date)

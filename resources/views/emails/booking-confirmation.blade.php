@@ -8,10 +8,9 @@
 
 <body style="font-family: Arial, sans-serif">
 
-    {{-- @dd($booking) --}}
     <h2>Booking Confirmation 🎉</h2>
 
-    <p>Hello {{ $booking->user->first_name ?? 'Guest' }} {{$booking->user->last_name}},</p>
+    <p>Hello {{ $booking?->user->first_name ?? 'Guest' }} {{ $booking?->user?->last_name }},</p>
 
     <p>Your booking has been successfully placed.</p>
 
@@ -28,7 +27,7 @@
     <p>We will update you once payment is completed.</p>
 
     <p>Thanks & Regards,<br>
-        <strong>Your Travel Company</strong>
+        <strong>Unexplored Saudi</strong>
     </p>
 
 </body>

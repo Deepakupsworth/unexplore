@@ -20,7 +20,7 @@
     {{-- ALL --}}
     <a href="{{ route('packages.index') }}"
         class="{{ empty($selectedTypes) ? 'primary-text fw-600 text-decoration-none' : '' }}">
-        All Packages ({{ $total }})
+        {{__('header.all_packages')}} ({{ $total }})
     </a>
 
     {{-- PACKAGE TYPES --}}
@@ -51,7 +51,7 @@
 
         @if (count($selectedTypes))
             <div class="package-listing__results-applied-fil danger">
-                <p class="p-small">Clear All</p>
+                <p class="p-small">{{__('common.clearAll')}}</p>
                 <a href="{{ route('packages.index') }}"
                     class="package-listing__results-del-button text-danger clear-all">
                     <i class="fa-solid fa-trash-can"></i>
@@ -64,7 +64,7 @@
     {{-- SORT --}}
     <div class="dropdown ms-auto">
         <button class="btn dropdown-toggle" data-bs-toggle="dropdown">
-            Sort by:
+            {{__('package.sort.label')}}
             <strong>{{ $sortOptions[$currentSort] ?? 'Popular' }}</strong>
         </button>
 

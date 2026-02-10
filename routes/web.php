@@ -31,10 +31,15 @@ use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Frontend\ToDoThings\ToDoThingsController;
 use App\Models\Event;
 use App\Http\Controllers\Frontend\Profile\ProfileController as FrontendProfileController;
-use App\Http\Controllers\Frontend\Destination\DestinationController AS FrontendDestinationController;
-use App\Http\Controllers\Frontend\{TravellerController,AddressController,AccountController, CouponApplyController};
+use App\Http\Controllers\Frontend\Destination\DestinationController as FrontendDestinationController;
+use App\Http\Controllers\Frontend\{TravellerController, AddressController, AccountController, CouponApplyController};
 use App\Http\Controllers\Frontend\Booking\BookingController;
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\PackagePolicyController;
+use App\Http\Controllers\Admin\TagController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\NewsletterController;
 
 // routes/web.php
 Route::get('/lang/{locale}', function ($locale) {
@@ -82,7 +87,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/booking/success', [BookingController::class, 'success'])
         ->name('booking.success');
     Route::get('/test-booking-mail', [BookingController::class, 'testBookingMail']);
-
 });
 
 
@@ -94,17 +98,17 @@ Route::middleware(['auth', 'user'])->group(function () {
     Route::get('/account/load', [AccountController::class, 'loadTab'])
         ->name('account.load');
 
-        Route::post('/account/addresses', [AddressController::class, 'store']);
-        Route::get('/account/addresses/{id}', [AddressController::class, 'show']);
-        Route::put('/account/addresses/{id}', [AddressController::class, 'update']);
-        Route::delete('/account/addresses/{id}', [AddressController::class, 'destroy']);
+    Route::post('/account/addresses', [AddressController::class, 'store']);
+    Route::get('/account/addresses/{id}', [AddressController::class, 'show']);
+    Route::put('/account/addresses/{id}', [AddressController::class, 'update']);
+    Route::delete('/account/addresses/{id}', [AddressController::class, 'destroy']);
 
-        // optional
-        Route::post('/account/addresses/{id}/restore', [AddressController::class, 'restore']);
+    // optional
+    Route::post('/account/addresses/{id}/restore', [AddressController::class, 'restore']);
 
 
-        //travellers
-        Route::get('/account/tab/travellers', [TravellerController::class, 'index']);
+    //travellers
+    Route::get('/account/tab/travellers', [TravellerController::class, 'index']);
 
     Route::post('/account/travellers', [TravellerController::class, 'store']);
     Route::get('/account/travellers/{id}', [TravellerController::class, 'show']);
@@ -112,7 +116,6 @@ Route::middleware(['auth', 'user'])->group(function () {
     Route::delete('/account/travellers/{id}', [TravellerController::class, 'destroy']);
     Route::get('/travellers/{traveller}', [TravellerController::class, 'show'])
         ->name('travellers.show');
-
 });
 
 
@@ -143,8 +146,8 @@ Route::get('/events-filter', [FrontendEventController::class, 'filter'])->name('
 
 Route::middleware(['auth', 'admin'])->group(function () {
 
-    Route::get('/admin/dashboard', fn() => view('backend.admin.dashboard'))
-    ->name('admin.dashboard');
+    Route::get('/admin/dashboard', [DashboardController::class, 'index'])
+        ->name('admin.dashboard');
 
     Route::prefix('admin')->group(function () {
 
@@ -334,6 +337,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
                 [AdminPackageController::class, 'saveAdditionalInfo']
             )->name('additional-info.save');
 
+            Route::post(
+                'admin/packages/{package}/policies',
+                [AdminPackageController::class, 'savePolicies']
+            )->name('policies.save');
         });
     });
 
@@ -365,17 +372,49 @@ Route::middleware(['auth', 'admin'])->group(function () {
             Route::get('/{booking}/invoice', [AdminBookingController::class, 'downloadInvoice'])
                 ->name('invoice.download');
 
+            // ➕ Add Manual Payment
+            Route::post(
+                '/{booking}/payment',
+                [AdminBookingController::class, 'storeManualPayment']
+            )->name('payment.store');
         });
-
     });
 
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::get('package-policies', [PackagePolicyController::class, 'index'])
+            ->name('package-policies.index');
+
+        Route::get('package-policies/form/{id?}', [PackagePolicyController::class, 'form'])
+            ->name('package-policies.form');
+
+        Route::post('package-policies/save', [PackagePolicyController::class, 'save'])
+            ->name('package-policies.save');
+
+        Route::delete('package-policies/{id}', [PackagePolicyController::class, 'destroy'])
+            ->name('package-policies.destroy');
+    });
+
+    Route::prefix('admin')->name('admin.')->group(function () {
+
+        Route::get('/tags', [TagController::class, 'index'])
+            ->name('tags.index');
+
+        Route::get('/form/{id?}', [TagController::class, 'form'])
+            ->name('tags.form');
+
+        Route::post('/tags/save', [TagController::class, 'save'])
+            ->name('tags.save');
+
+        Route::delete('/tags/{tag}', [TagController::class, 'destroy'])
+            ->name('tags.delete');
+    });
 });
 
 
-Route::middleware(['auth','user'])->prefix('user')->group(function () {
+Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
 
     Route::post('/profile', [FrontendProfileController::class, 'update'])
-            ->name('user.profile.update');
+        ->name('user.profile.update');
 
     Route::post('/profile/update', [FrontendProfileController::class, 'update'])
         ->name('user.profile.update');
@@ -385,7 +424,6 @@ Route::middleware(['auth','user'])->prefix('user')->group(function () {
 
     Route::post('/profile/image/delete', [FrontendProfileController::class, 'deleteProfileImage'])
         ->name('profile.image.delete');
-
 });
 
 Route::post('/apply-coupon', [CouponApplyController::class, 'apply'])
@@ -421,10 +459,10 @@ Route::get('/package-details', [FrontendPackageController::class, 'details'])->n
 Route::get('/package-day-option/{id}/{type}', [FrontendPackageController::class, 'packageDayOption'])->name('package.details.options');
 
 Route::post('/store-traveller-session', [FrontendPackageController::class, 'storeSession'])
-     ->name('store.traveller.session');
+    ->name('store.traveller.session');
 
 Route::get('/package/{slug}/gallery', [FrontendPackageController::class, 'gallery'])
-->name('package.gallery');
+    ->name('package.gallery');
 
 Route::get('/package-day-option/{id}/{type}', [FrontendPackageController::class, 'packageDayOption'])->name('package.details.option');
 
@@ -493,3 +531,21 @@ Route::get('/destination-details-json', [DemoJsonController::class, 'destination
 
 Route::post('/checkout/init', [CheckoutController::class, 'init'])
     ->name('checkout.init');
+
+Route::post('/contact', [ContactController::class, 'store'])
+    ->name('contact.store');
+
+Route::get('/golf', function () {
+    return view('frontend.golf.index');
+})->name('golf.view');
+
+Route::get('/products', function () {
+    return view('frontend.products.index');
+})->name('products.view');
+
+
+Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])
+    ->name('newsletter.subscribe');
+
+Route::post('/newsletter/unsubscribe', [NewsletterController::class, 'unsubscribe'])
+    ->name('newsletter.unsubscribe');

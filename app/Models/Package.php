@@ -179,5 +179,14 @@ class Package extends Model
         );
     }
 
+   public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
+    }
+
+
+    public function policies(){
+        return $this->belongsToMany(PackagePolicy::class);
+    }
 
 }

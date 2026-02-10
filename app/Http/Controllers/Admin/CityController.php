@@ -14,6 +14,7 @@ use App\Models\CityTranslation;
 use App\Models\Language;
 use App\Models\Country;
 use App\Models\Image;
+use App\Models\Tag;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
@@ -55,15 +56,15 @@ class CityController extends Controller
     // Create / Edit form
     public function form($id = null)
     {
-        $model = City::with(['translations', 'images'])->find($id) ?? new City();
+        $model = City::with(['translations', 'images','tags'])->find($id) ?? new City();
         $languages = Language::all();
         $countries = Country::pluck('name', 'id');
         $categories = Category::where('type', CategoryType::CITY)
             ->with('translation')
             ->get();
+        $tags = Tag::orderBy('name')->get();
 
-
-        return view('backend.cities.form', compact('model', 'languages', 'countries', 'categories'));
+        return view('backend.cities.form', compact('model', 'languages', 'countries', 'categories','tags'));
     }
 
     // Store / Update
@@ -231,6 +232,14 @@ class CityController extends Controller
                 }
             }
 
+            /* ================= TAGS ================= */
+            if ($request->filled('tags')) {
+                $city->tags()->sync($request->tags);
+            } else {
+                $city->tags()->detach();
+            }
+
+
             /** ---------------- SAVE MULTI CATEGORIES (PIVOT) ---------------- */
             if ($request->filled('category_ids')) {
                 $city->categories()->sync($request->category_ids);
@@ -253,8 +262,8 @@ class CityController extends Controller
             }
 
             /** ---------------- GALLERY ---------------- */
-            if ($request->hasFile('gallery_images')) {
-                foreach ($request->file('gallery_images') as $file) {
+            if ($request->hasFile('gallery')) {
+                foreach ($request->file('gallery') as $file) {
                     storeImage($city, $file, 'cities/gallery', 'gallery');
                 }
             }

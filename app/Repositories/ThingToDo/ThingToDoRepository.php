@@ -20,6 +20,7 @@ class ThingToDoRepository implements ThingToDoRepositoryInterface
             'translations',
             'city.translations',
             'category.translations',
+            'thingCategories.category.translation',
             'gallery'
         ]);
 
@@ -58,6 +59,7 @@ class ThingToDoRepository implements ThingToDoRepositoryInterface
             'translations',
             'gallery',
             'thingCategories.category.translation',
+            'tags'
         ])->find($id);
     }
 
@@ -151,6 +153,7 @@ class ThingToDoRepository implements ThingToDoRepositoryInterface
                     'closing_time' => $data['closing_time'] ?? null,
                     'latitude'     => $data['latitude'] ?? null,
                     'longitude'    => $data['longitude'] ?? null,
+                    'video_url'    => $data['video_url'] ?? null
                 ]
             );
 
@@ -167,6 +170,13 @@ class ThingToDoRepository implements ThingToDoRepositoryInterface
                         'category_id' => $categoryId,
                     ]);
                 }
+            }
+
+              /* ===================== TAGS (SAVE + UPDATE) ===================== */
+            if (!empty($data['tags']) && is_array($data['tags'])) {
+                $thing->tags()->sync($data['tags']);   // create / update
+            } else {
+                $thing->tags()->detach();              // remove all
             }
 
             /* ===================== THUMB ===================== */

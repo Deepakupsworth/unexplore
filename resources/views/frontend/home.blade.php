@@ -104,8 +104,8 @@
                         <div class="section__header">
                             <div class="section__header-content">
                                 <h2 class="section__heading"><span
-                                        class="fw-normal">{{ __('home.plan.title_light') }}</span>
-                                    {{ __('home.plan.title_bold') }} </h2>
+                                        class="fw-normal">{{ __('home.plan.title_light') }} <strong> {{__('home.plan.title_bold')}}</strong></span>
+                                </h2>
                                 <p class="section__description">{{ __('home.plan.description') }}</p>
                             </div>
                         </div>
@@ -152,30 +152,30 @@
 
     <!-- 3. DISCOVER ADVENTURE SECTION  -->
     @if ($things->count() > 0)
-    <section class="dis-adventure section-padding">
-        <div class="container">
-            <div class="section__header">
-                <div class="section__header-content">
-                    <h2 class="section__heading">{{ __('home.exclusive.title') }}</h2>
-                    <p class="section__description">{{ __('home.exclusive.description') }}</p>
+        <section class="dis-adventure section-padding">
+            <div class="container">
+                <div class="section__header">
+                    <div class="section__header-content">
+                        <h2 class="section__heading">{!! __('home.exclusive.title') !!}</h2>
+                        <p class="section__description">{{ __('home.exclusive.description') }}</p>
+                    </div>
+                    <div class="section__header-CTA">
+                        <a href="{{ route('things.to.do') }}" class="btn btn-primary rounded-pill">
+                            {{ __('home.exclusive.view_all') }}
+                            <i class="fa-solid fa-angles-right"></i>
+                        </a>
+                    </div>
                 </div>
-                <div class="section__header-CTA">
-                    <a href="{{ route('things.to.do') }}" class="btn btn-primary rounded-pill">
-                        {{ __('home.exclusive.view_all') }}
-                        <i class="fa-solid fa-angles-right"></i>
-                    </a>
+                <div class="dis-adventure__carousel swiper">
+                    <div class="swiper-wrapper">
+                        @foreach ($things as $thing)
+                            <x-frontend.thing-card :thing="$thing" />
+                        @endforeach
+                    </div>
+                    <div class="custom__carousel-pagination"></div>
                 </div>
             </div>
-            <div class="dis-adventure__carousel swiper">
-                <div class="swiper-wrapper">
-                    @foreach ($things as $thing)
-                        <x-frontend.thing-card :thing="$thing" />
-                    @endforeach
-                </div>
-                <div class="custom__carousel-pagination"></div>
-            </div>
-        </div>
-    </section>
+        </section>
     @endif
 
     <!-- 4. EXPLORE SAUDI -->
@@ -277,8 +277,8 @@
             <div class="container">
                 <div class="section__header">
                     <div class="section__header-content">
-                        <h2 class="section__heading">{{ __('home.exclusive.title') }}</h2>
-                        <p class="section__description">{{ __('home.exclusive.description') }}</p>
+                        <h2 class="section__heading">{!! __('destination_details.exclusive_offers.title') !!}</h2>
+                        <p class="section__description">{{ __('home.plan.description') }}</p>
                     </div>
                     <div class="section__header-CTA">
                         <a href="{{ route('packages.index') }}" class="btn btn-primary rounded-pill">
@@ -315,7 +315,7 @@
             <div class="container">
                 <div class="section__header">
                     <div class="section__header-content">
-                        <h2 class="section__heading"> {{ __('home.events.title') }}</h2>
+                        <h2 class="section__heading"> {!! __('home.events.title') !!}</h2>
                         <p class="section__description">{{ __('home.events.description') }}</p>
                     </div>
                     <div class="section__header-CTA">
@@ -401,7 +401,7 @@
                 <div class="col-md-4 d-flex align-items-center">
                     <div class="section__header flex-column align-items-start gap-4">
                         <div class="section__header-content">
-                            <h2 class="section__heading">{{ __('home.news.title') }}</h2>
+                            <h2 class="section__heading">{!!__('home.news.title') !!}</h2>
                             <p class="section__description">{{ __('home.news.description') }}</p>
                         </div>
                         <div class="section__header-CTA">

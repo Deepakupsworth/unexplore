@@ -49,7 +49,7 @@
         {{-- ================= INFO ================= --}}
         <div class="exclusive-offers__carousel-item-info">
 
-            <div class="d-flex justify-content-between mb-1">
+            <div class="d-flex justify-content-between align-items-start mb-1">
                 <h6 class="fw-bold mb-0 text-ellipsis-1">
                     {{ $title }}
                 </h6>
@@ -76,14 +76,14 @@
 
                 {{-- PER PERSON --}}
                 <div class="d-flex justify-content-between align-items-center">
-                    <p class="text-muted">Starting from</p>
+                    <p class="text-muted">{{__('package.pricing.starting_from')}}</p>
 
                     <div class="d-flex align-items-center gap-1 text-muted">
                         <img src="{{ asset('frontend/assets/icons/riyal.svg') }}" alt="Riyal">
                         <p class="fw-bold text-dark mb-0">
                             {{ number_format($perPersonPrice) }}
                         </p>
-                        / Person
+                        / {{__('package.pricing.person')}}
                     </div>
                 </div>
 
@@ -97,7 +97,7 @@
                     </div>
 
                     <p class="text-muted small mb-0">
-                        Total Price:
+                        {{__('package.pricing.total_price')}}:
                         <img class="opacity-50"
                              src="{{ asset('frontend/assets/icons/riyal.svg') }}"
                              alt="Riyal">

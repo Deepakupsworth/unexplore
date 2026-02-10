@@ -1,25 +1,59 @@
 @extends('frontend.layout')
 @section('content')
-    {{-- @dd($relatedPackages) --}}
+    {{-- @dd($event) --}}
+    @php
+        use Illuminate\Support\Str;
+        $currentEvent = $event;
+        $videoUrl = $currentEvent->video_url ?? null;
+    @endphp
+
     <!-- 1. EVENT DETAILS: BANNER  -->
     <section class="hero-banner hero-banner-fullscreen">
-        @if ($event->video_url)
-            <video class="hero-banner__video" autoplay muted loop playsinline poster="../assets/hero-banner-bg.png">
-                <source src="{{ $event->video_url }}" type="video/mp4">
+        {{-- YouTube / Vimeo --}}
+        {{-- @if ($videoUrl && Str::contains($videoUrl, ['youtube', 'youtu.be', 'vimeo']))
+        <iframe
+            class="hero-banner__video"
+            src="{{ $videoUrl }}"
+            frameborder="0"
+            allow="autoplay; fullscreen"
+            allowfullscreen>
+        </iframe>
+        @endif --}}
+
+        @if ($videoUrl)
+            {{-- MP4 Video --}}
+            <video class="hero-banner__video" autoplay muted loop playsinline
+                poster="{{ asset('frontend/assets/hero-banner-bg.png') }}">
+                <source src="{{ $videoUrl }}" type="video/mp4">
                 {{ __('common.video_not_supported') }}
             </video>
+        @elseif ($event->thumb)
+
+            {{-- Thumbnail Image --}}
+            <img class="hero-banner__image" src="{{ asset('storage/' .$event->thumb->image_path) }}"
+                alt="{{ $event->translation?->title ?? 'Banner' }}">
         @else
-            <video class="hero-banner__video" autoplay muted loop playsinline poster="../assets/hero-banner-bg.png">
+            {{-- Default Fallback Video --}}
+            <video class="hero-banner__video" autoplay muted loop playsinline
+                poster="{{ asset('frontend/assets/hero-banner-bg.png') }}">
                 <source src="{{ asset('frontend/assets/videos/seekers-entry-video.mp4') }}" type="video/mp4">
                 {{ __('common.video_not_supported') }}
             </video>
         @endif
+
 
         <!-- <img class="hero-banner__image" src="../assets/hero-banner-bg.png" alt="Banner"> -->
         <div class="container">
             <div class="dest-details-banner__content flex-column gap-3 text-center">
                 <h1 class="text-white w-100">{{ $event->translation->title }}</h1>
                 <h5>{{ $event->translation->sub_title }}.</h5>
+
+                <div class="dest-details-banner__btn-group">
+                    @if ($currentEvent?->gallery && $currentEvent?->gallery->count() > 0)
+                        <button class="btn btn-primary rounded-pill" data-bs-toggle="modal"
+                            data-bs-target="#eventGalleryModal">{{ __('thing_detail.banner.see_images') }}</button>
+                    @endif
+                </div>
             </div>
         </div>
     </section>
@@ -125,23 +159,17 @@
                         $lng = $event->longitude;
                     @endphp
 
-                    @if($lat && $lng)
+                    @if ($lat && $lng)
                         <div class="event-map__card position-relative rounded-5 overflow-hidden">
 
                             {{-- Google Map --}}
-                            <iframe
-                                width="100%"
-                                height="500"
-                                style="border:0;"
-                                loading="lazy"
-                                allowfullscreen
+                            <iframe width="100%" height="500" style="border:0;" loading="lazy" allowfullscreen
                                 referrerpolicy="no-referrer-when-downgrade"
                                 src="https://www.google.com/maps?q={{ $lat }},{{ $lng }}&hl=en&z=14&output=embed">
                             </iframe>
 
                             {{-- Get Directions --}}
-                            <a
-                                href="https://www.google.com/maps/dir/?api=1&destination={{ $lat }},{{ $lng }}"
+                            <a href="https://www.google.com/maps/dir/?api=1&destination={{ $lat }},{{ $lng }}"
                                 target="_blank"
                                 class="event-map__card-btn btn btn-primary rounded-pill py-2 px-3 position-absolute bottom-0 end-0 m-3">
                                 {{ __('event_details.map.get_directions') }}
@@ -204,66 +232,70 @@
             </div>
         </div>
     </section>
-
-    <section class="section-padding-md">
-        <div class="container">
-            <div class="section__header">
-                <div class="section__header-content">
-                    <h2 class="section__heading">
-                        {{ __('event_details.similar.title') }}
-                    </h2>
-                    <p class="section__description">
-                        {{ __('event_details.similar.description') }}
-                    </p>
+    @if ($similarEvents->count() > 0)
+        <section class="section-padding-md">
+            <div class="container">
+                <div class="section__header">
+                    <div class="section__header-content">
+                        <h2 class="section__heading">
+                            {{ __('event_details.similar.title') }}
+                        </h2>
+                        <p class="section__description">
+                            {{ __('event_details.similar.description') }}
+                        </p>
+                    </div>
+                    <div class="section__header-CTA">
+                        <a href="{{ route('event.listing') }}" class="btn btn-primary rounded-pill">
+                            {{ __('common.view_all') }}
+                            <i class="fa-solid fa-angles-right"></i>
+                        </a>
+                    </div>
                 </div>
-                <div class="section__header-CTA">
-                    <a href="#" class="btn btn-primary rounded-pill">
-                        {{ __('common.view_all') }}
-                        <i class="fa-solid fa-angles-right"></i>
-                    </a>
+
+                <div class="upcoming-event__carousel swiper">
+                    <div class="upcoming-event__carousel-wrapper swiper-wrapper">
+                        @foreach ($similarEvents as $event)
+                            <x-frontend.event-card :event="$event" />
+                        @endforeach
+                    </div>
+                    <div class="custom__carousel-pagination"></div>
                 </div>
             </div>
+        </section>
+    @endif
+    @if ($relatedPackages->count() > 0)
+        <section class="exclusive-offers section-padding-md">
+            <div class="container">
+                <div class="section__header">
+                    <div class="section__header-content">
+                        <h2 class="section__heading">
+                            {{ __('event_details.related_packages.title') }}
+                        </h2>
+                        <p class="section__description">
+                            {{ __('event_details.related_packages.description') }}
+                        </p>
+                    </div>
+                    <div class="section__header-CTA">
+                        <a href="{{ route('packages.index') }}" class="btn btn-primary rounded-pill">
+                            {{ __('common.view_all') }}
+                            <i class="fa-solid fa-angles-right"></i>
+                        </a>
+                    </div>
+                </div>
 
-            <div class="upcoming-event__carousel swiper">
-                <div class="upcoming-event__carousel-wrapper swiper-wrapper">
-                    @foreach ($similarEvents as $event)
-                        <x-frontend.event-card :event="$event" />
-                    @endforeach
+                <div class="exclusive-offers__carousel swiper">
+                    <div class="swiper-wrapper">
+                        @foreach ($relatedPackages as $package)
+                            <div class="exclusive-offers__carousel-item swiper-slide">
+                                <x-frontend.package-card :package="$package" />
+                            </div>
+                        @endforeach
+                    </div>
+                    <div class="custom__carousel-pagination"></div>
                 </div>
-                <div class="custom__carousel-pagination"></div>
             </div>
-        </div>
-    </section>
+        </section>
+    @endif
 
-    <section class="exclusive-offers section-padding-md">
-        <div class="container">
-            <div class="section__header">
-                <div class="section__header-content">
-                    <h2 class="section__heading">
-                        {{ __('event_details.related_packages.title') }}
-                    </h2>
-                    <p class="section__description">
-                        {{ __('event_details.related_packages.description') }}
-                    </p>
-                </div>
-                <div class="section__header-CTA">
-                    <a href="#" class="btn btn-primary rounded-pill">
-                        {{ __('common.view_all') }}
-                        <i class="fa-solid fa-angles-right"></i>
-                    </a>
-                </div>
-            </div>
-
-            <div class="exclusive-offers__carousel swiper">
-                <div class="swiper-wrapper">
-                    @foreach ($relatedPackages as $package)
-                        <div class="exclusive-offers__carousel-item swiper-slide">
-                            <x-frontend.package-card :package="$package" />
-                        </div>
-                    @endforeach
-                </div>
-                <div class="custom__carousel-pagination"></div>
-            </div>
-        </div>
-    </section>
+    @include('frontend.events.partials.event-gallery-modal')
 @endsection

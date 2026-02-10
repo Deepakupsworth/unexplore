@@ -36,12 +36,14 @@
                     <p class="text-slate-500 mb-2">Category</p>
                     <p class="font-semibold">
                         @forelse ($package->packageCategories as $pc)
-                        <span class="badge bg-slate-900 text-white capitalize rounded-3xl">{{ $pc->category?->translation?->name }}
-                            @if (!$loop->last)</span>
-                                ,
-                            @endif
-                        @empty
-                            —
+                            <span
+                                class="badge bg-success-500 text-success-500 bg-opacity-30 capitalize rounded-3xl">{{ $pc->category?->translation?->name }}
+                                @if (!$loop->last)
+                            </span>
+                            ,
+                        @endif
+                    @empty
+                        —
                         @endforelse
                     </p>
 
@@ -168,26 +170,42 @@
                                                 default => 'border-slate-400',
                                             };
                                         @endphp
-                                        {{-- ITEM CARD --}}
+                                        {{-- ITEM HEADER --}}
                                         <div class="bg-white border {{ $border }} rounded-xl p-5 shadow-sm mb-4">
 
-                                            {{-- ITEM HEADER --}}
+                                            @php
+                                                $detail = match ($item->item_type) {
+                                                    'hotel' => $item->hotel,
+                                                    'event' => $item->event,
+                                                    'todo' => $item->todo,
+                                                    'transport' => $item->transport,
+                                                    default => null,
+                                                };
+                                            @endphp
+
+                                            {{-- HEADER --}}
                                             <div class="flex justify-between items-start mb-3">
                                                 <div>
-                                                    <p class="text-base font-semibold capitalize text-slate-800">
 
-                                                        {{ $item->item_type }}
-                                                        <span class="text-xs text-slate-400">
-                                                            (#{{ $item->item_id }})
+                                                    <p
+                                                        class="text-base font-semibold text-slate-800 flex items-center gap-2">
+                                                        {{ $detail?->translation?->title ?? ($detail?->translation?->name ?? ($detail?->name ?? '—')) }}
+
+                                                        <span class="text-xs text-slate-400 capitalize">
+                                                            ({{ $item->item_type }})
                                                         </span>
                                                     </p>
-
 
                                                     <p class="text-sm text-slate-500 mt-1">
                                                         {{ $item->start_time ? Carbon::parse($item->start_time)->format('h:i A') : '—' }}
                                                         →
                                                         {{ $item->end_time ? Carbon::parse($item->end_time)->format('h:i A') : '—' }}
                                                     </p>
+
+                                                    @if ($detail?->thumb)
+                                                        <img src="{{ asset('storage/' . $detail->thumb->image_path) }}"
+                                                            class="w-16 h-16 rounded-lg object-cover border mt-3">
+                                                    @endif
                                                 </div>
                                             </div>
 
@@ -198,7 +216,6 @@
                                                     'item' => $item,
                                                 ])
                                             </div>
-
                                         </div>
 
                                     @empty
@@ -215,11 +232,16 @@
             </div>
         </section>
 
-
         {{-- ================= PRICING ================= --}}
         @include('backend.packages.partials.pricing', ['card' => $card])
 
 
+         {{-- ================= POLICIES ================= --}}
+
+         @include('backend.packages.partials.policy-card', [
+            'package' => $package,
+            'policies' => $policies,
+        ])
 
         {{-- ================= MODALS & SCRIPTS ================= --}}
 

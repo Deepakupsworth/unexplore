@@ -125,8 +125,15 @@
 
                             {{-- CATEGORY --}}
                             <x-admin.table.td>
-                                {{ $thing->category?->translation?->name ?? '—' }}
+                                @forelse($thing->thingCategories as $tc)
+                                    <span class="badge bg-success-500 text-success-500 bg-opacity-30 capitalize rounded-3xl">
+                                        {{ $tc->category?->translation?->name ?? '—' }}
+                                    </span>
+                                @empty
+                                    —
+                                @endforelse
                             </x-admin.table.td>
+
 
                             {{-- ACTION --}}
                             <x-admin.table.td>
@@ -141,7 +148,7 @@
                 </x-admin.table.tbody>
 
             </x-admin.table.table>
-
+            <div class="mt-6">{{ $thingstodos->links() }}</div>
         </div>
     </div>
 @endsection

@@ -2,9 +2,19 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Services\BookingPaymentService;
+use App\Enums\PaymentMethod;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Exception;
+
+use App\Enums\BookingStatus;
+use App\Enums\PaymentStatus;
+use App\Mail\BookingCancelledMail;
+use App\Mail\BookingCompletedMail;
+use Illuminate\Support\Facades\Mail;
 
 class BookingController extends Controller
 {
@@ -36,31 +46,106 @@ class BookingController extends Controller
     public function show(Booking $booking)
     {
         $booking->load([
-            'package.translation',
-            'travellers'
+            'package.translation', // meta info
+            'travellers',
+            'snapshot',            // ✅ real relation
         ]);
-        return view('backend.bookings.show', compact('booking'));
+
+        // Snapshot JSON (safe)
+        $snapshot = $booking->snapshot?->snapshot_json ?? [];
+
+        // Extract snapshot data
+        $package   = $snapshot['package'] ?? [];
+        $days      = $package['days'] ?? [];
+        $coupon    = $snapshot['coupon'] ?? null;
+        $checkout  = $snapshot['checkout'] ?? null;
+        $thumb     = $snapshot['thumb'] ?? null;
+
+        return view('backend.bookings.show', compact(
+            'booking',
+            'snapshot',
+            'package',
+            'days',
+            'coupon',
+            'checkout',
+            'thumb'
+        ));
     }
+
 
     public function updateStatus(Request $request, Booking $booking)
     {
         $request->validate([
-            'type'   => 'required|in:booking,payment',
-            'status' => 'required|string',
+            'status' => 'required|in:pending,confirmed,cancelled,completed',
+            'reason' => 'nullable|string|max:255',
         ]);
 
-        if ($request->type === 'booking') {
-            $booking->update([
-                'status' => $request->status,
-            ]);
+        $oldStatus = $booking->status;
+
+        $booking->update([
+            'status' => $request->status
+        ]);
+
+        /*
+    |--------------------------------------------------------------------------
+    | 🔔 STATUS BASED EMAILS
+    |--------------------------------------------------------------------------
+    */
+
+        // ❌ Cancellation Mail
+        if ($oldStatus !== 'cancelled' && $request->status === 'cancelled') {
+            Mail::to($booking->user->email)
+                ->send(new BookingCancelledMail(
+                    $booking,
+                    $request->reason ?? null
+                ));
         }
 
-        if ($request->type === 'payment') {
-            $booking->update([
-                'payment_status' => $request->status,
-            ]);
+        // ✅ Completion Mail
+        if ($oldStatus !== 'completed' && $request->status === 'completed') {
+            Mail::to($booking->user->email)
+                ->send(new BookingCompletedMail($booking));
         }
+        return back()->with('success', 'Booking status updated successfully.');
+    }
 
-        return back()->with('success', 'Status updated successfully');
+
+    public function storeManualPayment(
+        Request $request,
+        Booking $booking,
+        BookingPaymentService $service
+    ) {
+        $request->validate([
+            'payment_method' => ['required'],
+            'amount'         => 'required|numeric|min:1',
+            'transaction_id' => 'nullable|string',
+            'bank_name'      => 'nullable|string',
+            'note'           => 'nullable|string',
+            'payment_id'     => 'nullable|integer',
+            'status'         => ['required', Rule::in([
+                'pending',
+                'paid',
+                'failed',
+                'refunded',
+                'partial_refund',
+            ])],
+        ]);
+
+        try {
+            $service->addOrUpdatePayment(
+                booking: $booking,
+                method: PaymentMethod::from($request->payment_method),
+                amount: (float) $request->amount,
+                transactionId: $request->transaction_id,
+                note: $request->note,
+                paymentId: $request->payment_id,
+                bankName: $request->bank_name,
+                status: PaymentStatus::from($request->status),
+            );
+
+            return back()->with('success', 'Payment saved successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['payment' => $e->getMessage()]);
+        }
     }
 }
