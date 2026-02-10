@@ -54,7 +54,7 @@
                                                     <label>
                                                         <!-- <input type="checkbox" aria-label="Things To Do" /> -->
                                                         <span
-                                                            class="option-text">{{ __('things.results.sort.popular') }}</span>
+                                                            class="option-text">{{ __('things.results.sort.thingToDo') }}</span>
                                                     </label>
                                                 </div>
                                             </a>
@@ -234,7 +234,7 @@
                                 {{ empty(request('categories')) ? 'success' : '' }}">
                                 <p class="p-small">All To Do Things</p>
                             </div>
-                        </a @foreach ($categories as $category)
+                        </a> @foreach ($categories as $category)
                         <a href="{{ route('things.to.do') }}?categories[]={{ $category->id }}"
                             style="text-decoration: none;">
                             <div

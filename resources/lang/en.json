@@ -188,6 +188,7 @@
     "things.results.sort.label": "Sort by:",
     "things.results.sort.popular": "Popular",
     "things.results.sort.newest": "Newest",
+    "things.results.sort.thingToDo" : "Things To Do",
     "thing_detail.banner.see_images": "See Images",
     "thing_detail.info.title": "Information",
     "thing_detail.info.location_label": "Location:",
