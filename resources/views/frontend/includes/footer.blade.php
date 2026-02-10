@@ -28,6 +28,7 @@
                   <li><a href="#" class="footer-link">{{ __('footer.link.plan_trip') }}</a></li>
                   <li><a href="#" class="footer-link">{{ __('footer.link.events_festivals') }}</a></li>
                   <li><a href="#" class="footer-link">{{ __('footer.link.saudi_calendar') }}</a></li>
+
                 </ul>
               </div>
 
@@ -61,15 +62,8 @@
           <!-- Social & Newsletter -->
           <div class="col-md-6 col-lg-3 mb-4">
             <div class="footer-icons-section">
-              <a href="#" class="footer-icon">
-                <img src="{{ asset('frontend/assets/icons/instagram.svg') }}" alt="instagram">
-              </a>
-              <a href="#" class="footer-icon">
-                <img src="{{ asset('frontend/assets/icons/facebook.svg') }}" alt="facebook">
-              </a>
-              <a href="#" class="footer-icon">
-                <img src="{{ asset('frontend/assets/icons/x.svg') }}" alt="x">
-              </a>
+              
+              <x-share-links a-class="footer-icon" icon-size="icon-sm" />
             </div>
 
             <div class="footer-newsletter-section">
