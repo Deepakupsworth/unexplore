@@ -1,16 +1,40 @@
 @extends('frontend.layout')
 @section('content')
 
-@php
-$currentCity = $city;
-@endphp
-    {{-- @dd($events) --}}
+    @php
+        $currentCity = $city;
+
+        use Illuminate\Support\Str;
+
+        $videoUrl = $currentCity->video_url ?? null;
+
+    @endphp
     <!-- 1. DESTINATION DETAILS BANNER SECTION  -->
     <section class="hero-banner dest-details-banner">
-        <video class="hero-banner__video" autoplay muted loop playsinline poster="../assets/hero-banner-bg.png">
+        {{-- <video class="hero-banner__video" autoplay muted loop playsinline poster="../assets/hero-banner-bg.png">
             <source src="{{ asset('frontend/assets/videos/seekers-entry-video.mp4') }}" type="video/mp4">
             {{ __('common.video_not_supported') }}
-        </video>
+        </video> --}}
+
+        @if ($videoUrl)
+            {{-- Any other video URL (MP4, CDN, S3, etc.) --}}
+            <video class="hero-banner__video" autoplay muted loop playsinline>
+                <source src="{{ $videoUrl }}">
+                {{ __('common.video_not_supported') }}
+            </video>
+        @elseif ($currentCity->thumb_image)
+            {{-- Thumbnail fallback --}}
+            <img class="hero-banner__image" src="{{ asset('storage/' . $currentCity->thumb_image) }}"
+                alt="{{ $currentCity->translation?->name ?? 'Banner' }}">
+        @else
+            {{-- Final fallback --}}
+            <video class="hero-banner__video" autoplay muted loop playsinline
+                poster="{{ asset('frontend/assets/hero-banner-bg.png') }}">
+                <source src="{{ asset('frontend/assets/videos/seekers-entry-video.mp4') }}">
+                {{ __('common.video_not_supported') }}
+            </video>
+        @endif
+
         <!-- <img class="hero-banner__image" src="../assets/hero-banner-bg.png" alt="Banner"> -->
         <div class="container">
             <div class="dest-details-banner__content">
@@ -20,17 +44,16 @@ $currentCity = $city;
                 </h1>
 
                 <img src="{{ asset('frontend/assets/hero-banner-vision.png') }}" alt="Vision 2030"
-                     class="dest-details-banner__vision d-none-sm d-none-md">
+                    class="dest-details-banner__vision d-none-sm d-none-md">
 
                 <div class="dest-details-banner__btn-group">
-                    <a href="{{ route('packages.index') }}"
-                       class="btn btn-outline-light gap-1 rounded-pill">
+                    <a href="{{ route('packages.index') }}" class="btn btn-outline-light gap-1 rounded-pill">
                         {{ __('destination_details.banner.related_packages') }}
                         <strong>({{ $city->package_count }})</strong>
                     </a>
                     @if ($city?->gallery && $city?->gallery->count() > 0)
-                    <button class="btn btn-primary rounded-pill" data-bs-toggle="modal"
-                        data-bs-target="#galleryModal"> {{ __('destination_details.banner.see_images') }}</button>
+                        <button class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                            {{ __('destination_details.banner.see_images') }}</button>
                     @endif
                 </div>
             </div>
@@ -71,8 +94,7 @@ $currentCity = $city;
                     </div>
 
                     <div class="section__header-CTA">
-                        <a href="{{ route('things.to.do') }}"
-                           class="btn btn-primary rounded-pill">
+                        <a href="{{ route('things.to.do') }}" class="btn btn-primary rounded-pill">
                             {{ __('common.view_all') }}
                             <i class="fa-solid fa-angles-right"></i>
                         </a>
@@ -107,8 +129,7 @@ $currentCity = $city;
                     </div>
 
                     <div class="section__header-CTA">
-                        <a href="{{ route('event.listing') }}"
-                           class="btn btn-primary rounded-pill">
+                        <a href="{{ route('event.listing') }}" class="btn btn-primary rounded-pill">
                             {{ __('common.view_all') }}
                             <i class="fa-solid fa-angles-right"></i>
                         </a>
@@ -160,7 +181,7 @@ $currentCity = $city;
 
                         <div class="stories-insight__carousel-item swiper-slide">
                             <img src="{{ asset('frontend/assets/stories-insight-1.png') }}" alt="Story Image"
-                                 class="img-fluid">
+                                class="img-fluid">
                             <div class="stories-insight__carousel-item-content">
                                 <p class="text-light2">
                                     {{ __('destination_details.stories.category') }}
@@ -173,7 +194,7 @@ $currentCity = $city;
 
                         <div class="stories-insight__carousel-item swiper-slide">
                             <img src="{{ asset('frontend/assets/stories-insight-1.png') }}" alt="Story Image"
-                                 class="img-fluid">
+                                class="img-fluid">
                             <div class="stories-insight__carousel-item-content">
                                 <p class="text-light2">
                                     {{ __('destination_details.stories.category') }}
@@ -186,7 +207,7 @@ $currentCity = $city;
 
                         <div class="stories-insight__carousel-item swiper-slide">
                             <img src="{{ asset('frontend/assets/stories-insight-1.png') }}" alt="Story Image"
-                                 class="img-fluid">
+                                class="img-fluid">
                             <div class="stories-insight__carousel-item-content">
                                 <p class="text-light2">
                                     {{ __('destination_details.stories.category') }}
@@ -227,8 +248,7 @@ $currentCity = $city;
                 </div>
 
                 <div class="section__header-CTA">
-                    <a href="{{ route('packages.index') }}"
-                       class="btn btn-primary rounded-pill">
+                    <a href="{{ route('packages.index') }}" class="btn btn-primary rounded-pill">
                         {{ __('common.view_all') }}
                         <i class="fa-solid fa-angles-right"></i>
                     </a>

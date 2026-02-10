@@ -76,4 +76,9 @@ class Category extends Model
     {
         return $this->hasMany(PackageCategory::class, 'category_id');
     }
+
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
+    }
 }

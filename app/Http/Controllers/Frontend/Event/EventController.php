@@ -76,8 +76,13 @@ class EventController extends Controller
             'thumb',
             'city.translationData',
             'category.translationData',
-            'eventCategories.category.translationData'
-        ]);
+            'eventCategories.category.translationData',
+        ])
+        ->where(function ($q) {
+            $q->whereNull('start_date')
+              ->orWhereDate('start_date', '>=', now());
+        });
+
 
         /* 🔎 Search */
         if ($request->filled('search')) {
@@ -111,6 +116,15 @@ class EventController extends Controller
             };
         }
 
+        if ($request->filled('event_date_from') || $request->filled('event_date_to')) {
+
+            $from = $request->event_date_from ?? '1900-01-01';
+            $to   = $request->event_date_to ?? '2999-12-31';
+
+            $query->whereDate('start_date', '>=', $from)
+                ->whereDate('start_date', '<=', $to);
+        }
+
         return $query;
     }
 
@@ -136,8 +150,8 @@ class EventController extends Controller
             ->where('id', '!=', $event->id) // skip current event
             ->where('status', 1)            // only active
             ->where(function ($q) {
-                $q->whereNull('end_date')
-                    ->orWhere('end_date', '>=', now()->toDateString());
+                $q->whereNull('start_date')
+                    ->orWhere('start_date', '>=', now()->toDateString());
             })
             ->where('category_id', $event->category_id) // OPTIONAL but recommended
             ->inRandomOrder()

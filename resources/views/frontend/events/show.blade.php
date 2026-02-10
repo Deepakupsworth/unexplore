@@ -223,7 +223,7 @@
                     </div>
 
                     <!-- Weather card -->
-                    <div class="event-map__info-card rounded-5 position-relative pb-5">
+                    {{-- <div class="event-map__info-card rounded-5 position-relative pb-5">
                         <p class="fw-600 p-large">
                             {{ __('event_details.weather.title') }}
                         </p>
@@ -233,7 +233,7 @@
                             {{ __('event_details.weather.status') }}
                         </div>
                         <div class="event-map__info-weather-decor"></div>
-                    </div>
+                    </div> --}}
 
                 </div>
             </div>
