@@ -1,17 +1,25 @@
 @extends('frontend.layout')
 @section('content')
+
+<style>
+   .golf-banner {
+    width: 100%;
+    background-position: center;
+}
+
+</style>
     <!-- 1. THING TO DO NATURE: BANNER SECTION  -->
     <section class="hero-banner hero-banner-fullscreen">
-        <video class="hero-banner__video" autoplay muted loop playsinline poster="../assets/hero-banner-bg.png">
+        {{-- <video class="hero-banner__video" autoplay muted loop playsinline poster="../assets/hero-banner-bg.png">
             <source src="{{ asset('frontend/assets/videos/seekers-entry-video.mp4')}}" type="video/mp4">
             Your browser does not support the video tag.
-        </video>
-        <!-- <img class="hero-banner__image" src="../assets/hero-banner-bg.png" alt="Banner"> -->
+        </video> --}}
+        <img class="hero-banner__image" src="{{ asset('frontend/assets/golf_banner.jpg')}}" alt="Banner">
         <div class="container">
             <div class="dest-details-banner__content">
-                <h1 class="text-white">Discover Elite <strong>Golf Experiences</strong></h1>
+                <h1 class="text-white">The World Golf Championships in <strong>Riyadh </strong></h1>
                 <img src="{{ asset('frontend/assets/hero-banner-vision.png')}}" alt="Vision 2030"
-                    class="dest-details-banner__vision d-none-sm d-none-md">
+                    class="dest-details-banner__vision d-none-sm d-none-md golf-banner">
             </div>
         </div>
     </section>
@@ -22,23 +30,23 @@
             <div class="golf-locations__carousel swiper">
                 <div class="swiper-wrapper">
                     <div class="golf-locations__item swiper-slide">
-                        <img class="img-fluid" src="{{ asset('frontend/assets/contact-office1.png')}}" alt="Golf">
+                        <img class="img-fluid" src="{{ asset('frontend/assets/liv-golf-riyadh-banner.jpg')}}" alt="Golf">
                         <div class="golf-locations__item-content">
-                            <p class="p-large fw-600">Algarve Golf Club</p>
+                            <p class="p-large fw-600">LIV Golf Riyadh Is a New Chapter in Saudi Golf</p>
                             <p class="p-small">Portugal, Europe</p>
                         </div>
                     </div>
                     <div class="golf-locations__item swiper-slide">
-                        <img class="img-fluid" src="{{ asset('frontend/assets/contact-office1.png')}}" alt="Golf">
+                        <img class="img-fluid" src="{{ asset('frontend/assets/pif-saudi-ladies-international.jpg')}}" alt="Golf">
                         <div class="golf-locations__item-content">
-                            <p class="p-large fw-600">Costa del Sol Golf Club</p>
+                            <p class="p-large fw-600">PIF Saudi Ladies International Showcases Golf’s Rising Stars</p>
                             <p class="p-small">Bali, Asia</p>
                         </div>
                     </div>
                     <div class="golf-locations__item swiper-slide">
-                        <img class="img-fluid" src="{{ asset('frontend/assets/contact-office1.png')}}" alt="Golf">
+                        <img class="img-fluid" src="{{ asset('frontend/assets/key-details.jpg')}}" alt="Golf">
                         <div class="golf-locations__item-content">
-                            <p class="p-large fw-600">Emirates Golf Club</p>
+                            <p class="p-large fw-600">Plan Your Golf Trip to Riyadh</p>
                             <p class="p-small">Dubai, UAE</p>
                         </div>
                     </div>
@@ -104,43 +112,43 @@
                         <div class="news-event__carousel swiper">
                             <div class="news-event__carousel-wrapper swiper-wrapper">
                                 <div class="news-event__carousel-item swiper-slide">
-                                    <img src="{{ asset('frontend/assets/golf.webp')}}" alt="News" class="img-fluid">
+                                    <img src="{{ asset('frontend/assets/Xv8vEjXDRONOu6W5FWqnHlBlnedCbgSXTfBeIvtR.jpg')}}" alt="News" class="img-fluid">
                                     <div class="news-event__carousel-item-info">
                                         <div class="small news-event__carousel-item-date mb-2">
                                             <i class="fa-solid fa-calendar"></i>
                                             Nov 28 | 15:30
                                         </div>
-                                        <h6>Event Ideas that Celebrate Culture, Community...</h6>
+                                        <h6>Golf Saudi’s all-star ambassador line-up set to inspire crowds at PIF Saudi Ladies International</h6>
                                     </div>
                                 </div>
                                 <div class="news-event__carousel-item swiper-slide">
-                                    <img src="{{ asset('frontend/assets/golf.webp')}}" alt="News" class="img-fluid">
+                                    <img src="{{ asset('frontend/assets/H0ajxteL3yyGSSdKwAeSOywWya4CZzXkRaxDT3py.jpg')}}" alt="News" class="img-fluid">
                                     <div class="news-event__carousel-item-info">
                                         <div class="small news-event__carousel-item-date mb-2">
                                             <i class="fa-solid fa-calendar"></i>
                                             Nov 28 | 15:30
                                         </div>
-                                        <h6>Event Ideas that Celebrate Culture, Community...</h6>
+                                        <h6>HELLGREN RECORDS BREAKTHROUGH VICTORY AT SAUDI OPEN PRESENTED BY PIF</h6>
                                     </div>
                                 </div>
                                 <div class="news-event__carousel-item swiper-slide">
-                                    <img src="{{ asset('frontend/assets/golf.webp')}}" alt="News" class="img-fluid">
+                                    <img src="{{ asset('frontend/assets/5fUogN7IkY3GsFR0mn4z1OUgJ0NfwtTroYld9Y3e.jpg')}}" alt="News" class="img-fluid">
                                     <div class="news-event__carousel-item-info">
                                         <div class="small news-event__carousel-item-date mb-2">
                                             <i class="fa-solid fa-calendar"></i>
                                             Nov 28 | 15:30
                                         </div>
-                                        <h6>Event Ideas that Celebrate Culture, Community...</h6>
+                                        <h6>SAUDI OPEN PRESENTED BY PIF: THOMPSON AND HELLGREN ENTERTAIN WITH HEAD-TO-HEAD CLASH</h6>
                                     </div>
                                 </div>
                                 <div class="news-event__carousel-item swiper-slide">
-                                    <img src="{{ asset('frontend/assets/golf.webp')}}" alt="News" class="img-fluid">
+                                    <img src="{{ asset('frontend/assets/cVwse29xZsxeIe0MzbaWXoRBdIARVavfNffAvi34.jpg')}}" alt="News" class="img-fluid">
                                     <div class="news-event__carousel-item-info">
                                         <div class="small news-event__carousel-item-date mb-2">
                                             <i class="fa-solid fa-calendar"></i>
                                             Nov 28 | 15:30
                                         </div>
-                                        <h6>Event Ideas that Celebrate Culture, Community...</h6>
+                                        <h6>ASIAN TOUR SEASON FINALE HEADS TO HISTORIC DIRAB AS DEFENDING CHA</h6>
                                     </div>
                                 </div>
                             </div>
@@ -172,40 +180,40 @@
             <div class="golf-highlights__carousel swiper">
                 <div class="swiper-wrapper">
                     <div class="golf-highlights__item swiper-slide">
-                        <img class="img-fluid" src="{{ asset('frontend/assets/golf-highlight.webp')}}" alt="Highlight">
+                        <img class="img-fluid" src="{{ asset('frontend/assets/xwh4kckjwrkeglratxrn.webp')}}" alt="Highlight">
                         <div class="golf-highlights__item-content">
-                            <div class="badge carousel-badge">Macca</div>
+                            <div class="badge carousel-badge">Riyadh</div>
                             <p class="p-large mt-2 fw-600">Photos: Ryder Cup Day 3</p>
                         </div>
                     </div>
                     <div class="golf-highlights__item swiper-slide">
-                        <img class="img-fluid" src="{{ asset('frontend/assets/golf-highlight.webp')}}" alt="Highlight">
+                        <img class="img-fluid" src="{{ asset('frontend/assets/vdya8k1q594rx1thonix.webp')}}" alt="Highlight">
                         <div class="golf-highlights__item-content">
-                            <div class="badge carousel-badge">Macca</div>
-                            <p class="p-large mt-2 fw-600">Photos: LIV Golf Michigan Team Championship, Finals</p>
+                            <div class="badge carousel-badge">Riyadh</div>
+                            <p class="p-large mt-2 fw-600">Photos: LIV Golf Riyadh, Round 1</p>
                         </div>
                     </div>
                     <div class="golf-highlights__item swiper-slide">
-                        <img class="img-fluid" src="{{ asset('frontend/assets/golf-highlight.webp')}}" alt="Highlight">
+                        <img class="img-fluid" src="{{ asset('frontend/assets/jugcukfqplsyichop5on.webp')}}" alt="Highlight">
                         <div class="golf-highlights__item-content">
-                            <div class="badge carousel-badge">Macca</div>
-                            <p class="p-large mt-2 fw-600">LIV Golf Indianapolis 2025 Celebrity Guests </p>
+                            <div class="badge carousel-badge">Riyadh</div>
+                            <p class="p-large mt-2 fw-600">Photos: LIV Golf Riyadh, Final Round </p>
                         </div>
                     </div>
                     <div class="golf-highlights__item swiper-slide">
-                        <img class="img-fluid" src="{{ asset('frontend/assets/golf-highlight.webp')}}" alt="Highlight">
+                        <img class="img-fluid" src="{{ asset('frontend/assets/e0gtwxml4n8qpfomg3eb.jpeg')}}" alt="Highlight">
                         <div class="golf-highlights__item-content">
-                            <div class="badge carousel-badge">Macca</div>
-                            <p class="p-large mt-2 fw-600">Photos: 2025 Individual Championship ring</p>
+                            <div class="badge carousel-badge">Riyadh</div>
+                            <p class="p-large mt-2 fw-600">Photos: LIV Golf Riyadh Preview</p>
                         </div>
                     </div>
-                    <div class="golf-highlights__item swiper-slide">
+                    {{-- <div class="golf-highlights__item swiper-slide">
                         <img class="img-fluid" src="{{ asset('frontend/assets/golf-highlight.webp')}}" alt="Highlight">
                         <div class="golf-highlights__item-content">
                             <div class="badge carousel-badge">Macca</div>
                             <p class="p-large mt-2 fw-600">Photos: LIV Golf Chicago, Rd. 3</p>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="custom__carousel-pagination golf-highlights__carousel-pagination"></div>
             </div>
