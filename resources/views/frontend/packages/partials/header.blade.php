@@ -19,16 +19,17 @@
 
     {{-- ALL --}}
     <a href="{{ route('packages.index') }}"
-        class="{{ empty($selectedTypes) ? 'primary-text fw-600 text-decoration-none' : '' }}">
+        class="text-decoration-none {{ empty($selectedTypes) ? 'primary-text fw-600' : '' }}">
         {{__('header.all_packages')}} ({{ $total }})
     </a>
 
     {{-- PACKAGE TYPES --}}
     @foreach ($packageTypes as $type => $count)
-        <a href="#" class="package-type-tag {{ in_array($type, $selectedTypes) ? 'primary-text fw-600' : '' }}"
+        {{-- <a href="#" class="text-decoration-none package-type-tag {{ in_array($type, $selectedTypes) ? 'primary-text fw-600' : '' }}"
             data-type="{{ $type }}">
             {{ ucfirst($type) }} ({{ $count }})
-        </a>
+        </a> --}}
+        <p> {{ ucfirst($type) }} ({{ $count }})</p>
     @endforeach
 
 </div>

@@ -328,10 +328,28 @@ class PackageController extends Controller
             ]);
 
             if (!$package->exists) {
-                $package->slug = Str::slug(
-                    collect($request->translations)->first()['title']
-                ) . '-' . time();
+
+                $currentLang = strtolower(app()->getLocale() ?? 'en');
+
+                // 1️⃣ Try current language title
+                $title = $request->translations[$currentLang]['title'] ?? null;
+
+                // 2️⃣ Fallback: first non-empty title
+                if (empty($title)) {
+                    $title = collect($request->translations)
+                        ->pluck('title')
+                        ->filter()
+                        ->first();
+                }
+
+                // 3️⃣ Final safety
+                if (empty($title)) {
+                    $title = 'package';
+                }
+
+                $package->slug = Str::slug($title) . '-' . time();
             }
+
 
             $package->save();
 

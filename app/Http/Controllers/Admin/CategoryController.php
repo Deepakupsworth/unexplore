@@ -7,11 +7,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\CategoryTranslation;
 use App\Models\Language;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+
 class CategoryController extends Controller
 {
     /**
@@ -42,8 +44,9 @@ class CategoryController extends Controller
         $model = Category::with('translations')->find($id) ?? new Category();
         $languages = Language::all();
         $types = CategoryType::cases();
+        $tags = Tag::orderBy('name')->get();
 
-        return view('backend.categories.form', compact('model', 'languages', 'types'));
+        return view('backend.categories.form', compact('model', 'languages', 'types', 'tags'));
     }
 
     /**
@@ -58,6 +61,8 @@ class CategoryController extends Controller
             'translations.en.name' => 'required|string|max:255',
             'thumb_image'          => 'nullable|image|max:2048',
             'thumb_icon'           => 'nullable|image|max:1024',
+            'tags'   => 'nullable|array',
+            'tags.*' => 'exists:tags,id',
         ]);
 
         try {
@@ -93,6 +98,14 @@ class CategoryController extends Controller
                     'slug' => $slug,
                 ]
             );
+
+            /* ================= TAGS ================= */
+            if ($request->filled('tags')) {
+                $category->tags()->sync($request->tags);
+            } else {
+                $category->tags()->detach();
+            }
+
 
             /**
              * Save Thumb Image
