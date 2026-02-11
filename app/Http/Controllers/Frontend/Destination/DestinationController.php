@@ -72,68 +72,62 @@ class DestinationController extends Controller
     // }
 
     public function index()
-{
-    $language = app()->getLocale();
+    {
+        $language = app()->getLocale();
 
-    Cache::forget("frontend_destinations_{$language}");
+        Cache::forget("frontend_destinations_{$language}");
 
-    [$favouriteCities, $otherCities] = Cache::remember(
-        "frontend_destinations_{$language}",
-        now()->addMinutes(30),
-        function () use ($language) {
+        [$favouriteCities, $otherCities] = Cache::remember(
+            "frontend_destinations_{$language}",
+            now()->addMinutes(30),
+            function () use ($language) {
 
-            /* ================= FAVOURITE TAG ================= */
-            $favouriteTagId = \App\Models\Tag::where('slug', 'favourite')->value('id');
+                /* ================= FAVOURITE TAG ================= */
+                $favouriteTagId = \App\Models\Tag::where('slug', 'favourite')->value('id');
 
-            /* ================= BASE QUERY ================= */
-            $citiesBaseQuery = City::with([
-                'translation' => fn ($q) =>
-                    $q->where('language_code', $language),
-                'thumb',
-                'categories.translationData',
-            ])
-            ->withCount([
-                'packageCities as package_count' => function ($q) {
-                    $q->whereHas(
-                        'package',
-                        fn ($p) => $p->where('status', 'active')
-                    );
+                /* ================= BASE QUERY ================= */
+                $citiesBaseQuery = City::with([
+                    'translation' => fn ($q) =>
+                        $q->where('language_code', $language),
+                    'thumb',
+                    'categories.translationData',
+                ])
+                ->withCount([
+                    'packageCities as package_count' => function ($q) {
+                        $q->whereHas(
+                            'package',
+                            fn ($p) => $p->where('status', 'active')
+                        );
+                    }
+                ]);
+
+                /* ================= FAVOURITE CITIES (MAX 4) ================= */
+                $favouriteCities = collect();
+
+                if ($favouriteTagId) {
+                    $favouriteCities = (clone $citiesBaseQuery)
+                        ->whereHas('tags', function ($q) use ($favouriteTagId) {
+                            $q->where('tags.id', $favouriteTagId);
+                        })
+                        ->latest()
+                        ->take(4)
+                        ->get();
                 }
-            ]);
 
-            /* ================= FAVOURITE CITIES (MAX 4) ================= */
-            $favouriteCities = collect();
-
-            if ($favouriteTagId) {
-                $favouriteCities = (clone $citiesBaseQuery)
-                    ->whereHas('tags', function ($q) use ($favouriteTagId) {
-                        $q->where('tags.id', $favouriteTagId);
-                    })
+                /* ================= OTHER CITIES (ALL CITIES, NO FILTER) ================= */
+                $otherCities = (clone $citiesBaseQuery)
                     ->latest()
-                    ->take(4)
-                    ->get();
+                    ->get();   // 🔥 No whereNotIn, no limit
+
+                return [$favouriteCities, $otherCities];
             }
+        );
 
-            /* ================= OTHER CITIES (ALL, NO LIMIT) ================= */
-            $otherCities = (clone $citiesBaseQuery)
-                ->when(
-                    $favouriteCities->isNotEmpty(),
-                    fn ($q) =>
-                        $q->whereNotIn('id', $favouriteCities->pluck('id'))
-                )
-                ->latest()
-                ->get();
-
-            return [$favouriteCities, $otherCities];
-        }
-    );
-
-    return view('frontend.destinations.index', compact(
-        'favouriteCities',
-        'otherCities'
-    ));
-}
-
+        return view('frontend.destinations.index', compact(
+            'favouriteCities',
+            'otherCities'
+        ));
+    }
 
 
 
