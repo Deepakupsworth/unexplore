@@ -21,12 +21,13 @@ class NewsletterController extends Controller
         try {
             $subscriber = NewsletterSubscriber::where('email', $request->email)->first();
 
-            // Already subscribed & active
             if ($subscriber && $subscriber->is_active) {
-                return back()->with('info', 'You are already subscribed.');
+                return response()->json([
+                    'status'  => 'info',
+                    'message' => 'You are already subscribed.'
+                ]);
             }
 
-            // Exists but inactive → reactivate
             if ($subscriber && !$subscriber->is_active) {
                 $subscriber->update([
                     'is_active'        => true,
@@ -34,29 +35,37 @@ class NewsletterController extends Controller
                     'unsubscribed_at'  => null,
                 ]);
 
-                return back()->with('success', 'Subscription reactivated successfully.');
+                return response()->json([
+                    'status'  => 'success',
+                    'message' => 'Subscription reactivated successfully.'
+                ]);
             }
 
-            // New subscription
             NewsletterSubscriber::create([
                 'email'          => $request->email,
                 'is_active'      => true,
                 'subscribed_at'  => now(),
             ]);
 
-            return back()->with('success', 'Subscribed successfully.');
+            return response()->json([
+                'status'  => 'success',
+                'message' => 'Subscribed successfully.'
+            ]);
+
         } catch (Throwable $e) {
 
             Log::error('Newsletter subscribe failed', [
                 'email' => $request->email,
                 'error' => $e->getMessage(),
-                'file'  => $e->getFile(),
-                'line'  => $e->getLine(),
             ]);
 
-            return back()->with('error', 'Something went wrong. Please try again.');
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Something went wrong. Please try again.'
+            ], 500);
         }
     }
+
 
     /**
      * Unsubscribe from newsletter
@@ -74,7 +83,11 @@ class NewsletterController extends Controller
                     'unsubscribed_at'  => now(),
                 ]);
 
-            return back()->with('success', 'You have been unsubscribed successfully.');
+            return response()->json([
+                'status'  => 'success',
+                'message' => 'You have been unsubscribed successfully.'
+            ]);
+
         } catch (Throwable $e) {
 
             Log::error('Newsletter unsubscribe failed', [
@@ -82,7 +95,11 @@ class NewsletterController extends Controller
                 'error' => $e->getMessage(),
             ]);
 
-            return back()->with('error', 'Unable to unsubscribe at the moment.');
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Unable to unsubscribe at the moment.'
+            ], 500);
         }
     }
+
 }

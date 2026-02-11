@@ -98,7 +98,7 @@
                 </button>
               </form> --}}
 
-                        <form action="{{ route('newsletter.subscribe') }}" method="POST" class="d-flex flex-column">
+                        <form id="newsletterForm" action="{{ route('newsletter.subscribe') }}" method="POST" class="d-flex flex-column">
                             @csrf
 
                             <div class="custom-input-group mb-2">
@@ -149,4 +149,79 @@
             </span>
         </div>
     </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const form = document.getElementById('newsletterForm');
+            if (!form) return;
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                const formData = new FormData(form);
+                const action = form.getAttribute('action');
+
+                fetch(action, {
+                    method: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': form.querySelector('[name=_token]').value,
+                        'Accept': 'application/json'
+                    },
+                    body: formData
+                })
+                .then(async response => {
+
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        throw data;
+                    }
+
+                    return data;
+                })
+                .then(data => {
+
+                    iziToast[data.status || 'success']({
+                        title: data.status?.charAt(0).toUpperCase() + data.status?.slice(1),
+                        message: data.message,
+                        position: 'topRight',
+                        timeout: 5000
+                    });
+
+                    if (data.status === 'success') {
+                        form.reset();
+                    }
+
+                })
+                .catch(error => {
+
+                    if (error.errors) {
+                        // Laravel validation errors
+                        Object.values(error.errors).forEach(messages => {
+                            messages.forEach(message => {
+                                iziToast.error({
+                                    title: 'Validation Error',
+                                    message: message,
+                                    position: 'topRight',
+                                    timeout: 6000
+                                });
+                            });
+                        });
+                    } else {
+                        iziToast.error({
+                            title: 'Error',
+                            message: error.message || 'Something went wrong.',
+                            position: 'topRight',
+                            timeout: 6000
+                        });
+                    }
+                });
+
+            });
+
+        });
+        </script>
+
 </footer>
