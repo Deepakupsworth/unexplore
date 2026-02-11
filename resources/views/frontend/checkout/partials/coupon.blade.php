@@ -41,7 +41,7 @@
                         <div>
                             <div class="d-flex primary-text p-large gap-1 align-items-center">
                                 <p>-</p>
-                                <img src="{{ asset('/frontend/assets/icons/riyal-primary.svg') }}" alt="">
+                                <img src="{{ asset(currency_icon_path(null, 'primary')) }}" alt="">
                                 <p>{{ number_format($checkout['final_total']) }}</p>
                             </div>
 

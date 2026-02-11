@@ -14,7 +14,7 @@
             <source src="{{ asset('frontend/assets/videos/seekers-entry-video.mp4')}}" type="video/mp4">
             Your browser does not support the video tag.
         </video> --}}
-        <img class="hero-banner__image" src="{{ asset('frontend/assets/golf_banner.jpg')}}" alt="Banner">
+        <img class="hero-banner__image" src="{{ asset('frontend/assets/pexels-nathan-nedley-20160-92858.jpg')}}" alt="Banner">
         <div class="container">
             <div class="dest-details-banner__content">
                 <h1 class="text-white">The World Golf Championships in <strong>Riyadh </strong></h1>
@@ -33,14 +33,14 @@
                         <img class="img-fluid" src="{{ asset('frontend/assets/liv-golf-riyadh-banner.jpg')}}" alt="Golf">
                         <div class="golf-locations__item-content">
                             <p class="p-large fw-600">LIV Golf Riyadh Is a New Chapter in Saudi Golf</p>
-                            <p class="p-small">Portugal, Europe</p>
+                            <p class="p-small">Riyadh</p>
                         </div>
                     </div>
                     <div class="golf-locations__item swiper-slide">
                         <img class="img-fluid" src="{{ asset('frontend/assets/pif-saudi-ladies-international.jpg')}}" alt="Golf">
                         <div class="golf-locations__item-content">
                             <p class="p-large fw-600">PIF Saudi Ladies International Showcases Golf’s Rising Stars</p>
-                            <p class="p-small">Bali, Asia</p>
+                            <p class="p-small">Riyadh</p>
                         </div>
                     </div>
                     <div class="golf-locations__item swiper-slide">
@@ -51,19 +51,20 @@
                         </div>
                     </div>
                     <div class="golf-locations__item swiper-slide">
-                        <img class="img-fluid" src="{{ asset('frontend/assets/contact-office1.png')}}" alt="Golf">
+
+                        <img class="img-fluid" src="{{ asset('frontend/assets/4GJDmtGKUbCGdtXWvunfEhokLb9PwZcvG0v1qnIu1.jpg')}}" alt="Golf">
                         <div class="golf-locations__item-content">
-                            <p class="p-large fw-600">Emirates Golf Club</p>
-                            <p class="p-small">Arizona, USA</p>
+                            <p class="p-large fw-600">Riyadh Hosts the Grand Launch</p>
+                            <p class="p-small">Riyadh</p>
                         </div>
                     </div>
-                    <div class="golf-locations__item swiper-slide">
+                    {{-- <div class="golf-locations__item swiper-slide">
                         <img class="img-fluid" src="{{ asset('frontend/assets/contact-office1.png')}}" alt="Golf">
                         <div class="golf-locations__item-content">
                             <p class="p-large fw-600">Emirates Golf Club</p>
                             <p class="p-small">Dubai, UAE</p>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="custom__carousel-pagination golf-locations__carousel-pagination"></div>
             </div>
