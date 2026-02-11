@@ -24,18 +24,28 @@ class EventController extends Controller
     {
         $lang = current_lang();
 
-        $cities = City::has('events')
+        $activeEventCondition = function ($q) {
+            $q->where(function ($q2) {
+                $q2->whereNull('start_date')
+                    ->orWhereDate('start_date', '>=', now());
+            });
+        };
+
+
+        $cities = City::whereHas('events', $activeEventCondition)
             ->with('translationData')
-            ->withCount('events')
+            ->withCount(['events' => $activeEventCondition])
             ->orderByDesc('events_count')
             ->get();
 
+
         $categories = Category::where('type', 'event')
-            ->has('events')
+            ->whereHas('events', $activeEventCondition)
             ->with('translationData')
-            ->withCount('events')
+            ->withCount(['events' => $activeEventCondition])
             ->orderByDesc('events_count')
             ->get();
+
 
         $events = $this->applyFilters(
             Event::query(),
@@ -78,10 +88,10 @@ class EventController extends Controller
             'category.translationData',
             'eventCategories.category.translationData',
         ])
-        ->where(function ($q) {
-            $q->whereNull('start_date')
-              ->orWhereDate('start_date', '>=', now());
-        });
+            ->where(function ($q) {
+                $q->whereNull('start_date')
+                    ->orWhereDate('start_date', '>=', now());
+            });
 
 
         /* 🔎 Search */
@@ -158,27 +168,27 @@ class EventController extends Controller
             ->limit(4)
             ->get();
 
-            $relatedPackages = Package::with([
-                // 🔹 package translation (language aware)
-                'translation' => fn ($q) =>
-                    $q->where('language_code', $lang),
+        $relatedPackages = Package::with([
+            // 🔹 package translation (language aware)
+            'translation' => fn($q) =>
+            $q->where('language_code', $lang),
 
-                'thumb',
+            'thumb',
 
-                // 🔹 category translation (language aware)
-                'category.translation' => fn ($q) =>
-                    $q->where('language_code', $lang),
-            ])
+            // 🔹 category translation (language aware)
+            'category.translation' => fn($q) =>
+            $q->where('language_code', $lang),
+        ])
             ->whereHas('days.items', function ($q) use ($event) {
                 $q->where('item_type', 'event')
-                  ->where('item_id', $event->id);
+                    ->where('item_id', $event->id);
             })
             ->where('status', 'active')
             ->distinct()
             ->get();
 
 
-        return view('frontend.events.show', compact('event', 'similarEvents','relatedPackages'));
+        return view('frontend.events.show', compact('event', 'similarEvents', 'relatedPackages'));
     }
 
 
