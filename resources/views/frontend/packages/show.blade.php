@@ -247,14 +247,14 @@
                         @if ($package->price->discount_price)
                             <p class="fw-500">{{ __('package.pricing.starting_from') }}</p>
                             <div class="d-flex align-items-center gap-1">
-                                <img src="{{ asset('frontend/assets/icons/riyal-light.svg') }}" alt="Riyal">
+                                <img src="{{ asset(currency_icon_path(null, 'light')) }}" alt="Riyal">
                                 <p class="text-decoration-line-through fw-600 text-light2">
                                     {{ $package->price->discount_price }}</p>
                             </div>
                         @endif
 
                         <div class="d-flex align-items-center gap-1">
-                            <img src="{{ asset('frontend/assets/icons/riyal-primary.svg') }}" alt="Riyal">
+                            <img src="{{ asset(currency_icon_path(null, 'primary')) }}" alt="Riyal">
                             <h5 class="text-success fw-bold">{{ $package->price->per_person_price }}</h5>
                             <p class="text-light2 fw-500">{{ __('package.pricing.per_person') }}</p>
                         </div>
@@ -281,7 +281,7 @@
 
                         <div class="fw-500 text-light2 d-flex align-items-center gap-1">
                             <p>{{ __('package.pricing.total_price') }}</p>
-                            <img src="{{ asset('frontend/assets/icons/riyal-light.svg') }}" alt="Riyal">
+                            <img src="{{ asset(currency_icon_path(null, 'light')) }}" alt="Riyal">
                             <p id="liveTotalPrice">{{ $package->price->original_price }}</p>
 
                         </div>
@@ -654,8 +654,21 @@
                 const pkg = window.PACKAGE;
                 const state = window.PRICE_STATE;
 
-                const adults = state.persons.adults;
-                const children = state.persons.children;
+                // const adults = state.persons.adults;
+                // const children = state.persons.children;
+
+
+                const adultText = document.getElementById('adultCount')?.innerText || '0';
+                const childText = document.getElementById('childCount')?.innerText || '0';
+
+                const adults = parseInt(adultText, 10) || 0;
+                const children = parseInt(childText, 10) || 0;
+
+                window.PACKAGE = window.PACKAGE || {};
+                window.PACKAGE.persons = window.PACKAGE.persons || {};
+
+                window.PACKAGE.persons.adults = adults;
+                window.PACKAGE.persons.children = children;
 
                 /* ================= BASE PRICE ================= */
                 const basePrice = pkg.originalPrice;
@@ -666,30 +679,61 @@
 
                 let extraAdultPerPrice = 0;
 
-                pkg.extraAdultRules.forEach(rule => {
-                    if (extraAdults >= rule.person_number) {
-                        extraAdultPerPrice = rule.price;
-                    }
-                });
+
+                const pricingData = pkg.extraAdultRules;
+                extraAdultPerPrice =
+                    Array.isArray(pkg.extraAdultRules)
+                        ? (pkg.extraAdultRules.find(
+                            r => r.person_number === Number(extraAdults)
+                        )?.price ?? pkg.pricePerPerson)
+                        : pkg.pricePerPerson;
+
+                // pkg.extraAdultRules.forEach(rule => {
+                //     if (extraAdults >= rule.person_number) {
+                //         extraAdultPerPrice = rule.price;
+                //     }
+                // });
 
                 const extraAdultTotal =
                     extraAdults * extraAdultPerPrice;
 
-                /* ================= CHILD PRICE ================= */
-                let childPerPrice = 0;
+                // /* ================= CHILD PRICE ================= */
+
+                let childPerPrice = pkg.pricePerPerson; // default fallback
                 let childTotal = 0;
 
-                if (children && pkg.childRules.length) {
+                if (children > 0) {
 
-                    const rule = pkg.childRules[0];
+                    const rules = Array.isArray(pkg.childRules) ? pkg.childRules : [];
 
-                    childPerPrice =
-                        rule.type === 'fixed' ?
-                        rule.value :
-                        (pkg.pricePerPerson * rule.value) / 100;
+                    if (rules.length > 0) {
+
+                        const rule = rules[0]; // or find specific rule if needed
+
+                        if (rule.type === 'fixed') {
+                            childPerPrice = rule.value;
+                        } else if (rule.type === 'percentage') {
+                            childPerPrice = (pkg.pricePerPerson * rule.value) / 100;
+                        }
+                    }
 
                     childTotal = childPerPrice * children;
                 }
+
+                // let childPerPrice = 0;
+                // let childTotal = 0;
+
+                // if (children && pkg.childRules.length) {
+
+                //     const rule = pkg.childRules[0];
+
+                //     childPerPrice =
+                //         rule.type === 'fixed' ?
+                //         rule.value :
+                //         (pkg.pricePerPerson * rule.value) / 100;
+
+                //     childTotal = childPerPrice * children;
+                // }
 
                 /* ================= DAY ITEM EXTRA ================= */
                 const dayItemExtra =

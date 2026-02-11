@@ -332,6 +332,17 @@ Route::middleware(['auth', 'admin'])->group(function () {
                 [PackagePricingController::class, 'update']
             )->name('pricing.update');
 
+            Route::delete(
+                '/pricing/extra-person/{id}',
+                [PackagePricingController::class, 'deleteExtraPerson']
+            )->name('pricing.extra-person.delete');
+
+            Route::delete(
+                '/pricing/child-price/{id}',
+                [PackagePricingController::class, 'deleteChildPrice']
+            )->name('pricing.child-price.delete');
+
+
             Route::post(
                 '/{package}/additional-info',
                 [AdminPackageController::class, 'saveAdditionalInfo']
