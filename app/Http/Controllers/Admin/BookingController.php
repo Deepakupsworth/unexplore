@@ -48,7 +48,8 @@ class BookingController extends Controller
         $booking->load([
             'package.translation', // meta info
             'travellers',
-            'snapshot',            // ✅ real relation
+            'snapshot',
+            'days.dayItems'            // ✅ real relation
         ]);
 
         // Snapshot JSON (safe)

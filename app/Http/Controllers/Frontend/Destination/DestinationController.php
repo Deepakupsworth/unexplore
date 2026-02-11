@@ -119,7 +119,6 @@ class DestinationController extends Controller
 
                 $otherCities = $remaining > 0
                     ? (clone $citiesBaseQuery)
-                    ->whereNotIn('id', $favouriteCities->pluck('id'))
                     ->latest()
                     ->take($remaining)
                     ->get()

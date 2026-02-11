@@ -73,12 +73,13 @@ class Booking extends Model
         return $this->hasOne(BookingSnapshot::class);
     }
 
+    public function days()
+    {
+        return $this->hasMany(BookingDay::class);
+    }
     public function dayItems()
     {
-        return $this->hasManyThrough(
-            BookingDayItem::class,
-            BookingDay::class
-        );
+        return $this->hasMany(BookingDayItem::class);
     }
 
     public function payments()

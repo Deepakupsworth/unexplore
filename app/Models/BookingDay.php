@@ -42,4 +42,9 @@ class BookingDay extends Model
         return $this->hasMany(BookingDayItem::class, 'booking_day_id')
             ->orderBy('sort_order');
     }
+
+    public function dayItems()
+    {
+        return $this->hasMany(BookingDayItem::class, 'booking_day_id');
+    }
 }
