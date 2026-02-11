@@ -32,9 +32,11 @@
                                     <h6 class="dest-banner__carousel-item-title">
                                         {{ $cites->translation->name }}
                                     </h6>
-                                    <a href="{{ route('packages.index') }}">
+                                    @if($cites->package_count > 0)
+                                    <a href="{{ route('packages.index', ['city' => $cites->id]) }}">
                                         Packages ({{ $cites->package_count }})
                                     </a>
+                                @endif
                                 </div>
                             </div>
                         </div>

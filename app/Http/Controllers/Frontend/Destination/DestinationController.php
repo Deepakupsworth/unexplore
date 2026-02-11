@@ -72,67 +72,68 @@ class DestinationController extends Controller
     // }
 
     public function index()
-    {
-        $language = app()->getLocale();
-        Cache::forget("frontend_destinations_{$language}");
+{
+    $language = app()->getLocale();
 
-        [$favouriteCities, $otherCities] = Cache::remember(
-            "frontend_destinations_{$language}",
-            now()->addMinutes(30),
-            function () use ($language) {
+    Cache::forget("frontend_destinations_{$language}");
 
-                /* ================= FAVOURITE TAG ================= */
-                $favouriteTagId = \App\Models\Tag::where('slug', 'favourite')->value('id');
+    [$favouriteCities, $otherCities] = Cache::remember(
+        "frontend_destinations_{$language}",
+        now()->addMinutes(30),
+        function () use ($language) {
 
-                /* ================= BASE QUERY ================= */
-                $citiesBaseQuery = City::with([
-                    'translation' => fn($q) =>
+            /* ================= FAVOURITE TAG ================= */
+            $favouriteTagId = \App\Models\Tag::where('slug', 'favourite')->value('id');
+
+            /* ================= BASE QUERY ================= */
+            $citiesBaseQuery = City::with([
+                'translation' => fn ($q) =>
                     $q->where('language_code', $language),
-                    'thumb',
-                    'categories.translationData',
-                ])
-                    ->withCount([
-                        'packageCities as package_count' => function ($q) {
-                            $q->whereHas(
-                                'package',
-                                fn($p) =>
-                                $p->where('status', 'active')
-                            );
-                        }
-                    ]);
-
-                /* ================= FAVOURITE CITIES ================= */
-                $favouriteCities = collect();
-
-                if ($favouriteTagId) {
-                    $favouriteCities = (clone $citiesBaseQuery)
-                        ->whereHas('tags', function ($q) use ($favouriteTagId) {
-                            $q->where('tags.id', $favouriteTagId);
-                        })
-                        ->latest()
-                        ->take(4)
-                        ->get();
+                'thumb',
+                'categories.translationData',
+            ])
+            ->withCount([
+                'packageCities as package_count' => function ($q) {
+                    $q->whereHas(
+                        'package',
+                        fn ($p) => $p->where('status', 'active')
+                    );
                 }
+            ]);
 
-                /* ================= OTHER CITIES ================= */
-                $remaining = 4 - $favouriteCities->count();
+            /* ================= FAVOURITE CITIES (MAX 4) ================= */
+            $favouriteCities = collect();
 
-                $otherCities = $remaining > 0
-                    ? (clone $citiesBaseQuery)
+            if ($favouriteTagId) {
+                $favouriteCities = (clone $citiesBaseQuery)
+                    ->whereHas('tags', function ($q) use ($favouriteTagId) {
+                        $q->where('tags.id', $favouriteTagId);
+                    })
                     ->latest()
-                    ->take($remaining)
-                    ->get()
-                    : collect();
-
-                return [$favouriteCities, $otherCities];
+                    ->take(4)
+                    ->get();
             }
-        );
 
-        return view('frontend.destinations.index', compact(
-            'favouriteCities',
-            'otherCities'
-        ));
-    }
+            /* ================= OTHER CITIES (ALL, NO LIMIT) ================= */
+            $otherCities = (clone $citiesBaseQuery)
+                ->when(
+                    $favouriteCities->isNotEmpty(),
+                    fn ($q) =>
+                        $q->whereNotIn('id', $favouriteCities->pluck('id'))
+                )
+                ->latest()
+                ->get();
+
+            return [$favouriteCities, $otherCities];
+        }
+    );
+
+    return view('frontend.destinations.index', compact(
+        'favouriteCities',
+        'otherCities'
+    ));
+}
+
 
 
 
