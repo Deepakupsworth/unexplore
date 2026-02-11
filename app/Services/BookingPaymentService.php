@@ -81,7 +81,13 @@ class BookingPaymentService
              * ➕ ADD NEW PAYMENT
              * =========================
              */
-            if ($booking->status !== BookingStatus::CONFIRMED && $method !== PaymentMethod::BANK) {
+            if (
+                $booking->status !== BookingStatus::CONFIRMED
+                && !in_array($method, [
+                    PaymentMethod::BANK,
+                    PaymentMethod::CASH
+                ])
+            ) {
                 throw new Exception('Payment allowed only for confirmed bookings.');
             }
 
