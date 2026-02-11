@@ -27,6 +27,7 @@ class PageController extends Controller
 
         Cache::forget("home_page_data_{$language}");
 
+
         $homeData = Cache::remember(
             "home_page_data_{$language}",
             now()->addMinutes(30),
@@ -97,6 +98,12 @@ class PageController extends Controller
                         ->take(12)
                         ->get();
                 }
+                $activeEventCondition = function ($q) {
+                    $q->where(function ($q2) {
+                        $q2->whereNull('start_date')
+                           ->orWhereDate('start_date', '>=', now());
+                    });
+                };
 
                 /* ================= EVENTS ================= */
                 $eventsBaseQuery = Event::with([
@@ -106,7 +113,9 @@ class PageController extends Controller
                     'category.translation',
                     'eventCategories.category.translationData'
                 ])
-                    ->where('status', 1);
+                ->where('status', 1)
+                ->where($activeEventCondition);
+
 
                 $events = $favouriteTagId
                     ? (clone $eventsBaseQuery)
