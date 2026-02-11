@@ -150,19 +150,20 @@ class PackageController extends Controller
             );
 
         /* ================= SORT ================= */
-        if (in_array($request->sort, ['price_low', 'price_high'])) {
 
-            // join only once for sorting
+        if ($request->sort === 'price_asc' || $request->sort === 'price_desc') {
+
+            $direction = $request->sort === 'price_asc' ? 'asc' : 'desc';
+
             $packagesQuery
-                ->leftJoin('package_prices', 'packages.id', '=', 'package_prices.package_id')
+                ->join('package_prices', 'package_prices.package_id', '=', 'packages.id')
+                ->orderBy('package_prices.original_price', $direction)
                 ->select('packages.*');
+        } elseif ($request->sort === 'newest') {
 
-            if ($request->sort === 'price_low') {
-                $packagesQuery->orderBy('package_prices.per_person_price', 'asc');
-            } else {
-                $packagesQuery->orderBy('package_prices.per_person_price', 'desc');
-            }
+            $packagesQuery->orderBy('packages.created_at', 'desc');
         } else {
+
             $packagesQuery->latest('packages.created_at');
         }
 
@@ -296,19 +297,20 @@ class PackageController extends Controller
             );
 
         /* ================= SORT ================= */
-        if (in_array($request->sort, ['price_low', 'price_high'])) {
 
-            // join only once for sorting
+        if ($request->sort === 'price_asc' || $request->sort === 'price_desc') {
+
+            $direction = $request->sort === 'price_asc' ? 'asc' : 'desc';
+
             $packagesQuery
-                ->leftJoin('package_prices', 'packages.id', '=', 'package_prices.package_id')
+                ->join('package_prices', 'package_prices.package_id', '=', 'packages.id')
+                ->orderBy('package_prices.original_price', $direction)
                 ->select('packages.*');
+        } elseif ($request->sort === 'newest') {
 
-            if ($request->sort === 'price_low') {
-                $packagesQuery->orderBy('package_prices.per_person_price', 'asc');
-            } else {
-                $packagesQuery->orderBy('package_prices.per_person_price', 'desc');
-            }
+            $packagesQuery->orderBy('packages.created_at', 'desc');
         } else {
+
             $packagesQuery->latest('packages.created_at');
         }
 

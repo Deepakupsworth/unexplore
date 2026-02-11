@@ -18,18 +18,22 @@
 <div class="package-listing__results-header d-flex gap-4 align-items-center">
 
     {{-- ALL --}}
-    <a href="{{ route('packages.index') }}"
-        class="text-decoration-none {{ empty($selectedTypes) ? 'primary-text fw-600' : '' }}">
-        {{__('header.all_packages')}} ({{ $total }})
-    </a>
+    <div class="package-listing__results-applied-fil {{ empty($selectedTypes) ? 'success' : '' }}">
+        <a href="{{ route('packages.index') }}" class="text-decoration-none">
+            <p class="p-small {{ empty($selectedTypes) ? 'text-success' : '' }}">{{ __('header.all_packages') }}</p>
+            {{-- ({{ $total }}) --}}
+        </a>
+    </div>
 
     {{-- PACKAGE TYPES --}}
     @foreach ($packageTypes as $type => $count)
-        {{-- <a href="#" class="text-decoration-none package-type-tag {{ in_array($type, $selectedTypes) ? 'primary-text fw-600' : '' }}"
-            data-type="{{ $type }}">
-            {{ ucfirst($type) }} ({{ $count }})
-        </a> --}}
-        <p> {{ ucfirst($type) }} ({{ $count }})</p>
+        <div class="package-listing__results-applied-fil {{ in_array($type, $selectedTypes) ? 'success' : '' }}">
+            <a href="#" class="text-decoration-none package-type-tag" data-type="{{ $type }}">
+                {{-- {{ ucfirst($type) }} ({{ $count }}) --}}
+                <p class="p-small  {{ in_array($type, $selectedTypes) ? 'text-success' : '' }}">{{ ucfirst($type) }}</p>
+            </a>
+        </div>
+
     @endforeach
 
 </div>
@@ -38,7 +42,7 @@
 <div class="package-listing__results-applied-list d-flex align-items-center mt-2">
 
     {{-- FILTER TAGS --}}
-    <div class="d-flex gap-2 flex-wrap">
+    {{-- <div class="d-flex gap-2 flex-wrap">
 
         @foreach ($selectedTypes as $type)
             <div class="package-listing__results-applied-fil success">
@@ -60,12 +64,12 @@
             </div>
         @endif
 
-    </div>
+    </div> --}}
 
     {{-- SORT --}}
-    <div class="dropdown ms-auto">
+    <div class="dropdown">
         <button class="btn dropdown-toggle" data-bs-toggle="dropdown">
-            {{__('package.sort.label')}}
+            {{ __('package.sort.label') }}
             <strong>{{ $sortOptions[$currentSort] ?? 'Popular' }}</strong>
         </button>
 
