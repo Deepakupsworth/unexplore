@@ -170,10 +170,14 @@ class DestinationController extends Controller
             'city.translation',
             'category.translation',
         ])
-            ->where('status', 1)
-            ->latest()
-            ->take(12)
-            ->get();
+        ->where('status', 1)
+        ->where(function ($q) {
+            $q->whereNull('start_date')
+              ->orWhereDate('start_date', '>=', now());
+        })
+        ->orderBy('start_date') // upcoming first (better UX)
+        ->take(12)
+        ->get();
 
         // ✅ Things To Do with related ACTIVE package count (city specific)
         $things = ThingToDo::with([
