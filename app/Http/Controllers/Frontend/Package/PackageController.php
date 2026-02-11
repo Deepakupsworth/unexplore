@@ -67,31 +67,26 @@ class PackageController extends Controller
                 });
             })
 
-            /* ✈️ FLIGHT */
-            ->when(
-                $request->flight === 'with',
-                fn($q) =>
-                $q->whereHas('days.items.transport', fn($t) => $t->where('type', 'flight'))
-            )
-            ->when(
-                $request->flight === 'without',
-                fn($q) =>
-                $q->whereDoesntHave('days.items.transport', fn($t) => $t->where('type', 'flight'))
-            )
+            /* 💰 BUDGET FILTER */
+            ->when($request->budget, function ($q) use ($request) {
 
-            /* 💰 PRICE */
-            ->when($request->price_min || $request->price_max, function ($q) use ($request) {
-                $q->whereHas(
-                    'price',
-                    fn($p) =>
-                    $p->whereBetween(
-                        'per_person_price',
-                        [
-                            $request->price_min ?? 0,
-                            $request->price_max ?? 99999999
-                        ]
-                    )
-                );
+                $ranges = (array) $request->budget;
+
+                $q->whereHas('price', function ($priceQuery) use ($ranges) {
+
+                    $priceQuery->where(function ($subQuery) use ($ranges) {
+
+                        foreach ($ranges as $range) {
+
+                            [$min, $max] = explode('-', $range);
+
+                            $subQuery->orWhereBetween('per_person_price', [
+                                (int) $min,
+                                (int) $max
+                            ]);
+                        }
+                    });
+                });
             })
 
             /* ⭐ HOTEL RATING */
@@ -248,37 +243,28 @@ class PackageController extends Controller
                 });
             })
 
-            /* ✈️ FLIGHT */
-            ->when(
-                $request->flight === 'with',
-                fn($q) =>
-                $q->whereHas(
-                    'days.items.transport',
-                    fn($t) =>
-                    $t->where('type', 'flight')
-                )
-            )
-            ->when(
-                $request->flight === 'without',
-                fn($q) =>
-                $q->whereDoesntHave(
-                    'days.items.transport',
-                    fn($t) =>
-                    $t->where('type', 'flight')
-                )
-            )
+            /* 💰 BUDGET FILTER */
+            ->when($request->budget, function ($q) use ($request) {
 
-            /* 💰 PRICE */
-            ->when($request->price_min || $request->price_max, function ($q) use ($request) {
-                $min = $request->price_min ?? 0;
-                $max = $request->price_max ?? 99999999;
+                $ranges = (array) $request->budget;
 
-                $q->whereHas(
-                    'price',
-                    fn($p) =>
-                    $p->whereBetween('per_person_price', [$min, $max])
-                );
+                $q->whereHas('price', function ($priceQuery) use ($ranges) {
+
+                    $priceQuery->where(function ($subQuery) use ($ranges) {
+
+                        foreach ($ranges as $range) {
+
+                            [$min, $max] = explode('-', $range);
+
+                            $subQuery->orWhereBetween('per_person_price', [
+                                (int) $min,
+                                (int) $max
+                            ]);
+                        }
+                    });
+                });
             })
+
 
             /* ⭐ HOTEL RATING */
             ->when(
@@ -408,18 +394,18 @@ class PackageController extends Controller
         ])->where('slug', $slug)->firstOrFail();
 
 
-         // 🔥 CITY → NIGHTS CALCULATION
+        // 🔥 CITY → NIGHTS CALCULATION
         $places = collect($package->days)
-        ->groupBy('city_id')
-        ->map(function ($days) {
-            $city = $days->first()->city;
+            ->groupBy('city_id')
+            ->map(function ($days) {
+                $city = $days->first()->city;
 
-            return [
-                'city'   => $city?->translation?->name ?? 'Unknown',
-                'nights' => max(1, $days->count() - 1),
-            ];
-        })
-        ->values();
+                return [
+                    'city'   => $city?->translation?->name ?? 'Unknown',
+                    'nights' => max(1, $days->count() - 1),
+                ];
+            })
+            ->values();
 
         //print_r($package->toArray());die;
 
@@ -449,9 +435,9 @@ class PackageController extends Controller
 
 
 
-       //use of this array for gallery images
-       $finalArray =  $this->finalArray($package);
-       // print_r($finalArray);die;
+        //use of this array for gallery images
+        $finalArray =  $this->finalArray($package);
+        // print_r($finalArray);die;
 
 
         //print_r($dayWiseOptions);die;
@@ -526,9 +512,8 @@ class PackageController extends Controller
 
 
         $filter_data = [];
-        $session_id_filter = "filter_package_".$package->id;
-        if(!empty(session($session_id_filter)))
-        {
+        $session_id_filter = "filter_package_" . $package->id;
+        if (!empty(session($session_id_filter))) {
             $filter_data = session($session_id_filter);
         }
 
@@ -653,7 +638,7 @@ class PackageController extends Controller
     {
         $language = current_lang();
 
-        if (!in_array($type, ['hotel', 'todo', 'event','transport'])) {
+        if (!in_array($type, ['hotel', 'todo', 'event', 'transport'])) {
             return response()->json([
                 'status'  => false,
                 'message' => 'Invalid item type'
@@ -788,7 +773,7 @@ class PackageController extends Controller
     {
         $package = Package::where('slug', $slug)->firstOrFail();
 
-          //use of this array for gallery images
+        //use of this array for gallery images
         $finalArray =  $this->finalArray($package);
 
         return view('frontend.package.partials.gallery-modal-content', compact(
@@ -796,6 +781,4 @@ class PackageController extends Controller
             'finalArray'
         ));
     }
-
-
 }
