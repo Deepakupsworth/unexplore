@@ -74,7 +74,6 @@ class DestinationController extends Controller
     public function index()
     {
         $language = app()->getLocale();
-
         Cache::forget("frontend_destinations_{$language}");
 
         [$favouriteCities, $otherCities] = Cache::remember(
@@ -87,21 +86,22 @@ class DestinationController extends Controller
 
                 /* ================= BASE QUERY ================= */
                 $citiesBaseQuery = City::with([
-                    'translation' => fn ($q) =>
-                        $q->where('language_code', $language),
+                    'translation' => fn($q) =>
+                    $q->where('language_code', $language),
                     'thumb',
                     'categories.translationData',
                 ])
-                ->withCount([
-                    'packageCities as package_count' => function ($q) {
-                        $q->whereHas(
-                            'package',
-                            fn ($p) => $p->where('status', 'active')
-                        );
-                    }
-                ]);
+                    ->withCount([
+                        'packageCities as package_count' => function ($q) {
+                            $q->whereHas(
+                                'package',
+                                fn($p) =>
+                                $p->where('status', 'active')
+                            );
+                        }
+                    ]);
 
-                /* ================= FAVOURITE CITIES (MAX 4) ================= */
+                /* ================= FAVOURITE CITIES ================= */
                 $favouriteCities = collect();
 
                 if ($favouriteTagId) {
@@ -110,14 +110,18 @@ class DestinationController extends Controller
                             $q->where('tags.id', $favouriteTagId);
                         })
                         ->latest()
-                        ->take(4)
+                        ->take(6)
                         ->get();
                 }
 
-                /* ================= OTHER CITIES (ALL CITIES, NO FILTER) ================= */
-                $otherCities = (clone $citiesBaseQuery)
+                /* ================= OTHER CITIES ================= */
+               // $remaining = 4 - $favouriteCities->count();
+
+                $otherCities =(clone $citiesBaseQuery)
                     ->latest()
-                    ->get();   // 🔥 No whereNotIn, no limit
+                    ->get();
+
+
 
                 return [$favouriteCities, $otherCities];
             }
