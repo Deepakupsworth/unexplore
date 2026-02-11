@@ -68,3 +68,20 @@ if (!function_exists('currency_show')) {
         return $currency->symbol . ' ' . number_format($converted, 2);
     }
 }
+if (!function_exists('currency_icon_path')) {
+
+    function currency_icon_path(?string $currencyCode = null): string
+    {
+        $currencyCode = $currencyCode
+            ?? session('currency')
+            ?? config('app.base_currency', 'SAR');
+
+        return match ($currencyCode) {
+            'SAR' => 'frontend/assets/icons/riyal.svg',
+            'USD' => 'frontend/assets/icons/usd.svg',
+            'EUR' => 'frontend/assets/icons/euro.svg',
+            'AED' => 'frontend/assets/icons/aed.svg',
+            default => 'frontend/assets/icons/riyal.svg',
+        };
+    }
+}

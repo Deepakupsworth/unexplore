@@ -27,10 +27,10 @@ class PackagePricingController extends Controller
 
         // dd($request->all());
         $request->validate([
-            'extra_persons.*.person_number' => 'required|integer|min:1',
-            'extra_persons.*.additional_price' => 'required|numeric|min:0',
-            'child_prices.*.min_age' => 'required|integer',
-            'child_prices.*.max_age' => 'required|integer',
+            'extra_persons.*.person_number'     => 'nullable|integer|min:1',
+            'extra_persons.*.additional_price'  => 'nullable|numeric|min:0',
+            'child_prices.*.min_age'            => 'nullable|integer',
+            'child_prices.*.max_age'            => 'nullable|integer',
         ]);
         DB::transaction(function () use ($request, $package) {
 
