@@ -70,9 +70,13 @@
 
                     <div>
                         <p class="text-sm text-slate-500">Total Amount</p>
-                        <p class="font-semibold text-primary-600">
-                            ₹{{ number_format($booking->booking_total_amount) }}
-                        </p>
+                        <div class="flex gap-2">
+                            <img src="{{ asset(currency_icon_path(null, 'light')) }}">
+                            <p class="font-semibold text-primary-600">
+                                {{ number_format($booking->booking_total_amount) }}
+                            </p>
+                        </div>
+
                     </div>
 
                 </div>
@@ -81,33 +85,72 @@
                 <div class="border-t pt-4">
                     <h5 class="font-semibold text-base mb-3">Itinerary Details</h5>
 
-                    @foreach($days as $day)
-                        <div class="mb-4 border rounded-lg p-3">
+                    @foreach ($booking->days as $day)
+                        <div class="mb-4 border rounded-lg p-4 bg-white shadow-sm">
 
-                            <p class="font-medium mb-2">
-                                Day {{ $day['day_number'] }} –
-                                {{ $day['city']['translation']['name'] ?? '—' }}
+                            {{-- Day Header --}}
+                            <p class="font-semibold mb-3 text-primary-600">
+                                Day {{ $day->day_number }}
+                                @if ($day->city_name)
+                                    – {{ $day->city_name }}
+                                @endif
                             </p>
 
-                            <div class="space-y-2 text-sm">
+                            {{-- Items --}}
+                            <div class="space-y-3">
 
-                                @foreach($day['items'] as $item)
-                                    <div class="flex justify-between items-center bg-slate-50 px-3 py-2 rounded">
-                                        <div class="capitalize font-medium">
-                                            {{ $item['item_type'] }}
+                                @foreach ($day->dayItems as $item)
+                                    @php
+                                        $meta = $item->meta_json ?? [];
+                                    @endphp
+
+                                    <div class="flex items-center justify-between bg-slate-50 p-3 rounded-lg">
+
+                                        {{-- LEFT: Image + Title --}}
+                                        <div class="flex items-center gap-3">
+
+                                            {{-- Image --}}
+                                            @if (!empty($meta['image_path']))
+                                                <img src="{{ asset('storage/' . $meta['image_path']) }}"
+                                                    class="w-14 h-14 object-cover rounded-md border">
+                                            @else
+                                                <div
+                                                    class="w-14 h-14 bg-gray-200 rounded-md flex items-center justify-center text-xs text-gray-500">
+                                                    No Image
+                                                </div>
+                                            @endif
+
+                                            {{-- Title + Type --}}
+                                            <div>
+                                                <p class="font-medium">
+                                                    {{ $item->title ?? ($meta['title'] ?? ucfirst($item->item_type)) }}
+                                                </p>
+
+                                                <p class="text-xs text-slate-500 capitalize">
+                                                    {{ $item->item_type }}
+                                                </p>
+                                            </div>
+
                                         </div>
 
-                                        <div class="text-slate-600">
-                                            {{ $item['start_time'] }} → {{ $item['end_time'] }}
+                                        {{-- RIGHT: Time --}}
+                                        <div class="text-sm text-slate-600">
+                                            @if ($item->start_time && $item->end_time)
+                                                {{ \Carbon\Carbon::parse($item->start_time)->format('h:i A') }}
+                                                →
+                                                {{ \Carbon\Carbon::parse($item->end_time)->format('h:i A') }}
+                                            @endif
                                         </div>
+
                                     </div>
                                 @endforeach
 
                             </div>
+
                         </div>
                     @endforeach
-
                 </div>
+
 
             </div>
         </div>
@@ -171,10 +214,9 @@
                             <header class="card-header flex justify-between">
                                 <h4 class="card-title">Payment Details</h4>
                                 {{-- @if ($booking->status === 'confirmed') --}}
-                                    <button class="btn btn-success mb-4" data-bs-toggle="modal"
-                                        data-bs-target="#paymentModal">
-                                        + Add Payment
-                                    </button>
+                                <button class="btn btn-success mb-4" data-bs-toggle="modal" data-bs-target="#paymentModal">
+                                    + Add Payment
+                                </button>
                                 {{-- @endif --}}
                             </header>
 
@@ -204,8 +246,12 @@
                                                         <x-admin.table.td>{{ ucfirst($payment->payment_method) }}</x-admin.table.td>
                                                         <x-admin.table.td>{{ $payment->transaction_id ?? '—' }}</x-admin.table.td>
                                                         <x-admin.table.td>
-                                                            {{ $payment->currency }}
-                                                            {{ number_format($payment->amount, 2) }}
+
+                                                            <div class="flex gap-2">
+                                                                <img src="{{ asset(currency_icon_path($payment->currency , 'light')) }}">
+                                                                <p>{{ number_format($payment->amount, 2) }}</p>
+                                                            </div>
+
                                                         </x-admin.table.td>
                                                         <x-admin.table.td>
                                                             {!! ui_badge(

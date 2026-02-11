@@ -151,8 +151,11 @@
 
         </div>
 
-        <hr>
+        <hr/>
 
+        <div id="drawerItinerary" class="mt-3"></div>
+
+        <hr/>
         <!-- Booking Details -->
         <p class="fw-600 text-black mb-3">Booking Details</p>
         <div class="d-flex gap-3 mb-2">

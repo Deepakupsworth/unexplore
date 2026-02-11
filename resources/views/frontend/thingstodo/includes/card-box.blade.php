@@ -1,4 +1,5 @@
-@php$t = $thing->translation;
+@php
+    $t = $thing->translation;
     $cityName = $thing->city?->translationData?->name;
     $categoryName = $thing->category?->translationData?->name;
 @endphp
