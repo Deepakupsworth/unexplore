@@ -3127,7 +3127,7 @@
 
   /* Package Listing Bar */
   .package-filter-bar-section {
-    position: sticky;
+    /* position: sticky; */
     top: 10px;
     z-index: 10;
   }
