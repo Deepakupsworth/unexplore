@@ -94,13 +94,13 @@
                             </div>
                         </div>
 
-                        <div class="event-map__info-card-row flex-v-center rounded-4 gap-1 mb-3">
+                        {{-- <div class="event-map__info-card-row flex-v-center rounded-4 gap-1 mb-3">
                             <div class="icon primary-text flex-center"><i class="fa-solid fa-cake-candles"></i></div>
                             <div>
                                 <p class="text-light2 p-small">{{ __('thing_detail.info.ages_label') }}</p>
                                 <p class="p-large fw-600">{{ __('thing_detail.info.ages_all') }}</p>
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="event-map__info-card-row flex-v-center rounded-4 gap-1">
                             <div class="icon primary-text flex-center"><i class="fa-regular fa-clock"></i></div>
