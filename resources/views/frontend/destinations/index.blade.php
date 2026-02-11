@@ -73,7 +73,9 @@
                                 <h5 class="explore-destinations__item-description">{{ $cites->translation->name }}</h5>
                             </div>
                             {{-- destinations.show --}}
+                            @if($cites->package_count > 0)
                             <a href="{{ route('packages.index') }}" class="btn btn-outline-primary rounded-pill"> {{__('destinations.card.packages') }} ({{$cites->package_count}}) <i class="fa-solid fa-angles-right"></i></a>
+                            @endif
                         </div>
                     </div>
                 </div>
