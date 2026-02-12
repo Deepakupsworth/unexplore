@@ -567,7 +567,7 @@
                     });
 
 
-                    console.log('Total Extra Price from Day Items:', totalExtra);
+                    // console.log('Total Extra Price from Day Items:', totalExtra);
 
                     window.PRICE_STATE.extras.dayItems = totalExtra;
 
@@ -585,17 +585,37 @@
         </script>
 
         <script>
+            // document.addEventListener('DOMContentLoaded', function() {
+
+            //     const dropdownEl = document.querySelector('.pkg-fil-bar__input-wrapper.dropdown');
+
+            //     dropdownEl.addEventListener('hidden.bs.dropdown', function() {
+
+            //         // 🔥 DROPDOWN CLOSED
+            //         // alert('close time');
+
+            //         storeTravellerSession();
+            //     });
+
+            // });
+
             document.addEventListener('DOMContentLoaded', function() {
 
+                // Desktop dropdown
                 const dropdownEl = document.querySelector('.pkg-fil-bar__input-wrapper.dropdown');
+                if (dropdownEl) {
+                    dropdownEl.addEventListener('hidden.bs.dropdown', function () {
+                        storeTravellerSession();
+                    });
+                }
 
-                dropdownEl.addEventListener('hidden.bs.dropdown', function() {
-
-                    // 🔥 DROPDOWN CLOSED
-                    // alert('close time');
-
-                    storeTravellerSession();
-                });
+                // Mobile modal
+                const mobileModal = document.getElementById('packageFilterModal');
+                if (mobileModal) {
+                    mobileModal.addEventListener('hidden.bs.modal', function () {
+                        storeTravellerSession();
+                    });
+                }
 
             });
         </script>
@@ -629,7 +649,7 @@
 
         <script>
             function storeTravellerSession() {
-                console.log('testing');
+                // console.log('testing');
 
                 fetch('/store-traveller-session', {
                     method: 'POST',
@@ -779,13 +799,13 @@
                     dayItemExtra;
 
                 /* ================= DEBUG (OPTIONAL) ================= */
-                console.log({
-                    basePrice,
-                    extraAdultTotal,
-                    childTotal,
-                    dayItemExtra,
-                    finalTotal
-                });
+                // console.log({
+                //     basePrice,
+                //     extraAdultTotal,
+                //     childTotal,
+                //     dayItemExtra,
+                //     finalTotal
+                // });
             }
         </script>
 
@@ -805,5 +825,9 @@
                 window.PRICE_STATE.extras.dayItems = totalExtra;
             }
         </script>
+
+
+
+
     @endpush
 @endsection

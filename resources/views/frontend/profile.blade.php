@@ -1071,7 +1071,7 @@
                     </div>
 
                     <!-- My Addresses -->
-                    <div class="tab-pane fade show active user-profile__box" id="user-addresses" role="tabpanel">
+                    <div class="tab-pane fade show user-profile__box" id="user-addresses" role="tabpanel">
                         <div class="user-profile__details-content">
                             <div
                                 class="user-profile__details-header white-bg p-3 d-flex justify-content-between align-items-center flex-sm-row flex-column gap-2">

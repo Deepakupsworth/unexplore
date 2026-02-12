@@ -58,40 +58,35 @@ if (!function_exists('header_destinations')) {
     function header_destinations()
     {
         $language = current_lang();
-        $favouriteTagId = \App\Models\Tag::where('slug', 'favourite')->value('id');
+
+        $baseQuery = \App\Models\City::with([
+            'translationData' => function ($q) use ($language) {
+                $q->select('id', 'name', 'city_id', 'language_code')
+                  ->where('language_code', $language);
+            }
+        ]);
 
         /* ================= FAVOURITES ================= */
-        if ($favouriteTagId) {
-            $favourites = \App\Models\City::with([
-                    'translationData' => function ($q) use ($language) {
-                        $q->select('id', 'name', 'city_id', 'language_code')
-                          ->where('language_code', $language);
-                    }
-                ])
-                ->whereHas('tags', function ($q) use ($favouriteTagId) {
-                    $q->where('tags.id', $favouriteTagId);
-                })
-                ->latest()
-                ->take(10)
-                ->get();
+        $favourites = (clone $baseQuery)
+            ->whereHas('tags', function ($q) {
+                $q->where('slug', 'favourite');
+            })
+            ->latest()
+            ->take(10)
+            ->get();
 
-            if ($favourites->isNotEmpty()) {
-                return $favourites;
-            }
+        if ($favourites->isNotEmpty()) {
+            return $favourites;
         }
 
         /* ================= FALLBACK ================= */
-        return \App\Models\City::with([
-                'translationData' => function ($q) use ($language) {
-                    $q->select('id', 'name', 'city_id', 'language_code')
-                      ->where('language_code', $language);
-                }
-            ])
+        return $baseQuery
             ->latest()
             ->take(5)
             ->get();
     }
 }
+
 
 
 

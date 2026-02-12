@@ -390,7 +390,7 @@ class BookingController extends Controller
             /* ===== PAYMENT ENTRY ===== */
             $paymentService->addOrUpdatePayment(
                 booking: $booking,
-                method: PaymentMethod::BANK,
+                method: PaymentMethod::BANK_TRANSFER,
                 amount: $finalPayable,
                 transactionId: $request->transaction_id ?? null,
                 note: 'Bank transfer initiated by user',

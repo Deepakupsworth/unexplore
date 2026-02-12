@@ -40,7 +40,8 @@ class AccountController extends Controller
 
                 'upcomingBookings' => Booking::with([
                     'snapshot',
-                    'days.dayItems'
+                    'days.dayItems',
+                    'payments'
                 ])
                     ->where('user_id', auth()->user()->id)
                     ->whereIn('status', ['pending', 'confirmed'])
@@ -49,7 +50,8 @@ class AccountController extends Controller
 
                 'cancelledBookings' => Booking::with([
                     'snapshot',
-                    'days.dayItems'
+                    'days.dayItems',
+                    'payments'
                 ])
                     ->where('user_id', auth()->user()->id)
                     ->where('status', 'cancelled')
@@ -58,7 +60,8 @@ class AccountController extends Controller
 
                 'completedBookings' => Booking::with([
                     'snapshot',
-                    'days.dayItems'
+                    'days.dayItems',
+                    'payments'
                 ])
                     ->where('user_id', auth()->user()->id)
                     ->where('status', 'completed')

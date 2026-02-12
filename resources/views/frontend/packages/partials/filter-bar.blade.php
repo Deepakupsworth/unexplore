@@ -117,6 +117,19 @@
 
         </div>
 
+
+        <div class="w-100 text-start package-filter-bar__mobile mb-2">
+
+                <div class="d-flex align-items-center gap-2">
+                    <p class="f-14 summaryMob" >{{ $package->base_persons }} {{ __('package.traveller.adults') }}</p>
+                    <div class="primary-text" id="package-filter-bar-edit-btn" data-bs-toggle="modal"
+                        data-bs-target="#packageFilterModal">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         {{-- ================= HIDDEN INPUTS (SERVER READY) ================= --}}
         <input type="hidden" name="start_date" id="startDateInput" form="packageCheckoutForm">
 
@@ -134,10 +147,111 @@
         <input type="hidden" name="child_total_price" id="childTotalPriceInput" form="packageCheckoutForm">
 
         <input type="hidden" name="final_total" id="finalTotalInput" form="packageCheckoutForm">
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="packageFilterModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="d-flex gap-2">
+                        <button type="button" class="pkg-fil-modal__close-btn" data-bs-dismiss="modal"
+                            aria-label="Close">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </button>
+                        <h5 class="modal-title" id="exampleModalLabel">Edit Your Search</h5>
+                    </div>
+                </div>
+                <div class="modal-body pkg-fil-modal-body">
+
+                    <div class="pkg-fil-bar__input-wrapper flex-center mb-2">
+                        <label>Starting Date</label>
+
+                        <input type="date" id="packageDateNew" value="{{ $filter_data['date'] ?? $minDate }}" min="{{ $minDate }}">
+
+                    </div>
+                    <div class="pkg-fil-bar__input-wrapper flex-center">
+                        <label>Starting From</label>
+                        <div class="w-100 d-flex justify-content-between align-items-center gap-1"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <p class="text-truncate summaryMob">{{ $package->base_persons }} {{ __('package.traveller.adults') }}</p>
+                            <i class="fa-solid fa-angle-down"></i>
+                        </div>
+                        <div class="dropdown-menu travellers-dropdown p-3 shadow-lg">
+
+                            <!-- Adults -->
+                            <div class="traveller-row d-flex justify-content-between align-items-center mb-3">
+                                <div>
+                                    <strong>Adults</strong>
+                                    <p class="text-muted small m-0">12+ Years</p>
+                                </div>
+
+                                <div class="traveller-counter d-flex align-items-center gap-2">
+                                    <button class="traveller-counter-btn minus" data-type="adult">
+                                        <i class="fa-solid fa-minus"></i>
+                                    </button>
+                                    <span  id="adultCountMob">{{ $package->base_persons }}</span>
+                                    <button class="traveller-counter-btn plus"  data-type="adult">
+                                        <i class="fa-solid fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Children -->
+                            <div class="traveller-row d-flex justify-content-between align-items-center mb-3">
+                                <div>
+                                    <strong>Children</strong>
+                                    <p class="text-muted small m-0">2–12 Years</p>
+                                </div>
+
+                                <div class="traveller-counter d-flex align-items-center gap-2">
+                                    <button class="traveller-counter-btn minus" data-type="child">
+                                        <i class="fa-solid fa-minus"></i>
+                                    </button>
+                                    <span  id="childCountMob">0</span>
+                                    <button class="traveller-counter-btn plus" data-type="child">
+                                        <i class="fa-solid fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+                    <?php /***
+                    <button
+                        class="btn btn-primary mt-3 w-100 btn-lg justify-content-center rounded-pill">Search</button> ***/ ?>
+                </div>
+            </div>
+        </div>
     </div>
+
 
     {{-- ================= FINAL JS ================= --}}
     <script>
+document.addEventListener('DOMContentLoaded', function() {
+
+    const dateNew  = document.getElementById('packageDateNew');
+    const dateMain = document.getElementById('packageDate');
+
+    if (!dateNew || !dateMain) return;
+
+    // When New Date Changes → Update Main
+    dateNew.addEventListener('change', function() {
+        dateMain.value = this.value;
+    });
+
+    // When Main Date Changes → Update New
+    dateMain.addEventListener('change', function() {
+        dateNew.value = this.value;
+    });
+
+});
+</script>
+
+ <script>
         (function() {
 
             const config = window.PACKAGE;
@@ -148,9 +262,14 @@
             let children = Number('{{ $filter_data['children'] ?? 0 }}');
 
 
-            const adultEl = document.getElementById('adultCount');
-            const childEl = document.getElementById('childCount');
+            let adultEl = document.getElementById('adultCount');
+            let childEl = document.getElementById('childCount');
+
+            const adultElMob = document.getElementById('adultCountMob');
+            const childElMob = document.getElementById('childCountMob');
+
             const summaryEl = document.getElementById('personSummary');
+            const summaryElMob = document.getElementsByClassName('summaryMob');
 
             function totalPersons() {
                 return adults + children;
@@ -159,11 +278,21 @@
             function calculateExtraAdult(extraAdults) {
                 let perPrice = 0;
 
-                config.extraAdultRules.forEach(rule => {
-                    if (extraAdults >= rule.person_number) {
-                        perPrice = rule.price;
-                    }
-                });
+                // config.extraAdultRules.forEach(rule => {
+                //     if (extraAdults >= rule.person_number) {
+                //         perPrice = rule.price;
+                //     }
+                // });
+
+
+                perPrice =
+                    Array.isArray(config.extraAdultRules)
+                        ? (config.extraAdultRules.find(
+                            r => r.person_number === Number(extraAdults)
+                        )?.price ?? config.pricePerPerson)
+                        : config.pricePerPerson;
+
+
 
                 return {
                     perPrice,
@@ -172,6 +301,8 @@
             }
 
             function calculateChild() {
+
+
                 if (!children || !config.childRules.length) {
                     return {
                         perPrice: 0,
@@ -179,19 +310,46 @@
                     };
                 }
 
-                const rule = config.childRules[0];
-                let perPrice = 0;
+                // const rule = config.childRules[0];
+                // let perPrice = 0;
 
-                if (rule.type === 'fixed') {
-                    perPrice = rule.value;
-                } else {
-                    perPrice = (config.pricePerPerson * rule.value) / 100;
+                // if (rule.type === 'fixed') {
+                //     perPrice = rule.value;
+                // } else {
+                //     perPrice = (config.pricePerPerson * rule.value) / 100;
+                // }
+
+                // new  code
+                let childPerPrice = config.pricePerPerson; // default fallback
+                let childTotal = 0;
+
+                if (children > 0) {
+
+                    const rules = Array.isArray(config.childRules) ? config.childRules : [];
+
+                    if (rules.length > 0) {
+
+                        const rule = rules[0]; // or find specific rule if needed
+
+                        if (rule.type === 'fixed') {
+                            childPerPrice = rule.value;
+                        } else if (rule.type === 'percentage') {
+                            childPerPrice = (config.pricePerPerson * rule.value) / 100;
+                        }
+                    }
+
+                    childTotal = childPerPrice * children;
                 }
 
                 return {
-                    perPrice,
-                    total: perPrice * children
+                    childPerPrice,
+                    total: childTotal
                 };
+
+                // return {
+                //     perPrice,
+                //     total: perPrice * children
+                // };
             }
 
             function updateHiddenFields() {
@@ -227,21 +385,42 @@
                 adultEl.textContent = adults;
                 childEl.textContent = children;
 
+
+
+                adultElMob.textContent = adults;
+                childElMob.textContent = children;
+
+
                 summaryEl.textContent =
                     `${adults} Adult${adults > 1 ? 's' : ''}` +
                     (children ? `, ${children} Child${children > 1 ? 'ren' : ''}` : '');
+
+                for (let i = 0; i < summaryElMob.length; i++) {
+                    summaryElMob[i].textContent = `${adults} Adult${adults > 1 ? 's' : ''}` +
+                    (children ? `, ${children} Child${children > 1 ? 'ren' : ''}` : '');
+
+                }
+
+
 
                 updateHiddenFields();
             }
 
             document.querySelectorAll('#packageFilterBar .traveller-counter-btn')
                 .forEach(btn => {
-                    btn.addEventListener('click', function() {
+                    btn.addEventListener('click', function(e) {
 
                         const type = btn.dataset.type;
                         const isPlus = btn.classList.contains('plus');
 
-                        if (isPlus && totalPersons() >= config.maxPersons) return;
+
+
+                       if (isPlus && totalPersons() >= config.maxPersons) {
+                        e.preventDefault();
+                            e.stopImmediatePropagation();
+                            return false;
+
+                       }
 
                         if (type === 'adult') {
                             if (isPlus) adults++;
