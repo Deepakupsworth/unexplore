@@ -38,19 +38,31 @@ class AccountController extends Controller
             /* ================= BOOKINGS (🔥 FIXED) ================= */
             'bookings' => view('frontend.account.tabs.bookings', [
 
-                'upcomingBookings' => Booking::with('snapshot')
+                'upcomingBookings' => Booking::with([
+                    'snapshot',
+                    'days.dayItems',
+                    'payments'
+                ])
                     ->where('user_id', auth()->user()->id)
                     ->whereIn('status', ['pending', 'confirmed'])
                     ->latest()
                     ->get(),
 
-                'cancelledBookings' => Booking::with('snapshot')
+                'cancelledBookings' => Booking::with([
+                    'snapshot',
+                    'days.dayItems',
+                    'payments'
+                ])
                     ->where('user_id', auth()->user()->id)
                     ->where('status', 'cancelled')
                     ->latest()
                     ->get(),
 
-                'completedBookings' => Booking::with('snapshot')
+                'completedBookings' => Booking::with([
+                    'snapshot',
+                    'days.dayItems',
+                    'payments'
+                ])
                     ->where('user_id', auth()->user()->id)
                     ->where('status', 'completed')
                     ->latest()

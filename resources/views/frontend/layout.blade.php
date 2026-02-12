@@ -37,6 +37,12 @@
         .exclusive-offers__carousel-price-box {
             margin-top: auto;
         }
+
+        .dest-banner__carousel-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
     </style>
     {{-- HEADER --}}
     @php

@@ -1,13 +1,13 @@
 @props(['thing'])
 
-<div class="dis-adventure__carousel-item swiper-slide">
+<div class="dis-adventure__carousel-item swiper-slide position-relative">
     <img src="{{ asset('storage/' . $thing->thumb->image_path) }}" alt="Adventure Image 1" class="img-fluid">
     <div class="dis-adventure__carousel-item-content">
         <div class="dis-adventure__carousel-item-top">
             <div class="badge carousel-badge"><i class="fa-solid fa-location-dot"></i> {{$thing?->city?->translationData?->name}}</div>
         </div>
         <div class="dis-adventure__carousel-item-bottom">
-            <a href="{{ route('things-to-do.show', $thing->slug) }}" class="text-white text-decoration-none">
+            <a href="{{ route('things-to-do.show', $thing->slug) }}" class="text-white text-decoration-none stretched-link">
                 <h6>{{ $thing->translation->name }}</h6>
             </a>
             <div class="dis-adventure__carousel-item-footer">

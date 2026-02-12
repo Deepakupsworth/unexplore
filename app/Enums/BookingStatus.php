@@ -14,12 +14,23 @@ enum BookingStatus: string
         return array_column(self::cases(), 'value');
     }
 
-    /**
-     * Human readable label
-     */
+    public static function options(): array
+    {
+        return collect(self::cases())
+            ->mapWithKeys(fn($case) => [
+                $case->value => $case->label()
+            ])
+            ->toArray();
+    }
+
     public function label(): string
     {
-        return ucfirst($this->value);
+        return match ($this) {
+            self::PENDING   => 'Pending',
+            self::CONFIRMED => 'Confirmed',
+            self::CANCELLED => 'Cancelled',
+            self::COMPLETED => 'Completed',
+        };
     }
 
     /**

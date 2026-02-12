@@ -117,11 +117,11 @@
 
                             <x-admin.table.td>
 
-                                {!! status_badge($booking->status) !!}
+                                {!! status_badge($booking->status->value) !!}
                             </x-admin.table.td>
 
                             <x-admin.table.td>
-                                {!! status_badge($booking->payment_status) !!}
+                                {!! status_badge($booking->payment_status->value) !!}
                             </x-admin.table.td>
 
                             <x-admin.table.td class="text-right">

@@ -1,12 +1,17 @@
 @php
-    function bookingStatusUI($status) {
+    function bookingStatusUI($status)
+    {
+        if ($status instanceof \App\Enums\BookingStatus) {
+            $status = $status->value;
+        }
+
         return match ($status) {
             'pending', 'confirmed' => ['Upcoming', ''],
             'cancelled' => ['Cancelled', 'bg-danger'],
             'completed' => ['Completed', 'bg-dark'],
-            default => ['Upcoming', ''],
         };
     }
+
 @endphp
 
 <div class="user-profile__details-content">
@@ -30,7 +35,7 @@
                             Upcoming
                         </button>
                         <button class="nav-link" data-bs-toggle="tab" data-bs-target="#cancelled">
-                            Canceled
+                            Cancelled
                         </button>
                         <button class="nav-link" data-bs-toggle="tab" data-bs-target="#completed">
                             Completed
@@ -51,7 +56,7 @@
                                 @include('frontend.account.partials.booking-card', [
                                     'booking' => $booking,
                                     'label' => $label,
-                                    'badgeClass' => $badgeClass
+                                    'badgeClass' => $badgeClass,
                                 ])
                             @empty
                                 <div class="col-12 text-center text-muted py-5">
@@ -70,7 +75,7 @@
                                 @include('frontend.account.partials.booking-card', [
                                     'booking' => $booking,
                                     'label' => $label,
-                                    'badgeClass' => $badgeClass
+                                    'badgeClass' => $badgeClass,
                                 ])
                             @empty
                                 <div class="col-12 text-center text-muted py-5">
@@ -89,7 +94,7 @@
                                 @include('frontend.account.partials.booking-card', [
                                     'booking' => $booking,
                                     'label' => $label,
-                                    'badgeClass' => $badgeClass
+                                    'badgeClass' => $badgeClass,
                                 ])
                             @empty
                                 <div class="col-12 text-center text-muted py-5">
@@ -105,4 +110,3 @@
         </div>
     </div>
 </div>
-

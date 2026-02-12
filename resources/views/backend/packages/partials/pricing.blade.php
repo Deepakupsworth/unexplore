@@ -45,7 +45,9 @@
 
         <div id="extraPersonBox">
             @foreach ($package->priceIncreasePersons as $i => $row)
-                <div class="grid grid-cols-3 gap-3 mb-2 price-row">
+                <div class="grid grid-cols-3 gap-3 mb-2 price-row"
+                     data-id="{{ $row->id }}"
+                     data-type="extra">
 
                     <div>
                         <label class="form-label">Extra Person Count</label>
@@ -63,12 +65,20 @@
                                disabled>
                     </div>
 
+                    <div class="flex items-end">
+                        <button type="button"
+                                class="btn btn-sm btn-outline-danger remove-row w-full">
+                            Remove
+                        </button>
+                    </div>
+
                     <input type="hidden"
                            name="extra_persons[{{ $i }}][id]"
                            value="{{ $row->id }}">
                 </div>
             @endforeach
         </div>
+
 
         <button type="button"
                 class="btn btn-sm btn-outline-primary mt-2"
@@ -81,7 +91,9 @@
 
         <div id="childPriceBox" class="space-y-4">
             @foreach ($package->childPrices as $i => $row)
-                <div class="border rounded-xl p-4 bg-slate-50 price-row">
+                <div class="border rounded-xl p-4 bg-slate-50 price-row"
+                     data-id="{{ $row->id }}"
+                     data-type="child">
 
                     <div class="flex justify-between items-center mb-3">
                         <h5 class="font-semibold text-slate-700">
@@ -142,6 +154,7 @@
                 </div>
             @endforeach
         </div>
+
 
         <button type="button"
                 class="btn btn-sm btn-outline-primary mt-2"

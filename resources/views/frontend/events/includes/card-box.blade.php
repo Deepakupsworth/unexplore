@@ -8,7 +8,7 @@
     $end_date = $event?->end_date ? \Carbon\Carbon::parse($event->end_date)->format('d M Y') : null;
 @endphp
 
-<div class="upcoming-event__carousel-item swiper-slide">
+<div class="upcoming-event__carousel-item swiper-slide position-relative">
     <div class="upcoming-event__carousel-item-img">
         <img src="{{ asset('storage/' . $event->thumb->image_path) }}" alt="Event" class="img-fluid">
 
@@ -36,7 +36,7 @@
         </button>
         <div class="d-flex justify-content-between mt-3">
             <h5 class="fw-bold text-ellipsis-1">{{ $t?->title }}</h5>
-            <a href="{{ route('event.show', ['slug' => $event->slug]) }}" class="p-large">
+            <a href="{{ route('event.show', ['slug' => $event->slug]) }}" class="p-large stretched-link">
                 <i class="fa-solid fa-arrow-right-long primary-text"></i>
             </a>
         </div>

@@ -579,11 +579,19 @@
       Book Now
       <i class="fa-solid fa-angles-right"></i>
      </a> -->
+                @guest
+                    <!-- When user is NOT logged in -->
+
+                    <a href="{{ route('login') }}" class="btn btn-outline-light rounded-pill">
+                        {{ __('header.login_signup') }}
+                    </a>
+                @endguest
+
                 </div>
                 <!-- When user is logged in -->
                 @if (!empty(@auth()->user()->id))
                     <div class="navbar__buttons d-flex flex-column gap-2 mt-3">
-                        <a href="#" class="text-white d-flex gap-2 align-items-center text-decoration-none">
+                        <a href="{{ url('/account') }}?tab=profile" class="text-white d-flex gap-2 align-items-center text-decoration-none">
                             <i class="fa-solid fa-circle-user"></i>
                             {{ Auth()?->user()->first_name }}
                         </a>

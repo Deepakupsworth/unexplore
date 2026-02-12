@@ -9,7 +9,7 @@
     </p>
 
     <div class="d-flex align-items-center gap-1 mb-2">
-        <img src="{{ asset('/frontend/assets/icons/riyal-primary.svg') }}" alt="Riyal">
+        <img src="{{ asset(currency_icon_path(null, 'primary')) }}" alt="Riyal">
         <h5 class="text-success fw-bold" id="grandTotalAmount">
             {{ number_format($checkout['final_total']) }}
         </h5>
@@ -34,12 +34,13 @@
         <div>
             <p class="fw-600 p-small">Total Basic Cost</p>
             <p class="p-small text-light2">
-                {{ number_format($checkout['base_price'] / max(1, $package->base_persons)) }}
-                x {{ $package->base_persons }} Travellers
+                {{-- {{ number_format($checkout['base_price'] / max(1, $package->base_persons)) }}
+                x --}}
+                {{ $package->base_persons }} Travellers
             </p>
         </div>
         <div class="d-flex align-items-center gap-1">
-            <img src="{{ asset('/frontend/assets/icons/riyal-light.svg') }}" alt="Riyal">
+            <img src="{{ asset(currency_icon_path(null, 'light')) }}" alt="Riyal">
             <p class="fw-600 text-light2">
                 {{ number_format($checkout['base_price']) }}
             </p>
@@ -52,12 +53,12 @@
             <div>
                 <p class="fw-600 p-small">Extra Adults</p>
                 <p class="p-small text-light2">
-                    {{ $checkout['extra_adults'] }}
-                    x {{ number_format($checkout['extra_adult_per_price']) }}
+                    {{ $checkout['extra_adults'] }} Adult
+                    {{-- x {{ number_format($checkout['extra_adult_per_price']) }} --}}
                 </p>
             </div>
             <div class="d-flex align-items-center gap-1">
-                <img src="{{ asset('/frontend/assets/icons/riyal-light.svg') }}" alt="Riyal">
+                <img src="{{ asset(currency_icon_path(null, 'light')) }}" alt="Riyal">
                 <p class="fw-600 text-light2">
                     {{ number_format($checkout['extra_adult_total_price']) }}
                 </p>
@@ -71,12 +72,13 @@
             <div>
                 <p class="fw-600 p-small">Children Price</p>
                 <p class="p-small text-light2">
-                    {{ number_format($checkout['child_per_price']) }} x
-                    {{ $checkout['total_persons'] - $checkout['adults'] }} Child
+                    {{-- {{ number_format($checkout['child_per_price']) }} x --}}
+                    {{ $checkout['total_persons'] - $checkout['adults'] }}
+                    Child
                 </p>
             </div>
             <div class="d-flex align-items-center gap-1">
-                <img src="{{ asset('/frontend/assets/icons/riyal-light.svg') }}" alt="Riyal">
+                <img src="{{ asset(currency_icon_path(null, 'light')) }}" alt="Riyal">
                 <p class="fw-600 text-light2">
                     {{ number_format($checkout['child_total_price']) }}
                 </p>
@@ -94,7 +96,7 @@
                 </p>
             </div>
             <div class="d-flex align-items-center gap-1">
-                <img src="{{ asset('/frontend/assets/icons/riyal-light.svg') }}" alt="Riyal">
+                <img src="{{ asset(currency_icon_path(null, 'light')) }}" alt="Riyal">
                 <p class="fw-600 text-light2">
                     {{ number_format($checkout['day_items_extra']) }}
                 </p>
@@ -113,7 +115,7 @@
         </div>
 
         <div class="d-flex align-items-center gap-1 text-success">
-            <img src="{{ asset('/frontend/assets/icons/riyal-light.svg') }}">
+            <img src="{{ asset(currency_icon_path(null, 'light')) }}">
             <p class="fw-600">
                 - <span id="couponDiscountAmount">0</span>
             </p>
@@ -129,7 +131,7 @@
             </p>
         </div>
         <div class="d-flex align-items-center gap-1">
-            <img src="{{ asset('/frontend/assets/icons/riyal-light.svg') }}" alt="Riyal">
+            <img src="{{ asset(currency_icon_path(null, 'light')) }}" alt="Riyal">
             <p class="fw-600 text-light2" id="totalPayableAmount">
                 {{ number_format($checkout['final_total']) }}
             </p>
