@@ -71,8 +71,8 @@
                 $('#package-results').html('<div class="text-center py-5">Loading...</div>');
             },
             success(res) {
-                setTimeout(()=>$('#package-results').html(res),500);
-                // $('#package-results').html(res);
+                // setTimeout(()=>$('#package-results').html(res),500);
+                $('#package-results').html(res);
             }
         });
     }
