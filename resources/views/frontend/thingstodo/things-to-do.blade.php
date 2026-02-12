@@ -269,7 +269,7 @@
                     <p class="section__description">{{ __('thing_detail.similar.description') }}</p>
                 </div>
                 <div class="section__header-CTA">
-                    <a href="#" class="btn btn-primary rounded-pill">
+                    <a href="{{ route('things.to.do') }}" class="btn btn-primary rounded-pill">
                         {{ __('common.view_all') }}
                         <i class="fa-solid fa-angles-right"></i>
                     </a>
@@ -296,7 +296,7 @@
                     <p class="section__description"> {{ __('thing_detail.related_packages.description') }}</p>
                 </div>
                 <div class="section__header-CTA">
-                    <a href="#" class="btn btn-primary rounded-pill">
+                    <a href="{{ route('packages.index') }}" class="btn btn-primary rounded-pill">
                         {{ __('common.view_all') }}
                         <i class="fa-solid fa-angles-right"></i>
                     </a>
