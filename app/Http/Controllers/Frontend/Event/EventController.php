@@ -148,8 +148,15 @@ class EventController extends Controller
             'city.translation',
             'category.translation'
         ])
-            ->where('slug', $request->slug)
-            ->firstOrFail();
+        ->withCount([
+            'packageDayItems as package_count' => function ($q) {
+                $q->whereHas('packageDay.package', function ($q2) {
+                    $q2->where('status', 'active');
+                });
+            }
+        ])
+        ->where('slug', $request->slug)
+        ->firstOrFail();
 
         // Similar Events (Random + Open + Skip Current)
         $similarEvents = Event::with([

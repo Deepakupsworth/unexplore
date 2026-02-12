@@ -135,6 +135,13 @@ class ToDoThingsController extends Controller
                 'category.translationData' => fn($q) =>
                 $q->where('language_code', $language),
             ])
+            ->withCount([
+                'packageDayItems as package_count' => function ($q) {
+                    $q->whereHas('packageDay.package', function ($q2) {
+                        $q2->where('status', 'active');
+                    });
+                }
+            ])
             ->firstOrFail();
 
         // 🔁 Rest remains SAME (no change needed)
