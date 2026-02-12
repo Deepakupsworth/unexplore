@@ -47,8 +47,8 @@ class Booking extends Model
         'travel_end_date'   => 'date',
         'snapshot_json' => 'array',
 
-        // 'payment_status' => PaymentStatus::class,
-        // 'status' => BookingStatus::class,
+        'payment_status' => PaymentStatus::class,
+        'status' => BookingStatus::class,
     ];
 
     /* ================= RELATIONS ======s=========== */

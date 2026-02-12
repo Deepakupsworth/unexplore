@@ -45,11 +45,11 @@
                         </li>
 
                         <!-- <li>
-                                <a href="javascript:void(0)" class="nav-link account-tab" data-tab="wishlist">
-                                    <i class="fa-solid fa-heart p-large"></i>
-                                    Wishlist
-                                </a>
-                            </li> -->
+                                        <a href="javascript:void(0)" class="nav-link account-tab" data-tab="wishlist">
+                                            <i class="fa-solid fa-heart p-large"></i>
+                                            Wishlist
+                                        </a>
+                                    </li> -->
 
                     </ul>
                 </div>
@@ -59,8 +59,9 @@
                     <div id="accountTabContent" class="user-profile__box">
                         {{-- AJAX CONTENT LOADS HERE --}}
                     </div>
-                </div>
 
+                </div>
+                @include('frontend.account.partials.booking-drawer')
             </div>
         </div>
     </section>
@@ -326,61 +327,204 @@
         }
     </script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
 
-        document.body.addEventListener('click', function (e) {
-            const btn = e.target.closest('.user-bookings__view-details-btn');
-            if (!btn) return;
+            document.body.addEventListener('click', function(e) {
 
-            // -------- BASIC INFO --------
-            bookingTitle.innerText = btn.dataset.title || '';
-            bookingRoute.innerText = btn.dataset.route || '';
-            bookingTotal.innerText = btn.dataset.total || '';
-            bookingDate.innerText  = btn.dataset.date || '';
-            thumbImage.src         = btn.dataset.thumb || '';
+                const btn = e.target.closest('.user-bookings__view-details-btn');
+                if (!btn) return;
 
-            // -------- RESET DRAWER --------
-            const amenitiesBox = document.getElementById('drawerAmenities');
-            amenitiesBox.innerHTML = '';
+                // -------- BASIC INFO --------
+                document.getElementById('drawerLabel').innerHTML = btn.dataset.label  || '';
+                document.getElementById('bookingTitle').innerText = btn.dataset.title || '';
+                document.getElementById('bookingRoute').innerText = btn.dataset.route || '';
+                document.getElementById('bookingTotal').innerText = btn.dataset.total || '';
+                document.getElementById('bookingDate').innerText = btn.dataset.date || '';
+                document.getElementById('thumbImage').src = btn.dataset.thumb || '';
 
-            // -------- SNAPSHOT DAYS --------
-            const days = JSON.parse(btn.dataset.days || '[]');
 
-            // -------- COLLECT ITEMS --------
-            const items = [];
-            days.forEach(day => {
-                (day.items || []).forEach(item => {
-                    items.push(item);
+                let badgeClass = btn.dataset.badgeClass || '';
+                const labelEl = document.getElementById('drawerLabel');
+                // 1️⃣ Pehle purani bg/text color classes remove karo
+                labelEl.classList.forEach(cls => {
+                    if (cls.startsWith('bg-') || cls.startsWith('text-')) {
+                        labelEl.classList.remove(cls);
+                    }
                 });
-            });
 
-            // -------- GROUP BY TYPE --------
-            const grouped = items.reduce((acc, item) => {
-                acc[item.item_type] = acc[item.item_type] || [];
-                acc[item.item_type].push(item);
-                return acc;
-            }, {});
+                // 2️⃣ bg- ko text- me convert karo
+                if (badgeClass.startsWith('bg-')) {
+                    badgeClass = badgeClass.replace('bg-', 'text-');
+                }
 
-            // -------- RENDER --------
-            const labels = {
-                hotel: count => `${count} Hotel Stays`,
-                event: count => `${count} Activities`,
-                todo:  count => `${count} Things To Do`,
-                transport: count => `${count} Transports`,
-            };
+                // 3️⃣ New class add karo
+                if (badgeClass) {
+                    labelEl.classList.add(badgeClass);
+                }
 
-            Object.keys(grouped).forEach(type => {
-                const p = document.createElement('p');
-                p.innerText = labels[type]
-                    ? labels[type](grouped[type].length)
-                    : `${grouped[type].length} ${type}`;
-                amenitiesBox.appendChild(p);
+
+                   // 🔥 Currency icon set
+                const icon = btn.dataset.currencyIcon || '';
+                const paymentsRaw = btn.dataset.payments || '[]';
+                let payments = [];
+
+                try {
+                    payments = JSON.parse(paymentsRaw);
+                } catch (e) {
+                    payments = [];
+                }
+
+
+                const paymentItems = payments.map((item, index) => {
+
+                let methodLabel = formatLabel(item.payment_method)|| '-';
+                let txnId = item.transaction_id ? '#' + item.transaction_id : '';
+
+                return `
+                    <div class="d-flex gap-3 mb-2">
+                        <img src="/frontend/assets/icons/drag-vertical.svg">
+                        <div class="booking-details__item">
+                            <span class="booking-details__item-title">Payment Type</span>
+                            <span class="fw-500 d-flex gap-3">
+                                <span class="text-black fw-600">:</span>
+                                ${methodLabel}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-3 mb-2">
+                        <img src="/frontend/assets/icons/drag-vertical.svg">
+                        <div class="booking-details__item">
+                            <span class="booking-details__item-title">Transaction ID</span>
+                            <span class="fw-500 d-flex gap-3">
+                                <span class="text-black fw-600">:</span>
+                                ${txnId}
+                            </span>
+                        </div>
+                    </div>
+                `;
+
+                }).join(''); // 🔥 IMPORTANT
+
+                document.getElementById('transactionItem').innerHTML = paymentItems;
+
+
+                document.getElementById('bookingCurrencyIcon').innerHTML =
+                icon ? `<img src="${icon}">` : '';
+
+                const itineraryBox = document.getElementById('drawerItinerary');
+                itineraryBox.innerHTML = '';
+
+                const days = JSON.parse(btn.dataset.days || '[]');
+
+                days.forEach(day => {
+
+                    const dayWrapper = document.createElement('div');
+                    dayWrapper.classList.add('mb-4');
+
+                    const dayTitle = document.createElement('h6');
+                    dayTitle.classList.add('fw-600', 'mb-2');
+                    dayTitle.innerText =
+                        `Day ${day.day_number} - ${day.city?.translation?.name || ''}`;
+
+                    dayWrapper.appendChild(dayTitle);
+
+                    (day.items || []).forEach(item => {
+
+                        let title = '';
+                        let imagePath = '';
+
+                        // 🔥 TYPE BASED EXTRACTION
+                        switch (item.item_type) {
+
+                            case 'hotel':
+                                title = item.hotel?.translation?.name || 'Hotel';
+                                imagePath = item.hotel?.thumb?.image_path;
+                                break;
+
+                            case 'event':
+                                title = item.event?.translation?.title || 'Event';
+                                imagePath = item.event?.thumb?.image_path;
+                                break;
+
+                            case 'todo':
+                                title = item.todo?.translation?.name || 'Activity';
+                                imagePath = item.todo?.thumb?.image_path;
+                                break;
+
+                            case 'transport':
+                                title = item.transport?.translation?.name || 'Transport';
+                                imagePath = item.transport?.thumb?.image_path;
+                                break;
+
+                            default:
+                                title = item.item_type;
+                        }
+
+                        const itemRow = document.createElement('div');
+                        itemRow.classList.add('d-flex', 'align-items-center', 'gap-3',
+                            'mb-2', 'p-2', 'bg-light', 'rounded');
+
+                        // IMAGE
+                        const img = document.createElement('img');
+                        img.style.width = '50px';
+                        img.style.height = '50px';
+                        img.style.objectFit = 'cover';
+                        img.style.borderRadius = '8px';
+
+                        img.src = imagePath ?
+                            `/storage/${imagePath}` :
+                            '/frontend/assets/default.jpg';
+
+                        // INFO
+                        const info = document.createElement('div');
+
+                        const titleDiv = document.createElement('div');
+                        titleDiv.classList.add('fw-500');
+                        titleDiv.innerText = title;
+
+                        const timeDiv = document.createElement('div');
+                        timeDiv.classList.add('small', 'text-muted');
+
+                        if (item.start_time && item.end_time) {
+                            timeDiv.innerText =
+                                formatTime(item.start_time) +
+                                ' → ' +
+                                formatTime(item.end_time);
+                        }
+
+                        info.appendChild(titleDiv);
+                        info.appendChild(timeDiv);
+
+                        itemRow.appendChild(img);
+                        itemRow.appendChild(info);
+
+                        dayWrapper.appendChild(itemRow);
+                    });
+
+                    itineraryBox.appendChild(dayWrapper);
+                });
+
+                function formatTime(timeString) {
+                    const date = new Date("1970-01-01T" + timeString);
+                    return date.toLocaleTimeString([], {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                }
+
             });
 
         });
 
-    });
-    </script>
+        function formatLabel(value) {
+            if (!value) return '-';
 
+            return value
+                .replace(/_/g, ' ')              // bank_transfer → bank transfer
+                .replace(/\b\w/g, c => c.toUpperCase()); // Bank Transfer
+        }
+
+    </script>
 @endpush

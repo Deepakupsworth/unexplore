@@ -16,7 +16,7 @@ class BookingPayment extends Model
     protected $fillable = [
         'booking_id',
         'payment_method',
-        'bank_name', 
+        'bank_name',
         'transaction_id',
         'gateway_reference',
         'currency',
@@ -28,8 +28,8 @@ class BookingPayment extends Model
     protected $casts = [
         'amount'       => 'decimal:2',
         'payload_json' => 'array',
-        // 'payment_method' => PaymentMethod::class,
-        // 'status' => PaymentStatus::class,
+        'payment_method' => PaymentMethod::class,
+        'status' => PaymentStatus::class,
     ];
 
     /**

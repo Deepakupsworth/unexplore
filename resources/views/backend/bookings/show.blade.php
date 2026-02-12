@@ -167,13 +167,13 @@
                 {{-- Booking Status --}}
                 <div>
                     <p class="text-sm text-slate-500 mb-1">Booking Status</p>
-                    {!! status_badge($booking->status) !!}
+                    {!! status_badge($booking->status->value) !!}
                 </div>
 
                 {{-- Payment Status --}}
                 <div>
                     <p class="text-sm text-slate-500 mb-1">Payment Status</p>
-                    {!! status_badge($booking->payment_status) !!}
+                    {!! status_badge($booking->payment_status->value) !!}
                 </div>
 
                 {{-- ACTIONS --}}
@@ -187,22 +187,20 @@
                             <input type="hidden" name="type" value="booking">
 
                             <select name="status" class="form-control mb-2" required>
-                                <option value="pending" @selected($booking->status === 'pending')>
-                                    Pending
-                                </option>
 
-                                <option value="confirmed" @selected($booking->status === 'confirmed')>
-                                    Confirmed
-                                </option>
+                                @foreach(\App\Enums\BookingStatus::cases() as $status)
 
-                                <option value="cancelled" @selected($booking->status === 'cancelled')>
-                                    Cancelled
-                                </option>
+                                    <option value="{{ $status->value }}"
+                                        @selected($booking->status?->value === $status->value)>
 
-                                <option value="completed" @selected($booking->status === 'completed')>
-                                    Completed
-                                </option>
+                                        {{ $status->label() }}
+
+                                    </option>
+
+                                @endforeach
+
                             </select>
+
 
                             <button class="btn btn-dark w-full">
                                 Update Booking Status
@@ -243,7 +241,7 @@
                                             <x-admin.table.tbody>
                                                 @foreach ($booking->payments as $payment)
                                                     <x-admin.table.tr>
-                                                        <x-admin.table.td>{{ ucfirst($payment->payment_method) }}</x-admin.table.td>
+                                                        <x-admin.table.td>{{$payment->payment_method->label() }}</x-admin.table.td>
                                                         <x-admin.table.td>{{ $payment->transaction_id ?? '—' }}</x-admin.table.td>
                                                         <x-admin.table.td>
 
@@ -254,16 +252,7 @@
 
                                                         </x-admin.table.td>
                                                         <x-admin.table.td>
-                                                            {!! ui_badge(
-                                                                $payment->status,
-                                                                match ($payment->status) {
-                                                                    'paid' => 'success',
-                                                                    'failed' => 'danger',
-                                                                    'refunded' => 'warning',
-                                                                    'manual' => 'info',
-                                                                    default => 'gray',
-                                                                },
-                                                            ) !!}
+                                                            {!! ui_badge($payment->status->value) !!}
                                                         </x-admin.table.td>
                                                         <x-admin.table.td>
                                                             {{ $payment->created_at->format('d M Y') }}
@@ -384,12 +373,17 @@
 
                             <!-- BODY -->
                             <div class="modal-body space-y-3">
+                                <select name="payment_method" id="modal_payment_method">
+                                    @foreach(\App\Enums\PaymentMethod::options() as $value => $label)
+                                        <option value="{{ $value }}">{{ $label }}</option>
+                                    @endforeach
+                                </select>
 
-                                <select name="payment_method" id="modal_payment_method" class="form-control" required>
+                                {{-- <select name="payment_method" id="modal_payment_method" class="form-control" required>
                                     <option value="cash">Cash</option>
                                     <option value="bank">Bank Transfer</option>
                                     <option value="manual">Manual</option>
-                                </select>
+                                </select> --}}
 
                                 <div id="modal_bank_field" style="display:none;">
                                     <input type="text" name="bank_name" id="modal_bank_name" class="form-control"
@@ -403,13 +397,22 @@
 
                                 <textarea name="note" id="modal_note" class="form-control" placeholder="Admin note"></textarea>
 
-                                <select name="status" id="modal_payment_status" class="form-control" required>
+                                {{-- <select name="status" id="modal_payment_status" class="form-control" required>
                                     <option value="pending">Pending</option>
                                     <option value="paid">Paid</option>
                                     <option value="failed">Failed</option>
                                     <option value="refunded">Refunded</option>
                                     <option value="partial_refund">Partial Refund</option>
+                                </select> --}}
+
+                                <select name="status" id="modal_payment_status" class="form-control" required>
+                                    @foreach(\App\Enums\PaymentStatus::options() as $value => $label)
+                                        <option value="{{ $value }}">
+                                            {{ $label }}
+                                        </option>
+                                    @endforeach
                                 </select>
+
 
                             </div>
 
@@ -432,7 +435,7 @@
             <!-- END: Modals -->
         </div>
 
-
+    </div>
         <script>
             document.getElementById('payment_method')?.addEventListener('change', function() {
                 alert('Payment method changed to: ' + this.value);
@@ -495,7 +498,5 @@
 
             });
         </script>
-
-
 
     @endsection

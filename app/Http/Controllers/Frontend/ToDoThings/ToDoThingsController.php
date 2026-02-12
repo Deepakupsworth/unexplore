@@ -153,6 +153,8 @@ class ToDoThingsController extends Controller
                 }
             ])
             ->orderByDesc('package_count')
+            ->latest()
+            ->take(12)
             ->get();
 
         $categories = Category::query()

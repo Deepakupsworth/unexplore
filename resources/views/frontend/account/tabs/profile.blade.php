@@ -113,13 +113,12 @@
                     </span>
                 </div>
 
-                {{-- SAVE --}}
-                <div class="mt-3">
-                    <button class="btn btn-primary rounded-pill">
-                        Save Changes
-                    </button>
-                </div>
-
+            </div>
+            {{-- SAVE --}}
+            <div class="mt-3 d-flex justify-content-end">
+                <button class="btn btn-primary rounded-pill">
+                    Save Changes
+                </button>
             </div>
         </form>
     </div>

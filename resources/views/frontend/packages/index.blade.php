@@ -1,4 +1,26 @@
 @extends('frontend.layout')
+<style>
+    #package-results {
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .results-loading {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    .results-loaded {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .loading-skeleton {
+        padding: 60px 0;
+        text-align: center;
+        font-weight: 600;
+        color: #999;
+    }
+</style>
 
 @section('content')
     @include('frontend.packages.partials.banner')
@@ -49,7 +71,8 @@
                 $('#package-results').html('<div class="text-center py-5">Loading...</div>');
             },
             success(res) {
-                $('#package-results').html(res);
+                setTimeout(()=>$('#package-results').html(res),500);
+                // $('#package-results').html(res);
             }
         });
     }
