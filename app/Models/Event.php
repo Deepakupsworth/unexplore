@@ -117,4 +117,5 @@ class Event extends Model
     {
         return $this->morphToMany(Tag::class, 'taggable');
     }
+
 }

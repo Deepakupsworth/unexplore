@@ -49,6 +49,14 @@
                 <h5>{{ $event->translation->sub_title }}.</h5>
 
                 <div class="dest-details-banner__btn-group">
+                    @if($event->package_count > 0)
+                        <a href="{{ route('packages.index', ['event_id' => $event->id]) }}"
+                        class="btn btn-outline-light rounded-pill">
+                        {{ __('destination_details.banner.related_packages') }}
+                            <strong>({{ $event->package_count }})</strong>
+                        </a>
+                    @endif
+
                     @if ($currentEvent?->gallery && $currentEvent?->gallery->count() > 0)
                         <button class="btn btn-primary rounded-pill" data-bs-toggle="modal"
                             data-bs-target="#eventGalleryModal">{{ __('thing_detail.banner.see_images') }}</button>

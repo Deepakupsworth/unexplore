@@ -19,7 +19,7 @@
             </div>
             <div class="position-relative mt-4 gallery-modal-carousel-container">
                 <div class="gallery-modal-carousel-wrapper swiper">
-                    <div class="swiper-wrapper">
+                    <div class="swiper-wrapper gap-2">
                         @foreach ($currentEvent->gallery as $img)
                             <div class="pkg-details__banner-carousel-item swiper-slide">
                                 <img src="{{ asset('storage/' . $img->image_path) }}" alt="Gallery Image"

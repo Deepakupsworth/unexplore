@@ -45,6 +45,14 @@
                 <img src="{{ asset('frontend/assets/hero-banner-vision.png') }}" alt="Vision 2030"
                     class="dest-details-banner__vision d-none-sm d-none-md">
                 <div class="dest-details-banner__btn-group">
+                    @if($thing->package_count > 0)
+                        <a href="{{ route('packages.index', ['todo_id' => $thing->id]) }}"
+                        class="btn btn-outline-light gap-1 rounded-pill">
+                            {{ __('destination_details.banner.related_packages') }}
+                            <strong>({{ $thing->package_count }})</strong>
+                        </a>
+                    @endif
+
                     @if ($currentThing?->gallery && $currentThing?->gallery->count() > 0)
                         <button class="btn btn-primary rounded-pill" data-bs-toggle="modal"
                             data-bs-target="#galleryModal">{{ __('thing_detail.banner.see_images') }}</button>
@@ -53,7 +61,7 @@
             </div>
         </div>
     </section>
-    {{-- @dd($thing) --}}
+    {{-- @dd($thing->package_count ) --}}
 
 
     <!-- 2. THING TO DO NATURE: DESCRIPTION -->
@@ -336,11 +344,11 @@
                 </div>
                 <div class="position-relative mt-4 gallery-modal-carousel-container">
                     <div class="gallery-modal-carousel-wrapper swiper">
-                        <div class="swiper-wrapper">
+                        <div class="swiper-wrapper gap-2">
                             @foreach ($currentThing->gallery as $img)
                                 <div class="pkg-details__banner-carousel-item swiper-slide">
                                     <img src="{{ asset('storage/' . $img->image_path) }}" alt="Gallery Image"
-                                        class="img-fluid w-100">
+                                        class="img-fluid w-100 mr-2">
                                 </div>
                             @endforeach
                         </div>
@@ -378,4 +386,5 @@
             </div>
         </div>
     </div>
+
 @endsection
