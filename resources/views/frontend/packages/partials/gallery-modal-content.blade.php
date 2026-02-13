@@ -101,9 +101,9 @@
                                     </div>
                                 </div> -->
 
-                         <div class="gallery-modal-section" data-section="port-blair">
+                         <div class="gallery-modal-section mb-2" data-section="port-blair">
                              <!-- IMAGE GRID PLACEHOLDER -->
-                             <h5 class="fw-bold">Image</h5>
+                             <h5 class="fw-bold mb-2">Image</h5>
                              <!-- <p class="text-muted small mt-1 mb-3">Port Blair</p> -->
 
                              <div class="gallery-image-grid">
@@ -144,7 +144,7 @@
                                      <h5 class="fw-bold">{{ $typeData['name'] }}</h5>
                                      <p class="text-muted small mt-1 mb-3">Image</p>
 
-                                     <div class="gallery-image-grid">
+                                     <div class="gallery-image-grid mb-2">
                                         @if(isset($typeData['thumb']) && isset($typeData['thumb']->image_path))
                                          <div class="gallery-img-box">
                                              <img class="img-fluid"
@@ -154,7 +154,7 @@
                                         @endif
                                      </div>
 
-                                     <p class="text-muted small mt-1 mb-3">Gallery</p>
+                                     <p class="text-muted small mt-1 mb-2">Gallery</p>
                                      <div class="gallery-image-grid">
                                          @foreach ($typeData['gallery'] as $todoGallery)
                                              <div class="gallery-img-box">

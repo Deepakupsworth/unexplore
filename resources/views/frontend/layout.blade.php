@@ -50,6 +50,11 @@
         padding-top: 8px;
         padding-bottom: 8px;
     }
+
+    .upcoming-event__carousel-item-img img{
+        width: 100%;
+    }
+
     </style>
     {{-- HEADER --}}
     @php

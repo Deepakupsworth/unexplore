@@ -12,8 +12,7 @@ use App\Http\Controllers\Controller;
     }
 
     public function detail(){
-        return view('frontend.blog-details');
+        return view('frontend.blogs.blog-details');
     }
-
 
 }

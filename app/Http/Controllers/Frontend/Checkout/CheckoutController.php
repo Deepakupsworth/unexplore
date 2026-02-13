@@ -49,7 +49,42 @@ class CheckoutController extends Controller
     {
         $checkout = session('checkout');
 
-        // dd($checkout);
+        // session()->forget('checkout_travellers');
+
+        /* ---------------------------------------------------
+        | Basic Counts
+        --------------------------------------------------- */
+
+        $adultCount = (int) ($checkout['adults'] ?? 0);
+        $totalTravellers = (int) ($checkout['total_persons'] ?? 0);
+        $childCount = max(0, $totalTravellers - $adultCount);
+
+        $sessionTravellers = session('checkout_travellers', []);
+
+        /* ---------------------------------------------------
+        | Build Traveller Slots
+        --------------------------------------------------- */
+
+        $travellerSlots = [];
+
+        for ($i = 0; $i < $totalTravellers; $i++) {
+
+            $type = $i < $adultCount ? 'adult' : 'child';
+
+            $travellerSlots[] = [
+                'type' => $type,
+                'data' => $sessionTravellers[$i] ?? null
+            ];
+        }
+
+        $travellers = collect(range(0, $totalTravellers - 1))
+            ->map(function ($index) use ($sessionTravellers) {
+                return [
+                    'type' => $index < 2 ? 'adult' : 'child', // example logic
+                    'data' => $sessionTravellers[$index] ?? null
+                ];
+            });
+
 
         if (!$checkout || empty($checkout['slug'])) {
             abort(404, 'Checkout session expired');
@@ -265,17 +300,56 @@ class CheckoutController extends Controller
         /* ================= DAY ITEM SESSION ================= */
         $sessionItems = session("package_day_items.{$package->id}", []);
 
-        return view('frontend.checkout.index', compact(
-            'package',
-            'travellers',
-            'checkout',
-            'allHotels',
-            'allTodos',
-            'allEvents',
-            'allTransports',
-            'dayWiseOptions',
-            'sessionItems',
-            'coupons'
-        ));
+        return view(
+            'frontend.checkout.index',
+            array_merge(
+                compact(
+                    'package',
+                    'travellers',
+                    'checkout',
+                    'allHotels',
+                    'allTodos',
+                    'allEvents',
+                    'allTransports',
+                    'dayWiseOptions',
+                    'sessionItems',
+                    'coupons'
+                ),
+                [
+                    'adultCount' => $adultCount,
+                    'childCount' => $childCount,
+                    'travellerSlots'   => $travellerSlots,
+                    'sessionTravellers' => $sessionTravellers,
+                    'totalTravellers'  => $totalTravellers,
+                ]
+            )
+        );
+    }
+
+
+    public function searchTraveller(Request $request)
+    {
+        $query = $request->q;
+
+        $travellers = Traveller::where('user_id', auth()->id()) // 🔒 FILTER BY LOGIN USER
+            ->where(function ($q) use ($query) {
+                $q->where('first_name', 'like', "%{$query}%")
+                    ->orWhere('last_name', 'like', "%{$query}%");
+            })
+            ->whereNull('deleted_at') // if soft delete
+            ->get();
+
+        return response()->json($travellers);
+    }
+
+
+
+    public function updateTravellerSession(Request $request)
+    {
+        session()->put('checkout_travellers', $request->travellers);
+
+        return response()->json([
+            'success' => true
+        ]);
     }
 }

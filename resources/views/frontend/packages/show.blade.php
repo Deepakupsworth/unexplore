@@ -324,12 +324,7 @@
 
                     </div>
 
-                    <div class="card pkg-details__pricing-card mt-3">
-                        <p class="p-large">{{ __('package.help.title') }}</p>
-                        <button class="btn btn-outline-secondary rounded-pill fw-600 mt-3 pkg-details__get-more-help-btn">
-                            {{ __('package.help.cta') }}
-                        </button>
-                    </div>
+                    <x-frontend.help-card />
 
                     <div class="mt-4">
                         <p>{{ __('package.share') }}</p>

@@ -27,7 +27,7 @@
 
                     @if ($totalTravellers > 0)
                         <div class="d-flex gap-2 p-small align-items-center">
-                            {{-- <p>1 Room</p> --}}
+
                             <div class="vertical-divider h-75"></div>
                             <p>{{ $adultCount }} Adult{{ $adultCount !== 1 ? 's' : '' }}</p>
                             @if ($childCount > 0)
@@ -46,6 +46,8 @@
                             $traveller = $slot['data'];
                         @endphp
 
+                        {{-- @dd($traveller) --}}
+
                         <div class="d-flex justify-content-between align-items-center checkout-traveller-header">
 
                             {{-- LEFT --}}
@@ -61,44 +63,61 @@
                                             ({{ ucfirst($slot['type']) }})
                                         </span>
                                     </h6>
-
-                                    @if ($traveller)
-                                        <p class="p-small fw-600 mb-0">
-                                            {{ $traveller->first_name }}
-                                            {{ $traveller->last_name }}
+                                    <div class="d-flex gap-1">
+                                        {{-- ✅ NAME (JS UPDATE TARGET) --}}
+                                        <p class="p-small fw-600 mb-0 traveller-name" data-slot="{{ $index }}">
+                                            {{ $traveller['first_name'] ?? '' }}
+                                            {{ $traveller['last_name'] ?? '' }}
                                         </p>
-                                    @else
-                                        <p class="text-danger p-small mb-0">
+
+
+
+                                        {{-- ✅ MISSING TEXT (JS HIDE TARGET) --}}
+                                        <p class="text-danger p-small mb-0 traveller-missing"
+                                            data-slot="{{ $index }}"
+                                            @if ($traveller) style="display:none" @endif>
                                             Traveller details missing
                                         </p>
-                                    @endif
+
+                                        {{-- REMOVE BUTTON --}}
+                                        <button type="button"
+                                            class="p-0 border-0 bg-transparent text-danger remove-traveller"
+                                            data-slot="{{ $index }}"
+                                            @if (!$traveller) style="display:none" @endif>
+                                            <i class="fa-solid fa-circle-xmark"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
 
                             {{-- RIGHT --}}
                             <div class="flex-center gap-3">
-                                @if ($traveller)
-                                    <div class="flex-center gap-1 text-success">
-                                        <i class="fa-solid fa-circle-check"></i>
-                                        <p class="p-small fw-500 mb-0">Traveller Added</p>
-                                    </div>
 
-                                    <button class="btn btn-outline-primary rounded-pill fw-500" data-bs-toggle="modal"
-                                        data-bs-target="#travellerModal" data-id="{{ $traveller->id }}">
-                                        Update
-                                    </button>
-                                @else
-                                    <button class="btn btn-outline-primary rounded-pill fw-500" data-bs-toggle="modal"
-                                        data-bs-target="#travellerModal" data-type="{{ $slot['type'] }}">
-                                        Add Traveller
-                                    </button>
-                                @endif
+                                {{-- ✅ STATUS CONTAINER (JS UPDATE TARGET) --}}
+                                <div class="traveller-status" data-slot="{{ $index }}">
+                                    @if ($traveller)
+                                        <div class="flex-center gap-1 text-success">
+                                            <i class="fa-solid fa-circle-check"></i>
+                                            <p class="p-small fw-500 mb-0">Traveller Added</p>
+                                        </div>
+                                    @endif
+                                </div>
+
+                                {{-- ✅ MODAL BUTTON --}}
+                                <button type="button"
+                                    class="btn btn-outline-primary rounded-pill fw-500 open-traveller-modal"
+                                    data-bs-toggle="modal" data-bs-target="#travellerModal"
+                                    data-slot="{{ $index }}" data-type="{{ $slot['type'] }}">
+                                    {{ $traveller ? 'Update' : 'Add Traveller' }}
+                                </button>
+
                             </div>
 
                         </div>
                         <hr>
                     @endforeach
                 </div>
+
 
                 {{-- ================= CONTACT DETAILS (UNCHANGED) ================= --}}
                 <div class="booking-contact mt-4">
@@ -108,7 +127,8 @@
                     <div class="row g-3 mb-4">
                         <div class="col-md-4">
                             <label class="form-label small mb-1">Email</label>
-                            <input name="contact_email" required class="form-control" placeholder="Enter email">
+                            <input type="email" name="contact_email" required class="form-control"
+                                placeholder="Enter email">
                         </div>
                         {{--
                 <div class="col-md-4">
@@ -118,9 +138,12 @@
 
                         <div class="col-md-4">
                             <label class="form-label small mb-1">Mobile</label>
-                            <input name="contact_mobile" required type="text" class="form-control"
-                                placeholder="Enter here">
+                            <input name="contact_mobile" type="tel" class="form-control"
+                                placeholder="05XXXXXXXX or +9665XXXXXXXX" required
+                                pattern="^(\+966|0)?5[0-9]{1}[\s\-()]?[0-9]{3}[\s\-()]?[0-9]{4}$" inputmode="tel"
+                                title="Enter valid Saudi mobile number">
                         </div>
+
                     </div>
 
                     <p class="fw-600 mb-2">Special Requests</p>
