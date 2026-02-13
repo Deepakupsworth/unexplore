@@ -1,17 +1,9 @@
 @extends('frontend.layout')
 @section('content')
-    @php
-        $travellerSlots = collect($travellers);
-
-        $totalTravellers = $travellerSlots->count();
-        $adultCount = $travellerSlots->where('type', 'adult')->count();
-        $childCount = $travellerSlots->where('type', 'child')->count();
-    @endphp
-
     <script>
         window.CHECKOUT = {
             adults: {{ (int) ($checkout['adults'] ?? 0) }},
-            travellers: @json($travellerSlots->values())
+            travellers: @json($travellerSlots)
         };
     </script>
 
@@ -31,7 +23,7 @@
 
     <section class="checkout-section">
         <div class="container">
-            <form method="POST" action="{{ route('checkout.book') }}">
+            <form method="POST" action="{{ route('checkout.book') }}" id="checkoutForm">
                 @csrf
                 <input type="hidden" name="travellers_completed" id="travellers_completed" value="0">
                 <input type="hidden" name="applied_coupon_code" id="appliedCouponInput">
@@ -97,13 +89,10 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
-                <form method="POST" id="travellerForm">
-
-                    @csrf
-
-                    <input type="hidden" name="traveller_id" id="traveller_id">
+                <div id="travellerForm">
 
                     <div class="modal-body">
+                        <input type="hidden" id="current_traveller_index">
 
                         <!-- TABS -->
                         <div class="d-flex traveller-tabs gap-3 mb-3 flex-wrap">
@@ -131,6 +120,13 @@
                             @endforeach
                         </div>
 
+                        <!-- 🔍 Traveller Search -->
+                        <div class="mb-3">
+                            <label class="form-label">Search Existing Traveller</label>
+                            <input type="text" id="travellerSearchInput" class="form-control"
+                                placeholder="Type traveller name...">
+                            <div id="travellerSearchResults" class="list-group mt-2"></div>
+                        </div>
 
                         <!-- INFO -->
                         <div class="mb-3">
@@ -146,22 +142,23 @@
 
                             <div class="col-md-6 col-lg-4">
                                 <label class="form-label">First Name *</label>
-                                <input type="text" name="first_name" id="first_name" class="form-control" required>
+                                <input type="text" id="first_name" class="form-control" required>
                             </div>
 
                             <div class="col-md-6 col-lg-4">
                                 <label class="form-label">Last Name *</label>
-                                <input type="text" name="last_name" id="last_name" class="form-control" required>
+                                <input type="text" id="last_name" class="form-control" required>
                             </div>
 
                             <div class="col-md-6 col-lg-4">
                                 <label class="form-label">Date of Birth *</label>
-                                <input type="date" name="dob" id="dob" class="form-control" required>
+                                <input type="date" min="{{ now()->subYears(100)->format('Y-m-d') }}"
+                                    max="{{ now()->format('Y-m-d') }}" id="dob" class="form-control" required>
                             </div>
 
                             <div class="col-md-6 col-lg-4">
                                 <label class="form-label">Gender *</label>
-                                <select name="gender" id="gender" class="form-select" required>
+                                <select id="gender" class="form-select" required>
                                     <option value="">Select</option>
                                     <option value="male">Male</option>
                                     <option value="female">Female</option>
@@ -170,11 +167,11 @@
 
                             <div class="col-md-6 col-lg-4">
                                 <label class="form-label">Country *</label>
-                                <input type="text" name="country" id="country" class="form-control" required>
+                                <input type="text" id="country" class="form-control" required>
                             </div>
                             <div class="col-md-6 col-lg-4">
                                 <label class="form-label">Traveller Type *</label>
-                                <select name="type" id="type" class="form-select" required>
+                                <select id="type" class="form-select" required>
                                     <option value="">Select Type</option>
                                     <option value="adult">Adult</option>
                                     <option value="child">Child</option>
@@ -186,153 +183,492 @@
 
                     <!-- FOOTER -->
                     <div class="modal-footer traveller-footer">
-                        <button type="button" class="btn btn-outline-secondary px-3 rounded-pill" data-bs-dismiss="modal">
+                        <button type="button" class="btn btn-outline-secondary px-3 rounded-pill"
+                            data-bs-dismiss="modal">
                             Cancel
                         </button>
 
-                        <button type="submit" class="btn btn-success px-3 rounded-pill">
+                        <button type="button" class="btn btn-success px-3 rounded-pill"
+                            onclick="saveTravellerLocally()">
                             Confirm Details
                         </button>
                     </div>
 
-                </form>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener("DOMContentLoaded", function() {
 
-            const modal = document.getElementById('travellerModal');
-            const form = document.getElementById('travellerForm');
+            /* =========================================================
+               INITIAL STATE
+            ========================================================== */
 
-            const f = {
-                id: document.getElementById('traveller_id'),
-                first: document.getElementById('first_name'),
-                last: document.getElementById('last_name'),
-                dob: document.getElementById('dob'),
-                gender: document.getElementById('gender'),
-                country: document.getElementById('country'),
-                type: document.getElementById('type'),
+            window.TRAVELLERS_STATE = @json($sessionTravellers ?? []);
+
+            if (!Array.isArray(window.TRAVELLERS_STATE)) {
+                window.TRAVELLERS_STATE = [];
+            }
+
+            const TOTAL_SLOTS = {{ $totalTravellers }};
+
+            while (window.TRAVELLERS_STATE.length < TOTAL_SLOTS) {
+                window.TRAVELLERS_STATE.push(null);
+            }
+
+            syncHiddenInputs();
+
+
+            /* =========================================================
+               OPEN MODAL (From Main Slot Button)
+            ========================================================== */
+
+            document.querySelectorAll('.open-traveller-modal').forEach(btn => {
+
+                btn.addEventListener('click', function() {
+
+                    const index = this.dataset.slot;
+
+                    // Trigger modal tab click instead of locking slot
+                    const modalTab = document.querySelector(`.trav-btn[data-slot="${index}"]`);
+                    if (modalTab) {
+                        modalTab.click();
+                    }
+                });
+
+            });
+
+
+            /* =========================================================
+               MODAL TAB SWITCHING (NEW LOGIC)
+            ========================================================== */
+
+            document.querySelectorAll('.trav-btn').forEach(tab => {
+
+                tab.addEventListener('click', function() {
+
+                    const index = this.dataset.slot;
+                    const slotType = this.dataset.type;
+
+                    document.getElementById('current_traveller_index').value = index;
+
+                    highlightActiveTab(index);
+                    setDOBLimits(slotType);
+
+                    const traveller = window.TRAVELLERS_STATE[index];
+
+                    const typeSelect = document.getElementById('type');
+                    typeSelect.value = slotType;
+                    typeSelect.setAttribute('disabled', true);
+
+                    if (traveller) {
+                        fillForm(traveller);
+                    } else {
+                        resetTravellerForm(slotType);
+                    }
+
+                    document.getElementById('travellerSearchInput').value = '';
+                    document.getElementById('travellerSearchResults').innerHTML = '';
+                });
+
+            });
+
+
+            /* =========================================================
+               SEARCH WITH DEBOUNCE
+            ========================================================== */
+
+            const debouncedSearch = debounce(function(e) {
+                searchTraveller(e.target.value.trim());
+            }, 400);
+
+            document.getElementById('travellerSearchInput')
+                .addEventListener('input', debouncedSearch);
+
+        });
+
+
+        /* =========================================================
+           SAVE TRAVELLER
+        ========================================================== */
+
+        function saveTravellerLocally() {
+
+            const index = document.getElementById('current_traveller_index').value;
+            const slotBtn = document.querySelector(`.trav-btn[data-slot="${index}"]`);
+            const slotType = slotBtn.dataset.type;
+
+            const traveller = {
+                first_name: document.getElementById('first_name').value.trim(),
+                last_name: document.getElementById('last_name').value.trim(),
+                dob: document.getElementById('dob').value,
+                gender: document.getElementById('gender').value,
+                country: document.getElementById('country').value.trim(),
+                type: slotType
             };
 
-            /* ---------------- RESET FORM ---------------- */
-            function resetForm(type) {
-                form.reset();
-                f.id.value = '';
-                f.type.value = type || 'adult';
+            if (!traveller.first_name || !traveller.last_name ||
+                !traveller.dob || !traveller.gender ||
+                !traveller.country) {
+
+                alert("Please fill all fields");
+                return;
             }
 
-            /* ---------------- FILL FORM ---------------- */
-            function fillForm(btn) {
-                f.id.value = btn.dataset.id || '';
-                f.first.value = btn.dataset.first || '';
-                f.last.value = btn.dataset.last || '';
-                f.dob.value = btn.dataset.dob || '';
-                f.gender.value = btn.dataset.gender || '';
-                f.country.value = btn.dataset.country || '';
-                f.type.value = btn.dataset.type || 'adult';
+            window.TRAVELLERS_STATE[index] = traveller;
+
+            updateTravellerUI(index);
+            syncHiddenInputs();
+            updateSession();
+
+            bootstrap.Modal.getInstance(
+                document.getElementById('travellerModal')
+            ).hide();
+        }
+
+
+        /* =========================================================
+            REMOVE TRAVELLER
+        ========================================================= */
+
+        document.addEventListener("click", function(e) {
+
+            const btn = e.target.closest('.remove-traveller');
+            if (!btn) return;
+
+            const index = btn.dataset.slot;
+
+            if (!confirm("Remove this traveller?")) return;
+
+            // 1️⃣ Reset state
+            window.TRAVELLERS_STATE[index] = null;
+
+            // 2️⃣ UI Elements
+            const nameEl = document.querySelector(`.traveller-name[data-slot="${index}"]`);
+            const missingEl = document.querySelector(`.traveller-missing[data-slot="${index}"]`);
+            const statusEl = document.querySelector(`.traveller-status[data-slot="${index}"]`);
+            const updateBtn = document.querySelector(`.open-traveller-modal[data-slot="${index}"]`);
+
+            // 3️⃣ Reset Name
+            if (nameEl) nameEl.innerText = '';
+
+            // 4️⃣ Show Missing Text
+            if (missingEl) missingEl.style.display = 'block';
+
+            // 5️⃣ Clear Status
+            if (statusEl) statusEl.innerHTML = '';
+
+            // 6️⃣ Hide Remove Button
+            btn.style.display = "none";
+
+            // 7️⃣ Reset Add/Update Button Text
+            if (updateBtn) {
+                updateBtn.innerText = "Add Traveller";
             }
 
-            /* ---------------- TAB ACTIVE ---------------- */
-            function setActiveTab(slotIndex) {
-                document.querySelectorAll('.trav-btn').forEach(b => {
-                    b.classList.toggle('active', b.dataset.slot === slotIndex);
+            // 8️⃣ Sync Hidden Inputs
+            syncHiddenInputs();
+
+            // 9️⃣ Update Session
+            updateSession();
+        });
+
+
+
+        /* =========================================================
+           SEARCH FUNCTION
+        ========================================================== */
+
+        function searchTraveller(query) {
+
+            const resultsBox = document.getElementById('travellerSearchResults');
+
+            if (query.length < 2) {
+                resultsBox.innerHTML = '';
+                return;
+            }
+
+            const currentIndex = document.getElementById('current_traveller_index').value;
+            const slotBtn = document.querySelector(`.trav-btn[data-slot="${currentIndex}"]`);
+            const slotType = slotBtn.dataset.type;
+
+            fetch("{{ route('checkout.search.traveller') }}?q=" + query)
+                .then(res => res.json())
+                .then(data => {
+
+                    resultsBox.innerHTML = '';
+
+                    data.forEach(traveller => {
+
+                        if (traveller.type !== slotType) return;
+
+                        const item = document.createElement('a');
+                        item.href = "javascript:void(0)";
+                        item.className = "list-group-item list-group-item-action";
+                        item.innerText = traveller.first_name + " " + traveller.last_name;
+
+                        item.addEventListener('click', function() {
+                            fillForm(traveller);
+                            resultsBox.innerHTML = '';
+                            document.getElementById('travellerSearchInput').value =
+                                traveller.first_name + " " + traveller.last_name;
+                        });
+
+                        resultsBox.appendChild(item);
+                    });
                 });
-            }
+        }
 
-            /* ---------------- OPEN MODAL ---------------- */
-            document.addEventListener('click', e => {
-                const btn = e.target.closest('.openTravellerModal');
-                if (!btn) return;
 
-                const mode = btn.dataset.mode;
-                const slot = btn.dataset.slot;
+        /* =========================================================
+           HIGHLIGHT ACTIVE TAB
+        ========================================================== */
 
-                setActiveTab(slot);
+        function highlightActiveTab(index) {
 
-                if (mode === 'add') {
-                    resetForm(btn.dataset.type);
-                } else {
-                    fillForm(btn);
-                }
+            document.querySelectorAll('.trav-btn').forEach(tab => {
+                tab.classList.remove('active');
             });
 
-            /* ---------------- TAB CLICK ---------------- */
-            document.querySelectorAll('.trav-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    setActiveTab(btn.dataset.slot);
-                    if (btn.dataset.id) {
-                        fillForm(btn);
-                    } else {
-                        resetForm(btn.dataset.type);
-                    }
+            const active = document.querySelector(`.trav-btn[data-slot="${index}"]`);
+            if (active) {
+                active.classList.add('active');
+            }
+        }
+
+
+        /* =========================================================
+           DOB LIMITS
+        ========================================================== */
+
+        function setDOBLimits(slotType) {
+
+            const dob = document.getElementById('dob');
+            const today = new Date();
+
+            if (slotType === 'adult') {
+
+                const minDate = new Date();
+                minDate.setFullYear(today.getFullYear() - 100);
+
+                const maxDate = new Date();
+                maxDate.setFullYear(today.getFullYear() - 12);
+
+                dob.min = minDate.toISOString().split("T")[0];
+                dob.max = maxDate.toISOString().split("T")[0];
+
+            } else {
+
+                const minDate = new Date();
+                minDate.setFullYear(today.getFullYear() - 11);
+
+                const maxDate = new Date();
+                maxDate.setFullYear(today.getFullYear() - 2);
+
+                dob.min = minDate.toISOString().split("T")[0];
+                dob.max = maxDate.toISOString().split("T")[0];
+            }
+        }
+
+
+
+        function updateTravellerUI(index) {
+
+            const traveller = window.TRAVELLERS_STATE[index];
+
+            const nameEl = document.querySelector(`.traveller-name[data-slot="${index}"]`);
+            const missingEl = document.querySelector(`.traveller-missing[data-slot="${index}"]`);
+            const statusEl = document.querySelector(`.traveller-status[data-slot="${index}"]`);
+            const removeBtn = document.querySelector(`.remove-traveller[data-slot="${index}"]`);
+            const actionBtn = document.querySelector(`.open-traveller-modal[data-slot="${index}"]`);
+
+            if (!nameEl || !missingEl || !statusEl) return;
+
+            // Update name
+            nameEl.innerText = traveller.first_name + " " + traveller.last_name;
+
+            // Hide missing text
+            missingEl.style.display = "none";
+
+            // Show status
+            statusEl.innerHTML = `
+            <div class="flex-center gap-1 text-success">
+                <i class="fa-solid fa-circle-check"></i>
+                <p class="p-small fw-500 mb-0">Traveller Added</p>
+            </div>
+            `;
+
+            // 🔥 SHOW REMOVE BUTTON
+            if (removeBtn) {
+                removeBtn.classList.remove('d-none');
+                removeBtn.style.display = "inline-block";
+            }
+
+            // Change Add → Update
+            if (actionBtn) {
+                actionBtn.innerText = "Update";
+            }
+        }
+
+
+        /* =========================================================
+           SYNC HIDDEN INPUTS
+        ========================================================== */
+
+        function syncHiddenInputs() {
+
+            const form = document.querySelector('form');
+
+            document.querySelectorAll('input[name^="travellers"]').forEach(el => el.remove());
+
+            window.TRAVELLERS_STATE.forEach((traveller, index) => {
+
+                if (!traveller) return;
+
+                Object.keys(traveller).forEach(key => {
+
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = `travellers[${index}][${key}]`;
+                    input.value = traveller[key];
+
+                    form.appendChild(input);
                 });
             });
+        }
 
-            /* ---------------- SUBMIT ---------------- */
-            form.addEventListener('submit', async e => {
-                e.preventDefault();
 
-                const isUpdate = f.id.value !== '';
-                const url = isUpdate ?
-                    `/account/travellers/${f.id.value}` :
-                    `/account/travellers`;
+        /* =========================================================
+           SESSION UPDATE
+        ========================================================== */
 
-                try {
-                    const res = await fetch(url, {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
-                        },
-                        body: new FormData(form)
+        function updateSession() {
+
+            fetch("{{ route('checkout.update.session') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                },
+                body: JSON.stringify({
+                    travellers: window.TRAVELLERS_STATE
+                })
+            });
+        }
+
+
+        /* =========================================================
+           FORM HELPERS
+        ========================================================== */
+
+        function resetTravellerForm(type) {
+
+            document.getElementById('first_name').value = '';
+            document.getElementById('last_name').value = '';
+            document.getElementById('dob').value = '';
+            document.getElementById('gender').value = '';
+            document.getElementById('country').value = '';
+            document.getElementById('type').value = type;
+        }
+
+        function fillForm(traveller) {
+
+            document.getElementById('first_name').value = traveller.first_name || '';
+            document.getElementById('last_name').value = traveller.last_name || '';
+            document.getElementById('dob').value = traveller.dob || '';
+            document.getElementById('gender').value = traveller.gender || '';
+            document.getElementById('country').value = traveller.country || '';
+        }
+
+
+        /* =========================================================
+           DEBOUNCE UTILITY
+        ========================================================== */
+
+        function debounce(func, delay = 400) {
+            let timer;
+            return function(...args) {
+                clearTimeout(timer);
+                timer = setTimeout(() => {
+                    func.apply(this, args);
+                }, delay);
+            };
+        }
+    </script>
+
+    <script>
+        /* =========================================================
+                       BLOCK BOOKING IF TRAVELLERS NOT COMPLETE
+                    ========================================================== */
+        document.addEventListener("DOMContentLoaded", function() {
+
+            const form = document.getElementById("checkoutForm");
+            const continueBtn = document.getElementById("checkoutContinueBtn");
+
+            if (!form || !continueBtn) return;
+
+            function validateTravellers() {
+
+                const totalSlots = {{ $totalTravellers }};
+                const state = window.TRAVELLERS_STATE || [];
+
+                const filled = state.filter(t => t !== null).length;
+
+                if (filled !== totalSlots) {
+
+                    iziToast.error({
+                        title: 'Incomplete Details',
+                        message: `Please complete all traveller details (${filled}/${totalSlots} completed).`,
+                        position: 'topRight',
+                        timeout: 5000
                     });
 
-                    if (!res.ok) throw new Error();
-                    location.reload();
+                    const section = document.getElementById("checkoutTravelDetails");
+                    if (section) {
+                        section.scrollIntoView({
+                            behavior: "smooth"
+                        });
+                    }
 
-                } catch {
-                    alert('Something went wrong');
+                    return false;
+                }
+
+                return true;
+            }
+
+            /* =========================
+               BUTTON CLICK BLOCK
+            ========================== */
+
+            continueBtn.addEventListener("click", function(e) {
+
+                if (!validateTravellers()) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    return false;
                 }
             });
 
-            /* ---------------- DELETE ---------------- */
-            document.addEventListener('click', async e => {
-                const btn = e.target.closest('.delete-traveller-btn');
-                if (!btn) return;
+            /* =========================
+               FORM SUBMIT DOUBLE CHECK
+            ========================== */
 
-                if (!confirm('Delete this traveller?')) return;
+            form.addEventListener("submit", function(e) {
 
-                await fetch(`/account/travellers/${btn.dataset.id}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
-                    }
-                });
-
-                location.reload();
+                if (!validateTravellers()) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    return false;
+                }
             });
 
         });
     </script>
 
-    <script>
-        window.TRAVELLER_STATUS = {
-            total: {{ $totalTravellers }},
-            filled: {{ $travellerSlots->whereNotNull('data')->count() }}
-        };
 
-        document.getElementById('checkoutContinueBtn')
-            .addEventListener('click', function(e) {
-
-                if (window.TRAVELLER_STATUS.filled < window.TRAVELLER_STATUS.total) {
-                    e.preventDefault();
-                    alert('Please add details for all travellers');
-                    return false;
-                }
-            });
-    </script>
-
+    {{-- coupon js --}}
     <script>
         function applyCoupon(code) {
             document.getElementById('couponCodeInput').value = code;

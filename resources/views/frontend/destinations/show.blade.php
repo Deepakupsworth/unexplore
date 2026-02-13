@@ -164,7 +164,7 @@
                     </div>
 
                     <div class="section__header-CTA">
-                        <a href="#" class="btn btn-primary rounded-pill">
+                        <a href="{{ route('things.to.do') }}" class="btn btn-primary rounded-pill">
                             {{ __('common.view_all') }}
                             <i class="fa-solid fa-angles-right"></i>
                         </a>
@@ -269,6 +269,7 @@
     </section>
 
     <!-- 7. DESTINATION DETAILS START EXPLORING -->
+    @if($favouriteCities && $favouriteCities->count() > 0)
     <section class="section-padding-md">
         <div class="container">
             <div class="section__header">
@@ -285,7 +286,7 @@
                 </div>
 
                 <div class="section__header-CTA">
-                    <a href="#" class="btn btn-primary rounded-pill">
+                    <a href="{{ route('destinations.index') }}" class="btn btn-primary rounded-pill">
                         {{ __('common.view_all') }}
                         <i class="fa-solid fa-angles-right"></i>
                     </a>
@@ -293,66 +294,26 @@
             </div>
 
             <div class="row start-exploring__row gy-3">
+
+                @foreach ($favouriteCities as $city)
+
                 <div class="col-md-6 col-lg-3">
                     <div class="start-exploring__item">
-                        <img src="{{ asset('frontend/assets/start-explore-1.png') }}" alt="Explore" class="img-fluid">
+                        <img src="{{ asset('storage/' . $city->thumb_image) }}" alt="Explore" class="img-fluid">
                         <div class="start-exploring__item-content">
                             <p class="mb-1 p-large fw-600">
-                                {{ __('destination_details.start_exploring.city_name') }}
+                               {{$city?->translation?->name}}
                             </p>
                             <p class="p-small">
-                                {{ __('destination_details.start_exploring.city_tagline') }}
+                               {{$city?->translation?->tagline}}
                             </p>
                         </div>
                     </div>
                 </div>
-
-                {{-- SAME BLOCK REPEATED AS ORIGINAL (NO REMOVAL) --}}
-                <div class="col-md-6 col-lg-3">
-                    <div class="start-exploring__item">
-                        <img src="{{ asset('frontend/assets/start-explore-1.png') }}" alt="Explore" class="img-fluid">
-                        <div class="start-exploring__item-content">
-                            <p class="mb-1 p-large fw-600">
-                                {{ __('destination_details.start_exploring.city_name') }}
-                            </p>
-                            <p class="p-small">
-                                {{ __('destination_details.start_exploring.city_tagline') }}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-6 col-lg-3">
-                    <div class="start-exploring__item">
-                        <img src="{{ asset('frontend/assets/start-explore-1.png') }}" alt="Explore" class="img-fluid">
-                        <div class="start-exploring__item-content">
-                            <p class="mb-1 p-large fw-600">
-                                {{ __('destination_details.start_exploring.city_name') }}
-                            </p>
-                            <p class="p-small">
-                                {{ __('destination_details.start_exploring.city_tagline') }}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-6 col-lg-3">
-                    <div class="start-exploring__item">
-                        <img src="{{ asset('frontend/assets/start-explore-1.png') }}" alt="Explore" class="img-fluid">
-                        <div class="start-exploring__item-content">
-                            <p class="mb-1 p-large fw-600">
-                                {{ __('destination_details.start_exploring.city_name') }}
-                            </p>
-                            <p class="p-small">
-                                {{ __('destination_details.start_exploring.city_tagline') }}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
+                @endforeach
             </div>
         </div>
     </section>
-
+    @endif
     @include('frontend.destinations.partials.destination-gallery-modal')
 @endsection

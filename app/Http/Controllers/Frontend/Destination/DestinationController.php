@@ -130,6 +130,49 @@ class DestinationController extends Controller
             ->firstOrFail();
 
 
+            $favouriteCities = City::with([
+                'translation' => fn($q) =>
+                $q->where('language_code', $language),
+                'thumb',
+                'categories.translationData',
+            ])
+                ->withCount([
+                    'packageCities as package_count' => function ($q) {
+                        $q->whereHas(
+                            'package',
+                            fn($p) => $p->where('status', 'active')
+                        );
+                    }
+                ])
+                ->whereHas('tags', function ($q) {
+                    $q->where('slug', 'favourite');
+                })
+                ->latest()
+                ->take(4)
+                ->get();
+
+
+                if ($favouriteCities->isEmpty()) {
+
+                    $favouriteCities = City::with([
+                            'translation' => fn($q) =>
+                                $q->where('language_code', $language),
+                            'thumb',
+                            'categories.translationData',
+                        ])
+                        ->withCount([
+                            'packageCities as package_count' => function ($q) {
+                                $q->whereHas(
+                                    'package',
+                                    fn($p) => $p->where('status', 'active')
+                                );
+                            }
+                        ])
+                        ->inRandomOrder()
+                        ->take(4)
+                        ->get();
+                }
+
         // ✅ Events
         $events = Event::with([
             'translation',
@@ -184,7 +227,7 @@ class DestinationController extends Controller
 
         return view(
             'frontend.destinations.show',
-            compact('city', 'events', 'things', 'packages')
+            compact('city','favouriteCities', 'events', 'things', 'packages')
         );
     }
 }
