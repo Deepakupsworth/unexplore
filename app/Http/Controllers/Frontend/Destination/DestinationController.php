@@ -8,6 +8,7 @@ use App\Models\Event;
 use App\Models\Package;
 use App\Models\ThingToDo;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class DestinationController extends Controller
 {
@@ -123,7 +124,7 @@ class DestinationController extends Controller
                 'packageCities as package_count' => function ($q) {
                     $q->whereHas('package', function ($p) {
                         $p->where('status', 'active');
-                    });
+                    })->select(DB::raw('COUNT(DISTINCT package_id)'));
                 }
             ])
             ->where('slug', $slug)
@@ -136,15 +137,14 @@ class DestinationController extends Controller
                 'thumb',
                 'categories.translationData',
             ])
-                ->withCount([
-                    'packageCities as package_count' => function ($q) {
-                        $q->whereHas(
-                            'package',
-                            fn($p) => $p->where('status', 'active')
-                        );
-                    }
-                ])
-                ->whereHas('tags', function ($q) {
+            ->withCount([
+                'packageCities as package_count' => function ($q) {
+                    $q->whereHas('package', function ($p) {
+                        $p->where('status', 'active');
+                    })->select(DB::raw('COUNT(DISTINCT package_id)'));
+                }
+            ])
+            ->whereHas('tags', function ($q) {
                     $q->where('slug', 'favourite');
                 })
                 ->latest()
@@ -195,16 +195,16 @@ class DestinationController extends Controller
             $q->where('language_code', $language),
             'thumb'
         ])
-            ->withCount([
-                'packageDayItems as package_count' => function ($q) use ($city) {
-                    $q->whereHas('packageDay.package', function ($p) use ($city) {
-                        $p->where('status', 'active')
-                            ->whereHas('cities', function ($pc) use ($city) {
-                                $pc->where('city_id', $city->id);
-                            });
-                    });
-                }
-            ])
+        ->withCount([
+            'packageDayItems as package_count' => function ($q) {
+                $q->whereHas(
+                    'packageDay.package',
+                    fn($q2) => $q2->where('status', 'active')
+                )
+                ->join('package_days', 'package_day_items.package_day_id', '=', 'package_days.id')
+                ->select(DB::raw('COUNT(DISTINCT package_days.package_id)'));
+            }
+        ])
             ->having('package_count', '>', 0)
             ->orderByDesc('package_count')
             ->take(12)
