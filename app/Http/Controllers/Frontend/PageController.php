@@ -9,6 +9,7 @@ use App\Models\ThingToDo;
 use App\Models\Package;
 use Illuminate\Support\Facades\Cache;
 use App\Models\Tag;
+use Illuminate\Support\Facades\DB;
 
 class PageController extends Controller
 {
@@ -70,15 +71,16 @@ class PageController extends Controller
                     'thumb',
                     'city.translationData',
                 ])
-                    ->withCount([
-                        'packageDayItems as package_count' => function ($q) {
-                            $q->whereHas(
-                                'packageDay.package',
-                                fn($q2) =>
-                                $q2->where('status', 'active')
-                            );
-                        }
-                    ])
+                ->withCount([
+                    'packageDayItems as package_count' => function ($q) {
+                        $q->whereHas(
+                            'packageDay.package',
+                            fn($q2) => $q2->where('status', 'active')
+                        )
+                        ->join('package_days', 'package_day_items.package_day_id', '=', 'package_days.id')
+                        ->select(DB::raw('COUNT(DISTINCT package_days.package_id)'));
+                    }
+                ])
                     ->having('package_count', '>', 0);
 
                 $things = $favouriteTagId

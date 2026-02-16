@@ -47,7 +47,8 @@
                     class="dest-details-banner__vision d-none-sm d-none-md">
 
                 <div class="dest-details-banner__btn-group">
-                    <a href="{{ route('packages.index') }}" class="btn btn-outline-light gap-1 rounded-pill">
+
+                    <a href="{{ route('packages.index', ['cities[]' => $city->id]) }}" class="btn btn-outline-light gap-1 rounded-pill">
                         {{ __('destination_details.banner.related_packages') }}
                         <strong>({{ $city->package_count }})</strong>
                     </a>

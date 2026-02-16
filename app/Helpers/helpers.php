@@ -2,9 +2,6 @@
 
 use App\Enums\CategoryType;
 use App\Models\Category;
-use App\Models\Event;
-use App\Models\ThingToDo;
-use App\Models\City;;
 use Illuminate\Support\Facades\Cache;
 
 if (!function_exists('header_event_categories')) {
