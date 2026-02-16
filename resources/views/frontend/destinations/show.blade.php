@@ -47,11 +47,12 @@
                     class="dest-details-banner__vision d-none-sm d-none-md">
 
                 <div class="dest-details-banner__btn-group">
-
+                    @if($city->package_count > 0)
                     <a href="{{ route('packages.index', ['cities[]' => $city->id]) }}" class="btn btn-outline-light gap-1 rounded-pill">
                         {{ __('destination_details.banner.related_packages') }}
                         <strong>({{ $city->package_count }})</strong>
                     </a>
+                    @endif
                     @if ($city?->gallery && $city?->gallery->count() > 0)
                         <button class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#galleryModal">
                             {{ __('destination_details.banner.see_images') }}</button>
