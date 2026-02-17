@@ -38,6 +38,12 @@
                                placeholder="Search booking code"
                                class="form-control">
                     </div>
+                    <div class="fromGroup">
+                        <label class="form-label">Packages</label>
+                        <select name="package_ids[]" id="packages" multiple class="form-control select2"></select>
+                    </div>
+
+
 
                     {{-- Status --}}
                     <div class="fromGroup">
@@ -47,9 +53,24 @@
                             <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending</option>
                             <option value="confirmed" {{ request('status') === 'confirmed' ? 'selected' : '' }}>Confirmed</option>
                             <option value="cancelled" {{ request('status') === 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                            <option value="completed" {{ request('status') === 'completed' ? 'selected' : '' }}>Completed</option>
+
                         </select>
                     </div>
 
+                    <div class="fromGroup">
+                    <label class="form-label">Payment Status</label>
+                    <select name="payment_status" class="form-control">
+                        <option value="">All</option>
+
+                        @foreach (\App\Enums\PaymentStatus::cases() as $status)
+                            <option value="{{ $status->value }}"
+                                {{ request('payment_status') === $status->value ? 'selected' : '' }}>
+                                {{ Str::headline($status->value) }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
                 </div>
 
                 <div class="flex justify-end gap-2 mt-4">
@@ -147,4 +168,70 @@
         </div>
     </div>
 
+  
+
+    <script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const el = document.getElementById('packages');
+    if (!el) return;
+
+    const selectedIds = @json(request('package_ids', []));
+
+    // Initialize Select2 with AJAX search
+    $(el).select2({
+        placeholder: 'Search packages',
+        width: '100%',
+        minimumInputLength: 1,
+        ajax: {
+            url: '/admin/packages/search',
+            dataType: 'json',
+            delay: 300,
+            data: function (params) {
+                return {
+                    q: params.term
+                };
+            },
+            processResults: function (data) {
+                return {
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.title
+                    }))
+                };
+            },
+            cache: true
+        }
+    });
+
+    // Load selected IDs (important for GET filter)
+    if (selectedIds.length > 0) {
+        $.ajax({
+            url: '/admin/packages/seachIds',
+            type: 'GET',
+            data: {
+                ids: selectedIds
+            },
+            success: function (data) {
+                data.forEach(item => {
+                    const option = new Option(item.title, item.id, true, true);
+                    el.append(option);
+                });
+                $(el).trigger('change');
+            }
+        });
+    }
+
+});
+</script>
+
+
+
+
+
+
+
+
 @endsection
+
+

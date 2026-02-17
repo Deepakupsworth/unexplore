@@ -35,6 +35,13 @@ class BookingController extends Controller
                 fn($q) =>
                 $q->where('status', $request->status)
             )
+            ->when(
+                $request->payment_status,
+                fn ($q) =>
+                    $q->whereHas('payments', function ($p) use ($request) {
+                        $p->where('status', $request->payment_status);
+                    })
+            )
             ->latest()
             ->paginate(15)
             ->withQueryString();

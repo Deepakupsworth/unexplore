@@ -53,6 +53,7 @@
 
                         <!-- BEGIN: Group Chart2 -->
                         <div class="py-[18px] px-4 rounded-[6px] bg-[#E5F9FF] dark:bg-slate-900	 ">
+                                <a href="{{ route('admin.bookings.index') }}">
                             <div class="flex items-center space-x-6 rtl:space-x-reverse">
                                 <div class="flex-none">
                                     <!-- <div id="wline1"></div> -->
@@ -66,56 +67,63 @@
                                     </div>
                                 </div>
                             </div>
+                             </a>
                         </div>
 
                         <div class="py-[18px] px-4 rounded-[6px] bg-[#E5F9FF] dark:bg-slate-900	 ">
-                            <div class="flex items-center space-x-6 rtl:space-x-reverse">
-                                <div class="flex-none">
-                                    <!-- <div id="wline1"></div> -->
-                                </div>
-                                <div class="flex-1">
-                                    <div class="text-slate-800 dark:text-slate-300 text-sm mb-1 font-medium">
-                                        Totel Packages
+                            <a href="{{ route('admin.packages.index') }}">    
+                                <div class="flex items-center space-x-6 rtl:space-x-reverse">
+                                    <div class="flex-none">
+                                        <!-- <div id="wline1"></div> -->
                                     </div>
-                                    <div class="text-slate-900 dark:text-white text-lg font-medium">
-                                        {{ $stats['packages']['active'] }}
+                                    <div class="flex-1">
+                                        <div class="text-slate-800 dark:text-slate-300 text-sm mb-1 font-medium">
+                                            Totel Packages
+                                        </div>
+                                        <div class="text-slate-900 dark:text-white text-lg font-medium">
+                                            {{ $stats['packages']['active'] }}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
 
                         <div class="py-[18px] px-4 rounded-[6px] bg-[#FFEDE5] dark:bg-slate-900	 ">
-                            <div class="flex items-center space-x-6 rtl:space-x-reverse">
-                                <div class="flex-none">
-                                    <!-- <div id="wline2"></div> -->
-                                </div>
-                                <div class="flex-1">
-                                    <div class="text-slate-800 dark:text-slate-300 text-sm mb-1 font-medium">
-                                        ToDo Things
+                            <a href="{{ route('thingtodos.index') }}">        
+                                <div class="flex items-center space-x-6 rtl:space-x-reverse">
+                                    <div class="flex-none">
+                                        <!-- <div id="wline2"></div> -->
                                     </div>
-                                    <div class="text-slate-900 dark:text-white text-lg font-medium">
-                                        {{ $stats['todos'] }}
+                                    <div class="flex-1">
+                                        <div class="text-slate-800 dark:text-slate-300 text-sm mb-1 font-medium">
+                                            ToDo Things
+                                        </div>
+                                        <div class="text-slate-900 dark:text-white text-lg font-medium">
+                                            {{ $stats['todos'] }}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
 
 
 
                         <div class="py-[18px] px-4 rounded-[6px] bg-[#EAE5FF] dark:bg-slate-900	 ">
-                            <div class="flex items-center space-x-6 rtl:space-x-reverse">
-                                <div class="flex-none">
-                                    <!-- <div id="wline3"></div> -->
-                                </div>
-                                <div class="flex-1">
-                                    <div class="text-slate-800 dark:text-slate-300 text-sm mb-1 font-medium">
-                                        Events
+                            <a href="{{ route('events.index') }}">          
+                                <div class="flex items-center space-x-6 rtl:space-x-reverse">
+                                    <div class="flex-none">
+                                        <!-- <div id="wline3"></div> -->
                                     </div>
-                                    <div class="text-slate-900 dark:text-white text-lg font-medium">
-                                        {{ $stats['events'] }}
+                                    <div class="flex-1">
+                                        <div class="text-slate-800 dark:text-slate-300 text-sm mb-1 font-medium">
+                                            Events
+                                        </div>
+                                        <div class="text-slate-900 dark:text-white text-lg font-medium">
+                                            {{ $stats['events'] }}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
 
                         <?php
@@ -130,19 +138,21 @@
 
                         ?>
                          <div class="py-[18px] px-4 rounded-[6px] bg-[#EAE5FF] dark:bg-slate-900	 ">
-                            <div class="flex items-center space-x-6 rtl:space-x-reverse">
-                                <div class="flex-none">
-                                    <!-- <div id="wline3"></div> -->
-                                </div>
-                                <div class="flex-1">
-                                    <div class="text-slate-800 dark:text-slate-300 text-sm mb-1 font-medium">
-                                        Booking {{ucfirst($status)}}
+                            <a href="{{ route('admin.bookings.index') }}?status={{$status}}">   
+                                <div class="flex items-center space-x-6 rtl:space-x-reverse">
+                                    <div class="flex-none">
+                                        <!-- <div id="wline3"></div> -->
                                     </div>
-                                    <div class="text-slate-900 dark:text-white text-lg font-medium">
-                                        {{ $stats['booking_status'][$status] ?? 0 }}
+                                    <div class="flex-1">
+                                        <div class="text-slate-800 dark:text-slate-300 text-sm mb-1 font-medium">
+                                            Booking {{ucfirst($status)}}
+                                        </div>
+                                        <div class="text-slate-900 dark:text-white text-lg font-medium">
+                                            {{ $stats['booking_status'][$status] ?? 0 }}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
                         <?php
                         }

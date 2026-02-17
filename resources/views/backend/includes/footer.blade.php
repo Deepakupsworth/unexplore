@@ -19,7 +19,7 @@
       </footer>
       <!-- END: Footer For Desktop and tab -->
 
-      <div class="bg-white bg-no-repeat custom-dropshadow footer-bg dark:bg-slate-700 flex justify-around items-center
+      <!-- <div class="bg-white bg-no-repeat custom-dropshadow footer-bg dark:bg-slate-700 flex justify-around items-center
     backdrop-filter backdrop-blur-[40px] fixed left-0 bottom-0 w-full z-[9999] bothrefm-0 py-[12px] px-4 md:hidden">
         <a href="chat.html">
           <div>
@@ -58,4 +58,4 @@
             </span>
           </div>
         </a>
-      </div>
+      </div> -->
