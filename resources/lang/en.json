@@ -396,6 +396,121 @@
     "packages.empty": "No packages found",
 
     "destination_details.stories.category" : "Culture & History, Art Gallery",
-    "destination_details.stories.title_sample" : "5 Must-Do Experiences in Jeddah"
+    "destination_details.stories.title_sample" : "5 Must-Do Experiences in Jeddah",
+
+    "checkout.traveller_details": "Traveller Details",
+    "checkout.traveller": "Traveller",
+    "checkout.travellers": "Travellers",
+    "checkout.traveller_details_missing": "Traveller details missing",
+    "checkout.traveller_added": "Traveller Added",
+    "checkout.add_traveller_details": "Add Traveller Details",
+    "checkout.search_existing_traveller": "Search Existing Traveller",
+    "checkout.mandatory_information": "Mandatory Information",
+    "checkout.please_enter_mandatory_information": "Please Enter Mandatory Information",
+    "checkout.enter_contact_details": "Please Enter Contact Details",
+    "checkout.first_name": "First Name",
+    "checkout.last_name": "Last Name",
+    "checkout.date_of_birth": "Date of Birth",
+    "checkout.gender": "Gender",
+    "checkout.country": "Country",
+    "checkout.traveller_type": "Traveller Type",
+
+    "checkout.select": "Select",
+    "checkout.male": "Male",
+    "checkout.female": "Female",
+    "checkout.adult": "Adult",
+    "checkout.adults": "Adults",
+    "checkout.child": "Child",
+
+    "checkout.cancel": "Cancel",
+    "checkout.confirm_details": "Confirm Details",
+    "checkout.email": "Email",
+    "checkout.mobile": "Mobile",
+    "checkout.special_requests": "Special Requests",
+    "checkout.enter_here": "Enter here",
+    "checkout.update": "Update",
+    "checkout.add_traveller": "Add Traveller",
+    "checkout.policies": "Policies",
+
+    "checkout.package_itinerary_inclusions": "Package Itinerary & Inclusions",
+    "checkout.package_features": "Package Features",
+    "checkout.itinerary": "Itinerary",
+    "checkout.hotels": "Hotels",
+    "checkout.transfers": "Transfers",
+    "checkout.events": "Events",
+    "checkout.activities": "Activities",
+    "checkout.day_plan": "Day Plan",
+    "checkout.day": "Day",
+    "checkout.hotel": "Hotel",
+    "checkout.todo_thing": "To Do Thing",
+    "checkout.events_label": "Events",
+    "checkout.transport": "Transport",
+
+    "checkout.coupons_offers": "Coupons & Offers",
+    "checkout.enter_coupon_code": "Enter Coupon Code",
+    "checkout.apply": "Apply",
+    "checkout.apply_code": "Apply Code",
+    "checkout.more_coupons": "+ :count More",
+    "checkout.off": "OFF",
+
+    "checkout.grand_total": "Grand Total",
+
+    "checkout.children": "Children",
+
+    "checkout.pay_full_amount": "Pay Full Amount Now",
+    "checkout.fare_breakup": "Fare Breakup",
+    "checkout.total_basic_cost": "Total Basic Cost",
+
+
+    "checkout.extra_adults": "Extra Adults",
+    "checkout.children_price": "Children Price",
+    "checkout.addon_cost": "Add-On Cost",
+    "checkout.additional_cost_selected_addons": "Additional cost for selected add-on items",
+
+    "checkout.coupon_discount": "Coupon Discount",
+    "checkout.total_payable": "Total Payable",
+    "checkout.all_taxes_included": "All taxes included",
+
+    "checkout.payment_method": "Payment Method",
+    "checkout.bank_transfer": "Bank Transfer",
+
+    "checkout.important_information": "Important Information",
+    "checkout.accept_terms_text": "I confirm that I have read and I accept Cancellation Policy, User Agreement, Terms of Service and Privacy Policy",
+    "checkout.continue": "Continue",
+
+    "gallery.package": "Package",
+    "gallery.activities_sightseeing": "Activities & Sightseeing",
+    "gallery.events": "Events",
+    "gallery.hotels": "Hotels",
+
+    "gallery.package_image": "Package Image",
+    "gallery.package_gallery": "Package Gallery",
+
+    "gallery.image": "Image",
+    "gallery.gallery": "Gallery",
+
+    "events.explore_events": "Explore Events",
+    "events.discover_events_saudi": "Discover upcoming events happening across Saudi.",
+
+    "common.filters": "Filters",
+    "common.search": "Search",
+
+    "events.browse_event_locations": "Browse Event, Locations",
+    "events.type": "Type",
+    "events.things_to_do": "Things To Do",
+    "events.events": "Events",
+
+    "common.categories": "Categories",
+    "common.destinations": "Destinations",
+
+    "events.event_date": "Event Date",
+    "common.from": "From",
+    "common.to": "To",
+
+    "events.all_events": "All Events",
+    "common.sort_by": "Sort by:",
+    "common.none": "None",
+    "common.popular": "Popular",
+    "common.newest": "Newest"
 
 }

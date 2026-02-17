@@ -5,8 +5,8 @@
     <section class="package-listing__banner">
         <div class="container">
             <div class="package-listing__banner-content text-center">
-                <h1 class="package-listing__banner-heading h2">Explore Events</h1>
-                <p>Discover upcoming events happening across Saudi.</p>
+                <h1 class="package-listing__banner-heading h2">{{ __('events.explore_events') }}</h1>
+                <p>{{ __('events.discover_events_saudi') }}</p>
             </div>
         </div>
     </section>
@@ -18,16 +18,16 @@
                 <!-- LEFT FILTERS -->
                 <div class="package-listing__filter-section">
                     <div class="package-listing__filter-section-header">
-                        <h6>Filters</h6>
+                        <h6>{{ __('common.filters') }}</h6>
                     </div>
 
                     <div class="package-listing__filter-items">
 
                         <!-- SEARCH -->
                         <div class="package-listing__filter-item">
-                            <p class="p-large package-listing__filter-title">Search</p>
+                            <p class="p-large package-listing__filter-title">{{ __('common.search') }}</p>
                             <div class="input-group mb-3 package-listing__search-bar">
-                                <input type="text" class="form-control" placeholder="Browse Event, Locations">
+                                <input type="text" class="form-control" placeholder="{{ __('events.browse_event_locations') }}" id="eventSearchInput">
                                 <button class="btn" type="button">
                                     <i class="fa-solid fa-magnifying-glass"></i>
                                 </button>
@@ -41,7 +41,7 @@
                             <div class="accordion-item">
                                 <p class="accordion-header p-large package-listing__filter-title">
                                     <button class="accordion-button" type="button">
-                                        Type
+                                        {{ __('events.type') }}
                                     </button>
                                 </p>
 
@@ -53,7 +53,7 @@
                                             <div
                                                 class="package-listing__budget-filter-option package-listing__budget-button">
                                                 <label>
-                                                    <span class="option-text">Things To Do</span>
+                                                    <span class="option-text">{{ __('events.things_to_do') }}                                                    </span>
                                                 </label>
                                             </div>
                                         </a>
@@ -63,7 +63,7 @@
                                             <div
                                                 class="package-listing__budget-filter-option package-listing__budget-button active">
                                                 <label>
-                                                    <span class="option-text">Events</span>
+                                                    <span class="option-text">{{ __('events.events') }}</span>
                                                 </label>
                                             </div>
                                         </a>
@@ -80,7 +80,7 @@
                             <div class="accordion-item">
                                 <p class="accordion-header p-large package-listing__filter-title">
                                     <button class="accordion-button" type="button">
-                                        Categories
+                                        {{ __('common.categories') }}
                                     </button>
                                 </p>
 
@@ -116,7 +116,7 @@
                             <div class="accordion-item">
                                 <p class="accordion-header p-large package-listing__filter-title">
                                     <button class="accordion-button" type="button">
-                                        Destinations
+                                        {{ __('common.destinations') }}
                                     </button>
                                 </p>
 
@@ -151,7 +151,7 @@
                             <div class="accordion-item">
                                 <p class="accordion-header p-large package-listing__filter-title">
                                     <button class="accordion-button" type="button">
-                                        Event Date
+                                        {{ __('events.event_date') }}
                                     </button>
                                 </p>
 
@@ -161,7 +161,8 @@
 
                                         <!-- FROM -->
                                         <label class="date-label w-100">
-                                            From
+                                            {{ __('common.from') }}
+
                                             <input type="date" name="event_date_from"
                                                 value="{{ request('event_date_from') }}" min="<?php echo date('Y-m-d'); ?>"
                                                 class="form-control w-100">
@@ -169,7 +170,7 @@
 
                                         <!-- TO -->
                                         <label class="date-label mt-2 w-100">
-                                            To
+                                            {{ __('common.to') }}
                                             <input type="date" name="event_date_to"
                                                 value="{{ request('event_date_to') }}" min="<?php echo date('Y-m-d'); ?>"
                                                 class="form-control w-100">
@@ -193,7 +194,7 @@
                             <div
                                 class="package-listing__results-applied-fil
                                 {{ empty(request('categories')) ? 'success' : '' }}">
-                                <p class="p-small">All Events</p>
+                                <p class="p-small">{{ __('events.all_events') }} </p>
                             </div>
                         </a>
 
@@ -213,13 +214,13 @@
                     <div class="package-listing__results-applied-list">
                         <div class="dropdown package-listing__results-sort-dropdown">
                             <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                <span class="label">Sort by:</span>
-                                <span class="package-listing__results-sort-option fw-600" id="currentSortLabel">None</span>
+                                <span class="label">{{ __('common.sort_by') }}</span>
+                                <span class="package-listing__results-sort-option fw-600" id="currentSortLabel">{{ __('common.none') }}</span>
                             </button>
 
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#" data-sort="popular">Popular</a></li>
-                                <li><a class="dropdown-item" href="#" data-sort="newest">Newest</a></li>
+                                <li><a class="dropdown-item" href="#" data-sort="popular">{{ __('common.popular') }}</a></li>
+                                <li><a class="dropdown-item" href="#" data-sort="newest">{{ __('common.newest') }}</a></li>
                             </ul>
                         </div>
                     </div>
@@ -244,8 +245,7 @@
 
         function applyFilters() {
 
-            const search =
-                document.querySelector('input[placeholder*="Browse"]')?.value || '';
+            const search = document.getElementById('eventSearchInput')?.value || '';
 
             const cities = [...document.querySelectorAll('input[name="cities[]"]:checked')]
                 .map(el => el.value);

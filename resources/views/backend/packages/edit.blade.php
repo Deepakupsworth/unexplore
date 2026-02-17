@@ -230,25 +230,25 @@
                                         <div>
                                             <label class="form-label">Currency</label>
                                             <input class="form-control" name="pricing[currency]"
-                                                value="{{ old('pricing.currency', $package->price->currency ?? 'INR') }}">
+                                                value="{{ old('pricing.currency', $package->price->currency ?? 'SAR') }}">
                                         </div>
 
                                         <div>
-                                            <label class="form-label">Original Price</label>
-                                            <input class="form-control" name="pricing[original_price]"
-                                                value="{{ old('pricing.original_price', $package->price->original_price ?? '') }}">
+                                            <label class="form-label">Price (Per Person)</label>
+                                            <input class="form-control" name="pricing[per_person_price]"
+                                                value="{{ old('pricing.per_person_price', $package->price->per_person_price ?? '') }}">
                                         </div>
 
                                         <div>
-                                            <label class="form-label">Discount Price</label>
+                                            <label class="form-label">Discount Price(Per Person)</label>
                                             <input class="form-control" name="pricing[discount_price]"
                                                 value="{{ old('pricing.discount_price', $package->price->discount_price ?? '') }}">
                                         </div>
 
                                         <div>
-                                            <label class="form-label">Per Person Price</label>
-                                            <input class="form-control" name="pricing[per_person_price]"
-                                                value="{{ old('pricing.per_person_price', $package->price->per_person_price ?? '') }}">
+                                            <label class="form-label">Total Price</label>
+                                            <input class="form-control" name="pricing[original_price]"
+                                                value="{{ old('pricing.original_price', $package->price->original_price ?? '') }}">
                                         </div>
                                     </div>
 

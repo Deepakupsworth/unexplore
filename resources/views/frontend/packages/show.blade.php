@@ -61,11 +61,11 @@
             <div class="gallery-wrapper swiper">
                 <div class="swiper-wrapper  gallery-grid">
                     <!-- LEFT LARGE IMAGE -->
-                    <div class="gallery-item gallery-item--large swiper-slide open-gallery" data-open-tab="galleryTabsDestination"
-                    data-bs-toggle="modal"
-                    data-bs-target="#galleryModal">
+                    <div class="gallery-item gallery-item--large swiper-slide open-gallery"
+                        data-open-tab="galleryTabsDestination" data-bs-toggle="modal" data-bs-target="#galleryModal">
                         <img class="img-fluid" src="{{ asset('storage/' . $package->thumb->image_path) }}" alt="">
-                        <button class="view-gallery-btn stretched-link" data-bs-toggle="modal" data-bs-target="#galleryModal" data-open-tab="galleryTabsDestination">
+                        <button class="view-gallery-btn stretched-link" data-bs-toggle="modal"
+                            data-bs-target="#galleryModal" data-open-tab="galleryTabsDestination">
                             <i class="fa-regular fa-image"></i>
                             {{ __('package.gallery.view') }} →
                         </button>
@@ -91,9 +91,6 @@
                                     default => asset('frontend/assets/package-banner.png'),
                                 };
                                 ?>
-
-
-
 
                                 <img class="img-fluid" src="{{ $imagePathToDo }}" alt="">
                                 <p class="p-small">{{ __('package.gallery.activities') }}</p>
@@ -191,164 +188,166 @@
     ])
     <section>
         <div class="container">
-            <div class="pkg-details__wrapper mb-3">
+            <form action="{{ route('checkout.init') }}" method="POST" id="packageCheckoutForm">
+                @csrf
+                <div class="pkg-details__wrapper mb-3">
 
-                <div class="pkg-details">
+                    <div class="pkg-details">
 
-                    {{-- HEADER --}}
-                    <div class="section__header mt-4">
-                        <div class="section__header-content">
-                            <h2 class="section__heading">
-                                {{ $t->title }}
-                            </h2>
+                        {{-- HEADER --}}
+                        <div class="section__header mt-4">
+                            <div class="section__header-content">
+                                <h2 class="section__heading">
+                                    {{ $t->title }}
+                                </h2>
 
-                            <div class="section__description d-flex gap-2 align-items-center">
-                                <p>{{ $t->sub_title }}</p>
+                                <div class="section__description d-flex gap-2 align-items-center">
+                                    <p>{{ $t->sub_title }}</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    {{-- TABS --}}
-                    <ul class="nav nav-pills mt-3 pkg-details__tabs">
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link active" id="pkg-details__overview-tab" data-bs-toggle="pill"
-                                data-bs-target="#explore-saudi__overview-tab-content" type="button" role="tab"
-                                aria-controls="explore-saudi__overview-tab-content" aria-selected="true">{{ __('package.tabs.overview') }}</a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a class="nav-link" id="pkg-details__additional-tab" data-bs-toggle="pill"
-                                data-bs-target="#explore-saudi__additional-tab-content" type="button" role="tab"
-                                aria-controls="explore-saudi__additional-tab-content" aria-selected="false">
-                                {{ __('package.tabs.additional_info') }}
-                            </a>
-                        </li>
-                    </ul>
+                        {{-- TABS --}}
+                        <ul class="nav nav-pills mt-3 pkg-details__tabs">
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link active" id="pkg-details__overview-tab" data-bs-toggle="pill"
+                                    data-bs-target="#explore-saudi__overview-tab-content" type="button" role="tab"
+                                    aria-controls="explore-saudi__overview-tab-content"
+                                    aria-selected="true">{{ __('package.tabs.overview') }}</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="pkg-details__additional-tab" data-bs-toggle="pill"
+                                    data-bs-target="#explore-saudi__additional-tab-content" type="button" role="tab"
+                                    aria-controls="explore-saudi__additional-tab-content" aria-selected="false">
+                                    {{ __('package.tabs.additional_info') }}
+                                </a>
+                            </li>
+                        </ul>
 
-                    <div class="tab-content">
                         <div class="tab-content">
-                            {{-- OVERVIEW TAB --}}
+                            <div class="tab-content">
+                                {{-- OVERVIEW TAB --}}
 
-                            @include('frontend.packages.partials.tabs.overview')
+                                @include('frontend.packages.partials.tabs.overview')
 
-                            {{-- ADDITIONAL INFO TAB --}}
-                            @include('frontend.packages.partials.tabs.additional-info-tabs')
-                        </div>
-
-                        <div class="tab-pane fade mt-4" id="additional">
-                            {!! $t->additional_info ?? '' !!}
-                        </div>
-
-                    </div>
-                </div>
-
-
-                <div class="pkg-details__pricing mt-4">
-                    <div class="card pkg-details__pricing-card">
-                        @if ($package->price->discount_price)
-                            <p class="fw-500">{{ __('package.pricing.starting_from') }}</p>
-                            <div class="d-flex align-items-center gap-1">
-                                <img src="{{ asset(currency_icon_path(null, 'light')) }}" alt="Riyal">
-                                <p class="text-decoration-line-through fw-600 text-light2">
-                                    {{ $package->price->discount_price }}</p>
+                                {{-- ADDITIONAL INFO TAB --}}
+                                @include('frontend.packages.partials.tabs.additional-info-tabs')
                             </div>
-                        @endif
 
-                        <div class="d-flex align-items-center gap-1">
-                            <img src="{{ asset(currency_icon_path(null, 'primary')) }}" alt="Riyal">
-                            <h5 class="text-success fw-bold">{{ $package->price->per_person_price }}</h5>
-                            <p class="text-light2 fw-500">{{ __('package.pricing.per_person') }}</p>
+                            <div class="tab-pane fade mt-4" id="additional">
+                                {!! $t->additional_info ?? '' !!}
+                            </div>
+
                         </div>
+                    </div>
 
-                        {{-- <a href="{{route('checkout.view')}}" class="btn btn-primary justify-content-center pkg-details__book-now-btn my-2">
-                            Book Now
-                        </a> --}}
 
-                        <form action="{{ route('checkout.init') }}" method="POST" id="packageCheckoutForm">
+                    <div class="pkg-details__pricing mt-4">
+                        <div class="card pkg-details__pricing-card">
+                            @if ($package->price->discount_price)
+                                <p class="fw-500">{{ __('package.pricing.starting_from') }}</p>
+                                <div class="d-flex align-items-center gap-1">
+                                    <img src="{{ asset(currency_icon_path(null, 'light')) }}" alt="Riyal">
+                                    <p class="text-decoration-line-through fw-600 text-light2">
+                                        {{ $package->price->discount_price }}</p>
+                                </div>
+                            @endif
 
-                            {{-- 🔒 CSRF not required for GET, but ok if POST --}}
-                            @csrf
-                            <input type="hidden" name="slug" value="{{ $package->slug }}">
+                            <div class="d-flex align-items-center gap-1">
+                                <img src="{{ asset(currency_icon_path(null, 'primary')) }}" alt="Riyal">
+                                <h5 class="text-success fw-bold">{{ $package->price->per_person_price }}</h5>
+                                <p class="text-light2 fw-500">{{ __('package.pricing.per_person') }}</p>
+                            </div>
+
+                            {{-- <a href="{{route('checkout.view')}}" class="btn btn-primary justify-content-center pkg-details__book-now-btn my-2">
+                                Book Now
+                            </a> --}}
+
+
+                            <input type="hidden" name="slug" value="{{ $package->slug }}"
+                                form="packageCheckoutForm">
 
                             <input type="hidden" name="day_items_extra" id="dayItemsExtraInput"
                                 form="packageCheckoutForm">
-                            <button type="submit"
+                            <button type="submit" onclick="prepareCheckoutSubmit()"
                                 class="btn btn-primary justify-content-center pkg-details__book-now-btn my-2">
                                 {{ __('package.pricing.book_now') }}
                             </button>
 
-                        </form>
 
 
-                        <div class="fw-500 text-light2 d-flex align-items-center gap-1">
-                            <p>{{ __('package.pricing.total_price') }}</p>
-                            <img src="{{ asset(currency_icon_path(null, 'light')) }}" alt="Riyal">
-                            <p id="liveTotalPrice">{{ $package->price->original_price }}</p>
+                            <div class="fw-500 text-light2 d-flex align-items-center gap-1">
+                                <p>{{ __('package.pricing.total_price') }}</p>
+                                <img src="{{ asset(currency_icon_path(null, 'light')) }}" alt="Riyal">
+                                <p id="liveTotalPrice">{{ $package->price->original_price }}</p>
+
+                            </div>
+
+                            <!-- Decorative line -->
+                            <div class="pkg-details__decorative-line my-3">
+                                <img src="{{ asset('frontend/assets/decorative-line.png') }}" alt="Decorative Line"
+                                    class="img-fluid w-100">
+                            </div>
+
+                            <!-- Duration -->
+                            <div class="pkg-details__additional-info-item py-2 px-3 d-flex align-items-center gap-2 mb-2">
+                                <i class="fa-solid fa-clock primary-text"></i>
+                                <div class="">
+                                    <p class="text-light2">{{ __('package.duration.label') }}:</p>
+                                    <p class="fw-600 p-large">{{ $package->duration_nights }} Nights &
+                                        {{ $package->duration_days }} Days</p>
+                                </div>
+                            </div>
+
+                            <!-- Places to Visit -->
+                            <div class="pkg-details__additional-info-item py-2 px-3 d-flex align-items-center gap-2 mt-2">
+                                <i class="fa-solid fa-location-dot primary-text"></i>
+
+                                <div>
+                                    <p class="text-light2 mb-0">{{ __('package.places_to_visit') }}:</p>
+
+                                    <p class="fw-600 p-large mb-0" style="font-size: 15px">
+                                        @foreach ($places as $place)
+                                            {{ $place['nights'] }}N {{ $place['city'] }}
+                                            @if (!$loop->last)
+                                                .
+                                            @endif
+                                        @endforeach
+                                    </p>
+                                </div>
+                            </div>
+
+
 
                         </div>
 
-                        <!-- Decorative line -->
-                        <div class="pkg-details__decorative-line my-3">
-                            <img src="{{ asset('frontend/assets/decorative-line.png') }}" alt="Decorative Line"
-                                class="img-fluid w-100">
-                        </div>
+                        <x-frontend.help-card />
 
-                        <!-- Duration -->
-                        <div class="pkg-details__additional-info-item py-2 px-3 d-flex align-items-center gap-2 mb-2">
-                            <i class="fa-solid fa-clock primary-text"></i>
-                            <div class="">
-                                <p class="text-light2">{{ __('package.duration.label') }}:</p>
-                                <p class="fw-600 p-large">{{ $package->duration_nights }} Nights &
-                                    {{ $package->duration_days }} Days</p>
+                        <div class="mt-4">
+                            <p>{{ __('package.share') }}</p>
+                            <div class="mt-2 pkg-details__share-icons">
+                                <a href="#" class="flex-center">
+                                    <img src="{{ asset('frontend/assets/icons/instagram.svg') }}" alt="Instagram">
+                                </a>
+                                <a href="#" class="flex-center">
+                                    <img src="{{ asset('frontend/assets/icons/facebook.svg') }}" alt="Facebook">
+                                </a>
+                                <a href="#" class="flex-center">
+                                    <img src="{{ asset('frontend/assets/icons/facebook.svg') }}" alt="Facebook">
+                                </a>
+                                <a href="#" class="flex-center">
+                                    <img src="{{ asset('frontend/assets/icons/x.svg') }}" alt="X">
+                                </a>
+                                <a href="#" class="flex-center">
+                                    <img src="{{ asset('frontend/assets/icons/share.svg') }}" alt="Share">
+                                </a>
                             </div>
                         </div>
-
-                        <!-- Places to Visit -->
-                        <div class="pkg-details__additional-info-item py-2 px-3 d-flex align-items-center gap-2 mt-2">
-                            <i class="fa-solid fa-location-dot primary-text"></i>
-
-                            <div>
-                                <p class="text-light2 mb-0">{{ __('package.places_to_visit') }}:</p>
-
-                                <p class="fw-600 p-large mb-0" style="font-size: 15px">
-                                    @foreach ($places as $place)
-                                        {{ $place['nights'] }}N {{ $place['city'] }}
-                                        @if (!$loop->last)
-                                .
-                                        @endif
-                                    @endforeach
-                                </p>
-                            </div>
-                        </div>
-
-
-
                     </div>
 
-                    <x-frontend.help-card />
-
-                    <div class="mt-4">
-                        <p>{{ __('package.share') }}</p>
-                        <div class="mt-2 pkg-details__share-icons">
-                            <a href="#" class="flex-center">
-                                <img src="{{ asset('frontend/assets/icons/instagram.svg') }}" alt="Instagram">
-                            </a>
-                            <a href="#" class="flex-center">
-                                <img src="{{ asset('frontend/assets/icons/facebook.svg') }}" alt="Facebook">
-                            </a>
-                            <a href="#" class="flex-center">
-                                <img src="{{ asset('frontend/assets/icons/facebook.svg') }}" alt="Facebook">
-                            </a>
-                            <a href="#" class="flex-center">
-                                <img src="{{ asset('frontend/assets/icons/x.svg') }}" alt="X">
-                            </a>
-                            <a href="#" class="flex-center">
-                                <img src="{{ asset('frontend/assets/icons/share.svg') }}" alt="Share">
-                            </a>
-                        </div>
-                    </div>
                 </div>
+            </form>
 
-            </div>
         </div>
     </section>
 
@@ -505,6 +504,7 @@
                 ===================================================== */
                 document.getElementById('saveDayItems').onclick = () => {
 
+
                     if (!activeSlot || !selectedClone) return;
 
                     const dayId = activeSlot.dataset.dayId;
@@ -512,8 +512,10 @@
                     const index = activeSlot.dataset.index;
                     const itemId = selectedClone.dataset.itemId;
 
+
                     /* 🔒 lock index */
                     selectedClone.dataset.index = index;
+
 
                     /* ❌ REMOVE price text from MAIN list */
                     selectedClone.querySelectorAll('.extra-price').forEach(p => p.remove());
@@ -523,6 +525,20 @@
                     if (oldWrapper) oldWrapper.remove();
 
                     activeSlot.prepend(selectedClone);
+
+                    updateDayItemHiddenInput(selectedClone, itemId);
+
+                    // get extra price from popup clone
+                    const priceInput = selectedClone.querySelector('input[name="extra_price"]');
+                    const extraPrice = priceInput ? priceInput.value : 0;
+
+                    updateDayItemExtraPrice(
+                        selectedClone,
+                        dayId,
+                        type,
+                        itemId,
+                        extraPrice
+                    );
 
                     /* update edit button */
                     const editBtn = activeSlot.querySelector('.editDayItemsBtn');
@@ -564,7 +580,9 @@
 
                     // console.log('Total Extra Price from Day Items:', totalExtra);
 
+                    // window.PRICE_STATE.extras.dayItems += totalExtra;
                     window.PRICE_STATE.extras.dayItems = totalExtra;
+
 
                     updatePricing();
 
@@ -577,6 +595,25 @@
                 syncDayItemExtrasFromDOM();
                 updatePricing();
             });
+        </script>
+
+        <script>
+            function updateDayItemHiddenInput(wrapper, newItemId) {
+                const hiddenInput = wrapper.querySelector('.day-item-input');
+                if (hiddenInput) {
+                    hiddenInput.value = newItemId;
+                }
+            }
+
+
+            function updateDayItemExtraPrice(wrapper, dayId, type, itemId, extraPrice) {
+                const priceInput = wrapper.querySelector('.day-item-price-input');
+
+                if (priceInput) {
+                    priceInput.name = `day_item_prices[${dayId}][${type}][${itemId}]`;
+                    priceInput.value = extraPrice ?? 0;
+                }
+            }
         </script>
 
         <script>
@@ -599,7 +636,7 @@
                 // Desktop dropdown
                 const dropdownEl = document.querySelector('.pkg-fil-bar__input-wrapper.dropdown');
                 if (dropdownEl) {
-                    dropdownEl.addEventListener('hidden.bs.dropdown', function () {
+                    dropdownEl.addEventListener('hidden.bs.dropdown', function() {
                         storeTravellerSession();
                     });
                 }
@@ -607,7 +644,7 @@
                 // Mobile modal
                 const mobileModal = document.getElementById('packageFilterModal');
                 if (mobileModal) {
-                    mobileModal.addEventListener('hidden.bs.modal', function () {
+                    mobileModal.addEventListener('hidden.bs.modal', function() {
                         storeTravellerSession();
                     });
                 }
@@ -697,11 +734,11 @@
 
                 const pricingData = pkg.extraAdultRules;
                 extraAdultPerPrice =
-                    Array.isArray(pkg.extraAdultRules)
-                        ? (pkg.extraAdultRules.find(
-                            r => r.person_number === Number(extraAdults)
-                        )?.price ?? pkg.pricePerPerson)
-                        : pkg.pricePerPerson;
+                    Array.isArray(pkg.extraAdultRules) ?
+                    (pkg.extraAdultRules.find(
+                        r => r.person_number === Number(extraAdults)
+                    )?.price ?? pkg.pricePerPerson) :
+                    pkg.pricePerPerson;
 
                 // pkg.extraAdultRules.forEach(rule => {
                 //     if (extraAdults >= rule.person_number) {
@@ -789,18 +826,9 @@
                 document.getElementById('finalTotalInput').value =
                     finalTotal;
 
-                /* ================= HIDDEN INPUTS ================= */
-                document.getElementById('dayItemsExtraInput').value =
-                    dayItemExtra;
+                document.getElementById('dayItemsExtraInput').value = dayItemExtra;
 
-                /* ================= DEBUG (OPTIONAL) ================= */
-                // console.log({
-                //     basePrice,
-                //     extraAdultTotal,
-                //     childTotal,
-                //     dayItemExtra,
-                //     finalTotal
-                // });
+
             }
         </script>
 
@@ -817,12 +845,28 @@
                     }
                 });
 
+
+
                 window.PRICE_STATE.extras.dayItems = totalExtra;
             }
         </script>
 
+        <script>
+            function prepareCheckoutSubmit() {
 
+                // 🔥 force latest calculation
+                syncDayItemExtrasFromDOM();
+                updatePricing();
 
+                // 🧪 debug (remove later)
+                console.log(
+                    'Submitting extra:',
+                    document.getElementById('dayItemsExtraInput')?.value
+                );
 
+                // ✅ now safe submit
+                document.getElementById('packageCheckoutForm').submit();
+            }
+        </script>
     @endpush
 @endsection

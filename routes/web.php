@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Controller;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\RoleMiddleware;
@@ -14,14 +13,12 @@ use App\Http\Controllers\Admin\ThingtodoController;
 use App\Http\Controllers\Admin\EventController;
 use App\Http\Controllers\Admin\HotelController;
 use App\Http\Controllers\Admin\ImageController;
-use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\TransportController;
 use App\Http\Controllers\Admin\AdminCouponController;
 use App\Http\Controllers\Frontend\Event\EventController as FrontendEventController;
 
 use App\Http\Controllers\DemoJsonController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\Frontend\Blog\BlogController;
 use App\Http\Controllers\Frontend\Checkout\CheckoutController;
 use App\Http\Controllers\Admin\PackageController as AdminPackageController;
@@ -35,6 +32,7 @@ use App\Http\Controllers\Frontend\Destination\DestinationController as FrontendD
 use App\Http\Controllers\Frontend\{TravellerController, AddressController, AccountController, CouponApplyController};
 use App\Http\Controllers\Frontend\Booking\BookingController;
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
+use App\Http\Controllers\Admin\CompanyDetailController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PackagePolicyController;
 use App\Http\Controllers\Admin\TagController;
@@ -427,6 +425,19 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::delete('/tags/{tag}', [TagController::class, 'destroy'])
             ->name('tags.delete');
     });
+
+    Route::prefix('admin')->name('admin.')->group(function () {
+
+        Route::get('company-details', [CompanyDetailController::class, 'index'])
+            ->name('company-details.index');
+
+        // Company Details (single record)
+        Route::get('company-details/form', [CompanyDetailController::class, 'form'])
+        ->name('company-details.form');
+
+        Route::post('company-details/save', [CompanyDetailController::class, 'save'])
+            ->name('company-details.save');
+        });
 });
 
 
@@ -568,3 +579,16 @@ Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])
 
 Route::post('/newsletter/unsubscribe', [NewsletterController::class, 'unsubscribe'])
     ->name('newsletter.unsubscribe');
+
+
+Route::get('/cookie-policy', [PageController::class, 'cookiePolicy'])
+    ->name('cookie-policy');
+
+Route::get('/faqs', [PageController::class, 'faqs'])
+    ->name('faqs');
+
+Route::get('/privacy-policy', [PageController::class, 'privacyPolicy'])
+    ->name('privacy-policy');
+
+Route::get('/terms-conditions', [PageController::class, 'termsConditions'])
+    ->name('terms-conditions');

@@ -12,7 +12,11 @@ use App\Models\{
     BookingDay,
     BookingDayItem,
     Coupon,
+    Event,
+    Hotel,
     Package,
+    ThingToDo,
+    Transport,
 };
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -58,11 +62,12 @@ class BookingController extends Controller
         $startDate = Carbon::parse($checkout['start_date']);
         $endDate   = $startDate->copy()->addDays($package->days->count() - 1);
 
+
         /* ========================= 4️⃣ COUPON ========================= */
         [$couponCode, $couponDiscount, $finalPayable] =
             $this->calculateCouponDiscount(
                 $request->applied_coupon_code,
-                $checkout['final_total'],
+                $checkout['pricing']['final_total'],
                 $package
             );
 
@@ -74,7 +79,7 @@ class BookingController extends Controller
             ->filter()
             ->values();
 
-        if ($validTravellers->count() != $checkout['total_persons']) {
+        if ($validTravellers->count() != $checkout['pricing']['total_persons']) {
             return back()->with('error', 'Please complete all traveller details.');
         }
 
@@ -113,9 +118,9 @@ class BookingController extends Controller
                 'travel_start_date'    => $startDate->toDateString(),
                 'travel_end_date'      => $endDate->toDateString(),
 
-                'total_person'         => $checkout['total_persons'],
-                'total_adult'          => $checkout['adults'],
-                'total_child'          => max(0, $checkout['total_persons'] - $checkout['adults']),
+                'total_person'         => $checkout['pricing']['total_persons'],
+                'total_adult'          => $checkout['pricing']['adults'],
+                'total_child'          => $checkout['pricing']['child'],
             ]);
 
             /* ===== TRAVELLERS FROM SESSION ===== */
@@ -132,6 +137,84 @@ class BookingController extends Controller
             }
 
             /* ===== DAYS + ITEMS ===== */
+            // foreach ($package->days as $dayIndex => $day) {
+
+            //     $bookingDay = BookingDay::create([
+            //         'booking_id'      => $booking->id,
+            //         'original_day_id' => $day->id,
+            //         'day_number'      => $dayIndex + 1,
+            //         'date'            => $startDate->copy()->addDays($dayIndex),
+            //         'city_id'         => $day->city_id,
+            //         'city_name'       => $day->city?->translation?->name,
+            //         'meta_json'       => $day->toArray(),
+            //     ]);
+
+            //     foreach ($day->items as $itemIndex => $item) {
+
+            //         $title = null;
+            //         $image = null;
+
+            //         switch ($item->item_type) {
+            //             case 'hotel':
+            //                 $title = $item->hotel?->translation?->name;
+            //                 $image = $item->hotel?->thumb?->image_path;
+            //                 break;
+
+            //             case 'todo':
+            //                 $title = $item->todo?->translation?->name;
+            //                 $image = $item->todo?->thumb?->image_path;
+            //                 break;
+
+            //             case 'event':
+            //                 $title = $item->event?->translation?->title;
+            //                 $image = $item->event?->thumb?->image_path;
+            //                 break;
+
+            //             case 'transport':
+            //                 $title = $item->transport?->translation?->name;
+            //                 $image = $item->transport?->thumb?->image_path;
+            //                 break;
+            //         }
+
+            //         BookingDayItem::create([
+            //             'booking_day_id'   => $bookingDay->id,
+            //             'item_type'        => $item->item_type,
+            //             'original_item_id' => $item->item_id,
+            //             'title'            => $title ?? 'N/A',
+            //             'description'      => $item->description,
+            //             'start_time'       => $item->start_time
+            //                 ? Carbon::parse($item->start_time)->format('H:i:s')
+            //                 : null,
+            //             'end_time'         => $item->end_time
+            //                 ? Carbon::parse($item->end_time)->format('H:i:s')
+            //                 : null,
+            //             'sort_order'       => $itemIndex,
+            //             'extra_price'      => $item->extra_price ?? 0,
+            //             'is_optional'      => $item->is_optional ?? 0,
+            //             'is_selected'      => 1,
+            //             'meta_json'        => [
+            //                 'item_id'    => $item->item_id,
+            //                 'item_type'  => $item->item_type,
+            //                 'title'      => $title,
+            //                 'image_path' => $image,
+            //             ],
+            //         ]);
+            //     }
+            // }
+
+
+            /* ================= DAY ITEMS FROM SESSION ================= */
+            $selectedDayItems = collect($checkout['day_items'] ?? [])
+                ->mapWithKeys(fn($v, $k) => [(string)$k => $v])
+                ->toArray();
+
+            $dayItemPrices = collect($checkout['day_item_prices'] ?? [])
+                ->mapWithKeys(fn($v, $k) => [(string)$k => $v])
+                ->toArray();
+
+            // dd( $checkout['day_item_prices'] );
+
+            /* ===== DAYS + ITEMS ===== */
             foreach ($package->days as $dayIndex => $day) {
 
                 $bookingDay = BookingDay::create([
@@ -144,60 +227,144 @@ class BookingController extends Controller
                     'meta_json'       => $day->toArray(),
                 ]);
 
-                foreach ($day->items as $itemIndex => $item) {
+                $dayKey       = (string) $day->id;
+                $daySession   = $selectedDayItems[$dayKey] ?? [];
+                $dayPriceData = $dayItemPrices[$dayKey] ?? [];
 
-                    $title = null;
-                    $image = null;
+                $defaultItems = $day->items->groupBy('item_type');
 
-                    switch ($item->item_type) {
-                        case 'hotel':
-                            $title = $item->hotel?->translation?->name;
-                            $image = $item->hotel?->thumb?->image_path;
-                            break;
+                $types = ['hotel', 'todo', 'event', 'transport'];
+                $sortOrder = 0;
 
-                        case 'todo':
-                            $title = $item->todo?->translation?->name;
-                            $image = $item->todo?->thumb?->image_path;
-                            break;
+                foreach ($types as $type) {
 
-                        case 'event':
-                            $title = $item->event?->translation?->title;
-                            $image = $item->event?->thumb?->image_path;
-                            break;
+                    /* ========================================
+                        STEP 1: Resolve item IDs
+                    ======================================== */
+                    if (!empty($daySession[$type])) {
 
-                        case 'transport':
-                            $title = $item->transport?->translation?->name;
-                            $image = $item->transport?->thumb?->image_path;
-                            break;
+                        // ✅ USER SELECTED (REPLACED)
+                        $itemIds = collect($daySession[$type])
+                            ->map(fn($v) => (int) $v)
+                            ->filter()
+                            ->values()
+                            ->toArray();
+                    } else {
+
+                        // ✅ PACKAGE DEFAULT
+                        $itemIds = collect($defaultItems->get($type, []))
+                            ->pluck('item_id')
+                            ->map(fn($v) => (int) $v)
+                            ->filter()
+                            ->values()
+                            ->toArray();
                     }
 
-                    BookingDayItem::create([
-                        'booking_day_id'   => $bookingDay->id,
-                        'item_type'        => $item->item_type,
-                        'original_item_id' => $item->item_id,
-                        'title'            => $title ?? 'N/A',
-                        'description'      => $item->description,
-                        'start_time'       => $item->start_time
-                            ? Carbon::parse($item->start_time)->format('H:i:s')
-                            : null,
-                        'end_time'         => $item->end_time
-                            ? Carbon::parse($item->end_time)->format('H:i:s')
-                            : null,
-                        'sort_order'       => $itemIndex,
-                        'extra_price'      => $item->extra_price ?? 0,
-                        'is_optional'      => $item->is_optional ?? 0,
-                        'is_selected'      => 1,
-                        'meta_json'        => [
-                            'item_id'    => $item->item_id,
-                            'item_type'  => $item->item_type,
-                            'title'      => $title,
-                            'image_path' => $image,
-                        ],
-                    ]);
+                    if (empty($itemIds)) {
+                        continue;
+                    }
+
+                    /* ========================================
+                        STEP 2: Load models
+                    ======================================== */
+                    $models = match ($type) {
+                        'hotel'     => Hotel::with(['translation', 'thumb'])->whereIn('id', $itemIds)->get()->keyBy('id'),
+                        'todo'      => ThingToDo::with(['translation', 'thumb'])->whereIn('id', $itemIds)->get()->keyBy('id'),
+                        'event'     => Event::with(['translation', 'thumb'])->whereIn('id', $itemIds)->get()->keyBy('id'),
+                        'transport' => Transport::with(['translation', 'thumb'])->whereIn('id', $itemIds)->get()->keyBy('id'),
+                    };
+
+                    /* ========================================
+                        STEP 3: Create booking items
+                    ======================================== */
+                    foreach ($itemIds as $id) {
+
+                        $model = $models->get((int) $id);
+                        if (!$model) continue;
+
+                        /* ---------- title ---------- */
+                        $title = $type === 'event'
+                            ? $model->translation?->title
+                            : $model->translation?->name;
+
+                        $image = $model->thumb?->image_path;
+                        $description = $model->translation?->description ?? null;
+
+                        /* ========================================
+                            ✅ STRICT TIME RULE
+                            ONLY event & todo have time
+                        ======================================== */
+                        $startTime = null;
+                        $endTime   = null;
+
+                        if (in_array($type, ['event', 'todo'])) {
+
+                            if (!empty($model->opening_time)) {
+                                $startTime = \Carbon\Carbon::parse($model->opening_time)->format('H:i:s');
+                            }
+
+                            if (!empty($model->closing_time)) {
+                                $endTime = \Carbon\Carbon::parse($model->closing_time)->format('H:i:s');
+                            }
+                        }
+
+                        /* ========================================
+                             ✅ EXTRA PRICE FROM SESSION
+                        ======================================== */
+                        $extraPrice = (float) (
+                            $dayPriceData[$type][$id] ?? 0
+                        );
+
+
+                        /* ========================================
+                             🚀 CREATE BOOKING ITEM
+                        ======================================== */
+                        BookingDayItem::create([
+                            'booking_day_id'   => $bookingDay->id,
+                            'item_type'        => $type,
+                            'original_item_id' => $id,
+                            'title'            => $title ?? 'N/A',
+                            'description'      => $description,
+
+                            // ✅ strict timing
+                            'start_time'       => $startTime,
+                            'end_time'         => $endTime,
+
+                            'sort_order'       => $sortOrder++,
+                            'extra_price'      => $extraPrice,
+                            'is_optional'      => 0,
+                            'is_selected'      => 1,
+
+                            'meta_json' => [
+                                'item_id'    => $id,
+                                'item_type'  => $type,
+                                'title'      => $title,
+                                'image_path' => $image,
+                            ],
+                        ]);
+                    }
                 }
             }
 
+
             /* ===== SNAPSHOT ===== */
+            // BookingSnapshot::create([
+            //     'booking_id' => $booking->id,
+            //     'snapshot_json' => [
+            //         'thumb' => $package->thumb ?? null,
+            //         'checkout' => $checkout,
+            //         'coupon'   => [
+            //             'code'     => $couponCode,
+            //             'discount' => $couponDiscount,
+            //             'final'    => $finalPayable,
+            //         ],
+            //         'package'  => $package->toArray(),
+            //         'created'  => now()->toDateTimeString(),
+            //     ],
+            // ]);
+
+            $booking->load(['days.dayItems']);
+
             BookingSnapshot::create([
                 'booking_id' => $booking->id,
                 'snapshot_json' => [
@@ -208,6 +375,27 @@ class BookingController extends Controller
                         'discount' => $couponDiscount,
                         'final'    => $finalPayable,
                     ],
+
+                    // ✅ THIS IS THE REAL FIX
+                    'days' => $booking->days->map(function ($day) {
+                        return [
+                            'day_number' => $day->day_number,
+                            'city_name'  => $day->city_name,
+                            'items'      => $day->dayItems->map(function ($item) {
+                                return [
+                                    'item_type'   => $item->item_type,
+                                    'title'       => $item->title,
+                                    'image_path'  => $item->meta_json['image_path'] ?? null,
+                                    'start_time'  => $item->start_time,
+                                    'end_time'    => $item->end_time,
+                                    'extra_price' => $item->extra_price,
+                                ];
+                            })->values(),
+                        ];
+                    })->values(),
+
+                    // optional: keep package minimal
+                    'package_id' => $package->id,
                     'package'  => $package->toArray(),
                     'created'  => now()->toDateTimeString(),
                 ],
@@ -239,7 +427,7 @@ class BookingController extends Controller
 
         /* ========================= CLEAN SESSION ========================= */
 
-        session()->forget(['checkout', 'checkout_travellers',"filter_package_{$package->id}"]);
+        session()->forget(['checkout', 'checkout_travellers', 'day_items', 'day_item_prices', "filter_package_{$package->id}", "package_day_items.{$package->id}"]);
 
         return redirect()->route('booking.success');
     }

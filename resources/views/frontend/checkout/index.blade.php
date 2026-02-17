@@ -80,7 +80,7 @@
                 <div class="modal-header">
                     <div>
                         <h6 class="modal-title fw-600 p-large">
-                            Add Traveller Details
+                            {{ __('checkout.add_traveller_details') }}
                         </h6>
                         <p class="text-light2 p-small mb-0">
                             {{-- Traveller {{ max(1, $travellerCount) }}/{{ max(1, $travellerCount) }} --}}
@@ -122,7 +122,7 @@
 
                         <!-- 🔍 Traveller Search -->
                         <div class="mb-3">
-                            <label class="form-label">Search Existing Traveller</label>
+                            <label class="form-label"> {{ __('checkout.search_existing_traveller') }}</label>
                             <input type="text" id="travellerSearchInput" class="form-control"
                                 placeholder="Type traveller name...">
                             <div id="travellerSearchResults" class="list-group mt-2"></div>
@@ -130,10 +130,10 @@
 
                         <!-- INFO -->
                         <div class="mb-3">
-                            <h6 class="fw-600 p">Mandatory Information</h6>
+                            <h6 class="fw-600 p">{{ __('checkout.mandatory_information') }}</h6>
                             <p class="p-small text-light2">
                                 <i class="fa-solid fa-circle-info"></i>
-                                Please Enter Mandatory Information
+                                {{ __('checkout.please_enter_mandatory_information') }}
                             </p>
                         </div>
 
@@ -141,40 +141,40 @@
                         <div class="row g-3">
 
                             <div class="col-md-6 col-lg-4">
-                                <label class="form-label">First Name *</label>
+                                <label class="form-label">{{ __('checkout.first_name') }} *</label>
                                 <input type="text" id="first_name" class="form-control" required>
                             </div>
 
                             <div class="col-md-6 col-lg-4">
-                                <label class="form-label">Last Name *</label>
+                                <label class="form-label">{{ __('checkout.last_name') }} *</label>
                                 <input type="text" id="last_name" class="form-control" required>
                             </div>
 
                             <div class="col-md-6 col-lg-4">
-                                <label class="form-label">Date of Birth *</label>
+                                <label class="form-label">{{ __('checkout.date_of_birth') }} *</label>
                                 <input type="date" min="{{ now()->subYears(100)->format('Y-m-d') }}"
                                     max="{{ now()->format('Y-m-d') }}" id="dob" class="form-control" required>
                             </div>
 
                             <div class="col-md-6 col-lg-4">
-                                <label class="form-label">Gender *</label>
+                                <label class="form-label">{{ __('checkout.gender') }} *</label>
                                 <select id="gender" class="form-select" required>
-                                    <option value="">Select</option>
-                                    <option value="male">Male</option>
-                                    <option value="female">Female</option>
+                                    <option value="">{{ __('checkout.select') }}</option>
+                                    <option value="male">{{ __('checkout.male') }}</option>
+                                    <option value="female">{{ __('checkout.female') }}</option>
                                 </select>
                             </div>
 
                             <div class="col-md-6 col-lg-4">
-                                <label class="form-label">Country *</label>
+                                <label class="form-label">{{ __('checkout.country') }} *</label>
                                 <input type="text" id="country" class="form-control" required>
                             </div>
                             <div class="col-md-6 col-lg-4">
-                                <label class="form-label">Traveller Type *</label>
+                                <label class="form-label">{{ __('checkout.traveller_type') }} *</label>
                                 <select id="type" class="form-select" required>
-                                    <option value="">Select Type</option>
-                                    <option value="adult">Adult</option>
-                                    <option value="child">Child</option>
+                                    <option value="">{{ __('checkout.select') }}</option>
+                                    <option value="adult">{{ __('checkout.adult') }} </option>
+                                    <option value="child">{{ __('checkout.child') }} </option>
                                 </select>
                             </div>
 
@@ -185,12 +185,12 @@
                     <div class="modal-footer traveller-footer">
                         <button type="button" class="btn btn-outline-secondary px-3 rounded-pill"
                             data-bs-dismiss="modal">
-                            Cancel
+                            {{ __('checkout.cancel') }}
                         </button>
 
                         <button type="button" class="btn btn-success px-3 rounded-pill"
                             onclick="saveTravellerLocally()">
-                            Confirm Details
+                            {{ __('checkout.confirm_details') }}
                         </button>
                     </div>
 
@@ -714,6 +714,7 @@
                         errorBox.classList.remove('d-none');
                         return;
                     }
+                    console.log(data.discount);
 
                     // ✅ SUCCESS (controller response)
                     // alert(

@@ -244,4 +244,25 @@ class PageController extends Controller
     {
         return view('frontend.contact-us');
     }
+
+
+    public function cookiePolicy()
+    {
+        return view('frontend.pages.cookie-policy');
+    }
+
+    public function faqs()
+    {
+        return view('frontend.pages.faqs');
+    }
+
+    public function privacyPolicy()
+    {
+        return view('frontend.pages.privacy-policy');
+    }
+
+    public function termsConditions()
+    {
+        return view('frontend.pages.terms-conditions');
+    }
 }

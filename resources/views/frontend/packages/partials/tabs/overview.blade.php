@@ -114,6 +114,14 @@
                                                                 </div>
                                                                 <input type="hidden" name="extra_price"
                                                                     value="{{ $dayWiseOptions[$day->id]['hotel'][$hotel->id]['extra_price'] ?? 0 }}">
+                                                                <input class="day-item-input" type="hidden"
+                                                                    name="day_items[{{ $day->id }}][hotel][{{ $hotel_slot }}]"
+                                                                    value="{{ $hotel->id }}">
+                                                                <input type="hidden"
+                                                                    name="day_item_prices[{{ $day->id }}][hotel][{{ $hotel->id }}]"
+                                                                    class="day-item-price-input"
+                                                                    value="{{ $dayWiseOptions[$day->id]['hotel'][$hotel->id]['extra_price'] ?? 0 }}">
+
                                                             </div>
                                                             @if ($package->package_type !== 'fixed')
                                                                 <button type="button"
@@ -209,7 +217,14 @@
                                                                 </div>
                                                                 <input type="hidden" name="extra_price"
                                                                     value="{{ $dayWiseOptions[$day->id]['todo'][$todo->id]['extra_price'] ?? 0 }}">
-
+                                                                <input type="hidden"
+                                                                    class="day-item-input"
+                                                                    name="day_items[{{ $day->id }}][todo][{{ $todo_slot }}]"
+                                                                    value="{{ $todo->id }}">
+                                                                <input type="hidden"
+                                                                    name="day_item_prices[{{ $day->id }}][todo][{{ $todo->id }}]"
+                                                                    class="day-item-price-input"
+                                                                    value="{{ $dayWiseOptions[$day->id]['todo'][$todo->id]['extra_price'] ?? 0 }}">
                                                             </div>
                                                             @if ($package->package_type !== 'fixed')
                                                                 <button type="button"
@@ -302,7 +317,15 @@
                                                                 </div>
                                                                 <input type="hidden" name="extra_price"
                                                                     value="{{ $dayWiseOptions[$day->id]['event'][$event->id]['extra_price'] ?? 0 }}">
+                                                                <input type="hidden"
+                                                                    class="day-item-input"
+                                                                    name="day_items[{{ $day->id }}][event][{{ $event_slot }}]"
+                                                                    value="{{ $event->id }}">
 
+                                                                <input type="hidden"
+                                                                    name="day_item_prices[{{ $day->id }}][event][{{ $event->id }}]"
+                                                                    class="day-item-price-input"
+                                                                    value="{{ $dayWiseOptions[$day->id]['event'][$event->id]['extra_price'] ?? 0 }}">
                                                             </div>
                                                             @if ($package->package_type !== 'fixed')
                                                                 <button type="button"
@@ -405,6 +428,15 @@
 
                                                                 <input type="hidden" name="extra_price"
                                                                     value="{{ $dayWiseOptions[$day->id]['transport'][$transport->id]['extra_price'] ?? 0 }}">
+                                                                    <input type="hidden"
+                                                                    class="day-item-input"
+                                                                    name="day_items[{{ $day->id }}][transport][{{ $transport_slot }}]"
+                                                                    value="{{ $transport->id }}">
+                                                                <input type="hidden"
+                                                                    name="day_item_prices[{{ $day->id }}][transport][{{ $transport->id }}]"
+                                                                    class="day-item-price-input"
+                                                                    value="{{ $dayWiseOptions[$day->id]['transport'][$transport->id]['extra_price'] ?? 0 }}">
+
                                                             </div>
 
                                                             @if ($package->package_type !== 'fixed')

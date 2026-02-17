@@ -45,11 +45,11 @@
                         </li>
 
                         <!-- <li>
-                                        <a href="javascript:void(0)" class="nav-link account-tab" data-tab="wishlist">
-                                            <i class="fa-solid fa-heart p-large"></i>
-                                            Wishlist
-                                        </a>
-                                    </li> -->
+                                            <a href="javascript:void(0)" class="nav-link account-tab" data-tab="wishlist">
+                                                <i class="fa-solid fa-heart p-large"></i>
+                                                Wishlist
+                                            </a>
+                                        </li> -->
 
                     </ul>
                 </div>
@@ -327,7 +327,7 @@
         }
     </script>
 
-    <script>
+    {{-- <script>
         document.addEventListener('DOMContentLoaded', function() {
 
             document.body.addEventListener('click', function(e) {
@@ -526,5 +526,225 @@
                 .replace(/\b\w/g, c => c.toUpperCase()); // Bank Transfer
         }
 
+    </script> --}}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            document.body.addEventListener('click', function(e) {
+
+                const btn = e.target.closest('.user-bookings__view-details-btn');
+                if (!btn) return;
+
+                /* ================= BASIC INFO ================= */
+                document.getElementById('drawerLabel').innerHTML = btn.dataset.label || '';
+                document.getElementById('bookingTitle').innerText = btn.dataset.title || '';
+                document.getElementById('bookingRoute').innerText = btn.dataset.route || '';
+                document.getElementById('bookingTotal').innerText = btn.dataset.total || '';
+                document.getElementById('bookingDate').innerText = btn.dataset.date || '';
+                document.getElementById('thumbImage').src = btn.dataset.thumb || '';
+
+                /* ================= BADGE COLOR ================= */
+                let badgeClass = btn.dataset.badgeClass || '';
+                const labelEl = document.getElementById('drawerLabel');
+
+                labelEl.classList.forEach(cls => {
+                    if (cls.startsWith('bg-') || cls.startsWith('text-')) {
+                        labelEl.classList.remove(cls);
+                    }
+                });
+
+                if (badgeClass.startsWith('bg-')) {
+                    badgeClass = badgeClass.replace('bg-', 'text-');
+                }
+
+                if (badgeClass) {
+                    labelEl.classList.add(badgeClass);
+                }
+
+                /* ================= PAYMENTS ================= */
+                const icon = btn.dataset.currencyIcon || '';
+                const paymentsRaw = btn.dataset.payments || '[]';
+
+                let payments = [];
+                try {
+                    payments = JSON.parse(paymentsRaw);
+                } catch (e) {
+                    payments = [];
+                }
+
+                const paymentItems = payments.map(item => {
+
+                    let methodLabel = formatLabel(item.payment_method) || '-';
+                    let txnId = item.transaction_id ? '#' + item.transaction_id : '';
+
+                    return `
+                        <div class="d-flex gap-3 mb-2">
+                            <img src="/frontend/assets/icons/drag-vertical.svg">
+                            <div class="booking-details__item">
+                                <span class="booking-details__item-title">Payment Type</span>
+                                <span class="fw-500 d-flex gap-3">
+                                    <span class="text-black fw-600">:</span>
+                                    ${methodLabel}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-3 mb-2">
+                            <img src="/frontend/assets/icons/drag-vertical.svg">
+                            <div class="booking-details__item">
+                                <span class="booking-details__item-title">Transaction ID</span>
+                                <span class="fw-500 d-flex gap-3">
+                                    <span class="text-black fw-600">:</span>
+                                    ${txnId}
+                                </span>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                document.getElementById('transactionItem').innerHTML = paymentItems;
+
+                document.getElementById('bookingCurrencyIcon').innerHTML =
+                    icon ? `<img src="${icon}">` : '';
+
+                /* ================= ITINERARY ================= */
+                const itineraryBox = document.getElementById('drawerItinerary');
+                itineraryBox.innerHTML = '';
+
+                let days = [];
+
+                try {
+                    days = JSON.parse(btn.dataset.days || '[]');
+                } catch (e) {
+                    days = [];
+                }
+
+                days.forEach(day => {
+
+                    const dayWrapper = document.createElement('div');
+                    dayWrapper.classList.add('mb-4');
+
+                    /* ---------- DAY TITLE ---------- */
+                    const dayTitle = document.createElement('h6');
+                    dayTitle.classList.add('fw-600', 'mb-2');
+                    dayTitle.innerText =
+                        `Day ${day.day_number} - ${day.city_name || ''}`;
+
+                    dayWrapper.appendChild(dayTitle);
+
+                    /* ---------- ITEMS ---------- */
+                    (day.items || []).forEach(item => {
+
+                        const title = item.title || item.item_type || 'Item';
+                        const imagePath = item.image_path || null;
+                        const extraPrice = parseFloat(item.extra_price || 0);
+
+                        const itemRow = document.createElement('div');
+                        itemRow.classList.add(
+                            'd-flex',
+                            'align-items-center',
+                            'gap-3',
+                            'mb-2',
+                            'p-2',
+                            'bg-light',
+                            'rounded'
+                        );
+
+                        /* IMAGE */
+                        const img = document.createElement('img');
+                        img.style.width = '50px';
+                        img.style.height = '50px';
+                        img.style.objectFit = 'cover';
+                        img.style.borderRadius = '8px';
+
+                        img.src = imagePath ?
+                            `/storage/${imagePath}` :
+                            '/frontend/assets/default.jpg';
+
+                        /* INFO */
+                        const info = document.createElement('div');
+
+                        const titleDiv = document.createElement('div');
+                        titleDiv.classList.add('fw-500');
+                        titleDiv.innerText = title;
+
+                        const timeDiv = document.createElement('div');
+                        timeDiv.classList.add('small', 'text-muted');
+
+                        console.log(item.start_time, item.end_time);
+
+                        if (item.start_time && item.end_time) {
+
+                            const start = safeFormatTime(item.start_time);
+                            const end = safeFormatTime(item.end_time);
+
+                            if (start && end) {
+                                timeDiv.innerText = `${start} → ${end}`;
+                            }
+                        }
+
+
+                        info.appendChild(titleDiv);
+                        info.appendChild(timeDiv);
+
+                        /* ✅ EXTRA PRICE */
+                        if (extraPrice > 0) {
+                            const priceDiv = document.createElement('div');
+                            priceDiv.classList.add('small', 'text-success', 'fw-600');
+                            priceDiv.innerText = `+ ${extraPrice.toFixed(2)}`;
+                            info.appendChild(priceDiv);
+                        }
+
+                        itemRow.appendChild(img);
+                        itemRow.appendChild(info);
+
+                        dayWrapper.appendChild(itemRow);
+                    });
+
+                    itineraryBox.appendChild(dayWrapper);
+                });
+
+                /* ================= TIME FORMAT ================= */
+                function safeFormatTime(timeString) {
+                    if (!timeString) return '';
+
+                    try {
+                        let date;
+
+                        // ✅ case 1: full ISO datetime
+                        if (timeString.includes('T')) {
+                            date = new Date(timeString);
+                        }
+                        // ✅ case 2: only time HH:mm:ss
+                        else {
+                            date = new Date(`1970-01-01T${timeString}`);
+                        }
+
+                        if (isNaN(date.getTime())) return '';
+
+                        return date.toLocaleTimeString([], {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+
+                    } catch (e) {
+                        return '';
+                    }
+                }
+
+
+            });
+
+        });
+
+        /* ================= LABEL FORMAT ================= */
+        function formatLabel(value) {
+            if (!value) return '-';
+
+            return value
+                .replace(/_/g, ' ')
+                .replace(/\b\w/g, c => c.toUpperCase());
+        }
     </script>
 @endpush

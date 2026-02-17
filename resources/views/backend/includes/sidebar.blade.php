@@ -247,9 +247,18 @@
             </li>
 
 
-            {{-- <li class="sidebar-menu-title">SETTINGS</li>
+            <li class="sidebar-menu-title">SETTINGS</li>
 
             <li>
+                <x-sidebar-link href="{{ route('admin.company-details.form') }}">
+                    <span class="flex items-center">
+                        <iconify-icon class="nav-icon" icon="heroicons-outline:building-office"></iconify-icon>
+                        <span>Company Details</span>
+                    </span>
+                </x-sidebar-link>
+            </li>
+
+            {{-- <li>
                 <x-sidebar-link href="{{ url('/admin/languages') }}">
                     <span class="flex items-center">
                         <iconify-icon class="nav-icon" icon="heroicons-outline:language"></iconify-icon>
