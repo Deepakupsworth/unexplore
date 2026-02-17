@@ -43,6 +43,18 @@
             height: 250px;
             object-fit: cover;
         }
+
+    .explore-destinations__item-content a.btn.btn-outline-primary {
+        white-space: nowrap;
+        gap: 4px;
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
+    .upcoming-event__carousel-item-img img{
+        width: 100%;
+    }
+
     </style>
     {{-- HEADER --}}
     @php

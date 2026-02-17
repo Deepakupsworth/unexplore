@@ -16,7 +16,7 @@
                     <a href="{{ route('packages.index', [
                         'todo_id' => $thing->id,
                     ]) }}"
-                        class="btn btn-outline-light rounded-pill">
+                        class="btn btn-outline-light rounded-pill position-relative" style="z-index: 5;">
                         Related packages ({{ $thing->package_count }})
                     </a>
                 @endif

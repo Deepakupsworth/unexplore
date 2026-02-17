@@ -8,6 +8,7 @@ use App\Models\Event;
 use App\Models\City;
 use App\Models\Category;
 use App\Models\Package;
+use Illuminate\Support\Facades\DB;
 
 class EventController extends Controller
 {
@@ -148,8 +149,18 @@ class EventController extends Controller
             'city.translation',
             'category.translation'
         ])
-            ->where('slug', $request->slug)
-            ->firstOrFail();
+        ->withCount([
+            'packageDayItems as package_count' => function ($q) {
+                $q->whereHas(
+                    'packageDay.package',
+                    fn($q2) => $q2->where('status', 'active')
+                )
+                ->join('package_days', 'package_day_items.package_day_id', '=', 'package_days.id')
+                ->select(DB::raw('COUNT(DISTINCT package_days.package_id)'));
+            }
+        ])
+        ->where('slug', $request->slug)
+        ->firstOrFail();
 
         // Similar Events (Random + Open + Skip Current)
         $similarEvents = Event::with([

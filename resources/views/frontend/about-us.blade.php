@@ -187,7 +187,7 @@
                 <p class="section__description">{{ __('about.exclusive.description') }}</p>
             </div>
             <div class="section__header-CTA">
-                <a href="#" class="btn btn-primary rounded-pill">
+                <a href="{{ route('packages.index') }}" class="btn btn-primary rounded-pill">
                     {{ __('common.view_all') }}
                     <i class="fa-solid fa-angles-right"></i>
                 </a>
@@ -196,258 +196,13 @@
 
         <div class="exclusive-offers__carousel swiper">
             <div class="swiper-wrapper">
-                <div class="exclusive-offers__carousel-item swiper-slide">
-                    <div class="exclusive-offers__carousel-item-img">
-                        <img src="{{ asset('/frontend/assets/exclusive-offer.png') }}" alt="Exclusive Offer"
-                            class="img-fluid">
-                        <div class="badge carousel-badge"><i class="fa-solid fa-location-dot"></i> Macca</div>
-                    </div>
-                    <div class="exclusive-offers__carousel-item-info">
-                        <div class="d-flex justify-content-between mb-1">
-                            <h6 class="fw-bold">Bujairi Terrace</h6>
-                            <span class="badge carousel-badge-outline rounded-pill">2N/3D</span>
-                        </div>
-                        <p class="text-muted small mb-2">2N Diriyah • 3D Jeddah</p>
-                        <hr>
-                        <ul class="exclusive-offers__carousel-features-list">
-                            <li><span>Round Trip Flights</span></li>
-                            <li><span>5 Star Hotels</span></li>
-                            <li><span>Airport Transfers</span></li>
-                            <li><span>5 Activities</span></li>
-                            <li><span>Selected Meals</span></li>
-                        </ul>
 
-                        <!-- Price Box -->
-                        <div class="exclusive-offers__carousel-price-box">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <p class="text-muted">Only for now</p>
-                                <div class="d-flex align-items-center gap-1 text-muted">
-                                    <img src="{{ asset('/frontend/assets/icons/riyal.svg') }}" alt="Riyal">
-                                    <p class="fw-bold text-dark">40,000</p> /Person
-                                </div>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center gap-1 text-muted">
-                                    <img class="opacity-50" src="{{ asset('/frontend/assets/icons/riyal.svg') }}"
-                                        alt="Riyal">
-                                    8,332
-                                </div>
-                                <p class="text-muted small">Total Price: <img class="opacity-50"
-                                        src="{{ asset('/frontend/assets/icons/riyal.svg') }}" alt="Riyal"> 1,22,100</p>
-                            </div>
-                        </div>
+                @foreach ($packages as $package)
+                    <div class="exclusive-offers__carousel-item swiper-slide">
+                        <x-frontend.package-card :package="$package" />
                     </div>
-                </div>
-                <div class="exclusive-offers__carousel-item swiper-slide">
-                    <div class="exclusive-offers__carousel-item-img">
-                        <img src="{{ asset('/frontend/assets/exclusive-offer.png') }}" alt="Exclusive Offer"
-                            class="img-fluid">
-                        <div class="badge carousel-badge"><i class="fa-solid fa-location-dot"></i> Macca</div>
-                    </div>
-                    <div class="exclusive-offers__carousel-item-info">
-                        <div class="d-flex justify-content-between mb-1">
-                            <h6 class="fw-bold">Bujairi Terrace</h6>
-                            <span class="badge carousel-badge-outline rounded-pill">2N/3D</span>
-                        </div>
-                        <p class="text-muted small mb-2">2N Diriyah • 3D Jeddah</p>
-                        <hr>
-                        <ul class="exclusive-offers__carousel-features-list">
-                            <li>Round Trip Flights</li>
-                            <li>5 Star Hotels</li>
-                            <li>Airport Transfers</li>
-                            <li>5 Activities</li>
-                            <li>Selected Meals</li>
-                        </ul>
+                @endforeach
 
-                        <!-- Price Box -->
-                        <div class="exclusive-offers__carousel-price-box">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <p class="text-muted">Only for now</p>
-                                <div class="d-flex align-items-center gap-1 text-muted">
-                                    <img src="{{ asset('/frontend/assets/icons/riyal.svg') }}" alt="Riyal">
-                                    <p class="p-large fw-bold text-dark">40,000</p> /Person
-                                </div>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center gap-1 text-muted">
-                                    <img class="opacity-50" src="{{ asset('/frontend/assets/icons/riyal.svg') }}"
-                                        alt="Riyal">
-                                    8,332
-                                </div>
-                                <p class="text-muted small">Total Price: <img class="opacity-50"
-                                        src="{{ asset('/frontend/assets/icons/riyal.svg') }}" alt="Riyal"> 1,22,100</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="exclusive-offers__carousel-item swiper-slide">
-                    <div class="exclusive-offers__carousel-item-img">
-                        <img src="{{ asset('/frontend/assets/exclusive-offer.png') }}" alt="Exclusive Offer"
-                            class="img-fluid">
-                        <div class="badge carousel-badge"><i class="fa-solid fa-location-dot"></i> Macca</div>
-                    </div>
-                    <div class="exclusive-offers__carousel-item-info">
-                        <div class="d-flex justify-content-between mb-1">
-                            <h6 class="fw-bold">Bujairi Terrace</h6>
-                            <span class="badge carousel-badge-outline rounded-pill">2N/3D</span>
-                        </div>
-                        <p class="text-muted small mb-2">2N Diriyah • 3D Jeddah</p>
-                        <hr>
-                        <ul class="exclusive-offers__carousel-features-list">
-                            <li>Round Trip Flights</li>
-                            <li>5 Star Hotels</li>
-                            <li>Airport Transfers</li>
-                            <li>5 Activities</li>
-                            <li>Selected Meals</li>
-                        </ul>
-
-                        <!-- Price Box -->
-                        <div class="exclusive-offers__carousel-price-box">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <p class="text-muted">Only for now</p>
-                                <div class="d-flex align-items-center gap-1 text-muted">
-                                    <img src="{{ asset('/frontend/assets/icons/riyal.svg') }}" alt="Riyal">
-                                    <p class="p-large fw-bold text-dark">40,000</p> /Person
-                                </div>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center gap-1 text-muted">
-                                    <img class="opacity-50" src="{{ asset('/frontend/assets/icons/riyal.svg') }}"
-                                        alt="Riyal">
-                                    8,332
-                                </div>
-                                <p class="text-muted small">Total Price: <img class="opacity-50"
-                                        src="{{ asset('/frontend/assets/icons/riyal.svg') }}" alt="Riyal"> 1,22,100</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="exclusive-offers__carousel-item swiper-slide">
-                    <div class="exclusive-offers__carousel-item-img">
-                        <img src="{{ asset('/frontend/assets/exclusive-offer.png') }}" alt="Exclusive Offer"
-                            class="img-fluid">
-                        <div class="badge carousel-badge"><i class="fa-solid fa-location-dot"></i> Macca</div>
-                    </div>
-                    <div class="exclusive-offers__carousel-item-info">
-                        <div class="d-flex justify-content-between mb-1">
-                            <h6 class="fw-bold">Bujairi Terrace</h6>
-                            <span class="badge carousel-badge-outline rounded-pill">2N/3D</span>
-                        </div>
-                        <p class="text-muted small mb-2">2N Diriyah • 3D Jeddah</p>
-                        <hr>
-                        <ul class="exclusive-offers__carousel-features-list">
-                            <li>Round Trip Flights</li>
-                            <li>5 Star Hotels</li>
-                            <li>Airport Transfers</li>
-                            <li>5 Activities</li>
-                            <li>Selected Meals</li>
-                        </ul>
-
-                        <!-- Price Box -->
-                        <div class="exclusive-offers__carousel-price-box">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <p class="text-muted">Only for now</p>
-                                <div class="d-flex align-items-center gap-1 text-muted">
-                                    <img src="{{ asset('/frontend/assets/icons/riyal.svg') }}" alt="Riyal">
-                                    <p class="p-large fw-bold text-dark">40,000</p> /Person
-                                </div>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center gap-1 text-muted">
-                                    <img class="opacity-50" src="{{ asset('/frontend/assets/icons/riyal.svg') }}"
-                                        alt="Riyal">
-                                    8,332
-                                </div>
-                                <p class="text-muted small">Total Price: <img class="opacity-50"
-                                        src="{{ asset('/frontend/assets/icons/riyal.svg') }}" alt="Riyal"> 1,22,100</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="exclusive-offers__carousel-item swiper-slide">
-                    <div class="exclusive-offers__carousel-item-img">
-                        <img src="{{ asset('/frontend/assets/exclusive-offer.png') }}" alt="Exclusive Offer"
-                            class="img-fluid">
-                        <div class="badge carousel-badge"><i class="fa-solid fa-location-dot"></i> Macca</div>
-                    </div>
-                    <div class="exclusive-offers__carousel-item-info">
-                        <div class="d-flex justify-content-between mb-1">
-                            <h6 class="fw-bold">Bujairi Terrace</h6>
-                            <span class="badge carousel-badge-outline rounded-pill">2N/3D</span>
-                        </div>
-                        <p class="text-muted small mb-2">2N Diriyah • 3D Jeddah</p>
-                        <hr>
-                        <ul class="exclusive-offers__carousel-features-list">
-                            <li>Round Trip Flights</li>
-                            <li>5 Star Hotels</li>
-                            <li>Airport Transfers</li>
-                            <li>5 Activities</li>
-                            <li>Selected Meals</li>
-                        </ul>
-
-                        <!-- Price Box -->
-                        <div class="exclusive-offers__carousel-price-box">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <p class="text-muted">Only for now</p>
-                                <div class="d-flex align-items-center gap-1 text-muted">
-                                    <img src="{{ asset('/frontend/assets/icons/riyal.svg') }}" alt="Riyal">
-                                    <p class="p-large fw-bold text-dark">40,000</p> /Person
-                                </div>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center gap-1 text-muted">
-                                    <img class="opacity-50" src="{{ asset('/frontend/assets/icons/riyal.svg') }}"
-                                        alt="Riyal">
-                                    8,332
-                                </div>
-                                <p class="text-muted small">Total Price: <img class="opacity-50"
-                                        src="{{ asset('/frontend/assets/icons/riyal.svg') }}" alt="Riyal"> 1,22,100</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="exclusive-offers__carousel-item swiper-slide">
-                    <div class="exclusive-offers__carousel-item-img">
-                        <img src="{{ asset('/frontend/assets/exclusive-offer.png') }}" alt="Exclusive Offer"
-                            class="img-fluid">
-                        <div class="badge carousel-badge"><i class="fa-solid fa-location-dot"></i> Macca</div>
-                    </div>
-                    <div class="exclusive-offers__carousel-item-info">
-                        <div class="d-flex justify-content-between mb-1">
-                            <h6 class="fw-bold">Bujairi Terrace</h6>
-                            <span class="badge carousel-badge-outline rounded-pill">2N/3D</span>
-                        </div>
-                        <p class="text-muted small mb-2">2N Diriyah • 3D Jeddah</p>
-                        <hr>
-                        <ul class="exclusive-offers__carousel-features-list">
-                            <li>Round Trip Flights</li>
-                            <li>5 Star Hotels</li>
-                            <li>Airport Transfers</li>
-                            <li>5 Activities</li>
-                            <li>Selected Meals</li>
-                        </ul>
-
-                        <!-- Price Box -->
-                        <div class="exclusive-offers__carousel-price-box">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <p class="text-muted">Only for now</p>
-                                <div class="d-flex align-items-center gap-1 text-muted">
-                                    <img src="{{ asset('/frontend/assets/icons/riyal.svg') }}" alt="Riyal">
-                                    <p class="p-large fw-bold text-dark">40,000</p> /Person
-                                </div>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center gap-1 text-muted">
-                                    <img class="opacity-50" src="{{ asset('/frontend/assets/icons/riyal.svg') }}"
-                                        alt="Riyal">
-                                    8,332
-                                </div>
-                                <p class="text-muted small">Total Price: <img class="opacity-50"
-                                        src="{{ asset('/frontend/assets/icons/riyal.svg') }}" alt="Riyal"> 1,22,100</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
             <div class="custom__carousel-pagination"></div>
         </div>
@@ -455,6 +210,7 @@
 </section>
 
 <!-- START EXPLORING -->
+@if($favouriteCities && $favouriteCities->count() > 0)
 <section class="section-padding-md">
     <div class="container">
         <div class="section__header">
@@ -465,7 +221,7 @@
                 <p class="section__description">{{ __('about.explore.description') }}</p>
             </div>
             <div class="section__header-CTA">
-                <a href="#" class="btn btn-primary rounded-pill">
+                <a href="{{ route('destinations.index') }}" class="btn btn-primary rounded-pill">
                     {{ __('common.view_all') }}
                     <i class="fa-solid fa-angles-right"></i>
                 </a>
@@ -473,47 +229,24 @@
         </div>
 
         <div class="row start-exploring__row gy-3">
-            <div class="col-md-6 col-lg-3">
-                <div class="start-exploring__item">
-                    <img src="{{ asset('/frontend/assets/start-explore-1.png') }}" class="img-fluid">
-                    <div class="start-exploring__item-content">
-                        <p class="mb-1 p-large fw-600">{{ __('about.explore.riyadh.title') }}</p>
-                        <p class="p-small">{{ __('about.explore.riyadh.description') }}</p>
-                    </div>
-                </div>
-            </div>
+            @foreach ($favouriteCities as $city)
 
-            <div class="col-md-6 col-lg-3">
-                <div class="start-exploring__item">
-                    <img src="{{ asset('/frontend/assets/start-explore-1.png') }}" class="img-fluid">
-                    <div class="start-exploring__item-content">
-                        <p class="mb-1 p-large fw-600">{{ __('about.explore.jeddah.title') }}</p>
-                        <p class="p-small">{{ __('about.explore.jeddah.description') }}</p>
+                <div class="col-md-6 col-lg-3">
+                    <div class="start-exploring__item">
+                        <img src="{{ asset('storage/' . $city->thumb_image) }}" alt="Explore" class="img-fluid">
+                        <div class="start-exploring__item-content">
+                            <p class="mb-1 p-large fw-600">
+                               {{$city?->translation?->name}}
+                            </p>
+                            <p class="p-small">
+                               {{$city?->translation?->tagline}}
+                            </p>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="col-md-6 col-lg-3">
-                <div class="start-exploring__item">
-                    <img src="{{ asset('/frontend/assets/start-explore-1.png') }}" class="img-fluid">
-                    <div class="start-exploring__item-content">
-                        <p class="mb-1 p-large fw-600">{{ __('about.explore.makkah.title') }}</p>
-                        <p class="p-small">{{ __('about.explore.makkah.description') }}</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6 col-lg-3">
-                <div class="start-exploring__item">
-                    <img src="{{ asset('/frontend/assets/start-explore-1.png') }}" class="img-fluid">
-                    <div class="start-exploring__item-content">
-                        <p class="mb-1 p-large fw-600">{{ __('about.explore.madinah.title') }}</p>
-                        <p class="p-small">{{ __('about.explore.madinah.description') }}</p>
-                    </div>
-                </div>
-            </div>
+                @endforeach
         </div>
     </div>
 </section>
-
+@endif
 @endsection

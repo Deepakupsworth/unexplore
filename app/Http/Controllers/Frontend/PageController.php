@@ -9,6 +9,7 @@ use App\Models\ThingToDo;
 use App\Models\Package;
 use Illuminate\Support\Facades\Cache;
 use App\Models\Tag;
+use Illuminate\Support\Facades\DB;
 
 class PageController extends Controller
 {
@@ -70,15 +71,16 @@ class PageController extends Controller
                     'thumb',
                     'city.translationData',
                 ])
-                    ->withCount([
-                        'packageDayItems as package_count' => function ($q) {
-                            $q->whereHas(
-                                'packageDay.package',
-                                fn($q2) =>
-                                $q2->where('status', 'active')
-                            );
-                        }
-                    ])
+                ->withCount([
+                    'packageDayItems as package_count' => function ($q) {
+                        $q->whereHas(
+                            'packageDay.package',
+                            fn($q2) => $q2->where('status', 'active')
+                        )
+                        ->join('package_days', 'package_day_items.package_day_id', '=', 'package_days.id')
+                        ->select(DB::raw('COUNT(DISTINCT package_days.package_id)'));
+                    }
+                ])
                     ->having('package_count', '>', 0);
 
                 $things = $favouriteTagId
@@ -101,7 +103,7 @@ class PageController extends Controller
                 $activeEventCondition = function ($q) {
                     $q->where(function ($q2) {
                         $q2->whereNull('start_date')
-                           ->orWhereDate('start_date', '>=', now());
+                            ->orWhereDate('start_date', '>=', now());
                     });
                 };
 
@@ -113,8 +115,8 @@ class PageController extends Controller
                     'category.translation',
                     'eventCategories.category.translationData'
                 ])
-                ->where('status', 1)
-                ->where($activeEventCondition);
+                    ->where('status', 1)
+                    ->where($activeEventCondition);
 
 
                 $events = $favouriteTagId
@@ -173,7 +175,69 @@ class PageController extends Controller
 
     public function about_us()
     {
-        return view('frontend.about-us');
+
+        $language = app()->getLocale();
+
+        $favouriteCities = City::with([
+            'translation' => fn($q) =>
+            $q->where('language_code', $language),
+            'thumb',
+            'categories.translationData',
+        ])
+            ->withCount([
+                'packageCities as package_count' => function ($q) {
+                    $q->whereHas(
+                        'package',
+                        fn($p) => $p->where('status', 'active')
+                    );
+                }
+            ])
+            ->whereHas('tags', function ($q) {
+                $q->where('slug', 'favourite');
+            })
+            ->latest()
+            ->take(4)
+            ->get();
+
+
+        if ($favouriteCities->isEmpty()) {
+
+            $favouriteCities = City::with([
+                'translation' => fn($q) =>
+                $q->where('language_code', $language),
+                'thumb',
+                'categories.translationData',
+            ])
+                ->withCount([
+                    'packageCities as package_count' => function ($q) {
+                        $q->whereHas(
+                            'package',
+                            fn($p) => $p->where('status', 'active')
+                        );
+                    }
+                ])
+                ->inRandomOrder()
+                ->take(4)
+                ->get();
+        }
+
+        $packages = Package::query()
+            ->with([
+                'translation' => fn($q) =>
+                $q->where('language_code', $language),
+                'cities.city',
+                'price',
+                'days.items.transport',
+                'days.items.hotel'
+            ])
+            ->where('status', 'active')
+            ->whereHas('tags', function ($q) {
+                $q->where('slug', 'favourite');
+            })
+            ->latest()
+            ->take(12)
+            ->get();
+        return view('frontend.about-us', compact('packages', 'favouriteCities'));
     }
 
     public function contact_us()

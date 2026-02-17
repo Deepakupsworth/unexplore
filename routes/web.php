@@ -87,6 +87,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/booking/success', [BookingController::class, 'success'])
         ->name('booking.success');
     Route::get('/test-booking-mail', [BookingController::class, 'testBookingMail']);
+
+    Route::post('/checkout/update-travellers-session',
+    [CheckoutController::class, 'updateTravellerSession']
+    )->name('checkout.update.session');
+
+    Route::get('/checkout/search-traveller', [CheckoutController::class, 'searchTraveller'])
+    ->name('checkout.search.traveller');
+
 });
 
 

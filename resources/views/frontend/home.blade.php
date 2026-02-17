@@ -496,7 +496,7 @@
                             </h2>
                         </div>
                         <div class="section__header-CTA">
-                            <a href="#" class="btn btn-primary rounded-pill">
+                            <a href="{{route('packages.index')}}" class="btn btn-primary rounded-pill">
                                 {{ __('home.pass.cta') }}
                                 <i class="fa-solid fa-angles-right"></i>
                             </a>
