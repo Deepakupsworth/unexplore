@@ -127,7 +127,7 @@
     "about.exclusive.per_person": "/Person",
     "about.exclusive.total_price": "Total Price",
     "about.explore.title": "Start exploring",
-    "about.explore.description" : "Embark on unforgettable journeys and explore the hidden gems across the heart of Saudi Arabia",
+    "about.explore.description": "Embark on unforgettable journeys and explore the hidden gems across the heart of Saudi Arabia",
     "about.explore.riyadh.title": "Riyadh",
     "about.explore.riyadh.description": "A Modern Capital Shaping the Future",
     "about.explore.jeddah.title": "Jeddah",
@@ -189,7 +189,7 @@
     "things.results.sort.label": "Sort by:",
     "things.results.sort.popular": "Popular",
     "things.results.sort.newest": "Newest",
-    "things.results.sort.thingToDo" : "Things To Do",
+    "things.results.sort.thingToDo": "Things To Do",
     "thing_detail.banner.see_images": "See Images",
     "thing_detail.info.title": "Information",
     "thing_detail.info.location_label": "Location:",
@@ -321,83 +321,61 @@
     "auth.forgot.send_email": "Send Recovery Email",
     "auth.forgot.remember_password": "Remember password?",
     "auth.forgot.sign_in": "Sign In",
-
     "auth.back_to_site": "Go back to the website",
     "auth.email.placeholder": "Your Email",
-
     "auth.reset.title": "Reset Your Password",
     "auth.reset.subtitle": "Enter your registered email and create a new password to regain access.",
-
     "auth.reset.email_label": "Email Address",
     "auth.reset.email_placeholder": "Enter your email",
-
     "auth.reset.new_password_label": "New Password",
     "auth.reset.new_password_placeholder": "Enter new password",
-
     "auth.reset.confirm_password_label": "Confirm Password",
     "auth.reset.confirm_password_placeholder": "Re-enter new password",
-
     "auth.reset.submit": "Reset Password",
-
     "auth.reset.remember_password": "Remember your password?",
     "auth.reset.sign_in": "Sign In",
-
     "package.gallery.view": "View Gallery",
     "package.gallery.activities": "Activities & Sightseeing",
     "package.gallery.events": "Events",
     "package.gallery.hotels": "Hotels",
-
     "package.tabs.overview": "Overview",
     "package.tabs.additional_info": "Additional Info",
-
     "package.day_plan.title": "Day Plan",
     "package.day": "Day",
-
     "package.item.hotel": "Hotel",
     "package.item.todo": "To Do Thing",
     "package.item.event": "Events",
     "package.item.transport": "Transport",
-
     "package.pricing.starting_from": "Starting from",
     "package.pricing.per_person": "Per Person",
     "package.pricing.person": "Person",
     "package.pricing.book_now": "Book Now",
     "package.pricing.total_price": "Total Price",
-
     "package.duration.label": "Duration",
     "package.places_to_visit": "Places to Visit",
-
     "package.help.title": "Do you have questions or need more information?",
     "package.help.cta": "Get More Help",
-
     "package.share": "Share",
-
     "package.modal.edit_search": "Edit Your Search",
     "package.modal.starting_from": "Starting From",
     "package.modal.going_to": "Going to",
     "package.modal.starting_date": "Starting Date",
     "package.modal.search": "Search",
-
     "package.traveller.adults": "Adults",
     "package.traveller.children": "Children",
     "package.traveller.infants": "Infants",
-
     "package.traveller.adults_age": "12+ Years",
     "package.traveller.children_age": "2–12 Years",
     "package.traveller.infants_age": "Below 2 Years",
-
     "package.traveller.economy": "Economy",
     "package.traveller.business": "Business Class",
     "package.traveller.first": "First Class",
     "package.traveller.premium": "Premium Economy",
-
     "package.save": "Save",
-    "common.clearAll" : "Clear All",
+    "common.clearAll": "Clear All",
     "packages.empty": "No packages found",
-
-    "destination_details.stories.category" : "Culture & History, Art Gallery",
-    "destination_details.stories.title_sample" : "5 Must-Do Experiences in Jeddah",
-
+    "destination_details.stories.category": "Culture & History, Art Gallery",
+    "destination_details.stories.title_sample": "5 Must-Do Experiences in Jeddah",
     "checkout.traveller_details": "Traveller Details",
     "checkout.traveller": "Traveller",
     "checkout.travellers": "Travellers",
@@ -414,14 +392,12 @@
     "checkout.gender": "Gender",
     "checkout.country": "Country",
     "checkout.traveller_type": "Traveller Type",
-
     "checkout.select": "Select",
     "checkout.male": "Male",
     "checkout.female": "Female",
     "checkout.adult": "Adult",
     "checkout.adults": "Adults",
     "checkout.child": "Child",
-
     "checkout.cancel": "Cancel",
     "checkout.confirm_details": "Confirm Details",
     "checkout.email": "Email",
@@ -431,7 +407,6 @@
     "checkout.update": "Update",
     "checkout.add_traveller": "Add Traveller",
     "checkout.policies": "Policies",
-
     "checkout.package_itinerary_inclusions": "Package Itinerary & Inclusions",
     "checkout.package_features": "Package Features",
     "checkout.itinerary": "Itinerary",
@@ -445,72 +420,108 @@
     "checkout.todo_thing": "To Do Thing",
     "checkout.events_label": "Events",
     "checkout.transport": "Transport",
-
     "checkout.coupons_offers": "Coupons & Offers",
     "checkout.enter_coupon_code": "Enter Coupon Code",
     "checkout.apply": "Apply",
     "checkout.apply_code": "Apply Code",
     "checkout.more_coupons": "+ :count More",
     "checkout.off": "OFF",
-
     "checkout.grand_total": "Grand Total",
-
     "checkout.children": "Children",
-
     "checkout.pay_full_amount": "Pay Full Amount Now",
     "checkout.fare_breakup": "Fare Breakup",
     "checkout.total_basic_cost": "Total Basic Cost",
-
-
     "checkout.extra_adults": "Extra Adults",
     "checkout.children_price": "Children Price",
     "checkout.addon_cost": "Add-On Cost",
     "checkout.additional_cost_selected_addons": "Additional cost for selected add-on items",
-
     "checkout.coupon_discount": "Coupon Discount",
     "checkout.total_payable": "Total Payable",
     "checkout.all_taxes_included": "All taxes included",
-
     "checkout.payment_method": "Payment Method",
     "checkout.bank_transfer": "Bank Transfer",
-
     "checkout.important_information": "Important Information",
     "checkout.accept_terms_text": "I confirm that I have read and I accept Cancellation Policy, User Agreement, Terms of Service and Privacy Policy",
     "checkout.continue": "Continue",
-
     "gallery.package": "Package",
     "gallery.activities_sightseeing": "Activities & Sightseeing",
     "gallery.events": "Events",
     "gallery.hotels": "Hotels",
-
     "gallery.package_image": "Package Image",
     "gallery.package_gallery": "Package Gallery",
-
     "gallery.image": "Image",
     "gallery.gallery": "Gallery",
-
     "events.explore_events": "Explore Events",
     "events.discover_events_saudi": "Discover upcoming events happening across Saudi.",
-
     "common.filters": "Filters",
     "common.search": "Search",
-
     "events.browse_event_locations": "Browse Event, Locations",
     "events.type": "Type",
     "events.things_to_do": "Things To Do",
     "events.events": "Events",
-
     "common.categories": "Categories",
     "common.destinations": "Destinations",
-
     "events.event_date": "Event Date",
     "common.from": "From",
     "common.to": "To",
-
     "events.all_events": "All Events",
     "common.sort_by": "Sort by:",
     "common.none": "None",
     "common.popular": "Popular",
-    "common.newest": "Newest"
-
+    "common.newest": "Newest",
+    "account.dashboard": "Dashboard",
+    "account.profile": "Profile",
+    "account.bookings": "Bookings",
+    "account.manage_address": "Manage Address",
+    "account.manage_traveller": "Manage Traveller",
+    "account.delete_address_confirm": "Delete this address?",
+    "account.delete_traveller_confirm": "Delete traveller?",
+    "account.remove_profile_image_confirm": "Remove profile image?",
+    "account.upload_failed": "Upload failed",
+    "account.payment_type": "Payment Type",
+    "account.transaction_id": "Transaction ID",
+    "account.manage_address_desc": "Manage your saved addresses — view, add, edit or delete anytime.",
+    "account.add_new_address": "Add New Address",
+    "account.address_title": "Address Title",
+    "account.full_address": "Full Address",
+    "account.last_updated": "Last Updated",
+    "account.action": "Action",
+    "account.no_addresses_found": "No addresses found.",
+    "account.my_bookings": "My Bookings",
+    "account.my_bookings_desc": "Here you can view all your bookings and packages along with their current status.",
+    "account.upcoming": "Upcoming",
+    "account.cancelled": "Cancelled",
+    "account.completed": "Completed",
+    "account.status_upcoming": "Upcoming",
+    "account.status_cancelled": "Cancelled",
+    "account.status_completed": "Completed",
+    "account.no_upcoming_bookings": "No upcoming bookings",
+    "account.no_cancelled_bookings": "No cancelled bookings",
+    "account.no_completed_bookings": "No completed bookings",
+    "account.total_bookings": "Total Bookings",
+    "account.completed_trips": "Completed Trips",
+    "account.upcoming_trips": "Upcoming Trips",
+    "account.profile_desc": "Update your avatar and personal information",
+    "account.personal_information": "Personal Information",
+    "account.personal_information_desc": "Update your personal details and contact information",
+    "account.first_name": "First Name",
+    "account.last_name": "Last Name",
+    "account.email_address": "Email Address",
+    "account.phone_number": "Phone Number",
+    "account.profile_picture": "Profile Picture",
+    "account.profile_picture_desc": "Update your avatar",
+    "account.upload_new_photo": "Upload new photo",
+    "account.remove": "Remove",
+    "account.image_hint": "JPG, PNG. Max size 2MB.",
+    "account.save_changes": "Save Changes",
+    "account.travellers": "Travellers",
+    "account.travellers_desc": "Manage adults and children for bookings",
+    "account.add_traveller": "Add Traveller",
+    "account.name": "Name",
+    "account.type": "Type",
+    "account.age": "Age",
+    "account.country": "Country",
+    "account.adult": "Adult",
+    "account.child": "Child",
+    "account.no_travellers": "No travellers added"
 }

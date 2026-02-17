@@ -12,35 +12,35 @@
                         <li>
                             <a href="javascript:void(0)" class="nav-link account-tab active" data-tab="dashboard">
                                 <i class="fa-solid fa-house p-large"></i>
-                                Dashboard
+                                {{ __('account.dashboard') }}
                             </a>
                         </li>
 
                         <li>
                             <a href="javascript:void(0)" class="nav-link account-tab" data-tab="profile">
                                 <i class="fa-solid fa-circle-user p-large"></i>
-                                Profile
+                                {{ __('account.profile') }}
                             </a>
                         </li>
 
                         <li>
                             <a href="javascript:void(0)" class="nav-link account-tab" data-tab="bookings">
                                 <i class="fa-solid fa-calendar-check p-large"></i>
-                                Bookings
+                                {{ __('account.bookings') }}
                             </a>
                         </li>
 
                         <li>
                             <a href="javascript:void(0)" class="nav-link account-tab" data-tab="addresses">
                                 <i class="fa-solid fa-location-dot p-large"></i>
-                                Manage Address
+                                {{ __('account.manage_address') }}
                             </a>
                         </li>
                         <li>
                             <a href="javascript:void(0)" class="nav-link account-tab" data-tab="travellers">
                                 <i class="fa-solid fa-people-group p-large"></i>
 
-                                Manage Traveller
+                                {{ __('account.manage_traveller') }}
                             </a>
                         </li>
 
@@ -114,7 +114,7 @@
 
 
         function deleteAddress(id) {
-            if (!confirm('Delete this address?')) return;
+            if (!confirm("{{ __('account.delete_address_confirm') }}")) return;
 
             fetch(`/account/addresses/${id}`, {
                 method: 'DELETE',
@@ -234,7 +234,7 @@
                         };
                         reader.readAsDataURL(file);
                     } else {
-                        alert('Upload failed');
+                        // alert('Upload failed');
                     }
                 });
         });
@@ -242,7 +242,7 @@
         /* ================= DELETE IMAGE ================= */
         function deleteProfileImage() {
 
-            if (!confirm('Remove profile image?')) return;
+            if (!confirm("{{ __('account.remove_profile_image_confirm') }}")) return;
 
             fetch('{{ route('profile.image.delete') }}', {
                     method: 'POST',
@@ -289,7 +289,7 @@
         }
 
         function deleteTraveller(id) {
-            if (!confirm('Delete traveller?')) return;
+            if (!confirm("{{ __('account.remove_profile_image_confirm') }}")) return;
             fetch(`/account/travellers/${id}`, {
                 method: 'DELETE',
                 headers: {
@@ -582,7 +582,7 @@
                         <div class="d-flex gap-3 mb-2">
                             <img src="/frontend/assets/icons/drag-vertical.svg">
                             <div class="booking-details__item">
-                                <span class="booking-details__item-title">Payment Type</span>
+                                <span class="booking-details__item-title">{{ __('account.payment_type') }}</span>
                                 <span class="fw-500 d-flex gap-3">
                                     <span class="text-black fw-600">:</span>
                                     ${methodLabel}
@@ -593,7 +593,7 @@
                         <div class="d-flex gap-3 mb-2">
                             <img src="/frontend/assets/icons/drag-vertical.svg">
                             <div class="booking-details__item">
-                                <span class="booking-details__item-title">Transaction ID</span>
+                                <span class="booking-details__item-title">{{ __('account.transaction_id') }}</span>
                                 <span class="fw-500 d-flex gap-3">
                                     <span class="text-black fw-600">:</span>
                                     ${txnId}

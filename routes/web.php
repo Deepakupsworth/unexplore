@@ -36,6 +36,7 @@ use App\Http\Controllers\Admin\CompanyDetailController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PackagePolicyController;
 use App\Http\Controllers\Admin\TagController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\NewsletterController;
 
@@ -155,8 +156,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])
         ->name('admin.dashboard');
 
+
+
     Route::prefix('admin')->group(function () {
 
+        Route::get('/users', [UserController::class, 'index'])
+        ->name('admin.users.index');
 
         Route::resource('coupon', AdminCouponController::class);
         Route::post('coupon/{coupon}/status', [AdminCouponController::class, 'status'])
