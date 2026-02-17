@@ -169,6 +169,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
         |--------------------------------------------------------------------------
         */
         Route::prefix('cities')->group(function () {
+            Route::get('/search',[CityController::class, 'search'])->name('cities.search');
+
+            Route::get('/seachIds',[CityController::class, 'seachIds'])->name('cities.seachIds');
+
             Route::get('/', [CityController::class, 'index'])->name('cities.index');
             Route::get('/create', [CityController::class, 'form'])->name('cities.create');
             Route::get('/{id}/edit', [CityController::class, 'form'])->name('cities.edit');
@@ -179,6 +183,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
             Route::delete('/delete/{id}', [CityController::class, 'destroy'])->name('cities.delete');
 
             Route::delete('/gallery/delete/{id}', [CityController::class, 'deleteGalleryImage'])->name('cities.image.delete');
+
+          
         });
 
         Route::prefix('gallery')->group(function () {
@@ -360,6 +366,19 @@ Route::middleware(['auth', 'admin'])->group(function () {
                 'admin/packages/{package}/policies',
                 [AdminPackageController::class, 'savePolicies']
             )->name('policies.save');
+
+            Route::get(
+                '/search',
+                [AdminPackageController::class, 'search']
+            )->name('search');
+
+            Route::get(
+                '/seachIds',
+                [AdminPackageController::class, 'seachIds']
+            )->name('seachIds');
+
+            
+            
         });
     });
 

@@ -396,6 +396,7 @@
     "packages.empty": "No packages found",
 
     "destination_details.stories.category" : "Culture & History, Art Gallery",
-    "destination_details.stories.title_sample" : "5 Must-Do Experiences in Jeddah"
+    "destination_details.stories.title_sample" : "5 Must-Do Experiences in Jeddah",
+    "dashboard": "Dashboard"
 
 }

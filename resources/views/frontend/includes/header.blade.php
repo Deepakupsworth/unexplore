@@ -377,9 +377,15 @@
                                 {{ Auth()?->user()->first_name }}
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                @if(Auth()?->user()->role == 'admin')
+                                <li><a class="dropdown-item"
+                                        href="{{ route('admin.dashboard') }}">{{ __('dashboard') }}</a>
+                                </li>
+                                @else
                                 <li><a class="dropdown-item"
                                         href="{{ url('/account') }}?tab=profile">{{ __('header.my_profile') }}</a>
                                 </li>
+                                @endif
 
                                 <li>
                                     <form method="POST" action="/logout">
@@ -591,10 +597,17 @@
                 <!-- When user is logged in -->
                 @if (!empty(@auth()->user()->id))
                     <div class="navbar__buttons d-flex flex-column gap-2 mt-3">
+                        @if(@auth()->user()->role == 'admin')
+                        <a href="{{ route('admin.dashboard') }}" class="text-white d-flex gap-2 align-items-center text-decoration-none">
+                            {{ __('dashboard') }}
+                        </a>
+                        @else
                         <a href="{{ url('/account') }}?tab=profile" class="text-white d-flex gap-2 align-items-center text-decoration-none">
                             <i class="fa-solid fa-circle-user"></i>
                             {{ Auth()?->user()->first_name }}
                         </a>
+                        @endif
+                        
                         <a href="#" class="text-white d-flex gap-2 align-items-center text-decoration-none"
                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             <i class="fa-solid fa-right-from-bracket"></i>

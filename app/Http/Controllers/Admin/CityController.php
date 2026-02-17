@@ -323,4 +323,38 @@ class CityController extends Controller
         City::findOrFail($id)->delete();
         return redirect()->back()->with('success', 'City deleted successfully.');
     }
+
+
+    public function search(Request $request)
+    {
+       
+        return City::query()
+            ->whereHas('translations', function ($t) use ($request) {
+                $t->where('name', 'like', '%' . $request->q . '%');
+            })
+            ->with(['translationData'])
+            ->limit(10)
+            ->get()
+            ->map(function ($city) {
+                return [
+                    'id' => $city->id,
+                    'title' => optional($city->translationData)->name
+                ];
+            });
+    }
+
+    public function seachIds(Request $request)
+    {
+        return City::whereIn('id', $request->ids)
+            ->with('translationData')
+            ->get()
+            ->map(function ($city) {
+                return [
+                    'id' => $city->id,
+                    'title' => optional($city->translationData)->name
+                ];
+            });
+    }
+    
+
 }
