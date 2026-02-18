@@ -141,13 +141,13 @@
                             {{ __('thing_detail.map.get_directions') }}
                         </a>
                     </div>
-                    <div class="event-map__info-card">
+                    {{-- <div class="event-map__info-card">
                         <p class="fw-500">Share</p>
                         <div class="d-flex gap-3 mt-2">
 
-                            <x-share-links />
+                            <x-share-links a-class="social-icon" icon-size="icon-sm" />
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>

@@ -52,9 +52,47 @@
 
 {{-- ================= AJAX SCRIPT ================= --}}
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const slider = document.getElementById('budgetSlider');
+        if (!slider) return;
+
+        const minInput = document.getElementById('min_price');
+        const maxInput = document.getElementById('max_price');
+        const minLabel = document.getElementById('minPriceLabel');
+        const maxLabel = document.getElementById('maxPriceLabel');
+
+        noUiSlider.create(slider, {
+            start: [Number(minInput.value), Number(maxInput.value)],
+            connect: true,
+            step: 5000,
+            range: {
+                min: 0,
+                max: 200000
+            },
+            format: {
+                to: value => Math.round(value),
+                from: value => Number(value)
+            }
+        });
+
+        // ✅ UPDATE LABELS LIVE
+        slider.noUiSlider.on('update', function(values) {
+            minInput.value = values[0];
+            maxInput.value = values[1];
+
+            minLabel.textContent = Number(values[0]).toLocaleString('en-IN');
+            maxLabel.textContent = Number(values[1]).toLocaleString('en-IN');
+        });
+
+        // 🔥🔥🔥 IMPORTANT — TRIGGER AJAX ON SLIDE END
+        slider.noUiSlider.on('change', function() {
+            loadPackages(); // ✅ your existing function
+        });
+    });
+</script>
 
 <script>
-
     function loadPackages(page = 1, updateUrl = true) {
 
         const $form = $('.package-filter');
@@ -163,8 +201,7 @@
     window.addEventListener('popstate', function() {
         loadPackages(1, false);
     });
-
-    </script>
+</script>
 
 <script>
     $(document).on('click', '.package-type-tag', function(e) {

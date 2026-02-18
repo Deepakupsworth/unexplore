@@ -277,6 +277,7 @@
     "packages.filters.cities": "Cities",
     "packages.filters.package_type": "Package Type",
     "packages.filters.customizable": "Customizable",
+    "packages.filters.non_customizable": "Non Customizable",
     "packages.banner.title": "Explore Packages",
     "packages.banner.description": "Discover the full range of amazing things to see and do across Saudi.",
     "header.my_profile": "My Profile",

@@ -35,13 +35,15 @@ class PackageController extends Controller
         /* ================= LEFT FILTER DATA ================= */
 
         // 🌍 Cities
-        $cities = City::orderBy('slug')->get();
+        $cities = City::whereHas('packages')
+        ->orderBy('slug')
+        ->get();
 
         // 👥 Persons
         $persons = max((int) $request->get('persons', 1), 1);
 
         /* ================= MAIN QUERY ================= */
-
+        //print_r($request->rating);die;
         $packagesQuery = Package::query()
             ->with([
                 'translations',
@@ -67,27 +69,21 @@ class PackageController extends Controller
                 });
             })
 
-            /* 💰 BUDGET FILTER */
-            ->when($request->budget, function ($q) use ($request) {
+            /* 💰 BUDGET RANGE FILTER (NEW) */
+            ->when(
+                $request->filled('min_price') || $request->filled('max_price'),
+                function ($q) use ($request) {
 
-                $ranges = (array) $request->budget;
+                    $min = (int) ($request->min_price ?? 0);
+                    $max = (int) ($request->max_price ?? PHP_INT_MAX);
 
-                $q->whereHas('price', function ($priceQuery) use ($ranges) {
-
-                    $priceQuery->where(function ($subQuery) use ($ranges) {
-
-                        foreach ($ranges as $range) {
-
-                            [$min, $max] = explode('-', $range);
-
-                            $subQuery->orWhereBetween('per_person_price', [
-                                (int) $min,
-                                (int) $max
-                            ]);
-                        }
+                    $q->whereHas('price', function ($priceQuery) use ($min, $max) {
+                        $priceQuery->whereBetween('per_person_price', [$min, $max]);
                     });
-                });
-            })
+                }
+            )
+
+
 
             /* ⭐ HOTEL RATING */
             ->when(
@@ -244,27 +240,19 @@ class PackageController extends Controller
                 });
             })
 
-            /* 💰 BUDGET FILTER */
-            ->when($request->budget, function ($q) use ($request) {
+            /* 💰 BUDGET RANGE FILTER (NEW) */
+            ->when(
+                $request->filled('min_price') || $request->filled('max_price'),
+                function ($q) use ($request) {
 
-                $ranges = (array) $request->budget;
+                    $min = (int) ($request->min_price ?? 0);
+                    $max = (int) ($request->max_price ?? PHP_INT_MAX);
 
-                $q->whereHas('price', function ($priceQuery) use ($ranges) {
-
-                    $priceQuery->where(function ($subQuery) use ($ranges) {
-
-                        foreach ($ranges as $range) {
-
-                            [$min, $max] = explode('-', $range);
-
-                            $subQuery->orWhereBetween('per_person_price', [
-                                (int) $min,
-                                (int) $max
-                            ]);
-                        }
+                    $q->whereHas('price', function ($priceQuery) use ($min, $max) {
+                        $priceQuery->whereBetween('per_person_price', [$min, $max]);
                     });
-                });
-            })
+                }
+            )
 
 
             /* ⭐ HOTEL RATING */

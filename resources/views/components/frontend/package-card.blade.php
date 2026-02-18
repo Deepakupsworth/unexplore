@@ -1,4 +1,4 @@
-@props(['package'])
+@props(['package','cityShow'=>true])
 {{-- @dd($package) --}}
 @php
     // =========================
@@ -44,7 +44,7 @@
             >
 
             {{-- CITY BADGE --}}
-            @if($city)
+            @if($city && $cityShow)
                 <div class="badge carousel-badge">
                     <i class="fa-solid fa-location-dot"></i>
                     {{ $city->name }}
@@ -75,7 +75,8 @@
             <hr>
 
             {{-- FEATURES --}}
-            {!! packageListingUl($package->days) !!}
+
+            {!! packageListingUl($package->days,$_GET['rating'] ?? []) !!}
 
             {{-- ================= PRICE ================= --}}
             <div class="exclusive-offers__carousel-price-box">

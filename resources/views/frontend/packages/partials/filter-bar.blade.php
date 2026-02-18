@@ -418,6 +418,16 @@ document.addEventListener('DOMContentLoaded', function() {
                        if (isPlus && totalPersons() >= config.maxPersons) {
                         e.preventDefault();
                             e.stopImmediatePropagation();
+                            iziToast.info({
+                                title: 'Limit Reached',
+                                message: `You can select up to ${config.maxPersons} persons only.`,
+                                position: 'topRight',
+                                timeout: 4000,
+                                closeOnClick: true,
+                                pauseOnHover: true,
+                                displayMode: 2
+                            });
+
                             return false;
 
                        }
