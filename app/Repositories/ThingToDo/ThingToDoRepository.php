@@ -36,6 +36,13 @@ class ThingToDoRepository implements ThingToDoRepositoryInterface
         if ($request->filled('city_id')) {
             $query->where('city_id', $request->city_id);
         }
+        
+        $citiesIds = $request->input('cities_ids');
+
+        if (is_array($citiesIds) && count($citiesIds) > 0) {
+            $query->whereIn('city_id', $citiesIds);
+        }
+
 
         // 🗂 Category filter
         if ($request->filled('category_id')) {

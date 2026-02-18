@@ -133,13 +133,26 @@
 
                                         </div>
 
-                                        {{-- RIGHT: Time --}}
-                                        <div class="text-sm text-slate-600">
+
+                                        {{-- RIGHT: Time + Extra Price --}}
+                                        <div class="text-right">
+
+                                            {{-- Time --}}
                                             @if ($item->start_time && $item->end_time)
-                                                {{ \Carbon\Carbon::parse($item->start_time)->format('h:i A') }}
-                                                →
-                                                {{ \Carbon\Carbon::parse($item->end_time)->format('h:i A') }}
+                                                <div class="text-sm text-slate-600">
+                                                    {{ \Carbon\Carbon::parse($item->start_time)->format('h:i A') }}
+                                                    →
+                                                    {{ \Carbon\Carbon::parse($item->end_time)->format('h:i A') }}
+                                                </div>
                                             @endif
+
+                                            {{-- 🔥 EXTRA PRICE (only if exists) --}}
+                                            @if (!empty($item->extra_price) && $item->extra_price > 0)
+                                                <div class="text-sm font-semibold text-green-600 mt-1">
+                                                    + {{ number_format($item->extra_price, 2) }}
+                                                </div>
+                                            @endif
+
                                         </div>
 
                                     </div>
@@ -188,15 +201,12 @@
 
                             <select name="status" class="form-control mb-2" required>
 
-                                @foreach(\App\Enums\BookingStatus::cases() as $status)
-
-                                    <option value="{{ $status->value }}"
-                                        @selected($booking->status?->value === $status->value)>
+                                @foreach (\App\Enums\BookingStatus::cases() as $status)
+                                    <option value="{{ $status->value }}" @selected($booking->status?->value === $status->value)>
 
                                         {{ $status->label() }}
 
                                     </option>
-
                                 @endforeach
 
                             </select>
@@ -241,12 +251,13 @@
                                             <x-admin.table.tbody>
                                                 @foreach ($booking->payments as $payment)
                                                     <x-admin.table.tr>
-                                                        <x-admin.table.td>{{$payment->payment_method->label() }}</x-admin.table.td>
+                                                        <x-admin.table.td>{{ $payment->payment_method->label() }}</x-admin.table.td>
                                                         <x-admin.table.td>{{ $payment->transaction_id ?? '—' }}</x-admin.table.td>
                                                         <x-admin.table.td>
 
                                                             <div class="flex gap-2">
-                                                                <img src="{{ asset(currency_icon_path($payment->currency , 'light')) }}">
+                                                                <img
+                                                                    src="{{ asset(currency_icon_path($payment->currency, 'light')) }}">
                                                                 <p>{{ number_format($payment->amount, 2) }}</p>
                                                             </div>
 
@@ -374,7 +385,7 @@
                             <!-- BODY -->
                             <div class="modal-body space-y-3">
                                 <select name="payment_method" id="modal_payment_method">
-                                    @foreach(\App\Enums\PaymentMethod::options() as $value => $label)
+                                    @foreach (\App\Enums\PaymentMethod::options() as $value => $label)
                                         <option value="{{ $value }}">{{ $label }}</option>
                                     @endforeach
                                 </select>
@@ -406,7 +417,7 @@
                                 </select> --}}
 
                                 <select name="status" id="modal_payment_status" class="form-control" required>
-                                    @foreach(\App\Enums\PaymentStatus::options() as $value => $label)
+                                    @foreach (\App\Enums\PaymentStatus::options() as $value => $label)
                                         <option value="{{ $value }}">
                                             {{ $label }}
                                         </option>
@@ -432,71 +443,70 @@
                     </div>
                 </div>
             </div>
-            <!-- END: Modals -->
         </div>
-
+        <!-- END: Modals -->
     </div>
-        <script>
-            document.getElementById('payment_method')?.addEventListener('change', function() {
-                alert('Payment method changed to: ' + this.value);
-                const bankField = document.getElementById('bank-name-field');
+    <script>
+        document.getElementById('payment_method')?.addEventListener('change', function() {
+            alert('Payment method changed to: ' + this.value);
+            const bankField = document.getElementById('bank-name-field');
 
-                if (this.value === 'bank') {
-                    bankField.classList.remove('hidden');
-                } else {
-                    bankField.classList.add('hidden');
-                }
+            if (this.value === 'bank') {
+                bankField.classList.remove('hidden');
+            } else {
+                bankField.classList.add('hidden');
+            }
+        });
+    </script>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const modal = document.getElementById('paymentModal');
+            const methodSelect = document.getElementById('modal_payment_method');
+            const bankField = document.getElementById('modal_bank_field');
+
+            const statusSelect = document.getElementById('modal_payment_status');
+
+
+            function toggleBank(method) {
+                bankField.style.display = method === 'bank' ? 'block' : 'none';
+            }
+
+            // Payment method change
+            methodSelect.addEventListener('change', function() {
+                toggleBank(this.value);
             });
-        </script>
 
+            // Modal open (ADD + EDIT)
+            modal.addEventListener('show.bs.modal', function(event) {
 
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
+                const btn = event.relatedTarget;
 
-                const modal = document.getElementById('paymentModal');
-                const methodSelect = document.getElementById('modal_payment_method');
-                const bankField = document.getElementById('modal_bank_field');
-
-                const statusSelect = document.getElementById('modal_payment_status');
-
-
-                function toggleBank(method) {
-                    bankField.style.display = method === 'bank' ? 'block' : 'none';
+                // ADD case
+                if (!btn.dataset.paymentId) {
+                    document.getElementById('paymentModalTitle').innerText = 'Add Payment';
+                    document.getElementById('paymentForm').reset();
+                    document.getElementById('modal_payment_id').value = '';
+                    toggleBank(methodSelect.value);
+                    return;
                 }
 
-                // Payment method change
-                methodSelect.addEventListener('change', function() {
-                    toggleBank(this.value);
-                });
+                // EDIT case
+                document.getElementById('paymentModalTitle').innerText = 'Edit Payment';
 
-                // Modal open (ADD + EDIT)
-                modal.addEventListener('show.bs.modal', function(event) {
-
-                    const btn = event.relatedTarget;
-
-                    // ADD case
-                    if (!btn.dataset.paymentId) {
-                        document.getElementById('paymentModalTitle').innerText = 'Add Payment';
-                        document.getElementById('paymentForm').reset();
-                        document.getElementById('modal_payment_id').value = '';
-                        toggleBank(methodSelect.value);
-                        return;
-                    }
-
-                    // EDIT case
-                    document.getElementById('paymentModalTitle').innerText = 'Edit Payment';
-
-                    document.getElementById('modal_payment_id').value = btn.dataset.paymentId;
-                    methodSelect.value = btn.dataset.method;
-                    document.getElementById('modal_amount').value = btn.dataset.amount;
-                    document.getElementById('modal_transaction_id').value = btn.dataset.txn ?? '';
-                    document.getElementById('modal_bank_name').value = btn.dataset.bank ?? '';
-                    document.getElementById('modal_note').value = btn.dataset.note ?? '';
-                    statusSelect.value = btn.dataset.status ?? 'pending';
-                    toggleBank(btn.dataset.method);
-                });
-
+                document.getElementById('modal_payment_id').value = btn.dataset.paymentId;
+                methodSelect.value = btn.dataset.method;
+                document.getElementById('modal_amount').value = btn.dataset.amount;
+                document.getElementById('modal_transaction_id').value = btn.dataset.txn ?? '';
+                document.getElementById('modal_bank_name').value = btn.dataset.bank ?? '';
+                document.getElementById('modal_note').value = btn.dataset.note ?? '';
+                statusSelect.value = btn.dataset.status ?? 'pending';
+                toggleBank(btn.dataset.method);
             });
-        </script>
 
-    @endsection
+        });
+    </script>
+
+@endsection

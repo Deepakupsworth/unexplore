@@ -1,26 +1,26 @@
 @php
-    function bookingStatusUI($status)
-    {
-        if ($status instanceof \App\Enums\BookingStatus) {
-            $status = $status->value;
-        }
-
-        return match ($status) {
-            'pending', 'confirmed' => ['Upcoming', ''],
-            'cancelled' => ['Cancelled', 'bg-danger'],
-            'completed' => ['Completed', 'bg-dark'],
-        };
+function bookingStatusUI($status)
+{
+    if ($status instanceof \App\Enums\BookingStatus) {
+        $status = $status->value;
     }
 
+    return match ($status) {
+        'pending', 'confirmed' => [__('account.status_upcoming'), ''],
+        'cancelled' => [__('account.status_cancelled'), 'bg-danger'],
+        'completed' => [__('account.status_completed'), 'bg-dark'],
+    };
+}
 @endphp
+
 
 <div class="user-profile__details-content">
 
     {{-- HEADER --}}
     <div class="user-profile__details-header white-bg p-3">
-        <p class="p-large fw-600 mb-1">My Bookings</p>
+        <p class="p-large fw-600 mb-1">{{ __('account.my_bookings') }}</p>
         <p class="text-light2">
-            Here you can view all your bookings and packages along with their current status.
+            {{ __('account.my_bookings_desc') }}
         </p>
     </div>
 
@@ -32,13 +32,13 @@
                 <nav class="user-bookings__nav">
                     <div class="nav nav-tabs">
                         <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#upcoming">
-                            Upcoming
+                            {{ __('account.upcoming') }}
                         </button>
                         <button class="nav-link" data-bs-toggle="tab" data-bs-target="#cancelled">
-                            Cancelled
+                            {{ __('account.cancelled') }}
                         </button>
                         <button class="nav-link" data-bs-toggle="tab" data-bs-target="#completed">
-                            Completed
+                            {{ __('account.completed') }}
                         </button>
                     </div>
                 </nav>
@@ -60,7 +60,7 @@
                                 ])
                             @empty
                                 <div class="col-12 text-center text-muted py-5">
-                                    No upcoming bookings
+                                    {{ __('account.no_upcoming_bookings') }}
                                 </div>
                             @endforelse
                         </div>
@@ -79,7 +79,7 @@
                                 ])
                             @empty
                                 <div class="col-12 text-center text-muted py-5">
-                                    No cancelled bookings
+                                    {{ __('account.no_cancelled_bookings') }}
                                 </div>
                             @endforelse
                         </div>
@@ -98,7 +98,7 @@
                                 ])
                             @empty
                                 <div class="col-12 text-center text-muted py-5">
-                                    No completed bookings
+                                    {{ __('account.no_completed_bookings') }}
                                 </div>
                             @endforelse
                         </div>

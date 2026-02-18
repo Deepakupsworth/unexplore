@@ -72,9 +72,10 @@
 
                                     {{-- ITEM NAME --}}
                                     <p class="text-sm text-slate-600 mt-0.5">
-                                        {{ $relatedItem?->translation?->name ?? 'Item not found' }}
+                                        {{ $relatedItem?->translation?->name
+                                            ?? $relatedItem?->translation?->title
+                                            ?? '' }}
                                     </p>
-
                                     <div class="flex gap-2 mt-1">
                                         @if ($opt->is_default)
                                             <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">

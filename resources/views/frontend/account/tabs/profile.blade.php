@@ -4,8 +4,8 @@
 
         {{-- HEADER --}}
         <div class="user-profile__details-header white-bg p-3">
-            <p class="p-large fw-600 mb-1">Profile</p>
-            <p class="text-light2">Update your avatar and personal information</p>
+            <p class="p-large fw-600 mb-1">{{ __('account.profile') }}</p>
+            <p class="text-light2">{{ __('account.profile_desc') }} </p>
         </div>
 
         {{-- PROFILE FORM --}}
@@ -18,16 +18,16 @@
 
                 {{-- PERSONAL INFO --}}
                 <div class="user-profile__details-form user-profile__box p-3 white-bg">
-                    <p class="fw-600 mb-1">Personal Information</p>
+                    <p class="fw-600 mb-1">{{ __('account.personal_information') }}</p>
                     <p class="text-light2 p-small">
-                        Update your personal details and contact information
+                        {{ __('account.personal_information_desc') }}
                     </p>
 
                     <div class="mt-4">
                         <div class="row">
 
                             <div class="col-sm-6">
-                                <label class="form-label">First Name</label>
+                                <label class="form-label">{{ __('account.first_name') }}</label>
                                 <input type="text"
                                        class="form-control"
                                        name="first_name"
@@ -35,7 +35,7 @@
                             </div>
 
                             <div class="col-sm-6">
-                                <label class="form-label">Last Name</label>
+                                <label class="form-label">{{ __('account.last_name') }}</label>
                                 <input type="text"
                                        class="form-control"
                                        name="last_name"
@@ -43,7 +43,7 @@
                             </div>
 
                             <div class="col-sm-6">
-                                <label class="form-label">Email Address</label>
+                                <label class="form-label">{{ __('account.email_address') }}</label>
                                 <div class="input-group custom-input-group mb-3">
                                     <span class="input-group-text">
                                         <i class="fa-solid fa-envelope"></i>
@@ -56,7 +56,7 @@
                             </div>
 
                             <div class="col-sm-6">
-                                <label class="form-label">Phone Number</label>
+                                <label class="form-label">{{ __('account.phone_number') }}</label>
                                 <input type="text"
                                        class="form-control"
                                        name="phone"
@@ -71,8 +71,8 @@
                 <div class="user-profile__details-avatar user-profile__box p-3 white-bg"
                      data-profile-avatar>
 
-                    <p class="p-large fw-600 mb-1">Profile Picture</p>
-                    <p class="text-light2 p-small">Update your avatar</p>
+                    <p class="p-large fw-600 mb-1">{{ __('account.profile_picture') }}</p>
+                    <p class="text-light2 p-small">{{ __('account.profile_picture_desc') }}</p>
 
                     <div class="user-profile__avatar my-4">
                         <img data-profile-preview
@@ -94,7 +94,7 @@
                                    accept="image/*"
                                    hidden>
                             <i class="fa-solid fa-arrow-up-from-bracket"></i>
-                            Upload new photo
+                            {{ __('account.upload_new_photo') }}
                         </div>
 
                         {{-- DELETE --}}
@@ -103,13 +103,13 @@
                              onclick="deleteProfileImage()"
                              style="cursor:pointer;">
                             <i class="fa-solid fa-trash-can"></i>
-                            Remove
+                            {{ __('account.remove') }}
                         </div>
                         @endif
                     </div>
 
                     <span class="text-light2 p-micro">
-                        JPG, PNG. Max size 2MB.
+                        {{ __('account.image_hint') }}
                     </span>
                 </div>
 
@@ -117,7 +117,7 @@
             {{-- SAVE --}}
             <div class="mt-3 d-flex justify-content-end">
                 <button class="btn btn-primary rounded-pill">
-                    Save Changes
+                    {{ __('account.save_changes') }}
                 </button>
             </div>
         </form>

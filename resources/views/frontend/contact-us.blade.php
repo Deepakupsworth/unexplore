@@ -9,7 +9,6 @@
             <p class="mt-3 fw-bold fs-5">{{ __('contact.form.sending') }}</p>
         </div>
     </div>
-
     <!-- CONTACT BANNER -->
     <section class="package-listing__banner">
         <div class="container">
@@ -93,7 +92,7 @@
                             <div class="icon primary-text flex-center"><i class="fa-solid fa-location-dot"></i></div>
                             <div>
                                 <p class="text-light2 p-small mb-1">{{ __('contact.info.location_label') }}</p>
-                                <p class="p-large fw-500">{{ __('contact.info.location_value') }}</p>
+                                <p class="p-large fw-500">{{ company('address_line') }}</p>
                             </div>
                         </div>
 
@@ -101,7 +100,7 @@
                             <div class="icon primary-text flex-center"><i class="fa-regular fa-clock"></i></div>
                             <div>
                                 <p class="text-light2 p-small mb-1">{{ __('contact.info.time_label') }}</p>
-                                <p class="p-large fw-500">{{ __('contact.info.time_value') }}</p>
+                                <p class="p-large fw-500">{{company('working_days')}} : {{ company('working_hours') }}</p>
                             </div>
                         </div>
 
@@ -109,7 +108,7 @@
                             <div class="icon primary-text flex-center"><i class="fa-solid fa-phone"></i></div>
                             <div>
                                 <p class="text-light2 p-small mb-1">{{ __('contact.info.call_label') }}</p>
-                                <p class="p-large fw-500">{{ __('contact.info.call_value') }}</p>
+                                <p class="p-large fw-500">{{ company('phone') }}</p>
                             </div>
                         </div>
 
@@ -117,7 +116,7 @@
                             <div class="icon primary-text flex-center"><i class="fa-regular fa-envelope"></i></div>
                             <div>
                                 <p class="text-light2 p-small mb-1">{{ __('contact.info.email_label') }}</p>
-                                <p class="p-large fw-500">{{ __('contact.info.email_value') }}</p>
+                                <p class="p-large fw-500">{{ company('email') }}</p>
                             </div>
                         </div>
 
@@ -125,7 +124,7 @@
                             <div class="icon primary-text flex-center"><i class="fa-brands fa-whatsapp"></i></div>
                             <div>
                                 <p class="text-light2 p-small mb-1">{{ __('contact.info.whatsapp_label') }}</p>
-                                <p class="p-large fw-500">{{ __('contact.info.whatsapp_value') }}</p>
+                                <p class="p-large fw-500">{{ company('whatsapp') }}</p>
                             </div>
                         </div>
                     </div>

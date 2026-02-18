@@ -36,9 +36,9 @@ class EventController extends Controller
                 );
             })
             ->when(
-                $request->filled('city_id'),
-                fn($q) =>
-                $q->where('city_id', $request->city_id)
+                $request->filled('cities_ids'),
+                fn ($q) =>
+                    $q->whereIn('city_id', $request->cities_ids)
             )
             ->when(
                 $request->filled('status'),

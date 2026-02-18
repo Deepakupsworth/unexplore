@@ -10,8 +10,8 @@ use App\Models\Package;
 use App\Models\ThingToDo;
 use App\Models\Transport;
 use App\Models\Traveller;
+use App\Services\PackagePriceService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class CheckoutController extends Controller
 {
@@ -21,18 +21,44 @@ class CheckoutController extends Controller
     }
 
 
-    public function init(Request $request)
+    public function init(Request $request, PackagePriceService $priceService)
     {
-        // package resolve FIRST
         $package = Package::where('slug', $request->slug)->firstOrFail();
 
-        // checkout payload
-        $checkout = $request->all();
+        $start_date = $request->start_date;
+        $adults     = (int) $request->adults;
+        $children   = (int) $request->children;
+        $dayItemsExtra = (float) $request->input('day_items_extra', 0);
 
-        // 🔥 REQUIRED FOR BOOKING
+        /* ================= DAY ITEMS FROM FORM ================= */
+
+        $dayItems       = $request->input('day_items', []);
+        $dayItemPrices  = $request->input('day_item_prices', []);
+
+        /* ================= SERVER PRICING ================= */
+
+        $pricing = $priceService->calculate(
+            $package,
+            $adults,
+            $children,
+            $dayItemsExtra
+        );
+
+        /* ================= BUILD CHECKOUT SESSION ================= */
+
+        $checkout = session('checkout', []);
+
         $checkout['package_id'] = $package->id;
+        $checkout['start_date'] = $start_date;
+        $checkout['adults']     = $adults;
+        $checkout['children']   = $children;
+        $checkout['pricing']    = $pricing;
 
-        // optional but safe
+        // ⭐⭐⭐ CRITICAL ⭐⭐⭐
+        $checkout['day_items']       = $dayItems;
+        $checkout['day_item_prices'] = $dayItemPrices;
+
+        // optional currency safety
         $checkout['base_currency']    = $checkout['base_currency'] ?? 'SAR';
         $checkout['booking_currency'] = $checkout['booking_currency'] ?? 'SAR';
         $checkout['exchange_rate']    = $checkout['exchange_rate'] ?? 1;
@@ -43,32 +69,41 @@ class CheckoutController extends Controller
     }
 
 
-
-
     public function show(Request $request)
     {
+        /* ---------------------------------------------------
+        | Checkout Session Guard
+        --------------------------------------------------- */
         $checkout = session('checkout');
 
-        // session()->forget('checkout_travellers');
+
+
+        $sessionItems = session("package_day_items.{$checkout['package_id']}", []);
+        // dd($sessionItems);
+
+        $user = auth()->user();
+        $language = current_lang();
 
         /* ---------------------------------------------------
-        | Basic Counts
+        | SAFE PERSON COUNTS (🔥 SINGLE SOURCE OF TRUTH)
         --------------------------------------------------- */
-
         $adultCount = (int) ($checkout['adults'] ?? 0);
-        $totalTravellers = (int) ($checkout['total_persons'] ?? 0);
-        $childCount = max(0, $totalTravellers - $adultCount);
+        $childCount = (int) ($checkout['children'] ?? 0);
+        $totalTravellers = $adultCount + $childCount;
+
+
+        if ($adultCount <= 0) {
+            abort(400, 'Invalid travellers');
+        }
 
         $sessionTravellers = session('checkout_travellers', []);
 
         /* ---------------------------------------------------
-        | Build Traveller Slots
+        | BUILD TRAVELLER SLOTS (UI PURPOSE)
         --------------------------------------------------- */
-
         $travellerSlots = [];
 
         for ($i = 0; $i < $totalTravellers; $i++) {
-
             $type = $i < $adultCount ? 'adult' : 'child';
 
             $travellerSlots[] = [
@@ -76,22 +111,6 @@ class CheckoutController extends Controller
                 'data' => $sessionTravellers[$i] ?? null
             ];
         }
-
-        $travellers = collect(range(0, $totalTravellers - 1))
-            ->map(function ($index) use ($sessionTravellers) {
-                return [
-                    'type' => $index < 2 ? 'adult' : 'child', // example logic
-                    'data' => $sessionTravellers[$index] ?? null
-                ];
-            });
-
-
-        if (!$checkout || empty($checkout['slug'])) {
-            abort(404, 'Checkout session expired');
-        }
-
-        $user = auth()->user();
-        $language = current_lang();
 
         /* ================= PACKAGE ================= */
         $package = Package::with([
@@ -113,12 +132,24 @@ class CheckoutController extends Controller
             'translation',
             'days.city.translation',
             'policies.translation',
+            'price.increasePersons',
+            'price.childPrices',
         ])
-            ->where('slug', $checkout['slug'])
+            ->where('id', $checkout['package_id'])
             ->firstOrFail();
 
-        /* ================= ACTIVE COUPONS ================= */
+        /* ---------------------------------------------------
+        | 🔥 PRICE REVALIDATION (ANTI-TAMPER)
+        --------------------------------------------------- */
+        $dayItemsExtra = (float) ($checkout['pricing']['day_items_extra'] ?? 0);
 
+        $pricing = app(\App\Services\PackagePriceService::class)
+            ->calculate($package, $adultCount, $childCount, $dayItemsExtra);
+
+        $checkout['pricing'] = $pricing;
+        session()->put('checkout', $checkout);
+
+        /* ================= ACTIVE COUPONS ================= */
         $packageId  = $package->id;
         $categoryId = $package->category_id;
 
@@ -126,30 +157,19 @@ class CheckoutController extends Controller
             ->whereDate('starts_at', '<=', now())
             ->whereDate('ends_at', '>=', now())
             ->where(function ($q) use ($packageId, $categoryId) {
-
-                // 🌍 applies to ALL
                 $q->where('applies_to', 'all')
-
-                    // 📦 applies to PACKAGE
                     ->orWhere(function ($q) use ($packageId) {
                         $q->where('applies_to', 'package')
-                            ->whereHas('packages', function ($p) use ($packageId) {
-                                $p->where('packages.id', $packageId);
-                            });
+                            ->whereHas('packages', fn($p) => $p->where('packages.id', $packageId));
                     })
-
-                    // 🏷 applies to CATEGORY
                     ->orWhere(function ($q) use ($categoryId) {
                         $q->where('applies_to', 'category')
-                            ->whereHas('categories', function ($c) use ($categoryId) {
-                                $c->where('categories.id', $categoryId);
-                            });
+                            ->whereHas('categories', fn($c) => $c->where('categories.id', $categoryId));
                     });
             })
             ->get();
 
-
-        // ===== ✅ DAY WISE OPTIONS (FINAL STRUCTURE) =====
+        /* ================= DAY OPTIONS ================= */
         $dayWiseOptions = [];
 
         foreach ($package->days as $day) {
@@ -161,9 +181,8 @@ class CheckoutController extends Controller
                         ->keyBy('item_id')
                         ->map(function ($option) use ($type) {
 
-                            // remove unrelated relations
                             if ($type !== 'hotel') unset($option['hotel']);
-                            if ($type !== 'todo')  unset($option['todo']);
+                            if ($type !== 'todo') unset($option['todo']);
                             if ($type !== 'event') unset($option['event']);
                             if ($type !== 'transport') unset($option['transport']);
 
@@ -174,103 +193,67 @@ class CheckoutController extends Controller
                 ->toArray();
         }
 
-        //print_r($dayWiseOptions);die;
+        /* ================= SESSION DAY ITEMS ================= */
         $sessionItems = session("package_day_items.{$package->id}", []);
-        //print_r($sessionItems);
 
+        /* ================= MASTER LISTS ================= */
         $hotelIds = [];
         $eventIds = [];
         $todoIds  = [];
         $transportIds = [];
 
         foreach ($package->days as $day) {
-
             foreach ($day->items as $index => $item) {
 
                 $type = $item->item_type;
 
-                // 🔑 SESSION OVERRIDE → else DEFAULT
                 $selectedItemId =
                     $sessionItems[$day->id][$type][$index]
                     ?? $item->item_id;
 
-                if ($type === 'hotel') {
-                    $hotelIds[] = $selectedItemId;
-                }
-
-                if ($type === 'event') {
-                    $eventIds[] = $selectedItemId;
-                }
-
-                if ($type === 'todo') {
-                    $todoIds[] = $selectedItemId;
-                }
-
-                if ($type === 'transport') {
-                    $transportIds[] = $selectedItemId;
-                }
+                if ($type === 'hotel') $hotelIds[] = $selectedItemId;
+                if ($type === 'event') $eventIds[] = $selectedItemId;
+                if ($type === 'todo')  $todoIds[]  = $selectedItemId;
+                if ($type === 'transport') $transportIds[] = $selectedItemId;
             }
         }
 
-
-
-        // remove duplicates
-        $hotelIds = array_unique($hotelIds);
-
-        //print_r($hotelIds);die;
-        $eventIds = array_unique($eventIds);
-        $todoIds  = array_unique($todoIds);
-        $transportIds = array_unique($transportIds);
-
-
-
-        // ✅ MASTER LIST (POPUP)
         $allHotels = Hotel::with(['translation', 'thumb'])
-            ->whereIn('id', $hotelIds)
+            ->whereIn('id', array_unique($hotelIds))
             ->get()
             ->keyBy('id');
 
         $allEvents = Event::with(['translation', 'thumb'])
-            ->whereIn('id', $eventIds)
+            ->whereIn('id', array_unique($eventIds))
             ->get()
             ->keyBy('id');
 
         $allTodos = ThingToDo::with(['translation', 'thumb'])
-            ->whereIn('id', $todoIds)
+            ->whereIn('id', array_unique($todoIds))
             ->get()
             ->keyBy('id');
-
 
         $allTransports = Transport::with(['translation', 'thumb'])
-            ->whereIn('id', $transportIds)
+            ->whereIn('id', array_unique($transportIds))
             ->get()
             ->keyBy('id');
-        /* ================= COUNTS (🔥 FIXED) ================= */
-        $adults        = (int) ($checkout['adults'] ?? 0);
-        $totalPersons = (int) ($checkout['total_persons'] ?? $adults);
-
-        // 🔥 ONLY ONE TRUTH
-        $children = max(0, $totalPersons - $adults);
 
         /* ================= USER SAVED TRAVELLERS ================= */
         $savedTravellers = Traveller::where('user_id', $user->id)
             ->orderBy('id')
             ->get();
 
-        /* ================= BUILD SLOT BASED TRAVELLERS ================= */
         $travellers = [];
         $usedIds = [];
 
-        // ===== ADULT SLOTS =====
-        for ($i = 0; $i < $adults; $i++) {
+        // Adults
+        for ($i = 0; $i < $adultCount; $i++) {
             $match = $savedTravellers
                 ->where('type', 'adult')
                 ->whereNotIn('id', $usedIds)
                 ->first();
 
-            if ($match) {
-                $usedIds[] = $match->id;
-            }
+            if ($match) $usedIds[] = $match->id;
 
             $travellers[] = [
                 'type'   => 'adult',
@@ -279,16 +262,14 @@ class CheckoutController extends Controller
             ];
         }
 
-        // ===== CHILD SLOTS (🔥 NOW WORKING) =====
-        for ($i = 0; $i < $children; $i++) {
+        // Children
+        for ($i = 0; $i < $childCount; $i++) {
             $match = $savedTravellers
                 ->where('type', 'child')
                 ->whereNotIn('id', $usedIds)
                 ->first();
 
-            if ($match) {
-                $usedIds[] = $match->id;
-            }
+            if ($match) $usedIds[] = $match->id;
 
             $travellers[] = [
                 'type'   => 'child',
@@ -296,9 +277,6 @@ class CheckoutController extends Controller
                 'data'   => $match,
             ];
         }
-
-        /* ================= DAY ITEM SESSION ================= */
-        $sessionItems = session("package_day_items.{$package->id}", []);
 
         return view(
             'frontend.checkout.index',
@@ -318,9 +296,9 @@ class CheckoutController extends Controller
                 [
                     'adultCount' => $adultCount,
                     'childCount' => $childCount,
-                    'travellerSlots'   => $travellerSlots,
+                    'travellerSlots' => $travellerSlots,
                     'sessionTravellers' => $sessionTravellers,
-                    'totalTravellers'  => $totalTravellers,
+                    'totalTravellers' => $totalTravellers,
                 ]
             )
         );

@@ -3,18 +3,18 @@
 
 
 {{-- ================= COUPON INPUT ================= --}}
-<div class="card pkg-details__pricing-card checkout-pricing-card mt-3">
-    <p class="fw-600">Coupons & Offers</p>
+{{-- <div class="card pkg-details__pricing-card checkout-pricing-card mt-3">
+    <p class="fw-600">{{ __('checkout.coupons_offers') }}</p>
 
     <div class="input-group mt-3 package-listing__search-bar checkout-pricing-card__search-bar">
         <input type="text" id="couponCodeInput" class="form-control" placeholder="Enter Coupon Code">
-        <button class="btn btn-primary btn-sm rounded-pill p-small" type="button" onclick="applyCouponFromInput()">
-            Apply
+        <button dis class="btn btn-primary btn-sm rounded-pill p-small" type="button" onclick="applyCouponFromInput()">
+            {{ __('checkout.apply') }}
         </button>
     </div>
 
     <p id="couponError" class="text-danger p-small mt-2 d-none"></p>
-</div>
+</div> --}}
 
 {{-- ================= COUPON LIST ================= --}}
 @if ($coupons->count())
@@ -23,9 +23,10 @@
         @foreach ($coupons as $coupon)
             @php
                 $stripText =
-                    $coupon->discount_type === 'percentage'
-                        ? rtrim(rtrim($coupon->discount_value, '0'), '.') . '% OFF'
-                        : '₹' . number_format($coupon->discount_value) . ' OFF';
+                $coupon->discount_type === 'percentage'
+                    ? rtrim(rtrim($coupon->discount_value, '0'), '.') . '% ' . __('checkout.off')
+                    : '₹' . number_format($coupon->discount_value) . ' ' . __('checkout.off');
+
             @endphp
 
             <div class="checkout-coupon-card d-flex mt-3" data-code="{{ $coupon->code }}">
@@ -42,7 +43,7 @@
                             <div class="d-flex primary-text p-large gap-1 align-items-center">
                                 <p>-</p>
                                 <img src="{{ asset(currency_icon_path(null, 'primary')) }}" alt="">
-                                <p>{{ number_format($checkout['final_total']) }}</p>
+                                <p>{{ number_format($checkout['pricing']['final_total']) }}</p>
                             </div>
 
                             <h6 class="fw-600 mb-1 p-large">
@@ -59,17 +60,19 @@
                         {{ $coupon->title }}
                     </p>
 
-                    <button type="button" class="btn apply-btn w-100 rounded-pill"
+                    <button disabled type="button" class="btn apply-btn w-100 rounded-pill"
                         onclick="applyCoupon('{{ $coupon->code }}')">
-                        Apply Code
+                        {{ __('checkout.apply_code') }}
                     </button>
+
                 </div>
             </div>
         @endforeach
 
         <div class="mt-3 text-center">
             <a href="#" class="primary-text">
-                + {{ $coupons->count() }} More
+                {{ __('checkout.more_coupons', ['count' => $coupons->count()]) }}
+
             </a>
         </div>
 

@@ -16,7 +16,7 @@
         <div class="accordion-header" data-bs-toggle="collapse" data-bs-target="#checkoutItineraryOnCollapse"
             aria-expanded="true" aria-controls="checkoutItineraryOnCollapse">
             <div class="d-flex gap-2 pkg-details__accordion-actions">
-                <p class="fw-600">2. Package Itinerary & Inclusions</p>
+                <p class="fw-600">2. {{ __('checkout.package_itinerary_inclusions') }}</p>
             </div>
             <div class="d-flex justify-content-between align-items-center gap-3">
                 <div class="d-flex align-items-center gap-2">
@@ -30,21 +30,21 @@
         <div id="checkoutItineraryOnCollapse" class="accordion-collapse collapse show" aria-labelledby="headingOne"
             data-bs-parent="#checkoutItinerary">
             <div class="accordion-body">
-                <p class="fw-600">Package Features</p>
+                <p class="fw-600"> {{ __('checkout.package_features') }}</p>
                 <div class="d-flex align-items-center gap-2">
-                    <p class="fw-600 mb-1">Itinerary:</p>
+                    <p class="fw-600 mb-1">{{ __('checkout.itinerary') }}:</p>
                     <p class="p-small">
-                        {{ $hotelCount }} Hotels /
-                        {{ $transportCount }} Transfers /
-                        {{ $eventCount }} Events /
-                        {{ $todoCount }} Activities
+                        {{ $hotelCount }} {{ __('checkout.hotels') }} /
+                        {{ $transportCount }} {{ __('checkout.transfers') }} /
+                        {{ $eventCount }} {{ __('checkout.events') }} /
+                        {{ $todoCount }} {{ __('checkout.activities') }}
                     </p>
                 </div>
                 <div class="pkg-details__content-wrapper">
                     <div class="pkg-details__day-plan">
                         <div class="pkg-details__day-plan-left">
-                            <div class="pkg-details__day-plan-header pkg-details__common-block">Day
-                                Plan
+                            <div class="pkg-details__day-plan-header pkg-details__common-block">
+                                {{ __('checkout.day_plan') }}
                             </div>
                             <div class="pkg-details__day-dates-wrapper">
                                 <div
@@ -53,7 +53,7 @@
                                         <div class="pkg-details__day-date-item rounded-pill {{ $loop->first ? 'active' : '' }}"
                                             data-bs-toggle="tab" data-bs-target="#day{{ $day->day_number }}">
                                             <div class="dot"></div>
-                                            Day {{ $day->day_number }}
+                                            {{ __('checkout.day') }}  {{ $day->day_number }}
                                         </div>
                                     @endforeach
                                 </div>
@@ -108,7 +108,8 @@
                                                                         data-bs-target="#hotelCollapse{{ $day->id }}">
                                                                         <i class="fa-solid fa-chevron-down"></i>
                                                                     </div>
-                                                                    <p class="p-small fw-600">Hotel
+                                                                    <p class="p-small fw-600">
+                                                                        {{ __('checkout.hotel') }}
                                                                     </p>
                                                                 </div>
                                                             </div>
@@ -222,8 +223,8 @@
                                                                         data-bs-target="#todoCollapse{{ $day->id }}">
                                                                         <i class="fa-solid fa-chevron-down"></i>
                                                                     </div>
-                                                                    <p class="p-small fw-600">ToDo
-                                                                        Thing
+                                                                    <p class="p-small fw-600">
+                                                                        {{ __('checkout.todo_thing') }}
                                                                     </p>
                                                                 </div>
                                                             </div>
@@ -315,7 +316,7 @@
                                                                         <i class="fa-solid fa-chevron-down"></i>
                                                                     </div>
                                                                     <p class="p-small fw-600">
-                                                                        Events
+                                                                        {{ __('checkout.events_label') }}
                                                                     </p>
                                                                 </div>
                                                             </div>
@@ -406,7 +407,7 @@
                                                                         <i class="fa-solid fa-chevron-down"></i>
                                                                     </div>
                                                                     <p class="p-small fw-600">
-                                                                        Transport</p>
+                                                                        {{ __('checkout.transport') }}</p>
                                                                 </div>
                                                             </div>
 

@@ -134,7 +134,7 @@
         <input type="hidden" name="start_date" id="startDateInput" form="packageCheckoutForm">
 
         <input type="hidden" name="adults" id="adultsInput" form="packageCheckoutForm">
-        <input type="hidden" name="children" id="childrenInput">
+        <input type="hidden" name="children" id="childrenInput" form="packageCheckoutForm">
         <input type="hidden" name="total_persons" id="totalPersonsInput" form="packageCheckoutForm">
 
         <input type="hidden" name="base_price" id="basePriceInput" form="packageCheckoutForm">

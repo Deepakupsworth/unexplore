@@ -2,6 +2,7 @@
 
 use App\Enums\CategoryType;
 use App\Models\Category;
+use App\Models\CompanyDetail;
 use Illuminate\Support\Facades\Cache;
 
 if (!function_exists('header_event_categories')) {
@@ -122,5 +123,43 @@ if (!function_exists('header_packages')) {
         ->limit(5)
         ->get();
 
+    }
+}
+
+
+if (!function_exists('company')) {
+
+    /**
+     * Get company detail or specific field
+     *
+     * Usage:
+     * company('company_name')
+     * company('email')
+     * company() // full model
+     */
+    function company($key = null, $default = null)
+    {
+        static $company = null;
+        // cache()->forget('company_details_single');
+
+        // 🔥 request-level cache
+        if ($company === null) {
+            $company = cache()->remember(
+                'company_details_single',
+                60 * 60, // 1 hour
+                fn() => CompanyDetail::first()
+            );
+        }
+
+        if (!$company) {
+            return $default;
+        }
+
+        // return full model
+        if ($key === null) {
+            return $company;
+        }
+
+        return data_get($company, $key, $default);
     }
 }

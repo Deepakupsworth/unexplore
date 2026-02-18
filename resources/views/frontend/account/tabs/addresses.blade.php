@@ -4,9 +4,9 @@
     <div
         class="user-profile__details-header white-bg p-3 d-flex justify-content-between align-items-center flex-sm-row flex-column gap-2">
         <div>
-            <p class="p-large fw-600 mb-1">Manage Address</p>
+            <p class="p-large fw-600 mb-1">{{ __('account.manage_address') }}</p>
             <p class="text-light2">
-                Manage your saved addresses — view, add, edit or delete anytime.
+                {{ __('account.manage_address_desc') }}
             </p>
         </div>
 
@@ -14,7 +14,7 @@
                 data-bs-toggle="modal"
                 data-bs-target="#addAddressModal">
             <i class="fa-solid fa-plus"></i>
-            Add New Address
+            {{ __('account.add_new_address') }}
         </button>
     </div>
 
@@ -25,10 +25,10 @@
                 <thead class="bg-light">
                 <tr class="text-light2">
                     <th>#</th>
-                    <th>Address Title</th>
-                    <th>Full Address</th>
-                    <th>Last Updated</th>
-                    <th class="text-end">Action</th>
+                    <th>{{ __('account.address_title') }}</th>
+                    <th>{{ __('account.full_address') }}</th>
+                    <th>{{ __('account.last_updated') }}</th>
+                    <th class="text-end">{{ __('account.action') }}</th>
                 </tr>
                 </thead>
 
@@ -73,7 +73,7 @@
                 @empty
                     <tr>
                         <td colspan="5" class="text-center text-light2 py-4">
-                            No addresses found.
+                            {{ __('account.no_addresses_found') }}
                         </td>
                     </tr>
                 @endforelse

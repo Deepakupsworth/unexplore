@@ -35,15 +35,8 @@
 
                     {{-- City --}}
                     <div class="fromGroup">
-                        <label class="form-label">City</label>
-                        <select name="city_id" class="form-control">
-                            <option value="">All Cities</option>
-                            @foreach ($cities as $id => $city)
-                                <option value="{{ $id }}" {{ request('city_id') == $id ? 'selected' : '' }}>
-                                    {{ $city }}
-                                </option>
-                            @endforeach
-                        </select>
+                        <label class="form-label">Cities</label>
+                        <select name="cities_ids[]" id="seachcities" multiple class="form-control select2"></select>
                     </div>
 
                     {{-- Status --}}
@@ -181,4 +174,60 @@
             </div>
         </div>
     </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+    const el = document.getElementById('seachcities');
+    if (!el) return;
+
+    const selectedIds = @json(request('cities_ids', []));
+
+    // Initialize Select2 with AJAX search
+    $(el).select2({
+        placeholder: 'Search cities',
+        width: '100%',
+        minimumInputLength: 1,
+        ajax: {
+            url: '/admin/cities/search',
+            dataType: 'json',
+            delay: 300,
+            data: function (params) {
+                return {
+                    q: params.term
+                };
+            },
+            processResults: function (data) {
+                return {
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.title
+                    }))
+                };
+            },
+            cache: true
+        }
+    });
+
+    // Load selected IDs (important for GET filter)
+    if (selectedIds.length > 0) {
+        $.ajax({
+            url: '/admin/cities/seachIds',
+            type: 'GET',
+            data: {
+                ids: selectedIds
+            },
+            success: function (data) {
+                data.forEach(item => {
+                    const option = new Option(item.title, item.id, true, true);
+                    el.append(option);
+                });
+                $(el).trigger('change');
+            }
+        });
+    }
+
+});
+</script>
 @endsection
+
+

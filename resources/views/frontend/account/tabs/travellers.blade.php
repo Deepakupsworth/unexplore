@@ -2,14 +2,14 @@
 
     <div class="user-profile__details-header white-bg p-3 d-flex justify-content-between">
         <div>
-            <p class="p-large fw-600 mb-1">Travellers</p>
-            <p class="text-light2">Manage adults and children for bookings</p>
+            <p class="p-large fw-600 mb-1">{{ __('account.travellers') }} </p>
+            <p class="text-light2">{{ __('account.travellers_desc') }}</p>
         </div>
 
         <button class="btn btn-primary rounded-pill"
                 data-bs-toggle="modal"
                 data-bs-target="#travellerModal">
-            <i class="fa-solid fa-plus"></i> Add Traveller
+            <i class="fa-solid fa-plus"></i> {{ __('account.add_traveller') }}
         </button>
     </div>
 
@@ -18,11 +18,11 @@
             <thead>
             <tr>
                 <th>#</th>
-                <th>Name</th>
-                <th>Type</th>
-                <th>Age</th>
-                <th>Country</th>
-                <th>Action</th>
+                <th>{{ __('account.name') }}</th>
+                <th>{{ __('account.type') }}</th>
+                <th>{{ __('account.age') }}</th>
+                <th>{{ __('account.country') }}</th>
+                <th>{{ __('account.action') }}</th>
             </tr>
             </thead>
             <tbody id="travellerTable">
@@ -31,7 +31,7 @@
                     <td>{{ $i + 1 }}</td>
                     <td>{{ $t->first_name }} {{ $t->last_name }}</td>
                     <td>
-                        <span class="badge {{ $t->type === 'adult' ? 'bg-success' : 'bg-info' }}">
+                        <span class="badge {{ $t->type === 'adult' ? __('account.adult') : __('account.child') }}">
                             {{ ucfirst($t->type) }}
                         </span>
                     </td>
@@ -55,7 +55,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="6" class="text-center text-light2">No travellers added</td>
+                    <td colspan="6" class="text-center text-light2">{{ __('account.no_travellers') }}</td>
                 </tr>
             @endforelse
             </tbody>

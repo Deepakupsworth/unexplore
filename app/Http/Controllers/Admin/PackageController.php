@@ -612,4 +612,38 @@ class PackageController extends Controller
 
         return back()->with('success', 'Package policies updated successfully.');
     }
+
+
+    public function search(Request $request)
+    {
+        return Package::query()
+            ->whereHas('translation', function ($t) use ($request) {
+                $t->where('title', 'like', '%' . $request->q . '%');
+            })
+            ->with(['translation'])
+            ->limit(10)
+            ->get()
+            ->map(function ($package) {
+                return [
+                    'id' => $package->id,
+                    'title' => optional($package->translation->first())->title
+                ];
+            });
+    }
+
+    public function seachIds(Request $request)
+    {
+        return Package::whereIn('id', $request->ids)
+            ->with('translation')
+            ->get()
+            ->map(function ($package) {
+                return [
+                    'id' => $package->id,
+                    'title' => optional($package->translation->first())->title
+                ];
+            });
+    }
+
+
+
 }

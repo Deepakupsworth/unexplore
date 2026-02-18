@@ -144,18 +144,8 @@
                     <div class="event-map__info-card">
                         <p class="fw-500">Share</p>
                         <div class="d-flex gap-3 mt-2">
-                            <a href="#" class="social-icon">
-                                <img src="{{ asset('frontend/assets/icons/instagram.svg') }}" alt="">
-                            </a>
-                            <a href="#" class="social-icon">
-                                <img src="{{ asset('frontend/assets/icons/facebook.svg') }}" alt="">
-                            </a>
-                            <a href="#" class="social-icon">
-                                <img src="{{ asset('frontend/assets/icons/x.svg') }}" alt="">
-                            </a>
-                            <a href="#" class="social-icon">
-                                <img src="{{ asset('frontend/assets/icons/share.svg') }}" alt="">
-                            </a>
+                            
+                            <x-share-links a-class="social-icon" icon-size="icon-sm" />
                         </div>
                     </div>
                 </div>

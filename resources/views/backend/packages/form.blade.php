@@ -188,20 +188,20 @@
                 <div class="grid grid-cols-2 gap-4 mb-4">
                     <div class="fromGroup">
                         <label class="form-label">Currency *</label>
-                        <input name="pricing[currency]" value="INR" class="form-control" required>
+                        <input name="pricing[currency]" value="SAR" class="form-control" required>
                     </div>
                     <div class="fromGroup">
-                        <label class="form-label">Original Price *</label>
-                        <input type="number" step="0.01" name="pricing[original_price]" class="form-control"
+                        <label class="form-label">Price (Per Person) *</label>
+                        <input type="number" step="0.01" name="pricing[per_person_price]" class="form-control"
                             required>
                     </div>
                     <div class="fromGroup">
-                        <label class="form-label">Discount Price</label>
+                        <label class="form-label">Discount Price(Per Person)</label>
                         <input type="number" step="0.01" name="pricing[discount_price]" class="form-control">
                     </div>
                     <div class="fromGroup">
-                        <label class="form-label">Per Person Price *</label>
-                        <input type="number" step="0.01" name="pricing[per_person_price]" class="form-control"
+                        <label class="form-label">Total Price *</label>
+                        <input type="number" step="0.01" name="pricing[original_price]" class="form-control"
                             required>
                     </div>
                 </div>

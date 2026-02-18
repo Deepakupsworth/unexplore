@@ -3,7 +3,7 @@
         <div class="accordion-header" data-bs-toggle="collapse" data-bs-target="#checkoutTravelCollapse"
             aria-expanded="true" aria-controls="checkoutTravelCollapse">
             <div class="d-flex gap-2 pkg-details__accordion-actions">
-                <p class="fw-600">1. Traveller Details</p>
+                <p class="fw-600">1. {{ __('checkout.traveller_details') }}</p>
             </div>
             <div class="d-flex justify-content-between align-items-center gap-3">
                 <div class="d-flex align-items-center gap-2">
@@ -58,7 +58,7 @@
 
                                 <div>
                                     <h6 class="fw-600 p">
-                                        TRAVELLER {{ $index + 1 }}
+                                        {{ __('checkout.traveller') }} {{ $index + 1 }}
                                         <span class="text-muted p-small">
                                             ({{ ucfirst($slot['type']) }})
                                         </span>
@@ -71,12 +71,11 @@
                                         </p>
 
 
-
                                         {{-- ✅ MISSING TEXT (JS HIDE TARGET) --}}
                                         <p class="text-danger p-small mb-0 traveller-missing"
                                             data-slot="{{ $index }}"
                                             @if ($traveller) style="display:none" @endif>
-                                            Traveller details missing
+                                            {{ __('checkout.traveller_details_missing') }}
                                         </p>
 
                                         {{-- REMOVE BUTTON --}}
@@ -98,7 +97,7 @@
                                     @if ($traveller)
                                         <div class="flex-center gap-1 text-success">
                                             <i class="fa-solid fa-circle-check"></i>
-                                            <p class="p-small fw-500 mb-0">Traveller Added</p>
+                                            <p class="p-small fw-500 mb-0">{{ __('checkout.traveller_added') }}</p>
                                         </div>
                                     @endif
                                 </div>
@@ -108,7 +107,8 @@
                                     class="btn btn-outline-primary rounded-pill fw-500 open-traveller-modal"
                                     data-bs-toggle="modal" data-bs-target="#travellerModal"
                                     data-slot="{{ $index }}" data-type="{{ $slot['type'] }}">
-                                    {{ $traveller ? 'Update' : 'Add Traveller' }}
+                                    {{ $traveller ? __('checkout.update') : __('checkout.add_traveller') }}
+
                                 </button>
 
                             </div>
@@ -122,11 +122,11 @@
                 {{-- ================= CONTACT DETAILS (UNCHANGED) ================= --}}
                 <div class="booking-contact mt-4">
 
-                    <p class="fw-600 mb-3">Please Enter Contact Details</p>
+                    <p class="fw-600 mb-3">{{ __('checkout.enter_contact_details') }}</p>
 
                     <div class="row g-3 mb-4">
                         <div class="col-md-4">
-                            <label class="form-label small mb-1">Email</label>
+                            <label class="form-label small mb-1">{{ __('checkout.email') }}</label>
                             <input type="email" name="contact_email" required class="form-control"
                                 placeholder="Enter email">
                         </div>
@@ -137,7 +137,7 @@
                 </div> --}}
 
                         <div class="col-md-4">
-                            <label class="form-label small mb-1">Mobile</label>
+                            <label class="form-label small mb-1">{{ __('checkout.mobile') }}</label>
                             <input name="contact_mobile" type="tel" class="form-control"
                                 placeholder="05XXXXXXXX or +9665XXXXXXXX" required
                                 pattern="^(\+966|0)?5[0-9]{1}[\s\-()]?[0-9]{3}[\s\-()]?[0-9]{4}$" inputmode="tel"
@@ -146,11 +146,11 @@
 
                     </div>
 
-                    <p class="fw-600 mb-2">Special Requests</p>
+                    <p class="fw-600 mb-2">{{ __('checkout.special_requests') }}</p>
 
                     <div class="mb-4">
-                        <label class="form-label small mb-1">Special Requests</label>
-                        <input type="text" class="form-control" placeholder="Enter here">
+                        <label class="form-label small mb-1">{{ __('checkout.special_requests') }}</label>
+                        <input type="text" class="form-control" placeholder="{{ __('checkout.enter_here') }}">
                     </div>
 
                     {{-- <div class="checkout-tcs-box p-3 rounded-4">

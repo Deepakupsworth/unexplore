@@ -15,7 +15,7 @@
                          <li class="nav-item" role="presentation">
                              <button class="nav-link active" data-target="galleryTabsDestination" type="button"
                                  role="tab">
-                                 {{ $t->title }} Package
+                                 {{ $t->title }} {{ __('gallery.package') }}
                                  <!-- <small class="d-block text-light2 fw-normal">9 Photos</small> -->
                              </button>
                          </li>
@@ -24,7 +24,7 @@
                              <li class="nav-item" role="presentation">
                                  <button class="nav-link" data-target="galleryTabsProperty" type="button"
                                      role="tab">
-                                     Activities & Sightseeing
+                                     {{ __('gallery.activities_sightseeing') }}
                                      <!-- <small class="d-block text-light2 fw-normal">170 Photos</small> -->
                                  </button>
                              </li>
@@ -34,7 +34,7 @@
                              <li class="nav-item" role="presentation">
                                  <button class="nav-link" data-target="galleryTabsActivities" type="button"
                                      role="tab">
-                                     Events
+                                     {{ __('gallery.events') }}
                                      <!-- <small class="d-block text-light2 fw-normal">20 Photos</small> -->
                                  </button>
                              </li>
@@ -44,7 +44,7 @@
                              <li class="nav-item" role="presentation">
                                  <button class="nav-link" data-target="galleryTabsHighlights" type="button"
                                      role="tab">
-                                     Hotels
+                                     {{ __('gallery.hotels') }}
                                      <!-- <small class="d-block text-light2 fw-normal">3 Photos</small> -->
                                  </button>
                              </li>
@@ -57,8 +57,8 @@
                      <!-- PILLS FOR TAB 1 -->
                      <div class="gallery-section-pills" data-tab="galleryTabsDestination">
 
-                         <button class="filter-pill" data-section="port-blair">Package Image</button>
-                         <button class="filter-pill" data-section="havelock">Package Gallery</button>
+                         <button class="filter-pill" data-section="port-blair">{{ __('gallery.package_image') }}</button>
+                         <button class="filter-pill" data-section="havelock">{{ __('gallery.package_gallery') }}</button>
 
                      </div>
 
@@ -103,7 +103,7 @@
 
                          <div class="gallery-modal-section mb-2" data-section="port-blair">
                              <!-- IMAGE GRID PLACEHOLDER -->
-                             <h5 class="fw-bold mb-2">Image</h5>
+                             <h5 class="fw-bold mb-2">{{ __('gallery.image') }}</h5>
                              <!-- <p class="text-muted small mt-1 mb-3">Port Blair</p> -->
 
                              <div class="gallery-image-grid">
@@ -118,7 +118,7 @@
                          <div class="gallery-modal-section" data-section="havelock">
                              <!-- IMAGE GRID PLACEHOLDER -->
                              <h5 class="fw-bold">{{ $t->title }}</h5>
-                             <p class="text-muted small mt-1 mb-3">Gallery</p>
+                             <p class="text-muted small mt-1 mb-3">{{ __('gallery.gallery') }}</p>
 
                              <div class="three-gallery-image">
                                  @foreach ($package->gallery as $pgallery)
@@ -142,7 +142,7 @@
                                  <div class="gallery-modal-section" data-section="{{ $typeData['name'] }}">
                                      <!-- VIDEO SECTION -->
                                      <h5 class="fw-bold">{{ $typeData['name'] }}</h5>
-                                     <p class="text-muted small mt-1 mb-3">Image</p>
+                                     <p class="text-muted small mt-1 mb-3">{{ __('gallery.image') }}</p>
 
                                      <div class="gallery-image-grid mb-2">
                                         @if(isset($typeData['thumb']) && isset($typeData['thumb']->image_path))
@@ -154,7 +154,7 @@
                                         @endif
                                      </div>
 
-                                     <p class="text-muted small mt-1 mb-2">Gallery</p>
+                                     <p class="text-muted small mt-1 mb-2">{{ __('gallery.gallery') }}</p>
                                      <div class="gallery-image-grid">
                                          @foreach ($typeData['gallery'] as $todoGallery)
                                              <div class="gallery-img-box">
@@ -179,7 +179,7 @@
                                  <div class="gallery-modal-section" data-section="{{ $typeData['name'] }}">
                                      <!-- VIDEO SECTION -->
                                      <h5 class="fw-bold">{{ $typeData['name'] }}</h5>
-                                     <p class="text-muted small mt-1 mb-3">Image</p>
+                                     <p class="text-muted small mt-1 mb-3">{{ __('gallery.image') }}</p>
 
                                      <div class="gallery-image-grid">
                                          @if (isset($typeData['thumb']) && isset($typeData['thumb']->image_path))
@@ -191,7 +191,7 @@
                                          @endif
                                      </div>
 
-                                     <p class="text-muted small mt-1 mb-3">Gallery</p>
+                                     <p class="text-muted small mt-1 mb-3">{{ __('gallery.gallery') }}</p>
                                      <div class="gallery-image-grid">
                                          @foreach ($typeData['gallery'] as $eventGallery)
                                              <div class="gallery-img-box">
@@ -213,7 +213,7 @@
                                  <div class="gallery-modal-section" data-section="{{ $typeData['name'] }}">
                                      <!-- VIDEO SECTION -->
                                      <h5 class="fw-bold">{{ $typeData['name'] }}</h5>
-                                     <p class="text-muted small mt-1 mb-3">Image</p>
+                                     <p class="text-muted small mt-1 mb-3">{{ __('gallery.image') }}</p>
                                      @if (isset($typeData['thumb']) && isset($typeData['thumb']->image_path))
                                          <div class="gallery-image-grid">
                                              <div class="gallery-img-box">
@@ -225,7 +225,7 @@
                                          </div>
                                      @endif
 
-                                     <p class="text-muted small mt-1 mb-3">Gallery</p>
+                                     <p class="text-muted small mt-1 mb-3">{{ __('gallery.gallery') }}</p>
                                      <div class="gallery-image-grid">
                                          @foreach ($typeData['gallery'] as $hotelGallery)
                                              @if (isset($typeData['gallery']) && isset($hotelGallery->image_path))
