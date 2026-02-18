@@ -644,6 +644,44 @@ class PackageController extends Controller
             });
     }
 
+    public function fixAllSlugs()
+    {
 
+        // 🔥 translation eager load
+        $packages = Package::with('translation')->get();
 
+        foreach ($packages as $package) {
+
+            // ✅ title from translation
+            $title = $package->translation->title ?? 'package';
+
+            // dd($title);
+
+            $baseSlug = Str::slug($title);
+
+            // fallback safety
+            if (!$baseSlug) {
+                $baseSlug = 'package-' . $package->id;
+            }
+
+            // 🔒 unique slug generator
+            $slug = $baseSlug;
+            $counter = 1;
+
+            while (
+                Package::where('slug', $slug)
+                ->where('id', '!=', $package->id)
+                ->exists()
+            ) {
+                $slug = $baseSlug . '-' . $counter++;
+            }
+
+            // ✅ update slug
+            $package->update([
+                'slug' => $slug
+            ]);
+        }
+
+        return back()->with('success', 'All package slugs updated successfully');
+    }
 }
