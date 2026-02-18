@@ -63,17 +63,16 @@
 
                     </div>
                 </div>
-
                 <!-- Social & Newsletter -->
                 <div class="col-md-6 col-lg-3 mb-4">
                     <div class="footer-icons-section">
-                        <a href="#" class="footer-icon">
+                        <a href={{ company('instagram_url') ?: '#' }}" class="footer-icon">
                             <img src="{{ asset('frontend/assets/icons/instagram.svg') }}" alt="instagram">
                         </a>
-                        <a href="#" class="footer-icon">
+                        <a href="{{ company('facebook_url') ?: '#' }}" class="footer-icon">
                             <img src="{{ asset('frontend/assets/icons/facebook.svg') }}" alt="facebook">
                         </a>
-                        <a href="#" class="footer-icon">
+                        <a href="{{ company('twitter_url') ?: '#' }}" class="footer-icon">
                             <img src="{{ asset('frontend/assets/icons/x.svg') }}" alt="x">
                         </a>
                     </div>
