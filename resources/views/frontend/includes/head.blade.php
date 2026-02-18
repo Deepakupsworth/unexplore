@@ -1,6 +1,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+{{-- Favicon --}}
+<link rel="icon" type="image/x-icon" href="{{  asset('frontend/assets/favicon.ico') }}">
+<link rel="shortcut icon" href="{{  asset('frontend/assetsfavicon.ico') }}">
+
+{{-- PNG fallback --}}
+<link rel="icon" type="image/png" sizes="32x32" href="{{  asset('frontend/assets/favicon-32x32.png') }}">
+<link rel="icon" type="image/png" sizes="16x16" href="{{  asset('frontend/assets/favicon-16x16.png') }}">
+
+{{-- Apple --}}
+<link rel="apple-touch-icon" href="{{  asset('frontend/assets/apple-touch-icon.png') }}">
+
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,3 +24,5 @@
 
 <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}">
 <link rel="stylesheet" href="{{ asset('frontend/css/responsive.css') }}">
+
+
