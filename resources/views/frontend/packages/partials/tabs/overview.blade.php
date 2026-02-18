@@ -105,11 +105,13 @@
                                                                         <p class="fw-600 my-1">
                                                                             {{ $hotel->translation?->name }}
                                                                         </p>
+                                                                        <div class="d-flex flex-column gap-2">
+                                                                            <p class="p-small text-light2">
+                                                                                <i class="fa-solid fa-location-dot"></i>
+                                                                                {{ $hotel->location }}
+                                                                            </p>
+                                                                        </div>
 
-                                                                        <p class="p-small text-light2">
-                                                                            <i class="fa-solid fa-location-dot"></i>
-                                                                            {{ $hotel->location }}
-                                                                        </p>
                                                                     </div>
                                                                 </div>
                                                                 <input type="hidden" name="extra_price"
@@ -207,12 +209,13 @@
                                                                         <p class="fw-600">
                                                                             {{ $todo->translation->name }}
                                                                         </p>
-                                                                        <p class="p-small text-light2">
-                                                                            <i class="fa fa-clock"></i>
-                                                                            {{ $todo->opening_time }}
-                                                                            -
-                                                                            {{ $todo->closing_time }}
-                                                                        </p>
+                                                                        @if($todo?->opening_time && $todo?->closing_time)
+                                                                            <p class="p-small text-light2">
+                                                                                <i class="fa fa-clock"></i>
+                                                                                {{ \App\Helpers\TimeHelper::range($todo->opening_time, $todo->closing_time) }}
+                                                                            </p>
+                                                                        @endif
+
                                                                     </div>
                                                                 </div>
                                                                 <input type="hidden" name="extra_price"
@@ -305,13 +308,21 @@
                                                                     <img src="{{ $event->thumb ? asset('storage/' . $event->thumb->image_path) : asset('frontend/assets/hotel-placeholder.jpg') }}"
                                                                         class="pkg-details__tr-ht-img">
 
-                                                                    <div>
+                                                                    <div class="d-flex flex-column gap-2">
                                                                         <p class="fw-600">
                                                                             {{ $event->translation->title }}
                                                                         </p>
+
+                                                                        @if($event?->opening_time && $event?->closing_time)
+                                                                            <p class="p-small text-light2">
+                                                                                <i class="fa fa-clock"></i>
+                                                                                {{ \App\Helpers\TimeHelper::range($event->opening_time, $event->closing_time) }}
+                                                                            </p>
+                                                                        @endif
+
                                                                         <p class="p-small text-light2">
                                                                             <i class="fa fa-calendar"></i>
-                                                                            {{ \App\Helpers\DateHelper::format($event->start_date) }}
+                                                                            {{ \App\Helpers\DateHelper::format($event?->start_date) }}
                                                                         </p>
                                                                     </div>
                                                                 </div>
@@ -422,7 +433,12 @@
                                                                         <p class="fw-600">
                                                                             {{ $transport->translation->name }}
                                                                         </p>
-
+                                                                        @if(!empty($transport?->capacity))
+                                                                            <p class="p-small text-light2">
+                                                                                <i class="fa-solid fa-user-group"></i>
+                                                                                {{ $transport->capacity }}
+                                                                            </p>
+                                                                        @endif
                                                                     </div>
                                                                 </div>
 

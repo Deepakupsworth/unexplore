@@ -107,6 +107,16 @@ class PackageController extends Controller
                 )
             )
 
+            ->when(
+                $request->city,
+                fn($q) =>
+                $q->whereHas(
+                    'cities',
+                    fn($c) =>
+                    $c->where('city_id',$request->city)
+                )
+            )
+
             /* 📦 PACKAGE TYPE */
             ->when(
                 $request->package_type,

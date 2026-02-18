@@ -33,7 +33,7 @@
                                         {{ $cites->translation->name }}
                                     </h6>
                                     @if($cites->package_count > 0)
-                                    <a href="{{ route('packages.index', ['city' => $cites->id]) }}">
+                                    <a class="btn btn-outline-primary rounded-pill" href="{{ route('packages.index', ['cities[]' => $cites->id]) }}">
                                         Packages ({{ $cites->package_count }})
                                     </a>
                                 @endif
@@ -74,7 +74,7 @@
                             </div>
                             {{-- destinations.show --}}
                             @if($cites->package_count > 0)
-                            <a href="{{ route('packages.index') }}" class="btn btn-outline-primary rounded-pill"> {{__('destinations.card.packages') }} ({{$cites->package_count}}) <i class="fa-solid fa-angles-right"></i></a>
+                            <a href="{{ route('packages.index', ['cities[]' => $cites->id]) }}" class="btn btn-outline-primary rounded-pill"> {{__('destinations.card.packages') }} ({{$cites->package_count}}) <i class="fa-solid fa-angles-right"></i></a>
                             @endif
                         </div>
                     </div>
