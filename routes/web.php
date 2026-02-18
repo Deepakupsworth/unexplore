@@ -187,7 +187,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
             Route::delete('/gallery/delete/{id}', [CityController::class, 'deleteGalleryImage'])->name('cities.image.delete');
 
-          
+
         });
 
         Route::prefix('gallery')->group(function () {
@@ -306,6 +306,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::prefix('packages')->name('packages.')->group(function () {
 
+            Route::get('/fix-all-slugs', [AdminPackageController::class, 'fixAllSlugs'])
+            ->name('fix-all-slugs');
+
+
             Route::get('/', [AdminPackageController::class, 'index'])
                 ->name('index');
 
@@ -379,9 +383,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
                 '/seachIds',
                 [AdminPackageController::class, 'seachIds']
             )->name('seachIds');
-
-            
-            
         });
     });
 
