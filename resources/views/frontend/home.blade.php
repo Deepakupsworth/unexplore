@@ -113,8 +113,8 @@
                         </div>
                         <div class="plan-trip__features">
                             <div class="plan-trip__feature">
-                                <div class="plan-trip__feature-icon">
-                                    <img src="{{ asset('frontend/assets/icons/__Choose Your Destination.svg') }}" alt="Hidden gems"
+                                <div class="plan-trip__feature-icon d-flex justify-content-center">
+                                    <img width="55%" src="{{ asset('frontend/assets/icons/__Choose Your Destination.svg') }}" alt="Hidden gems"
                                         class="img-fluid">
                                 </div>
                                 <div class="plan-trip__feature-text">
@@ -123,8 +123,8 @@
                                 </div>
                             </div>
                             <div class="plan-trip__feature">
-                                <div class="plan-trip__feature-icon">
-                                    <img src="{{ asset('frontend/assets/icons/__Experience Culture & Adventure.svg') }}" alt="Hidden gems"
+                                <div class="plan-trip__feature-icon  d-flex justify-content-center">
+                                    <img width="55%" src="{{ asset('frontend/assets/icons/__Experience Culture & Adventure.svg') }}" alt="Hidden gems"
                                         class="img-fluid">
                                 </div>
                                 <div class="plan-trip__feature-text">
@@ -133,8 +133,8 @@
                                 </div>
                             </div>
                             <div class="plan-trip__feature">
-                                <div class="plan-trip__feature-icon">
-                                    <img src="{{ asset('frontend/assets/icons/__Travel With Confidence.svg') }}" alt="Hidden gems"
+                                <div class="plan-trip__feature-icon  d-flex justify-content-center">
+                                    <img width="55%" src="{{ asset('frontend/assets/icons/__Travel With Confidence.svg') }}" alt="Hidden gems"
                                         class="img-fluid">
                                 </div>
                                 <div class="plan-trip__feature-text">
@@ -312,7 +312,7 @@
     <section class="visa-banner d-flex align-items-center justify-content-center">
         <div class="visa-banner__content d-flex flex-column align-items-center gap-4">
             <h2 class="text-white fw-normal">{!! __('home.visa.title') !!}</h2>
-            <a href="#" class="btn btn-primary rounded-pill">{{ __('home.visa.learn_more') }} <i
+            <a href="{{route('packages.index')}}" class="btn btn-primary rounded-pill">{{ __('home.visa.learn_more') }} <i
                     class="fa-solid fa-angles-right"></i></a>
         </div>
     </section>
@@ -526,7 +526,7 @@
                 });
             });
         });
-        </script>
+    </script>
     @endpush
 
 @endsection

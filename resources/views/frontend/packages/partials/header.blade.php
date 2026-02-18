@@ -27,14 +27,18 @@
 
     {{-- PACKAGE TYPES --}}
     @foreach ($packageTypes as $type => $count)
-        <div class="package-listing__results-applied-fil {{ in_array($type, $selectedTypes) ? 'success' : '' }}">
-            <a href="#" class="text-decoration-none package-type-tag" data-type="{{ $type }}">
-                {{-- {{ ucfirst($type) }} ({{ $count }}) --}}
-                <p class="p-small  {{ in_array($type, $selectedTypes) ? 'text-success' : '' }}">{{ ucfirst($type) }}</p>
-            </a>
-        </div>
+    <div class="package-listing__results-applied-fil {{ in_array($type, $selectedTypes) ? 'success' : '' }}">
+        <a href="#" class="text-decoration-none package-type-tag" data-type="{{ $type }}">
+            <p class="p-small {{ in_array($type, $selectedTypes) ? 'text-success' : '' }}">
+                {{ $type === 'customizable'
+                    ? __('packages.filters.customizable')
+                    : __('packages.filters.non_customizable') }}
+                ({{ $count }})
+            </p>
+        </a>
+    </div>
+@endforeach
 
-    @endforeach
 
 </div>
 

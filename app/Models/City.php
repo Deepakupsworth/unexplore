@@ -100,4 +100,15 @@ class City extends Model
         return $this->morphToMany(Tag::class, 'taggable');
     }
 
+    public function packages()
+    {
+        return $this->hasManyThrough(
+            Package::class,
+            PackageCity::class,
+            'city_id',     // FK on package_cities
+            'id',          // FK on packages
+            'id',          // local key on cities
+            'package_id'   // local key on package_cities
+        );
+    }
 }

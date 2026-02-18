@@ -323,12 +323,12 @@
 
                         <x-frontend.help-card />
 
-                        <div class="mt-4">
+                        {{-- <div class="mt-4">
                             <p>{{ __('package.share') }}</p>
                             <div class="mt-2 pkg-details__share-icons">
                                 <x-share-links :enableShareIcon="true"  />
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
 
                 </div>

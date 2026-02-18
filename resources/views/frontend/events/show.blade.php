@@ -116,7 +116,9 @@
                             {{ __('event_details.info.starting_from') }}
                         </p>
                         <h5 class="m-0 fw-bold">
-                            {{ \App\Helpers\DateHelper::format($event->start_date) }}
+                            {{ \App\Helpers\DateHelper::format($event->start_date) }} <br/>
+                            {{ $event->opening_days }} :
+                                    {{ \App\Helpers\TimeHelper::range($event->opening_time, $event->closing_time) }}
                         </h5>
                     </div>
 
@@ -136,7 +138,7 @@
         </div>
     </section>
 
-    <section class="event-details__overview">
+    {{-- <section class="event-details__overview">
         <div class="container">
             <div class="d-flex justify-content-between flex-column flex-sm-row">
                 <div class="py-3 event-details__overview-title flex-center">
@@ -156,7 +158,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
 
     <section class="section-padding-md event-map-info offwhite-bg">
         <div class="container">
@@ -207,7 +209,7 @@
                             </div>
                         </div>
 
-                        <div class="event-map__info-card-row flex-v-center rounded-4 gap-1">
+                        {{-- <div class="event-map__info-card-row flex-v-center rounded-4 gap-1">
                             <div class="icon primary-text flex-center">
                                 <i class="fa-regular fa-clock"></i>
                             </div>
@@ -220,7 +222,7 @@
                                     {{ \App\Helpers\TimeHelper::range($event->opening_time, $event->closing_time) }}
                                 </p>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
 
                     <!-- Weather card -->
