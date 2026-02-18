@@ -43,7 +43,7 @@ class AppServiceProvider extends ServiceProvider
         // App::setLocale($locale);
         // Event::observe(EventObserver::class);
         // ThingToDo::observe(ThingToDoObserver::class);
-        Package::observe(PackageObserver::class);
+        //Package::observe(PackageObserver::class);
 
         Booking::observe(BookingObserver::class);
     }

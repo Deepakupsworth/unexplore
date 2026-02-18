@@ -7,6 +7,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <title>Unxplord saudi - Backend</title>
+    {{-- Favicon --}}
+    <link rel="icon" type="image/x-icon" href="{{  asset('backend/images/favicon.ico') }}">
+    <link rel="shortcut icon" href="{{  asset('backend/images/favicon.ico') }}">
+
+    {{-- PNG fallback --}}
+    <link rel="icon" type="image/png" sizes="32x32" href="{{  asset('backend/images/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{  asset('backend/images/favicon-16x16.png') }}">
+
+    {{-- Apple --}}
+    <link rel="apple-touch-icon" href="{{  asset('backend/images/apple-touch-icon.png') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('frontend/assets/favicon/apple-touch-icon.png')}}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{asset('frontend/assets/favicon/favicon-32x32.png')}}">
