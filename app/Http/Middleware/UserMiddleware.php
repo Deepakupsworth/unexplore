@@ -18,7 +18,9 @@ class UserMiddleware
 
         // If logged in but not admin → 403 forbidden
         if (Auth::user()->role !== 'user') {
-            abort(403, 'Unauthorized Access');
+           // abort(403, 'Unauthorized Access');
+            return redirect('/')
+            ->with('error', __('unauthorized.access'));
         }
 
         return $next($request);

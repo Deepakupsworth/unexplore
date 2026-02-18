@@ -18,6 +18,9 @@ use App\Observers\ThingToDoObserver;
 use App\Models\Package;
 use App\Observers\PackageObserver;
 
+use App\Models\Booking;
+use App\Observers\BookingObserver;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -40,6 +43,8 @@ class AppServiceProvider extends ServiceProvider
         // App::setLocale($locale);
         // Event::observe(EventObserver::class);
         // ThingToDo::observe(ThingToDoObserver::class);
-        // Package::observe(PackageObserver::class);
+        Package::observe(PackageObserver::class);
+
+        Booking::observe(BookingObserver::class);
     }
 }

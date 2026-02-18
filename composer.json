@@ -33,7 +33,8 @@
                     "app/Helpers/TimeHelper.php",
                     "app/Helpers/UiHelper.php",
                     "app/Helpers/PackageHelper.php",
-                    "app/Helpers/DateHelper.php"
+                    "app/Helpers/DateHelper.php",
+                    "app/Helpers/SeoHelper.php"
                 ]
     },
     "autoload-dev": {

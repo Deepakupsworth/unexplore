@@ -523,5 +523,6 @@
     "account.country": "Country",
     "account.adult": "Adult",
     "account.child": "Child",
-    "account.no_travellers": "No travellers added"
+    "account.no_travellers": "No travellers added",
+    "unauthorized.access":"Unauthorized access! You were redirected to the home page."
 }

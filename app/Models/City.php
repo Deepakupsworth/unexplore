@@ -100,4 +100,11 @@ class City extends Model
         return $this->morphToMany(Tag::class, 'taggable');
     }
 
+    public function seo()
+    {
+        return $this->morphMany(SeoMeta::class, 'metaable');
+    }
+
+
+
 }
