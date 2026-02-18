@@ -150,8 +150,8 @@
                         {{ __('event_details.overview.share_text') }}
                     </p>
                     <div class="d-flex gap-3">
-                        
-                        <x-share-links a-class="social-icon" icon-size="icon-sm" />
+
+                        <x-share-links/>
                     </div>
                 </div>
             </div>

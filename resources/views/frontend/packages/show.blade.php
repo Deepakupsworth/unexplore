@@ -326,21 +326,7 @@
                         <div class="mt-4">
                             <p>{{ __('package.share') }}</p>
                             <div class="mt-2 pkg-details__share-icons">
-                                <a href="#" class="flex-center">
-                                    <img src="{{ asset('frontend/assets/icons/instagram.svg') }}" alt="Instagram">
-                                </a>
-                                <a href="#" class="flex-center">
-                                    <img src="{{ asset('frontend/assets/icons/facebook.svg') }}" alt="Facebook">
-                                </a>
-                                <a href="#" class="flex-center">
-                                    <img src="{{ asset('frontend/assets/icons/facebook.svg') }}" alt="Facebook">
-                                </a>
-                                <a href="#" class="flex-center">
-                                    <img src="{{ asset('frontend/assets/icons/x.svg') }}" alt="X">
-                                </a>
-                                <a href="#" class="flex-center">
-                                    <img src="{{ asset('frontend/assets/icons/share.svg') }}" alt="Share">
-                                </a>
+                                <x-share-links :enableShareIcon="true"  />
                             </div>
                         </div>
                     </div>

@@ -144,8 +144,8 @@
                     <div class="event-map__info-card">
                         <p class="fw-500">Share</p>
                         <div class="d-flex gap-3 mt-2">
-                            
-                            <x-share-links a-class="social-icon" icon-size="icon-sm" />
+
+                            <x-share-links />
                         </div>
                     </div>
                 </div>
