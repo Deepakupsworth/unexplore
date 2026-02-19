@@ -55,17 +55,6 @@
         width: 100%;
     }
 
-    .exclusive-offers__carousel-item {
-        display: flex !important;
-        flex-direction: column !important;
-        height: 100% !important;
-    }
-
-    .exclusive-offers__carousel-item-img img {
-        max-height: 200px !important;
-        height: 100% !important;
-    }
-
     </style>
 
 
