@@ -13,12 +13,12 @@ use App\Models\{
     BookingDay,
     BookingDayItem,
     Coupon,
-    CustomerBilling,
     Event,
     Hotel,
     Package,
     ThingToDo,
     Transport,
+    UserAddress,
 };
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -115,7 +115,7 @@ class BookingController extends Controller
             $billingData = array_filter($request->input('billing', []));
             $billingData['user_id'] = auth()->id();
 
-            // CustomerBilling::updateOrCreate(
+            // UserAddress::updateOrCreate(
             //     [
             //         'user_id' => auth()->id(),
             //         'is_default' => true,
