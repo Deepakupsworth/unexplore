@@ -471,7 +471,9 @@
     "common.popular": "Popular",
     "common.newest": "Newest",
     "account.dashboard": "Dashboard",
+    "account.home": "Home",
     "account.profile": "Profile",
+    "account.user.profile":"User Profile",
     "account.bookings": "Bookings",
     "account.manage_address": "Manage Address",
     "account.manage_traveller": "Manage Traveller",
@@ -524,5 +526,6 @@
     "account.country": "Country",
     "account.adult": "Adult",
     "account.child": "Child",
-    "account.no_travellers": "No travellers added"
+    "account.no_travellers": "No travellers added",
+    "unauthorized.access":"Unauthorized access! You were redirected to the home page."
 }

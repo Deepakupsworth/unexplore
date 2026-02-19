@@ -189,4 +189,11 @@ class Package extends Model
         return $this->belongsToMany(PackagePolicy::class);
     }
 
+    public function seo()
+    {
+        return $this->morphMany(SeoMeta::class, 'metaable');
+    }
+
+
+
 }

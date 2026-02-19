@@ -16,7 +16,9 @@ class RoleMiddleware
         }
         
         if (Auth::user()->role !== $role) {
-            abort(403, 'Unauthorized access');
+            //abort(403, 'Unauthorized access');
+            return redirect('/')
+            ->with('error', 'Unauthorized access! You were redirected to the home page.');
         }
 
         return $next($request);

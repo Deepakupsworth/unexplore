@@ -62,7 +62,7 @@
     }
 
     .exclusive-offers__carousel-item-img img {
-        min-height: 200px !important;
+        max-height: 200px !important;
         height: 100% !important;
     }
 
@@ -84,7 +84,7 @@
             'packages*',
             'things-to-do',
             'account',
-            'events*',
+            'events',
             'booking*',
             'products',
         ];

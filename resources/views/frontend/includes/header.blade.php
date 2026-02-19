@@ -85,12 +85,13 @@
                                     <div class="nav-menu__right">
                                         {{-- <p class="fw-bold p-large">{{ __('header.about_saudi') }}</p> --}}
                                         {{-- <p class="text-muted small">{{ __('header.about_saudi_short') }}</p> --}}
-                                        <img src="frontend/assets/header_saudi.jpg" alt="Saudi"
+                                        <img src="{{ asset('frontend/assets/header_saudi.jpg')}}" alt="Saudi"
                                             class="img-fluid about-image">
                                         {{-- <img src="frontend/assets/about_header.jpg" alt="Image"
                                             class="nav-menu__right-side-img"> --}}
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </li>
@@ -143,7 +144,7 @@
                                     <div class="nav-menu__right">
                                         {{-- <p class="fw-bold p-large">{{ __('header.about_saudi') }}</p> --}}
                                         {{-- <p class="text-muted small">{{ __('header.about_saudi_short') }}</p> --}}
-                                        <img src="frontend/assets/header_things.jpg" alt="Saudi"
+                                        <img src="{{ asset('frontend/assets/header_things.jpg')}}" alt="Saudi"
                                             class="img-fluid about-image">
                                         {{-- <img src="frontend/assets/about_header.jpg" alt="Image"
                                             class="nav-menu__right-side-img"> --}}
@@ -607,7 +608,7 @@
                             {{ Auth()?->user()->first_name }}
                         </a>
                         @endif
-                        
+
                         <a href="#" class="text-white d-flex gap-2 align-items-center text-decoration-none"
                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             <i class="fa-solid fa-right-from-bracket"></i>
