@@ -9,7 +9,7 @@
 
                 <div class="d-flex gap-2 pkg-details__accordion-actions">
                     <p class="fw-600">
-                         3. {{ __('checkout.policies') }}
+                         4. {{ __('checkout.policies') }}
                     </p>
                 </div>
 

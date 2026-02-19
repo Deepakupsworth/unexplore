@@ -39,6 +39,7 @@ use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\NewsletterController;
+use App\Http\Controllers\Frontend\InfoPageController;
 
 // routes/web.php
 Route::get('/lang/{locale}', function ($locale) {
@@ -87,13 +88,13 @@ Route::middleware('auth')->group(function () {
         ->name('booking.success');
     Route::get('/test-booking-mail', [BookingController::class, 'testBookingMail']);
 
-    Route::post('/checkout/update-travellers-session',
-    [CheckoutController::class, 'updateTravellerSession']
+    Route::post(
+        '/checkout/update-travellers-session',
+        [CheckoutController::class, 'updateTravellerSession']
     )->name('checkout.update.session');
 
     Route::get('/checkout/search-traveller', [CheckoutController::class, 'searchTraveller'])
-    ->name('checkout.search.traveller');
-
+        ->name('checkout.search.traveller');
 });
 
 
@@ -161,7 +162,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::prefix('admin')->group(function () {
 
         Route::get('/users', [UserController::class, 'index'])
-        ->name('admin.users.index');
+            ->name('admin.users.index');
 
         Route::resource('coupon', AdminCouponController::class);
         Route::post('coupon/{coupon}/status', [AdminCouponController::class, 'status'])
@@ -172,9 +173,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
         |--------------------------------------------------------------------------
         */
         Route::prefix('cities')->group(function () {
-            Route::get('/search',[CityController::class, 'search'])->name('cities.search');
+            Route::get('/search', [CityController::class, 'search'])->name('cities.search');
 
-            Route::get('/seachIds',[CityController::class, 'seachIds'])->name('cities.seachIds');
+            Route::get('/seachIds', [CityController::class, 'seachIds'])->name('cities.seachIds');
 
             Route::get('/', [CityController::class, 'index'])->name('cities.index');
             Route::get('/create', [CityController::class, 'form'])->name('cities.create');
@@ -186,8 +187,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
             Route::delete('/delete/{id}', [CityController::class, 'destroy'])->name('cities.delete');
 
             Route::delete('/gallery/delete/{id}', [CityController::class, 'deleteGalleryImage'])->name('cities.image.delete');
-
-
         });
 
         Route::prefix('gallery')->group(function () {
@@ -266,8 +265,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::post('/countries/import', [CountryController::class, 'import'])->name('admin.countries.import');
 
         Route::get('/apiImport', [CountryController::class, 'apiImport'])->name('apiImport');
-
-        
     });
 
     Route::prefix('admin')->group(function () {
@@ -311,7 +308,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::prefix('packages')->name('packages.')->group(function () {
 
             Route::get('/fix-all-slugs', [AdminPackageController::class, 'fixAllSlugs'])
-            ->name('fix-all-slugs');
+                ->name('fix-all-slugs');
 
 
             Route::get('/', [AdminPackageController::class, 'index'])
@@ -462,11 +459,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
         // Company Details (single record)
         Route::get('company-details/form', [CompanyDetailController::class, 'form'])
-        ->name('company-details.form');
+            ->name('company-details.form');
 
         Route::post('company-details/save', [CompanyDetailController::class, 'save'])
             ->name('company-details.save');
-        });
+    });
 });
 
 
@@ -621,3 +618,20 @@ Route::get('/privacy-policy', [PageController::class, 'privacyPolicy'])
 
 Route::get('/terms-conditions', [PageController::class, 'termsConditions'])
     ->name('terms-conditions');
+
+
+
+Route::prefix('info')->name('info.')->group(function () {
+
+    Route::get('/about-saudi', [InfoPageController::class, 'aboutSaudi'])
+        ->name('about-saudi');
+
+    Route::get('/visa-regulations', [InfoPageController::class, 'visaRegulations'])
+        ->name('visa-regulations');
+
+    Route::get('/travel-guide', [InfoPageController::class, 'travelGuide'])
+        ->name('travel-guide');
+
+    Route::get('/getting-around', [InfoPageController::class, 'gettingAround'])
+        ->name('getting-around');
+});

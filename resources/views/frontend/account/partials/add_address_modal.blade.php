@@ -33,7 +33,17 @@
 
                     <div class="mb-3">
                         <label class="form-label">Country</label>
-                        <input name="country" type="text" class="form-control" required>
+                        <select name="country" class="form-select" required>
+                            <option value="">
+                                {{ __('checkout.select_country') }}
+                            </option>
+
+                            @foreach (country_list() as $country)
+                                <option value="{{ $country->code }}">
+                                    {{ $country->name }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
 
                 </form>

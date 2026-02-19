@@ -4,14 +4,14 @@
     <section class="user-profile__banner">
         <div class="container">
             <div class="user-profile__banner-content text-center">
-                <h1 class="text-white mb-3 h2">{{__('account.user.profile')}}</h1>
+                <h1 class="text-white mb-3 h2">{{ __('account.user.profile') }}</h1>
                 <div class="banner-breadcrumb rounded-pill d-flex align-items-center justify-content-center gap-3 p-small">
                     <a href="#" class="">
                         <i class="fa-solid fa-house"></i>
-                       {{__('account.home')}}
+                        {{ __('account.home') }}
                     </a>
                     <span><i class="fa-solid fa-angles-right"></i></span>
-                    <span class="active">{{__('account.profile')}}</span>
+                    <span class="active">{{ __('account.profile') }}</span>
                 </div>
             </div>
         </div>
@@ -60,73 +60,112 @@
                         </li>
 
                         <!-- <li>
-                                                <a href="javascript:void(0)" class="nav-link account-tab" data-tab="wishlist">
-                                                    <i class="fa-solid fa-heart p-large"></i>
-                                                    Wishlist
-                                                </a>
-                                            </li> -->
+                                                        <a href="javascript:void(0)" class="nav-link account-tab" data-tab="wishlist">
+                                                            <i class="fa-solid fa-heart p-large"></i>
+                                                            Wishlist
+                                                        </a>
+                                                    </li> -->
 
                     </ul>
                 </div>
 
-                {{-- ================= RIGHT CONTENT ================= --}}
+                {{-- RIGHT CONTENT --}}
                 <div class="w-100">
                     <div id="accountTabContent" class="user-profile__box">
                         {{-- AJAX CONTENT LOADS HERE --}}
                     </div>
-
                 </div>
-                @include('frontend.account.partials.booking-drawer')
+
+                {{-- ✅ KEEP MODALS HERE (OUTSIDE AJAX) --}}
+                @include('frontend.account.partials.traveller_modal')
+                @include('frontend.account.partials.view_traveller_modal')
+                @include('frontend.account.partials.add_address_modal')
+
+
             </div>
         </div>
     </section>
-
-    {{-- ================= ADD TRAVELLER MODAL ================= --}}
-
-    @if ($_GET['tab'] == 'travellers')
-        @include('frontend.account.partials.traveller_modal')
-
-        @include('frontend.account.partials.view_traveller_modal')
-    @endif
-
-    {{-- ================= ADD ADDRESS MODAL ================= --}}
-
-    @if ($_GET['tab'] == 'addresses')
-        @include('frontend.account.partials.add_address_modal')
-    @endif
+    @include('frontend.account.partials.booking-drawer')
 @endsection
 
 @push('scripts')
     <script>
-        /* ================= LOAD TAB ================= */
+        /* =========================================================
+           ACCOUNT TAB LOADER (PRODUCTION READY)
+        ========================================================= */
+
         function loadAccountTab(tab) {
 
+            // ✅ active menu highlight
             document.querySelectorAll('.account-tab').forEach(el => {
                 el.classList.remove('active');
-                if (el.dataset.tab === tab) el.classList.add('active');
+                if (el.dataset.tab === tab) {
+                    el.classList.add('active');
+                }
             });
 
-            fetch(`/account/load?tab=${tab}`)
+            // ✅ show loader (optional but pro)
+            const container = document.getElementById('accountTabContent');
+            if (container) {
+                container.innerHTML =
+                    '<div class="text-center py-5">Loading...</div>';
+            }
+
+            // ✅ ajax load
+            fetch(`/account/load?tab=${tab}`, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
                 .then(res => res.text())
                 .then(html => {
-                    document.getElementById('accountTabContent').innerHTML = html;
+                    if (container) {
+                        container.innerHTML = html;
+                    }
+
+                    // ✅ update URL without reload
                     history.pushState(null, '', `?tab=${tab}`);
+                })
+                .catch(() => {
+                    if (container) {
+                        container.innerHTML =
+                            '<div class="text-danger text-center py-5">Failed to load</div>';
+                    }
                 });
         }
 
-        /* ================= CLICK HANDLER ================= */
-        document.querySelectorAll('.account-tab').forEach(el => {
-            el.addEventListener('click', () => loadAccountTab(el.dataset.tab));
+
+        /* =========================================================
+           🔥 EVENT DELEGATION (CRITICAL FIX)
+           Works after AJAX replace
+        ========================================================= */
+
+        document.addEventListener('click', function(e) {
+
+            const tabEl = e.target.closest('.account-tab');
+            if (!tabEl) return;
+
+            e.preventDefault();
+            loadAccountTab(tabEl.dataset.tab);
         });
 
-        /* ================= INITIAL LOAD ================= */
-        document.addEventListener('DOMContentLoaded', () => {
-            const tab = new URLSearchParams(window.location.search).get('tab') || 'dashboard';
+
+        /* =========================================================
+           INITIAL TAB LOAD
+        ========================================================= */
+
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const params = new URLSearchParams(window.location.search);
+            const tab = params.get('tab') || 'dashboard';
+
             loadAccountTab(tab);
         });
 
-        // /* ================= ADDRESS CRUD ================= */
 
+        /* =========================================================
+           ADDRESS CRUD
+        ========================================================= */
 
         function deleteAddress(id) {
             if (!confirm("{{ __('account.delete_address_confirm') }}")) return;
@@ -154,6 +193,7 @@
             fetch(`/account/addresses/${id}`)
                 .then(res => res.json())
                 .then(data => {
+
                     const form = document.getElementById('addressForm');
 
                     form.address_title.value = data.address_title;
@@ -174,14 +214,13 @@
         }
 
         function saveAddress() {
+
             const form = document.getElementById('addressForm');
             const id = form.dataset.id ?? '';
 
             const url = id ?
                 `/account/addresses/${id}` :
                 `/account/addresses`;
-
-            const method = id ? 'POST' : 'POST';
 
             const formData = new FormData(form);
 
@@ -206,12 +245,13 @@
 
                 loadAccountTab('addresses');
             });
-
-
         }
-    </script>
-    <script>
-        /* ================= OPEN FILE DIALOG ================= */
+
+
+        /* =========================================================
+           PROFILE IMAGE UPLOAD
+        ========================================================= */
+
         document.addEventListener('click', function(e) {
 
             const btn = e.target.closest('[data-upload-btn]');
@@ -220,7 +260,6 @@
             btn.querySelector('[data-upload-input]').click();
         });
 
-        /* ================= UPLOAD IMAGE ================= */
         document.addEventListener('change', function(e) {
 
             const input = e.target.closest('[data-upload-input]');
@@ -248,13 +287,17 @@
                             document.querySelector('[data-profile-preview]').src = e.target.result;
                         };
                         reader.readAsDataURL(file);
-                    } else {
-                        // alert('Upload failed');
+                        iziToast.success({
+                            title: 'Success',
+                            message: 'Profile image updated successfully.',
+                            position: 'topRight',
+                            timeout: 3000
+                        });
+
                     }
                 });
         });
 
-        /* ================= DELETE IMAGE ================= */
         function deleteProfileImage() {
 
             if (!confirm("{{ __('account.remove_profile_image_confirm') }}")) return;
@@ -270,13 +313,23 @@
                 .then(data => {
                     if (data.status === 'success') {
                         document.querySelector('[data-profile-preview]')
-                            .src = '{{ asset('frontend/assets/user.jpeg') }}';
+                            .src = '{{ asset('frontend/assets/user.png') }}';
+
+                            iziToast.success({
+                            title: 'Success',
+                            message: 'Profile image delated successfully.',
+                            position: 'topRight',
+                            timeout: 3000
+                        });
                     }
                 });
         }
-    </script>
 
-    <script>
+
+        /* =========================================================
+           TRAVELLER CRUD
+        ========================================================= */
+
         function saveTraveller() {
             const form = document.getElementById('travellerForm');
             const id = form.dataset.id ?? null;
@@ -297,6 +350,7 @@
                     const f = document.getElementById('travellerForm');
                     Object.keys(t).forEach(k => f[k] && (f[k].value = t[k]));
                     f.dataset.id = id;
+
                     bootstrap.Modal.getOrCreateInstance(
                         document.getElementById('travellerModal')
                     ).show();
@@ -305,6 +359,7 @@
 
         function deleteTraveller(id) {
             if (!confirm("{{ __('account.remove_profile_image_confirm') }}")) return;
+
             fetch(`/account/travellers/${id}`, {
                 method: 'DELETE',
                 headers: {
@@ -312,9 +367,7 @@
                 }
             }).then(() => location.reload());
         }
-    </script>
 
-    <script>
         function viewTraveller(id) {
             fetch(`/account/travellers/${id}`, {
                     headers: {
@@ -341,207 +394,6 @@
                 .catch(() => alert('Unable to load traveller details'));
         }
     </script>
-
-    {{-- <script>
-        document.addEventListener('DOMContentLoaded', function() {
-
-            document.body.addEventListener('click', function(e) {
-
-                const btn = e.target.closest('.user-bookings__view-details-btn');
-                if (!btn) return;
-
-                // -------- BASIC INFO --------
-                document.getElementById('drawerLabel').innerHTML = btn.dataset.label  || '';
-                document.getElementById('bookingTitle').innerText = btn.dataset.title || '';
-                document.getElementById('bookingRoute').innerText = btn.dataset.route || '';
-                document.getElementById('bookingTotal').innerText = btn.dataset.total || '';
-                document.getElementById('bookingDate').innerText = btn.dataset.date || '';
-                document.getElementById('thumbImage').src = btn.dataset.thumb || '';
-
-
-                let badgeClass = btn.dataset.badgeClass || '';
-                const labelEl = document.getElementById('drawerLabel');
-                // 1️⃣ Pehle purani bg/text color classes remove karo
-                labelEl.classList.forEach(cls => {
-                    if (cls.startsWith('bg-') || cls.startsWith('text-')) {
-                        labelEl.classList.remove(cls);
-                    }
-                });
-
-                // 2️⃣ bg- ko text- me convert karo
-                if (badgeClass.startsWith('bg-')) {
-                    badgeClass = badgeClass.replace('bg-', 'text-');
-                }
-
-                // 3️⃣ New class add karo
-                if (badgeClass) {
-                    labelEl.classList.add(badgeClass);
-                }
-
-
-                   // 🔥 Currency icon set
-                const icon = btn.dataset.currencyIcon || '';
-                const paymentsRaw = btn.dataset.payments || '[]';
-                let payments = [];
-
-                try {
-                    payments = JSON.parse(paymentsRaw);
-                } catch (e) {
-                    payments = [];
-                }
-
-
-                const paymentItems = payments.map((item, index) => {
-
-                let methodLabel = formatLabel(item.payment_method)|| '-';
-                let txnId = item.transaction_id ? '#' + item.transaction_id : '';
-
-                return `
-                    <div class="d-flex gap-3 mb-2">
-                        <img src="/frontend/assets/icons/drag-vertical.svg">
-                        <div class="booking-details__item">
-                            <span class="booking-details__item-title">Payment Type</span>
-                            <span class="fw-500 d-flex gap-3">
-                                <span class="text-black fw-600">:</span>
-                                ${methodLabel}
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="d-flex gap-3 mb-2">
-                        <img src="/frontend/assets/icons/drag-vertical.svg">
-                        <div class="booking-details__item">
-                            <span class="booking-details__item-title">Transaction ID</span>
-                            <span class="fw-500 d-flex gap-3">
-                                <span class="text-black fw-600">:</span>
-                                ${txnId}
-                            </span>
-                        </div>
-                    </div>
-                `;
-
-                }).join(''); // 🔥 IMPORTANT
-
-                document.getElementById('transactionItem').innerHTML = paymentItems;
-
-
-                document.getElementById('bookingCurrencyIcon').innerHTML =
-                icon ? `<img src="${icon}">` : '';
-
-                const itineraryBox = document.getElementById('drawerItinerary');
-                itineraryBox.innerHTML = '';
-
-                const days = JSON.parse(btn.dataset.days || '[]');
-
-                days.forEach(day => {
-
-                    const dayWrapper = document.createElement('div');
-                    dayWrapper.classList.add('mb-4');
-
-                    const dayTitle = document.createElement('h6');
-                    dayTitle.classList.add('fw-600', 'mb-2');
-                    dayTitle.innerText =
-                        `Day ${day.day_number} - ${day.city?.translation?.name || ''}`;
-
-                    dayWrapper.appendChild(dayTitle);
-
-                    (day.items || []).forEach(item => {
-
-                        let title = '';
-                        let imagePath = '';
-
-                        // 🔥 TYPE BASED EXTRACTION
-                        switch (item.item_type) {
-
-                            case 'hotel':
-                                title = item.hotel?.translation?.name || 'Hotel';
-                                imagePath = item.hotel?.thumb?.image_path;
-                                break;
-
-                            case 'event':
-                                title = item.event?.translation?.title || 'Event';
-                                imagePath = item.event?.thumb?.image_path;
-                                break;
-
-                            case 'todo':
-                                title = item.todo?.translation?.name || 'Activity';
-                                imagePath = item.todo?.thumb?.image_path;
-                                break;
-
-                            case 'transport':
-                                title = item.transport?.translation?.name || 'Transport';
-                                imagePath = item.transport?.thumb?.image_path;
-                                break;
-
-                            default:
-                                title = item.item_type;
-                        }
-
-                        const itemRow = document.createElement('div');
-                        itemRow.classList.add('d-flex', 'align-items-center', 'gap-3',
-                            'mb-2', 'p-2', 'bg-light', 'rounded');
-
-                        // IMAGE
-                        const img = document.createElement('img');
-                        img.style.width = '50px';
-                        img.style.height = '50px';
-                        img.style.objectFit = 'cover';
-                        img.style.borderRadius = '8px';
-
-                        img.src = imagePath ?
-                            `/storage/${imagePath}` :
-                            '/frontend/assets/default.jpg';
-
-                        // INFO
-                        const info = document.createElement('div');
-
-                        const titleDiv = document.createElement('div');
-                        titleDiv.classList.add('fw-500');
-                        titleDiv.innerText = title;
-
-                        const timeDiv = document.createElement('div');
-                        timeDiv.classList.add('small', 'text-muted');
-
-                        if (item.start_time && item.end_time) {
-                            timeDiv.innerText =
-                                formatTime(item.start_time) +
-                                ' → ' +
-                                formatTime(item.end_time);
-                        }
-
-                        info.appendChild(titleDiv);
-                        info.appendChild(timeDiv);
-
-                        itemRow.appendChild(img);
-                        itemRow.appendChild(info);
-
-                        dayWrapper.appendChild(itemRow);
-                    });
-
-                    itineraryBox.appendChild(dayWrapper);
-                });
-
-                function formatTime(timeString) {
-                    const date = new Date("1970-01-01T" + timeString);
-                    return date.toLocaleTimeString([], {
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    });
-                }
-
-            });
-
-        });
-
-        function formatLabel(value) {
-            if (!value) return '-';
-
-            return value
-                .replace(/_/g, ' ')              // bank_transfer → bank transfer
-                .replace(/\b\w/g, c => c.toUpperCase()); // Bank Transfer
-        }
-
-    </script> --}}
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {

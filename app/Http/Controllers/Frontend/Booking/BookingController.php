@@ -7,11 +7,13 @@ use App\Enums\PaymentStatus;
 use App\Http\Controllers\Controller;
 use App\Models\{
     Booking,
+    BookingBillingAddress,
     BookingTraveller,
     BookingSnapshot,
     BookingDay,
     BookingDayItem,
     Coupon,
+    CustomerBilling,
     Event,
     Hotel,
     Package,
@@ -39,6 +41,15 @@ class BookingController extends Controller
         if (!$checkout || empty($checkout['package_id'])) {
             abort(400, 'Checkout session expired');
         }
+
+        $request->validate([
+            'billing.full_name'      => 'required|string|max:255',
+            'billing.phone'          => 'required|string|max:20',
+            'billing.address_line1'  => 'required|string|max:255',
+            'billing.city'           => 'required|string|max:100',
+            'billing.postal_code'    => 'required|string|max:20',
+            'billing.country_code'   => 'required|string|max:5',
+        ]);
 
         /* ========================= 2️⃣ LOAD PACKAGE ========================= */
         $package = Package::with([
@@ -98,6 +109,21 @@ class BookingController extends Controller
             $validTravellers
         ) {
 
+
+            /* ================= BILLING ================= */
+
+            $billingData = array_filter($request->input('billing', []));
+            $billingData['user_id'] = auth()->id();
+
+            // CustomerBilling::updateOrCreate(
+            //     [
+            //         'user_id' => auth()->id(),
+            //         'is_default' => true,
+            //     ],
+            //     $billingData
+            // );
+
+
             /* ===== CREATE BOOKING ===== */
             $booking = Booking::create([
                 'booking_code'         => 'BK-' . strtoupper(Str::random(8)),
@@ -121,6 +147,12 @@ class BookingController extends Controller
                 'total_person'         => $checkout['pricing']['total_persons'],
                 'total_adult'          => $checkout['pricing']['adults'],
                 'total_child'          => $checkout['pricing']['child'],
+            ]);
+
+            BookingBillingAddress::create([
+                'booking_id' => $booking->id,
+                'user_id'    => auth()->id(),
+                ...$billingData
             ]);
 
             /* ===== TRAVELLERS FROM SESSION ===== */
@@ -368,6 +400,7 @@ class BookingController extends Controller
             BookingSnapshot::create([
                 'booking_id' => $booking->id,
                 'snapshot_json' => [
+                    'billing_snapshot' => $billingData,
                     'thumb' => $package->thumb ?? null,
                     'checkout' => $checkout,
                     'coupon'   => [

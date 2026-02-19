@@ -103,7 +103,7 @@
                              onclick="deleteProfileImage()"
                              style="cursor:pointer;">
                             <i class="fa-solid fa-trash-can"></i>
-                            {{ __('account.remove') }}
+                            {{-- {{ __('account.remove') }} --}}
                         </div>
                         @endif
                     </div>
