@@ -21,7 +21,7 @@ class SeoHelper
             [
                 'metaable_id'   => $model->id,
                 'metaable_type' => get_class($model),
-                'locale'        => $locale,
+                'language_code'        => $locale,
             ],
             [
                 'meta_title'       => $data['meta_title'] ?? null,
