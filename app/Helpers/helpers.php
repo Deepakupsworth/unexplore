@@ -3,6 +3,7 @@
 use App\Enums\CategoryType;
 use App\Models\Category;
 use App\Models\CompanyDetail;
+use App\Models\Country;
 use Illuminate\Support\Facades\Cache;
 
 if (!function_exists('header_event_categories')) {
@@ -85,9 +86,6 @@ if (!function_exists('header_destinations')) {
     }
 }
 
-
-
-
 if (!function_exists('header_destination_categories')) {
     function header_destination_categories()
     {
@@ -163,3 +161,40 @@ if (!function_exists('company')) {
         return data_get($company, $key, $default);
     }
 }
+
+if (!function_exists('country_list')) {
+
+    /**
+     * Get all active countries
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    function country_list()
+    {
+        return cache()->remember('country_list', 60 * 60, function () {
+            return Country::query()
+                ->where('status', 1)
+                ->orderBy('name')
+                ->get();
+        });
+    }
+}
+
+if (! function_exists('country_name')) {
+
+    function country_name($value): ?string
+    {
+        if (!$value) return null;
+
+        // ✅ if numeric → treat as id
+        if (is_numeric($value)) {
+            return \App\Models\Country::find($value)?->name;
+        }
+
+        // ✅ if string → treat as country code
+        return \App\Models\Country::where('code', $value)->value('name');
+    }
+}
+
+
+

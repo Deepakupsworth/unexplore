@@ -89,4 +89,26 @@ class User extends Authenticatable
     {
         return $this->hasMany(UserAddress::class);
     }
+
+
+    public function billings()
+    {
+        return $this->hasMany(CustomerBilling::class);
+    }
+
+    public function travellers()
+    {
+        return $this->hasMany(Traveller::class);
+    }
+
+    public function defaultBilling()
+    {
+        return $this->hasOne(CustomerBilling::class)
+            ->where('is_default', true);
+    }
+
+    public function billingAddress()
+    {
+        return $this->hasOne(BookingBillingAddress::class);
+    }
 }

@@ -527,5 +527,18 @@
     "account.adult": "Adult",
     "account.child": "Child",
     "account.no_travellers": "No travellers added",
-    "unauthorized.access":"Unauthorized access! You were redirected to the home page."
+    "unauthorized.access":"Unauthorized access! You were redirected to the home page.",
+    "checkout.billing_details": "Billing Details",
+    "checkout.full_name": "Full Name",
+    "checkout.enter_full_name": "Enter full name",
+    "checkout.enter_email": "Enter email address",
+    "checkout.address": "Address",
+    "checkout.enter_address": "Enter address",
+    "checkout.city": "City",
+    "checkout.enter_city": "Enter city",
+    "checkout.postal_code": "Postal Code",
+    "checkout.company_name": "Company Name",
+    "checkout.gst_number": "GST / VAT Number",
+    "checkout.optional": "Optional",
+    "checkout.select_country": "Select Country"
 }

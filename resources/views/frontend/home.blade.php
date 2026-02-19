@@ -359,7 +359,7 @@
                             alt="About Saudi">
                         <div class="card-body d-flex flex-column gap-1 justify-content-center p-0">
                             <h5 class="fw-bold">{!! __('home.know.about') !!}</h5>
-                            <a href="#"
+                            <a href="{{ route('info.about-saudi') }}"
                                 class="primary-text fw-semibold p-large text-decoration-none">{{ __('home.know.learn_more') }}</a>
                         </div>
                     </div>
@@ -370,7 +370,7 @@
                             alt="About Saudi">
                         <div class="card-body d-flex flex-column gap-1 justify-content-center p-0">
                             <h5 class="fw-bold">{{ __('home.know.visa') }}</h5>
-                            <a href="#"
+                            <a href="{{ route('info.visa-regulations') }}"
                                 class="primary-text fw-semibold p-large text-decoration-none">{{ __('home.know.learn_more') }}</a>
                         </div>
                     </div>
@@ -381,7 +381,7 @@
                             alt="About Saudi">
                         <div class="card-body d-flex flex-column gap-1 justify-content-center p-0">
                             <h5 class="fw-bold">{{ __('home.know.guide') }}</h5>
-                            <a href="#"
+                            <a href="{{ route('info.travel-guide') }}"
                                 class="primary-text fw-semibold p-large text-decoration-none">{{ __('home.know.learn_more') }}</a>
                         </div>
                     </div>
@@ -392,7 +392,7 @@
                             alt="About Saudi">
                         <div class="card-body d-flex flex-column gap-1 justify-content-center p-0">
                             <h5 class="fw-bold">{{ __('home.know.transport') }}</h5>
-                            <a href="#" class="primary-text fw-semibold p-large text-decoration-none">
+                            <a href="{{ route('info.getting-around') }}" class="primary-text fw-semibold p-large text-decoration-none">
                                 {{ __('home.know.learn_more') }}</a>
                         </div>
                     </div>

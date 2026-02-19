@@ -42,6 +42,8 @@
                             'adultCount' => $adultCount,
                             'childCount' => $childCount,
                         ])
+                        {{-- Billing Details --}}
+                        @include('frontend.checkout.partials.accordion.billing')
 
                         {{-- ================= PACKAGE ADD-ONS ACCORDION ================= --}}
 
@@ -121,12 +123,12 @@
                         </div>
 
                         <!-- 🔍 Traveller Search -->
-                        <div class="mb-3">
+                        {{-- <div class="mb-3">
                             <label class="form-label"> {{ __('checkout.search_existing_traveller') }}</label>
                             <input type="text" id="travellerSearchInput" class="form-control"
                                 placeholder="Type traveller name...">
                             <div id="travellerSearchResults" class="list-group mt-2"></div>
-                        </div>
+                        </div> --}}
 
                         <!-- INFO -->
                         <div class="mb-3">
@@ -167,8 +169,20 @@
 
                             <div class="col-md-6 col-lg-4">
                                 <label class="form-label">{{ __('checkout.country') }} *</label>
-                                <input type="text" id="country" class="form-control" required>
+
+                                <select id="country" class="form-select" required>
+                                    <option value="">{{ __('checkout.select_country') }}</option>
+
+                                    @foreach ($countries as $country)
+                                        <option value="{{ $country->code }}">
+                                            {{ $country->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
+
+
+
                             <div class="col-md-6 col-lg-4">
                                 <label class="form-label">{{ __('checkout.traveller_type') }} *</label>
                                 <select id="type" class="form-select" required>
@@ -305,7 +319,7 @@
                 last_name: document.getElementById('last_name').value.trim(),
                 dob: document.getElementById('dob').value,
                 gender: document.getElementById('gender').value,
-                country: document.getElementById('country').value.trim(),
+                country: document.getElementById('country').value,
                 type: slotType
             };
 
@@ -426,17 +440,43 @@
            HIGHLIGHT ACTIVE TAB
         ========================================================== */
 
+        // function highlightActiveTab(index) {
+
+        //     document.querySelectorAll('.trav-btn').forEach(tab => {
+        //         tab.classList.remove('active');
+        //     });
+
+        //     const active = document.querySelector(`.trav-btn[data-slot="${index}"]`);
+        //     if (active) {
+        //         active.classList.add('active');
+        //     }
+        // }
+
         function highlightActiveTab(index) {
 
             document.querySelectorAll('.trav-btn').forEach(tab => {
+
+                const tabIndex = tab.dataset.slot;
+
+                // remove active from all
                 tab.classList.remove('active');
+
+                // 🔥 disable all clicks
+                tab.style.pointerEvents = 'none';
+                tab.style.opacity = '0.6';
             });
 
             const active = document.querySelector(`.trav-btn[data-slot="${index}"]`);
+
             if (active) {
                 active.classList.add('active');
+
+                // ✅ enable only active tab
+                active.style.pointerEvents = 'auto';
+                active.style.opacity = '1';
             }
         }
+
 
 
         /* =========================================================
@@ -600,8 +640,8 @@
 
     <script>
         /* =========================================================
-                       BLOCK BOOKING IF TRAVELLERS NOT COMPLETE
-                    ========================================================== */
+                           BLOCK BOOKING IF TRAVELLERS NOT COMPLETE
+                        ========================================================== */
         document.addEventListener("DOMContentLoaded", function() {
 
             const form = document.getElementById("checkoutForm");

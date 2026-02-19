@@ -44,17 +44,30 @@
             object-fit: cover;
         }
 
-    .explore-destinations__item-content a.btn.btn-outline-primary {
-        white-space: nowrap;
-        gap: 4px;
-        padding-top: 8px;
-        padding-bottom: 8px;
-    }
+        .explore-destinations__item-content a.btn.btn-outline-primary {
+            white-space: nowrap;
+            gap: 4px;
+            padding-top: 8px;
+            padding-bottom: 8px;
+        }
 
-    .upcoming-event__carousel-item-img img{
-        width: 100%;
-    }
+        .upcoming-event__carousel-item-img img {
+            width: 100%;
+        }
 
+        .package-listing__results-list .exclusive-offers__carousel-item-img img {
+            height: 200px;
+        }
+        .exclusive-offers__carousel-item-img img {
+            height: 100%;
+            min-height: 200px;
+        }
+
+        .package-listing__results-list .exclusive-offers__carousel-item {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
     </style>
 
 
@@ -76,6 +89,7 @@
             'events',
             'booking*',
             'products',
+            'info*'
         ];
     @endphp
 

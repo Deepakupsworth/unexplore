@@ -16,7 +16,7 @@
         <div class="accordion-header" data-bs-toggle="collapse" data-bs-target="#checkoutItineraryOnCollapse"
             aria-expanded="true" aria-controls="checkoutItineraryOnCollapse">
             <div class="d-flex gap-2 pkg-details__accordion-actions">
-                <p class="fw-600">2. {{ __('checkout.package_itinerary_inclusions') }}</p>
+                <p class="fw-600">3. {{ __('checkout.package_itinerary_inclusions') }}</p>
             </div>
             <div class="d-flex justify-content-between align-items-center gap-3">
                 <div class="d-flex align-items-center gap-2">

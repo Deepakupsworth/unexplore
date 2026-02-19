@@ -117,54 +117,6 @@
                         <hr>
                     @endforeach
                 </div>
-
-
-                {{-- ================= CONTACT DETAILS (UNCHANGED) ================= --}}
-                <div class="booking-contact mt-4">
-
-                    <p class="fw-600 mb-3">{{ __('checkout.enter_contact_details') }}</p>
-
-                    <div class="row g-3 mb-4">
-                        <div class="col-md-4">
-                            <label class="form-label small mb-1">{{ __('checkout.email') }}</label>
-                            <input type="email" name="contact_email" required class="form-control"
-                                placeholder="Enter email">
-                        </div>
-                        {{--
-                <div class="col-md-4">
-                    <label class="form-label small mb-1">Mobile Code</label>
-                    <input name="contact_code" required type="text" class="form-control" placeholder="Enter here">
-                </div> --}}
-
-                        <div class="col-md-4">
-                            <label class="form-label small mb-1">{{ __('checkout.mobile') }}</label>
-                            <input name="contact_mobile" type="tel" class="form-control"
-                                placeholder="05XXXXXXXX or +9665XXXXXXXX" required
-                                pattern="^(\+966|0)?5[0-9]{1}[\s\-()]?[0-9]{3}[\s\-()]?[0-9]{4}$" inputmode="tel"
-                                title="Enter valid Saudi mobile number">
-                        </div>
-
-                    </div>
-
-                    <p class="fw-600 mb-2">{{ __('checkout.special_requests') }}</p>
-
-                    <div class="mb-4">
-                        <label class="form-label small mb-1">{{ __('checkout.special_requests') }}</label>
-                        <input type="text" class="form-control" placeholder="{{ __('checkout.enter_here') }}">
-                    </div>
-
-                    {{-- <div class="checkout-tcs-box p-3 rounded-4">
-                        <p class="mb-2 fw-600 p-small">
-                            TCS (Tax Collected at Source) is mandatory for International Holiday
-                            Packages
-                        </p>
-                        <p class="mb-0 text-muted p-small">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                            tempor incididunt ut labore.
-                        </p>
-                    </div> --}}
-                </div>
-
             </div>
 
         </div>

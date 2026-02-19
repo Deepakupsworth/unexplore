@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend\Checkout;
 
 use App\Http\Controllers\Controller;
+use App\Models\Country;
 use App\Models\Coupon;
 use App\Models\Event;
 use App\Models\Hotel;
@@ -96,19 +97,87 @@ class CheckoutController extends Controller
             abort(400, 'Invalid travellers');
         }
 
-        $sessionTravellers = session('checkout_travellers', []);
+        // $sessionTravellers = session('checkout_travellers', []);
 
         /* ---------------------------------------------------
         | BUILD TRAVELLER SLOTS (UI PURPOSE)
         --------------------------------------------------- */
+        // $travellerSlots = [];
+
+        // for ($i = 0; $i < $totalTravellers; $i++) {
+        //     $type = $i < $adultCount ? 'adult' : 'child';
+
+        //     $travellerSlots[] = [
+        //         'type' => $type,
+        //         'data' => $sessionTravellers[$i] ?? null
+        //     ];
+        // }
+        // session()->forget('checkout_travellers');
+
+
+        /* ---------------------------------------------------
+            |           STEP 1 — LOAD SESSION
+            --------------------------------------------------- */
+        $sessionTravellers = session('checkout_travellers', []);
+
+        /* ---------------------------------------------------
+            | STEP 2 — HYDRATE FROM DB (ONLY IF SESSION EMPTY)
+        --------------------------------------------------- */
+        if (empty($sessionTravellers) && $user) {
+
+            $dbTravellers = $user->travellers()
+                ->orderByRaw("FIELD(type, 'adult','child')")
+                ->orderBy('id')
+                ->get()
+                ->map(function ($t) {
+                    return [
+                        'type'       => $t->type,
+                        'first_name' => $t->first_name,
+                        'last_name'  => $t->last_name,
+                        'dob'        => optional($t->dob)->format('Y-m-d'),
+                        'gender'     => $t->gender,
+                        'country'    => $t->country,
+                    ];
+                })
+                ->take($totalTravellers) // prevent overflow
+                ->values()
+                ->toArray();
+
+            if (!empty($dbTravellers)) {
+                session(['checkout_travellers' => $dbTravellers]);
+                $sessionTravellers = $dbTravellers;
+            }
+        }
+
+        /* ---------------------------------------------------
+            |    STEP 3 — NORMALIZE SESSION
+        --------------------------------------------------- */
+        $sessionTravellers = collect($sessionTravellers)
+            ->filter()
+            ->values()
+            ->toArray();
+
+        /* ---------------------------------------------------
+            | STEP 4 — BUILD EXACT SLOT
+        --------------------------------------------------- */
         $travellerSlots = [];
 
         for ($i = 0; $i < $totalTravellers; $i++) {
+
             $type = $i < $adultCount ? 'adult' : 'child';
 
             $travellerSlots[] = [
                 'type' => $type,
-                'data' => $sessionTravellers[$i] ?? null
+                'data' => isset($sessionTravellers[$i])
+                    ? [
+                        'first_name' => $sessionTravellers[$i]['first_name'] ?? '',
+                        'last_name'  => $sessionTravellers[$i]['last_name'] ?? '',
+                        'dob'        => $sessionTravellers[$i]['dob'] ?? '',
+                        'gender'     => $sessionTravellers[$i]['gender'] ?? '',
+                        'country'    => $sessionTravellers[$i]['country'] ?? '',
+                        'type'       => $sessionTravellers[$i]['type'] ?? $type,
+                    ]
+                    : null,
             ];
         }
 
@@ -278,6 +347,13 @@ class CheckoutController extends Controller
             ];
         }
 
+        $countries = Country::query()
+            ->where('status', 1)
+            ->orderBy('name')
+            ->get();
+
+        $defaultBilling = auth()->user()->defaultBilling;
+
         return view(
             'frontend.checkout.index',
             array_merge(
@@ -291,7 +367,9 @@ class CheckoutController extends Controller
                     'allTransports',
                     'dayWiseOptions',
                     'sessionItems',
-                    'coupons'
+                    'coupons',
+                    'countries',
+                    'defaultBilling'
                 ),
                 [
                     'adultCount' => $adultCount,
