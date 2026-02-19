@@ -1,4 +1,9 @@
 @extends('frontend.layout')
+
+@section('title', 'Things to Do in Saudi Arabia | Attractions, Activities & Experiences')
+
+@section('meta_description', 'Explore the best things to do in Saudi Arabia, from cultural landmarks and desert adventures to entertainment, shopping, and nature experiences across top destinations.')
+
 @section('content')
     {{-- @dd($things) --}}
     <!-- 1. TO DO THING SEARCH: BANNER -->

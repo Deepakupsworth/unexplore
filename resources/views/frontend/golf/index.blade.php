@@ -1,4 +1,8 @@
 @extends('frontend.layout')
+@section('title','Saudi Arabia Golf Travel Packages | Luxury Golf Experiences')
+
+@section('meta_description', 'Discover premium golf travel packages in Saudi Arabia. Enjoy championship courses, luxury stays, VIP services, and curated golf experiences tailored to your trip.')
+
 @section('content')
 
 <style>

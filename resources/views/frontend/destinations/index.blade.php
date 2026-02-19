@@ -1,4 +1,9 @@
 @extends('frontend.layout')
+
+@section('title','Best Places to Visit in Saudi Arabia | Top Destinations & Travel Guide')
+
+@section('meta_description', 'Discover the best places to visit in Saudi Arabia, from Riyadh and Jeddah to AlUla and the Red Sea. Explore top attractions, travel tips, and must-see destinations.')
+
 @section('content')
 {{-- @dd($cities) --}}
     <!-- 1. DESTINATION BANNER SECTION  -->

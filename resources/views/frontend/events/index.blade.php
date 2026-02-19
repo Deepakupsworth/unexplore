@@ -1,5 +1,7 @@
 @extends('frontend.layout')
+@section('title','Saudi Arabia Events | Concerts, Exhibitions & Festivals')
 
+@section('meta_description', 'Discover upcoming events in Saudi Arabia including concerts, exhibitions, sports, and cultural festivals in Riyadh, Jeddah, AlUla and more. Plan your visit today.')
 @section('content')
     <!-- 1. EVENTS SEARCH: BANNER -->
     <section class="package-listing__banner">
