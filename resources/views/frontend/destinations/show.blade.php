@@ -1,4 +1,11 @@
 @extends('frontend.layout')
+@section('title', 'Things to Do in ' . ($city->translation?->name ?? '') . ' | Top Attractions & Travel Guide')
+
+@section(
+    'meta_description',
+    'Discover the best things to do in ' . ($city->translation?->name ?? '') . ', Saudi Arabia, including top attractions, cultural landmarks, activities, and travel experiences. Plan your visit today.'
+)
+
 @section('content')
 
     @php

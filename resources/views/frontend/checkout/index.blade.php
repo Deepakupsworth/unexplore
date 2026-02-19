@@ -1,4 +1,7 @@
 @extends('frontend.layout')
+@section('title','Checkout')
+
+@section('meta_description', '')
 @section('content')
     <script>
         window.CHECKOUT = {

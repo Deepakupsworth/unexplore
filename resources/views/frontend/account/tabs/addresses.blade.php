@@ -52,19 +52,19 @@
 
                         <td class="text-end text-nowrap">
                             <a href="javascript:void(0)"
-                               class="text-secondary me-2"
+                               class="text-secondary me-2 text-decoration-none"
                                onclick="viewAddress({{ $address->id }})">
                                 <i class="fa-solid fa-eye"></i>
                             </a>
 
                             <a href="javascript:void(0)"
-                               class="text-secondary me-2"
+                               class="text-primary me-2 text-decoration-none"
                                onclick="editAddress({{ $address->id }})">
                                 <i class="fa-solid fa-pencil"></i>
                             </a>
 
                             <a href="javascript:void(0)"
-                               class="text-danger"
+                               class="text-danger text-decoration-none"
                                onclick="deleteAddress({{ $address->id }})">
                                 <i class="fa-solid fa-trash-can"></i>
                             </a>

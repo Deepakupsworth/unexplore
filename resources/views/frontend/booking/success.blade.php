@@ -1,5 +1,7 @@
 @extends('frontend.layout')
+@section('title','Checkout')
 
+@section('meta_description', '')
 @section('content')
 <section class="py-5">
     <div class="container">

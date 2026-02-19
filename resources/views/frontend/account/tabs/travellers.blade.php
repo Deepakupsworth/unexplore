@@ -6,9 +6,11 @@
             <p class="text-light2">{{ __('account.travellers_desc') }}</p>
         </div>
 
-        <button class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#travellerModal">
-            <i class="fa-solid fa-plus"></i> {{ __('account.add_traveller') }}
-        </button>
+        <div>
+            <button class="btn btn-primary rounded-pill gap-2 ps-2 pe-3" data-bs-toggle="modal" data-bs-target="#travellerModal">
+                <i class="fa-solid fa-plus"></i> {{ __('account.add_traveller') }}
+            </button>
+        </div>
     </div>
 
     <div class="white-bg p-3 mt-3">
@@ -32,14 +34,13 @@
                         @php
                             $isAdult = $t->type === 'adult';
                         @endphp
-
+{{-- @dd($t) --}}
                         <td>
                             <span class="badge {{ $isAdult ? 'bg-success' : 'bg-warning text-dark' }}">
                                 {{ $isAdult ? __('account.adult') : __('account.child') }}
                             </span>
                         </td>
-
-                        <td>{{ $t->age }}</td>
+                        <td>{{ \App\Helpers\DateHelper::format($t->dob, 'd M Y') }}</td>
                         <td>
                             @php $countryName = country_name($t->country); @endphp
                             {{ $countryName ?: '-' }}
@@ -50,10 +51,10 @@
                                 <i class="fa-solid fa-eye"></i>
                             </a>
 
-                            <a href="javascript:void(0)" onclick="editTraveller({{ $t->id }})">
+                            <a href="javascript:void(0)" onclick="editTraveller({{ $t->id }})" class="text-decoration-none">
                                 <i class="fa-solid fa-pencil"></i>
                             </a>
-                            <a href="javascript:void(0)" class="text-danger ms-2"
+                            <a href="javascript:void(0)" class="text-danger ms-2 text-decoration-none"
                                 onclick="deleteTraveller({{ $t->id }})">
                                 <i class="fa-solid fa-trash"></i>
                             </a>
