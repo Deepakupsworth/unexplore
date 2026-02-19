@@ -370,19 +370,13 @@ class EventController extends Controller
             return redirect()
                 ->route('events.index')
                 ->with('success', 'Event saved successfully');
-        } catch (Throwable $e) {
+        }catch (\Throwable $e) {
 
             DB::rollBack();
 
-            Log::error('Event save failed', [
-                'error' => $e->getMessage(),
-                'file'  => $e->getFile(),
-                'line'  => $e->getLine(),
-            ]);
-
             return back()
                 ->withInput()
-                ->with('error', 'Something went wrong. Please try again.');
+                ->with('error', $e->getMessage());
         }
     }
 

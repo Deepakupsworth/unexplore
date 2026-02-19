@@ -36,7 +36,7 @@ class ThingToDoRepository implements ThingToDoRepositoryInterface
         if ($request->filled('city_id')) {
             $query->where('city_id', $request->city_id);
         }
-        
+
         $citiesIds = $request->input('cities_ids');
 
         if (is_array($citiesIds) && count($citiesIds) > 0) {
