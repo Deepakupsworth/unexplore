@@ -299,19 +299,22 @@
 
                 @foreach ($favouriteCities as $city)
 
-                <div class="col-md-6 col-lg-3">
-                    <div class="start-exploring__item">
-                        <img src="{{ asset('storage/' . $city->thumb_image) }}" alt="Explore" class="img-fluid">
-                        <div class="start-exploring__item-content">
-                            <p class="mb-1 p-large fw-600">
-                               {{$city?->translation?->name}}
-                            </p>
-                            <p class="p-small">
-                               {{$city?->translation?->tagline}}
-                            </p>
-                        </div>
+                    <div class="col-md-6 col-lg-3">
+                        <a href="{{ route('destinations.show', $city->slug) }}">
+                            <div class="start-exploring__item">
+                                <img src="{{ asset('storage/' . $city->thumb_image) }}" alt="Explore" class="img-fluid">
+                                <div class="start-exploring__item-content">
+                                    <p class="mb-1 p-large fw-600">
+                                    {{$city?->translation?->name}}
+                                    </p>
+                                    <p class="p-small">
+                                    {{$city?->translation?->tagline}}
+                                    </p>
+                                </div>
+                            </div>
+                        </a>
                     </div>
-                </div>
+
                 @endforeach
             </div>
         </div>
