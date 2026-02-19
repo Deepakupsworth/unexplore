@@ -78,7 +78,7 @@
                         <img data-profile-preview
                              src="{{ $profileImage
                                 ? asset('storage/'.$profileImage->image_path)
-                                : asset('frontend/assets/user.jpeg') }}"
+                                : asset('frontend/assets/user.png') }}"
                              class="rounded-circle"
                              alt="User">
                     </div>

@@ -40,7 +40,7 @@ class DestinationController extends Controller
                             $q->whereHas(
                                 'package',
                                 fn($p) => $p->where('status', 'active')
-                            );
+                            )->select(DB::raw('COUNT(DISTINCT package_id)'));
                         }
                     ])
                     ->whereHas('tags', function ($q) {
@@ -64,7 +64,7 @@ class DestinationController extends Controller
                                     $q->whereHas(
                                         'package',
                                         fn($p) => $p->where('status', 'active')
-                                    );
+                                    )->select(DB::raw('COUNT(DISTINCT package_id)'));
                                 }
                             ])
                             ->inRandomOrder()
@@ -87,7 +87,7 @@ class DestinationController extends Controller
                             $q->whereHas(
                                 'package',
                                 fn($p) => $p->where('status', 'active')
-                            );
+                            )->select(DB::raw('COUNT(DISTINCT package_id)'));
                         }
                     ])
                     ->latest()

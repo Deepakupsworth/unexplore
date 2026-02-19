@@ -111,4 +111,11 @@ class City extends Model
             'package_id'   // local key on package_cities
         );
     }
+    public function seo()
+    {
+        return $this->morphMany(SeoMeta::class, 'metaable');
+    }
+
+
+
 }

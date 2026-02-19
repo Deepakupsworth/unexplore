@@ -19,10 +19,11 @@ class AccountController extends Controller
     public function loadTab(Request $request)
     {
         $tab = $request->get('tab', 'dashboard');
+        $user = auth()->user();
 
         return match ($tab) {
             'dashboard' => view('frontend.account.tabs.dashboard', [
-                'stats' => Booking::where('user_id', auth()->user()->id)
+                'stats' => Booking::where('user_id', $user->id)
                     ->selectRaw('
                         COUNT(*) as total_bookings,
                         SUM(status = "completed") as completed_bookings,
@@ -32,8 +33,8 @@ class AccountController extends Controller
                     ->first()
             ]),
             'profile'   => view('frontend.account.tabs.profile', [
-                'user' => auth()->user(),
-                'profileImage' => auth()->user()->profileImage ?? null
+                'user' => $user,
+                'profileImage' => $user->profileImage ?? null
             ]),
             /* ================= BOOKINGS (🔥 FIXED) ================= */
             'bookings' => view('frontend.account.tabs.bookings', [
@@ -43,7 +44,7 @@ class AccountController extends Controller
                     'days.dayItems',
                     'payments'
                 ])
-                    ->where('user_id', auth()->user()->id)
+                    ->where('user_id', $user->id)
                     ->whereIn('status', ['pending', 'confirmed'])
                     ->latest()
                     ->get(),
@@ -53,7 +54,7 @@ class AccountController extends Controller
                     'days.dayItems',
                     'payments'
                 ])
-                    ->where('user_id', auth()->user()->id)
+                    ->where('user_id', $user->id)
                     ->where('status', 'cancelled')
                     ->latest()
                     ->get(),
@@ -63,7 +64,7 @@ class AccountController extends Controller
                     'days.dayItems',
                     'payments'
                 ])
-                    ->where('user_id', auth()->user()->id)
+                    ->where('user_id', $user->id)
                     ->where('status', 'completed')
                     ->latest()
                     ->get(),

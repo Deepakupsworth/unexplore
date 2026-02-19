@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\CountriesImport;
+use Illuminate\Support\Facades\Http;
 
 class CountryController extends Controller
 {
@@ -114,5 +115,35 @@ class CountryController extends Controller
         Excel::import(new CountriesImport, $request->file('file'));
 
         return back()->with('success', 'Countries imported successfully');
+    }
+
+    public function apiImport()
+    {
+        $response = Http::get('https://countriesnow.space/api/v0.1/countries');
+
+        if ($response->failed()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to fetch countries'
+            ], 2500);
+        }
+
+        $countries = $response->json('data');
+
+        foreach ($countries as $item) {
+            Country::updateOrCreate(
+                ['code' => $item['iso2']], // unique key
+                [
+                    'name' => $item['country'],
+                    'code' => $item['iso2'],
+                ]
+            );
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Countries imported successfully',
+            'count'   => count($countries),
+        ]);
     }
 }

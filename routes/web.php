@@ -264,6 +264,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
         // AJAX
         Route::patch('/countries/{id}/toggle-status', [CountryController::class, 'toggleStatus']);
         Route::post('/countries/import', [CountryController::class, 'import'])->name('admin.countries.import');
+
+        Route::get('/apiImport', [CountryController::class, 'apiImport'])->name('apiImport');
+
+        
     });
 
     Route::prefix('admin')->group(function () {

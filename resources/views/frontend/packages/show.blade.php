@@ -74,31 +74,48 @@
                     <!-- RIGHT GRID -->
                     <div class="gallery-middle swiper-slide">
                         <div class="d-flex flex-column gap-2">
-                            <div class="gallery-item full open-gallery" data-open-tab="galleryTabsProperty"
-                                data-bs-toggle="modal" data-bs-target="#galleryModal">
-
-                                <?php
-                                //print_r($finalArray['todo'][0]['thumb']);die;
-                                $imagePathToDo = match (true) {
-                                    !empty($finalArray['todo'][0]['thumb']) => asset('storage/' . $finalArray['todo'][0]['thumb']->image_path),
-
-                                    !empty($finalArray['event'][0]['thumb']) => asset('storage/' . $finalArray['event'][0]['thumb']->image_path),
-
-                                    !empty($finalArray['hotel'][0]['thumb']) => asset('storage/' . $finalArray['hotel'][0]['thumb']->image_path),
-
-                                    !empty($package->thumb) => asset('storage/' . $package->thumb->image_path),
-
-                                    default => asset('frontend/assets/package-banner.png'),
-                                };
+                        <?php
+                                $gallery_image1 = asset('storage/' .  $package->gallery[0]->image_path);
+                                $gallery_image2 = asset('storage/' . $package->gallery[1]->image_path);
                                 ?>
+                            <div class="gallery-item half">
 
-                                <img class="img-fluid" src="{{ $imagePathToDo }}" alt="">
-                                <p class="p-small">{{ __('package.gallery.activities') }}</p>
+                            <img class="img-fluid" src="{{ $gallery_image1 }}" alt="">
                             </div>
+
+                            <div class="gallery-item  half open-gallery" data-open-tab="galleryTabsProperty"
+                            data-bs-toggle="modal" data-bs-target="#galleryModal">
+                            <img class="img-fluid" src="{{ $gallery_image2 }}" alt="">
+                            <p class="p-small">{{ __('gallery.gallery') }}</p>
+                            </div>
+                            
                         </div>
 
                         <div class="d-flex flex-column gap-2">
-                            @php
+                                 <div class="gallery-item half">
+                                    <?php
+                                        $imagePathToDo = match (true) {
+                                            !empty($finalArray['todo'][0]['thumb']) => asset('storage/' . $finalArray['todo'][0]['thumb']->image_path),
+
+                                            !empty($finalArray['event'][0]['thumb']) => asset('storage/' . $finalArray['event'][0]['thumb']->image_path),
+
+                                            !empty($finalArray['hotel'][0]['thumb']) => asset('storage/' . $finalArray['hotel'][0]['thumb']->image_path),
+
+                                            !empty($package->thumb) => asset('storage/' . $package->thumb->image_path),
+
+                                            default => asset('frontend/assets/package-banner.png'),
+                                        };
+                                        ?>
+
+                                        <img class="img-fluid" src="{{ $imagePathToDo }}" alt="">
+                                        <p class="p-small">{{ __('package.gallery.activities') }}</p>
+
+                                    
+                                </div>
+
+                                <div class="gallery-item  half open-gallery" data-open-tab="galleryTabsActivities"
+                                    data-bs-toggle="modal" data-bs-target="#galleryModal">
+                                    @php
                                 $imagePathEvent = match (true) {
                                     !empty($finalArray['event'][0]['thumb']) => asset(
                                         'storage/' . $finalArray['event'][0]['thumb']->image_path,
@@ -117,36 +134,12 @@
                                     default => asset('frontend/assets/package-banner.png'),
                                 };
 
-                                $videoUrl = match (true) {
-                                    !empty($finalArray['event'][0]['video_url']) => $finalArray['event'][0][
-                                        'video_url'
-                                    ],
-
-                                    default => null,
-                                };
+                                
                             @endphp
-
-
-                            @if ($videoUrl)
-                                <div class="gallery-item half">
-
-                                    <video controls>
-                                        <source src="{{ $videoUrl }}" type="video/mp4">
-                                    </video>
-                                </div>
-
-                                <div class="gallery-item  half open-gallery" data-open-tab="galleryTabsActivities"
-                                    data-bs-toggle="modal" data-bs-target="#galleryModal">
                                     <img class="img-fluid" src="{{ $imagePathEvent }}" alt="">
                                     <p class="p-small">{{ __('package.gallery.events') }}</p>
                                 </div>
-                            @else
-                                <div class="gallery-item full open-gallery" data-open-tab="galleryTabsActivities"
-                                    data-bs-toggle="modal" data-bs-target="#galleryModal">
-                                    <img class="img-fluid" src="{{ $imagePathEvent }}" alt="">
-                                    <p class="p-small">{{ __('package.gallery.events') }}</p>
-                                </div>
-                            @endif
+                           
 
                         </div>
                     </div>

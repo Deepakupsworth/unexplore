@@ -1,6 +1,21 @@
 @extends('frontend.layout')
 
 @section('content')
+    <section class="user-profile__banner">
+        <div class="container">
+            <div class="user-profile__banner-content text-center">
+                <h1 class="text-white mb-3 h2">{{__('account.user.profile')}}</h1>
+                <div class="banner-breadcrumb rounded-pill d-flex align-items-center justify-content-center gap-3 p-small">
+                    <a href="#" class="">
+                        <i class="fa-solid fa-house"></i>
+                       {{__('account.home')}}
+                    </a>
+                    <span><i class="fa-solid fa-angles-right"></i></span>
+                    <span class="active">{{__('account.profile')}}</span>
+                </div>
+            </div>
+        </div>
+    </section>
     <section class="user-profile__section">
         <div class="container">
             <div class="user-profile__content d-flex gap-3">
@@ -45,11 +60,11 @@
                         </li>
 
                         <!-- <li>
-                                            <a href="javascript:void(0)" class="nav-link account-tab" data-tab="wishlist">
-                                                <i class="fa-solid fa-heart p-large"></i>
-                                                Wishlist
-                                            </a>
-                                        </li> -->
+                                                <a href="javascript:void(0)" class="nav-link account-tab" data-tab="wishlist">
+                                                    <i class="fa-solid fa-heart p-large"></i>
+                                                    Wishlist
+                                                </a>
+                                            </li> -->
 
                     </ul>
                 </div>

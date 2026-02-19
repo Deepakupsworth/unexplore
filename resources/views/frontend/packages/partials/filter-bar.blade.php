@@ -14,6 +14,8 @@
             originalPrice: {{ (float) optional($package->price)->original_price }},
             maxPersons: {{ (int) $package->max_persons }},
             pricePerPerson: {{ (float) optional($package->price)->per_person_price }},
+            minPersons: {{ (int) $package->base_persons }},
+
 
             /* ================= EXTRA ADULT RULES ================= */
             extraAdultRules: {!! json_encode(
@@ -431,6 +433,24 @@ document.addEventListener('DOMContentLoaded', function() {
                             return false;
 
                        }
+
+                       // ➖ MINUS VALIDATION
+                        if (!isPlus && totalPersons() <= (config.minPersons || 1)) {
+                            e.preventDefault();
+                            e.stopImmediatePropagation();
+
+                            iziToast.info({
+                                title: 'Minimum Required',
+                                message: `At least ${config.minPersons || 1} person is required.`,
+                                position: 'topRight',
+                                timeout: 4000,
+                                closeOnClick: true,
+                                pauseOnHover: true,
+                                displayMode: 2
+                            });
+
+                            return false;
+                        }
 
                         if (type === 'adult') {
                             if (isPlus) adults++;
