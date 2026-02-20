@@ -51,7 +51,7 @@ class PackageController extends Controller
                 'price',
                 'days.items.transport',
                 'days.items.hotel',
-            ])
+            ])->where('status','active')
 
             /* 🔍 SEARCH */
             ->when($request->search, function ($q) use ($request) {
@@ -195,7 +195,7 @@ class PackageController extends Controller
 
         $packageTypes = Package::query()
             ->select('package_type')
-            ->selectRaw('COUNT(*) as total')
+            ->selectRaw('COUNT(*) as total')->where('status','active')
             ->groupBy('package_type')
             ->pluck('total', 'package_type');
 
@@ -235,7 +235,7 @@ class PackageController extends Controller
                 'price',
                 'days.items.transport',
                 'days.items.hotel',
-            ])
+            ])->where('status','active')
 
             /* 🔍 SEARCH */
             ->when($request->search, function ($q) use ($request) {
