@@ -103,7 +103,8 @@
 
                         </div>
 
-                        <div class="d-flex flex-column gap-2">
+                        <div class="d-flex flex-column gap-2" data-open-tab="galleryTabsActivities"
+                        data-bs-toggle="modal" data-bs-target="#galleryModal">
                                  <div class="gallery-item half">
                                     <?php
                                     $imagePathToDo = match (true) {
@@ -124,8 +125,7 @@
 
                                 </div>
 
-                                <div class="gallery-item  half open-gallery" data-open-tab="galleryTabsActivities"
-                                    data-bs-toggle="modal" data-bs-target="#galleryModal">
+                                <div class="gallery-item  half open-gallery" >
                                     @php
                                 $imagePathEvent = match (true) {
                                     !empty($finalArray['event'][0]['thumb']) => asset(

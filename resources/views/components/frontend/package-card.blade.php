@@ -1,5 +1,5 @@
 @props(['package','cityShow'=>true])
-{{-- @dd($package) --}}
+
 @php
     // =========================
     // SAFE DATA (FROM CONTROLLER)
@@ -11,6 +11,8 @@
     $subTitle = $translation->sub_title ?? '';
 
     // City translation already resolved in controller
+
+
     $city = $cityTranslation = optional(
         optional($package->cities->first()?->city)
             ->translations
