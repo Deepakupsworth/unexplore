@@ -193,7 +193,16 @@ class Package extends Model
     {
         return $this->morphMany(SeoMeta::class, 'metaable');
     }
+ 
 
+    public function seoMeta($languageId = null)
+    {
+        $language_code ??= app()->getLocale();
+
+        return $this->seo()
+            ->where('language_code', $language_code)
+            ->first();
+    }
 
 
 }

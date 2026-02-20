@@ -89,10 +89,13 @@ class PackageController extends Controller
             ->when(
                 $request->rating,
                 fn($q) =>
-                $q->whereHas(
-                    'days.items.hotel',
-                    fn($h) =>
-                    $h->whereIn('star_rating', (array) $request->rating)
+                // $q->whereHas(
+                //     'days.items.hotel',
+                //     fn($h) =>
+                //     $h->whereIn('star_rating', (array) $request->rating)
+                // )
+                $q->whereDoesntHave('days.items.hotel', fn ($h) =>
+                    $h->whereNotIn('star_rating', (array) $request->rating)
                 )
             )
 
@@ -269,10 +272,13 @@ class PackageController extends Controller
             ->when(
                 $request->rating,
                 fn($q) =>
-                $q->whereHas(
-                    'days.items.hotel',
-                    fn($h) =>
-                    $h->whereIn('star_rating', (array) $request->rating)
+                // $q->whereHas(
+                //     'days.items.hotel',
+                //     fn($h) =>
+                //     $h->whereIn('star_rating', (array) $request->rating)
+                // )
+                $q->whereDoesntHave('days.items.hotel', fn ($h) =>
+                    $h->whereNotIn('star_rating', (array) $request->rating)
                 )
             )
 
