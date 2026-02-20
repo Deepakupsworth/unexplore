@@ -592,6 +592,8 @@
     background-color: var(--color-light);
     padding: 40px 80px 40px 40px;
     height: 100%;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
   }
 
   .nav-menu-dropdown .nav-menu__right .about-image {

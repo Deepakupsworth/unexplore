@@ -87,8 +87,8 @@
                                         {{-- <p class="text-muted small">{{ __('header.about_saudi_short') }}</p> --}}
                                         <img src="{{ asset('frontend/assets/header_saudi.jpg')}}" alt="Saudi"
                                             class="img-fluid about-image">
-                                        {{-- <img src="frontend/assets/about_header.jpg" alt="Image"
-                                            class="nav-menu__right-side-img"> --}}
+                                        <img src="{{ asset('frontend/assets/nav-dropdown-side.png')}}" alt="Image"
+                                            class="nav-menu__right-side-img">
                                     </div>
                                 </div>
 
@@ -146,8 +146,8 @@
                                         {{-- <p class="text-muted small">{{ __('header.about_saudi_short') }}</p> --}}
                                         <img src="{{ asset('frontend/assets/header_things.jpg')}}" alt="Saudi"
                                             class="img-fluid about-image">
-                                        {{-- <img src="frontend/assets/about_header.jpg" alt="Image"
-                                            class="nav-menu__right-side-img"> --}}
+                                        <img src="{{ asset('frontend/assets/nav-dropdown-side.png')}}" alt="Image"
+                                            class="nav-menu__right-side-img">
                                     </div>
                                 </div>
                             </div>
