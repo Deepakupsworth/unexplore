@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\HotelController;
 use App\Http\Controllers\Admin\ImageController;
 use App\Http\Controllers\Admin\TransportController;
 use App\Http\Controllers\Admin\AdminCouponController;
+use App\Http\Controllers\Admin\SeoController;
 use App\Http\Controllers\Frontend\Event\EventController as FrontendEventController;
 
 use App\Http\Controllers\DemoJsonController;
@@ -265,6 +266,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::post('/countries/import', [CountryController::class, 'import'])->name('admin.countries.import');
 
         Route::get('/apiImport', [CountryController::class, 'apiImport'])->name('apiImport');
+
+        Route::get('/seo/{type}/{id}',[SeoController::class, 'edit'])->name('seo.edit');
+
+        Route::post('/seo/{type}/{id}',[SeoController::class, 'update'])->name('seo.update');
     });
 
     Route::prefix('admin')->group(function () {
