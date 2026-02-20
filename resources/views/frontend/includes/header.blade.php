@@ -626,9 +626,9 @@
     </div>
 </header>
 
-<div class="feedback-button">
+{{-- <div class="feedback-button">
     <a href="#" class="feedback-button__link d-flex align-items-center">
         <span class="feedback-button__text">{{ __('header.feedback') }}
         </span>
     </a>
-</div>
+</div> --}}
