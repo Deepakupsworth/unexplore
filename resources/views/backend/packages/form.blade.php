@@ -2,7 +2,7 @@
 
 @section('content')
     {{-- ================= ERROR SHOW ================= --}}
-    @if ($errors->any())
+    {{-- @if ($errors->any())
         <div class="alert alert-danger mb-6">
             <strong>Please fix the following errors:</strong>
             <ul class="mt-2 list-disc list-inside">
@@ -11,7 +11,7 @@
                 @endforeach
             </ul>
         </div>
-    @endif
+    @endif --}}
 
     <style>
         .form-label {
@@ -62,31 +62,31 @@
                     <div class="fromGroup">
                         <label class="form-label">Package Type *</label>
                         <select name="package_type" class="form-control">
-                            <option value="fixed">Fixed</option>
-                            <option value="customized">Customized</option>
+                            <option value="fixed" {{ old('package_type') == 'fixed' ? 'selected' : '' }}>Fixed</option>
+                            <option value="customized" {{ old('package_type') == 'customized' ? 'selected' : '' }}>Customized</option>
                         </select>
                     </div>
 
                     <div class="fromGroup">
                         <label class="form-label">Duration Days *</label>
-                        <input id="duration_days" type="number" name="duration_days" class="form-control" min="1"
+                        <input value="{{ old('duration_days') }}" id="duration_days" type="number" name="duration_days" class="form-control" min="1"
                             required>
                     </div>
 
                     <div class="fromGroup">
                         <label class="form-label">Duration Nights *</label>
-                        <input id="duration_nights" type="number" name="duration_nights" class="form-control"
+                        <input  value="{{ old('duration_nights') }}" id="duration_nights" type="number" name="duration_nights" class="form-control"
                             min="0" required>
                     </div>
 
                     <div class="fromGroup">
                         <label class="form-label">Base Persons</label>
-                        <input type="number" name="base_persons" class="form-control" value="2">
+                        <input value="{{ old('base_persons', 2) }}" type="number" name="base_persons" class="form-control" value="2">
                     </div>
 
                     <div class="fromGroup">
                         <label class="form-label">Max Persons *</label>
-                        <input type="number" name="max_persons" class="form-control" required>
+                        <input  value="{{ old('max_persons') }}" type="number" name="max_persons" class="form-control" required>
                     </div>
 
                     <div class="fromGroup">
@@ -149,21 +149,21 @@
                 <div class="grid grid-cols-2 gap-4 mb-4">
                     <div>
                         <label class="form-label">Available From *</label>
-                        <input type="date" name="availability[available_from]" class="form-control" required>
+                        <input type="date" name="availability[available_from]"   value="{{ old('availability.available_from') }}" class="form-control" required>
                     </div>
                     <div>
                         <label class="form-label">Available To *</label>
-                        <input type="date" name="availability[available_to]" class="form-control" required>
+                        <input type="date" name="availability[available_to]" value="{{ old('availability.available_to') }}" class="form-control" required>
                     </div>
 
                     <div>
                         <label class="form-label">Booking Start Date</label>
-                        <input type="date" name="availability[booking_start_date]" class="form-control">
+                        <input type="date" name="availability[booking_start_date]" value="{{ old('availability.booking_start_date') }}" class="form-control">
                     </div>
 
                     <div>
                         <label class="form-label">Booking End Date</label>
-                        <input type="date" name="availability[booking_end_date]" class="form-control">
+                        <input type="date" name="availability[booking_end_date]" value="{{ old('availability.booking_end_date') }}" class="form-control">
                     </div>
                 </div>
 
@@ -188,7 +188,8 @@
                 <div class="grid grid-cols-2 gap-4 mb-4">
                     <div class="fromGroup">
                         <label class="form-label">Currency *</label>
-                        <input name="pricing[currency]" value="{{old('pricing[currency]')}}" value="SAR" class="form-control" required>
+                        <input name="pricing[currency]" value="{{ old('pricing[currency]') }}" value="SAR"
+                            class="form-control" required>
                     </div>
                     <div class="fromGroup">
                         <label class="form-label">Price (Per Person) *</label>
@@ -197,12 +198,13 @@
                     </div>
                     <div class="fromGroup">
                         <label class="form-label">Discount Price(Per Person)</label>
-                        <input type="number" step="0.01" name="pricing[discount_price]" class="form-control" value="{{old('pricing[discount_price]')}}">
+                        <input type="number" step="0.01" name="pricing[discount_price]" class="form-control"
+                            value="{{ old('pricing[discount_price]') }}">
                     </div>
                     <div class="fromGroup">
                         <label class="form-label">Total Price *</label>
                         <input type="number" step="0.01" name="pricing[original_price]" class="form-control"
-                           value="{{old('pricing[original_price]')}}" required>
+                            value="{{ old('pricing[original_price]') }}" required>
                     </div>
                 </div>
 
@@ -272,20 +274,38 @@
                 const row = document.createElement('div');
                 row.className = 'grid grid-cols-3 gap-4 mb-3';
 
+                // row.innerHTML = `
+            //     <select class="form-control" name="cities[${i}][city_id]" required>
+            //         <option value="">Select City</option>
+            //         ${cities.map(c => `<option value="${c.id}">${c.slug}</option>`).join('')}
+            //     </select>
+
+            //     <input class="form-control"
+            //            name="cities[${i}][nights]"
+            //            value="${old[`cities[${i}][nights]`] ?? 1}">
+
+            //     <input class="form-control"
+            //            name="cities[${i}][sort_order]"
+            //            value="${old[`cities[${i}][sort_order]`] ?? (i + 1)}">
+            // `;
+
                 row.innerHTML = `
-                    <select class="form-control" name="cities[${i}][city_id]">
-                        <option value="">Select City</option>
-                        ${cities.map(c => `<option value="${c.id}">${c.slug}</option>`).join('')}
-                    </select>
+                        <select class="form-control"
+                                name="cities[${i}][city_id]"
+                                required>
+                            <option value="">Select City</option>
+                            ${cities.map(c => `<option value="${c.id}">${c.slug}</option>`).join('')}
+                        </select>
 
-                    <input class="form-control"
-                           name="cities[${i}][nights]"
-                           value="${old[`cities[${i}][nights]`] ?? 1}">
+                        <input class="form-control"
+                            name="cities[${i}][nights]"
+                            value="${old[`cities[${i}][nights]`] ?? 1}"
+                            required>
 
-                    <input class="form-control"
-                           name="cities[${i}][sort_order]"
-                           value="${old[`cities[${i}][sort_order]`] ?? (i + 1)}">
-                `;
+                        <input class="form-control"
+                            name="cities[${i}][sort_order]"
+                            value="${old[`cities[${i}][sort_order]`] ?? (i + 1)}">
+                        `;
 
                 citiesContainer.appendChild(row);
 
