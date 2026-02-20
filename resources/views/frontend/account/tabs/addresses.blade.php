@@ -47,7 +47,7 @@
                         </td>
 
                         <td class="text-light2 text-nowrap">
-                            {{ $address->updated_at->format('Y-m-d H:i') }}
+                            {{ \App\Helpers\DateHelper::format($address->updated_at, 'd M Y') }}
                         </td>
 
                         <td class="text-end text-nowrap">
