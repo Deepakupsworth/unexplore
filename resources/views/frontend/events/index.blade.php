@@ -3,6 +3,45 @@
 
 @section('meta_description', 'Discover upcoming events in Saudi Arabia including concerts, exhibitions, sports, and cultural festivals in Riyadh, Jeddah, AlUla and more. Plan your visit today.')
 @section('content')
+
+<style>
+  @media (max-width: 768px) {
+
+        body.filter-open {
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .package-listing__filter-section {
+            position: fixed;
+            inset: 0;
+            background: #fff;
+            z-index: 9999;
+
+            display: none;              /* 🔥 hidden by default */
+            flex-direction: column;
+        }
+
+        .package-listing__filter-section.active {
+            display: flex;              /* 🔥 show only when active */
+        }
+
+        .filter-header,
+        .filter-footer {
+            flex-shrink: 0;
+        }
+
+        .filter-body {
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .filtet-mob-button{
+            margin: 25px 0px -18px 5px;
+        }
+}
+</style>
+
     <!-- 1. EVENTS SEARCH: BANNER -->
     <section class="package-listing__banner">
         <div class="container">
@@ -11,26 +50,43 @@
                 <p>{{ __('events.discover_events_saudi') }}</p>
             </div>
         </div>
+    
     </section>
 
     <!-- 2. EVENTS SEARCH -->
     <section class="package-listing to-do-things-search">
         <div class="container">
+       
+        
+        <div class="filtet-mob-button"> <button class="btn btn-outline-primary d-md-none mb-3" id="openFilters">
+                Filters
+            </button></div>
             <div class="package-listing__filters">
+            
+           
+           
+
                 <!-- LEFT FILTERS -->
                 <div class="package-listing__filter-section">
-                    <div class="package-listing__filter-section-header">
+                
+                
+                    <div class="package-listing__filter-section-header d-md-none d-flex justify-content-between align-items-center mb-3 filter-header">
                         <h6>{{ __('common.filters') }}</h6>
+                  
+                    <button class="btn btn-sm btn-outline-secondary" id="closeFilters">
+                        ✕
+                    </button>
+                
                     </div>
 
-                    <div class="package-listing__filter-items">
+                    <div class="package-listing__filter-items filter-body">
 
                         <!-- SEARCH -->
                         <div class="package-listing__filter-item">
                             <p class="p-large package-listing__filter-title">{{ __('common.search') }}</p>
                             <div class="input-group mb-3 package-listing__search-bar">
                                 <input type="text" class="form-control" placeholder="{{ __('events.browse_event_locations') }}" id="eventSearchInput">
-                                <button class="btn" type="button">
+                                <button class="btn" type="button" id="eventSearchBtn">
                                     <i class="fa-solid fa-magnifying-glass"></i>
                                 </button>
                             </div>
@@ -178,13 +234,21 @@
                                                 class="form-control w-100">
                                         </label>
 
+
                                     </div>
                                 </div>
                             </div>
                         </div>
-
+                                        
+                                        
+                        
 
                     </div>
+                    <div class="d-md-none position-sticky bottom-0 bg-white pt-3 pb-2 border-top filter-footer">
+                            <button class="btn btn-success w-100" id="applyFilters">
+                                Apply Filters
+                            </button>
+                        </div>
                 </div>
                 <!-- RIGHT RESULTS -->
                 <div class="package-listing__results pb-4">
@@ -330,4 +394,33 @@
             });
         });
     </script>
+
+
+<!-- chekc movi;e -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const filter   = document.querySelector('.package-listing__filter-section');
+    const openBtn  = document.getElementById('openFilters');
+    const closeBtn = document.getElementById('closeFilters');
+    const applyBtn = document.getElementById('applyFilters');
+    const searchBtn = document.getElementById('eventSearchBtn');
+
+    function openFilter() {
+        if (window.innerWidth > 768) return;
+        filter.classList.add('active');
+        document.body.classList.add('filter-open');
+    }
+
+    function closeFilter() {
+        filter.classList.remove('active');
+        document.body.classList.remove('filter-open');
+    }
+
+    openBtn?.addEventListener('click', openFilter);
+    closeBtn?.addEventListener('click', closeFilter);
+    applyBtn?.addEventListener('click', closeFilter);
+    searchBtn?.addEventListener('click', closeFilter);
+});
+</script>
 @endpush

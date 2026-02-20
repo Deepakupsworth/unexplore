@@ -23,6 +23,43 @@
         font-weight: 600;
         color: #999;
     }
+
+   
+  @media (max-width: 768px) {
+
+        body.filter-open {
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .package-listing__filter-section {
+            position: fixed;
+            inset: 0;
+            background: #fff;
+            z-index: 9999;
+
+            display: none;              /* 🔥 hidden by default */
+            flex-direction: column;
+        }
+
+        .package-listing__filter-section.active {
+            display: flex;              /* 🔥 show only when active */
+        }
+
+        .filter-header,
+        .filter-footer {
+            flex-shrink: 0;
+        }
+
+        .filter-body {
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .filtet-mob-button{
+            margin: 25px 0px -18px 5px;
+        }
+}
 </style>
 
 @section('content')
@@ -30,6 +67,11 @@
 
     <section class="package-listing">
         <div class="container">
+            <div class="filtet-mob-button">
+                <button class="btn btn-outline-primary d-md-none mb-3" id="openFilters">
+                    Filters
+                </button>
+            </div>
             <div class="package-listing__filters">
                 <form class="package-filter">
                     {{-- LEFT FILTER (STATIC) --}}
@@ -231,4 +273,31 @@
 
         loadPackages();
     });
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const filter   = document.querySelector('.package-listing__filter-section');
+    const openBtn  = document.getElementById('openFilters');
+    const closeBtn = document.getElementById('closeFilters');
+    const applyBtn = document.getElementById('applyFilters');
+    const searchBtn = document.getElementById('eventSearchBtn');
+
+    function openFilter() {
+        if (window.innerWidth > 768) return;
+        filter.classList.add('active');
+        document.body.classList.add('filter-open');
+    }
+
+    function closeFilter() {
+        filter.classList.remove('active');
+        document.body.classList.remove('filter-open');
+    }
+
+    openBtn?.addEventListener('click', openFilter);
+    closeBtn?.addEventListener('click', closeFilter);
+    applyBtn?.addEventListener('click', closeFilter);
+    searchBtn?.addEventListener('click', closeFilter);
+});
 </script>
