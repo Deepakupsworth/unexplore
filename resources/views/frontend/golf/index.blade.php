@@ -11,6 +11,11 @@
     background-position: center;
 }
 
+@media (max-width: 768px) {
+.golf-booking-cta__content {
+    width: 100%;
+}
+
 </style>
     <!-- 1. THING TO DO NATURE: BANNER SECTION  -->
     <section class="hero-banner hero-banner-fullscreen">
