@@ -1,5 +1,8 @@
 @extends('frontend.layout')
 
+@section('title', $package->translation?->title)
+@section('meta_description',\Illuminate\Support\Str::limit(strip_tags($package?->translation?->description), 160))
+
 @section('content')
     <style>
         .selectable-card {

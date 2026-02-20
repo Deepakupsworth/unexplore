@@ -1,5 +1,9 @@
 @extends('frontend.layout')
 
+@section('title','Profile')
+
+@section('meta_description', '')
+
 @section('content')
     <section class="user-profile__banner">
         <div class="container">

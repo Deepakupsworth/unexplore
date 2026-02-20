@@ -3,8 +3,9 @@
 
 <head>
     @include('frontend.includes.head')
+    <title>@yield('title', config('app.name'))</title>
+    <meta name="description" content="@yield('meta_description', 'Default description')">
 
-    <title>@yield('title', 'Unexplord')</title>
 </head>
 
 <body>

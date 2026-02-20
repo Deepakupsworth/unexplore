@@ -1,6 +1,12 @@
 @extends('frontend.layout')
+
+@section('title', $event?->translation?->title)
+
+@section('meta_description',\Illuminate\Support\Str::limit(strip_tags($event->translation?->description), 160))
+
+
 @section('content')
-    {{-- @dd($event) --}}
+
     @php
         use Illuminate\Support\Str;
         $currentEvent = $event;

@@ -1,4 +1,8 @@
 @extends('frontend.layout')
+
+@section('title', $thing->translation?->name)
+@section('meta_description',\Illuminate\Support\Str::limit(strip_tags($thing?->translation?->about), 160))
+
 @section('content')
     @php
         use Illuminate\Support\Str;

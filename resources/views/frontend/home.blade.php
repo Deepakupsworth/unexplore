@@ -1,4 +1,8 @@
 @extends('frontend.layout')
+
+@section('title','Explore Saudi Arabia | Travel Guide, Destinations & Experiences | Unxplord Saudi')
+
+@section('meta_description', 'Discover Saudi Arabia’s top destinations, travel guides, cultural highlights, events, and curated experiences. Plan your perfect trip with Unxplord Saudi.')
 @section('content')
     <style>
         .hero-banner__carousel .hero-banner__carousel-item>img {
@@ -411,12 +415,12 @@
                             <h2 class="section__heading">{!!__('home.news.title') !!}</h2>
                             <p class="section__description">{{ __('home.news.description') }}</p>
                         </div>
-                        <div class="section__header-CTA">
+                        {{-- <div class="section__header-CTA">
                             <a href="#" class="btn btn-primary rounded-pill">
                                 {{ __('home.news.view_all') }}
                                 <i class="fa-solid fa-angles-right"></i>
                             </a>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
                 <div class="col-md-8">

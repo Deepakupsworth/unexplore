@@ -11,6 +11,8 @@ use App\Models\Category;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use App\Repositories\ThingToDo\ThingToDoRepositoryInterface;
+use Illuminate\Database\QueryException;
+use Throwable;
 
 
 class ThingtodoController extends Controller
@@ -82,6 +84,7 @@ class ThingtodoController extends Controller
             'tags'
         ));
     }
+
     public function save(Request $request)
     {
         $request->validate([
@@ -96,18 +99,38 @@ class ThingtodoController extends Controller
             'category_ids.*'       => 'exists:categories,id',
 
             'video_url'            => 'nullable|url|max:255',
-            // 'thumb_image' => 'nullable|image|max:2048',
         ]);
 
-        $this->repo->createOrUpdate(
-            $request->all(),
-            $request->id
-        );
+        try {
 
-        return redirect()
-            ->route('thingtodos.index')
-            ->with('success', 'Thing To Do saved successfully');
+            $this->repo->createOrUpdate(
+                $request->all(),
+                $request->id
+            );
+
+            return redirect()
+                ->route('thingtodos.index')
+                ->with('success', 'Thing To Do saved successfully');
+        } catch (QueryException $e) {
+
+            // 🔥 Duplicate entry (MySQL 1062)
+            if ($e->errorInfo[1] == 1062) {
+                return back()
+                    ->withInput()
+                    ->with('error', 'Record with this name already exists.');
+            }
+
+            return back()
+                ->withInput()
+                ->with('error', 'Database error occurred.');
+        } catch (Throwable $e) {
+
+            return back()
+                ->withInput()
+                ->with('error', $e->getMessage()); // 👈 dev mode friendly
+        }
     }
+
 
     public function destroy($id)
     {

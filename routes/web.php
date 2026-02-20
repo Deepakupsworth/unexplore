@@ -121,7 +121,7 @@ Route::middleware(['auth', 'user'])->group(function () {
 
     Route::post('/account/travellers', [TravellerController::class, 'store']);
     Route::get('/account/travellers/{id}', [TravellerController::class, 'show']);
-    Route::post('/account/travellers/{id}', [TravellerController::class, 'update']);
+    Route::put('/account/travellers/{id}', [TravellerController::class, 'update']);
     Route::delete('/account/travellers/{id}', [TravellerController::class, 'destroy']);
     Route::get('/travellers/{traveller}', [TravellerController::class, 'show'])
         ->name('travellers.show');

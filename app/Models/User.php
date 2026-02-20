@@ -93,7 +93,7 @@ class User extends Authenticatable
 
     public function billings()
     {
-        return $this->hasMany(CustomerBilling::class);
+        return $this->hasMany(UserAddress::class);
     }
 
     public function travellers()
@@ -103,7 +103,7 @@ class User extends Authenticatable
 
     public function defaultBilling()
     {
-        return $this->hasOne(CustomerBilling::class)
+        return $this->hasOne(UserAddress::class)
             ->where('is_default', true);
     }
 

@@ -1,4 +1,7 @@
 @extends('frontend.layout')
+@section('title', 'Saudi Arabia Travel Packages | Tours, Deals & Experiences')
+
+@section('meta_description', 'Explore curated Saudi Arabia travel packages, including city tours, desert adventures, cultural experiences, and special deals to plan your perfect trip.')
 <style>
     #package-results {
         transition: opacity 0.3s ease, transform 0.3s ease;

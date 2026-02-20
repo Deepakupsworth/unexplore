@@ -47,24 +47,24 @@
                         </td>
 
                         <td class="text-light2 text-nowrap">
-                            {{ $address->updated_at->format('Y-m-d H:i') }}
+                            {{ \App\Helpers\DateHelper::format($address->updated_at, 'd M Y') }}
                         </td>
 
                         <td class="text-end text-nowrap">
                             <a href="javascript:void(0)"
-                               class="text-secondary me-2"
+                               class="text-secondary me-2 text-decoration-none"
                                onclick="viewAddress({{ $address->id }})">
                                 <i class="fa-solid fa-eye"></i>
                             </a>
 
                             <a href="javascript:void(0)"
-                               class="text-secondary me-2"
+                               class="text-primary me-2 text-decoration-none"
                                onclick="editAddress({{ $address->id }})">
                                 <i class="fa-solid fa-pencil"></i>
                             </a>
 
                             <a href="javascript:void(0)"
-                               class="text-danger"
+                               class="text-danger text-decoration-none"
                                onclick="deleteAddress({{ $address->id }})">
                                 <i class="fa-solid fa-trash-can"></i>
                             </a>

@@ -1,4 +1,11 @@
 @extends('frontend.layout')
+@section('title', 'Things to Do in ' . ($city->translation?->name ?? '') . ' | Top Attractions & Travel Guide')
+
+@section(
+    'meta_description',
+    'Discover the best things to do in ' . ($city->translation?->name ?? '') . ', Saudi Arabia, including top attractions, cultural landmarks, activities, and travel experiences. Plan your visit today.'
+)
+
 @section('content')
 
     @php
@@ -299,19 +306,22 @@
 
                 @foreach ($favouriteCities as $city)
 
-                <div class="col-md-6 col-lg-3">
-                    <div class="start-exploring__item">
-                        <img src="{{ asset('storage/' . $city->thumb_image) }}" alt="Explore" class="img-fluid">
-                        <div class="start-exploring__item-content">
-                            <p class="mb-1 p-large fw-600">
-                               {{$city?->translation?->name}}
-                            </p>
-                            <p class="p-small">
-                               {{$city?->translation?->tagline}}
-                            </p>
-                        </div>
+                    <div class="col-md-6 col-lg-3">
+                        <a href="{{ route('destinations.show', $city->slug) }}">
+                            <div class="start-exploring__item">
+                                <img src="{{ asset('storage/' . $city->thumb_image) }}" alt="Explore" class="img-fluid">
+                                <div class="start-exploring__item-content">
+                                    <p class="mb-1 p-large fw-600">
+                                    {{$city?->translation?->name}}
+                                    </p>
+                                    <p class="p-small">
+                                    {{$city?->translation?->tagline}}
+                                    </p>
+                                </div>
+                            </div>
+                        </a>
                     </div>
-                </div>
+
                 @endforeach
             </div>
         </div>

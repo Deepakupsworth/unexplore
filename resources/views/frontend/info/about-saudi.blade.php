@@ -1,4 +1,7 @@
 @extends('frontend.layout')
+@section('title','About Saudi Arabia | Travel Guide, Culture & Vision 2030 | Unxplord Saudi')
+
+@section('meta_description', 'Discover Saudi Arabia’s rich culture, UNESCO heritage sites, modern cities, and Vision 2030 transformation. Explore top destinations, history, and travel insights with Unxplord Saudi.')
 @section('content')
 
 <section class="package-listing__banner about-us__banner">
