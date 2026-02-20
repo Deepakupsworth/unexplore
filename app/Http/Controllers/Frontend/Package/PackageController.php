@@ -338,6 +338,7 @@ class PackageController extends Controller
         $packageTypes = Package::query()
             ->select('package_type')
             ->selectRaw('COUNT(*) as total')
+            ->where('status','active')
             ->groupBy('package_type')
             ->pluck('total', 'package_type');
 

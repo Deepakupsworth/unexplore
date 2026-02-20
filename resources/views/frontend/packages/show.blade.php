@@ -111,7 +111,8 @@
 
                     <!-- RIGHT GRID -->
                     <div class="gallery-middle swiper-slide">
-                        <div class="d-flex flex-column gap-2">
+                        <div class="d-flex flex-column gap-2" data-open-tab="galleryTabsDestination"
+                        data-bs-toggle="modal" data-bs-target="#galleryModal">
 
 
                             @php
@@ -130,17 +131,16 @@
                                 <img class="img-fluid" src="{{ $gallery_image1 ?? '' }}" alt="">
                             </div>
 
-                            <div class="gallery-item  half open-gallery" data-open-tab="galleryTabsProperty"
-                                data-bs-toggle="modal" data-bs-target="#galleryModal">
+                            <div class="gallery-item  half open-gallery" >
                                 <img class="img-fluid" src="{{ $gallery_image2 ?? '' }}" alt="">
                                 <p class="p-small">{{ __('gallery.gallery') }}</p>
                             </div>
 
                         </div>
 
-                        <div class="d-flex flex-column gap-2" data-open-tab="galleryTabsActivities" data-bs-toggle="modal"
+                        <div class="d-flex flex-column gap-2" >
+                            <div class="gallery-item half" data-open-tab="galleryTabsProperty" data-bs-toggle="modal"
                             data-bs-target="#galleryModal">
-                            <div class="gallery-item half">
                                 <?php
                                 $imagePathToDo = match (true) {
                                     !empty($finalArray['todo'][0]['thumb']) => asset('storage/' . $finalArray['todo'][0]['thumb']->image_path),
@@ -160,7 +160,8 @@
 
                             </div>
 
-                            <div class="gallery-item  half open-gallery">
+                            <div class="gallery-item  half open-gallery" data-open-tab="galleryTabsActivities" data-bs-toggle="modal"
+                            data-bs-target="#galleryModal">
                                 @php
                                     $imagePathEvent = match (true) {
                                         !empty($finalArray['event'][0]['thumb']) => asset(

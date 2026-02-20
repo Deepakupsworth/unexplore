@@ -58,7 +58,8 @@ if (!function_exists('header_destinations')) {
     {
         $language = current_lang();
 
-        $baseQuery = \App\Models\City::with([
+        // ✅ base query builder function
+        $query = fn() => \App\Models\City::with([
             'translationData' => function ($q) use ($language) {
                 $q->select('id', 'name', 'city_id', 'language_code')
                   ->where('language_code', $language);
@@ -66,10 +67,8 @@ if (!function_exists('header_destinations')) {
         ]);
 
         /* ================= FAVOURITES ================= */
-        $favourites = (clone $baseQuery)
-            ->whereHas('tags', function ($q) {
-                $q->where('slug', 'favourite');
-            })
+        $favourites = $query()
+            ->whereHas('tags', fn($q) => $q->where('slug', 'favourite'))
             ->latest()
             ->take(10)
             ->get();
@@ -79,7 +78,7 @@ if (!function_exists('header_destinations')) {
         }
 
         /* ================= FALLBACK ================= */
-        return $baseQuery
+        return $query()
             ->latest()
             ->take(5)
             ->get();
