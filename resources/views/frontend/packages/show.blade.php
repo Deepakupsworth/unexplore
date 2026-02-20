@@ -98,10 +98,10 @@
                         data-open-tab="galleryTabsDestination" data-bs-toggle="modal" data-bs-target="#galleryModal">
                         {{-- <img class="img-fluid" src="{{ asset('frontend/assets/package-banner.png') }}" alt=""> --}}
                         <img class="img-fluid"
-     src="{{ $package->thumb?->image_path
-            ? asset('storage/'.$package->thumb->image_path)
-            : asset('frontend/assets/package-details-banner.png') }}"
-     alt="">
+                            src="{{ $package->thumb?->image_path
+                                ? asset('storage/' . $package->thumb->image_path)
+                                : asset('frontend/assets/package-details-banner.png') }}"
+                            alt="">
                         <button class="view-gallery-btn stretched-link" data-bs-toggle="modal"
                             data-bs-target="#galleryModal" data-open-tab="galleryTabsDestination">
                             <i class="fa-regular fa-image"></i>

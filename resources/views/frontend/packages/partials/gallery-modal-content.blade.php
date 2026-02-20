@@ -108,8 +108,11 @@
 
                              <div class="gallery-image-grid">
                                  <div class="gallery-img-box">
-                                     <img class="img-fluid" src="{{ asset('storage/' . $package->thumb->image_path) }}"
-                                         alt="">
+                                    <img class="img-fluid"
+                                    src="{{ $package->thumb?->image_path
+                                       ? asset('storage/' . $package->thumb->image_path)
+                                       : asset('frontend/assets/package-details-banner.png') }}"
+                                    alt="">
                                  </div>
 
                              </div>
