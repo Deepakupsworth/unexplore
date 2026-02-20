@@ -70,6 +70,32 @@
             height: 100%;
         }
     </style>
+    <style>
+            /* Match Bootstrap input height */
+        .select2-container--default .select2-selection--single {
+            height: 38px;
+            padding: 8px 12px;
+            border: 1px solid #dee2e6;
+            border-radius: 0.375rem;
+            display: flex;
+            align-items: center;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: normal;
+            padding-left: 0;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 100%;
+            right: 10px;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__clear {
+            margin-right: 30px;
+        }
+        .select2-container--default.select2-container--focus .select2-selection--single {
+            border-color: #86b7fe;
+            box-shadow: 0 0 0 .25rem rgba(13,110,253,.25);
+        }
+</style>
 
 
     {{-- HEADER --}}

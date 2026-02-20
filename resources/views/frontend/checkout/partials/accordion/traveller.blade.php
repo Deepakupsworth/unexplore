@@ -103,7 +103,7 @@
                                 </div>
 
                                 {{-- ✅ MODAL BUTTON --}}
-                                <button type="button"
+                                <button type="button" 
                                     class="btn btn-outline-primary rounded-pill fw-500 open-traveller-modal"
                                     data-bs-toggle="modal" data-bs-target="#travellerModal"
                                     data-slot="{{ $index }}" data-type="{{ $slot['type'] }}">
