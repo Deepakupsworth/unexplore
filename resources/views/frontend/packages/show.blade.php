@@ -1,7 +1,7 @@
 @extends('frontend.layout')
 
 @section('title', $package->translation?->title)
-@section('meta_description',\Illuminate\Support\Str::limit(strip_tags($package?->translation?->description), 160))
+@section('meta_description', \Illuminate\Support\Str::limit(strip_tags($package?->translation?->description), 160))
 
 @section('content')
     <style>
@@ -21,7 +21,37 @@
 
         .selectable-card-wrapper.active {
             border-color: #198754;
+
             background-color: #f6fffa;
+        }
+
+        /* MOBILE: swiper active */
+        @media (max-width: 767px) {
+            .gallery-wrapper .swiper-wrapper.gallery-grid {
+                display: flex !important;
+            }
+
+            .gallery-wrapper .gallery-item {
+                height: 100%;
+            }
+
+            .gallery-wrapper .swiper-slide {
+                width: 85%;
+                flex-shrink: 0;
+            }
+        }
+
+        /* DESKTOP: grid layout */
+        @media (min-width: 768px) {
+            .gallery-wrapper .swiper-wrapper.gallery-grid {
+                display: grid !important;
+                grid-template-columns: 1.5fr 1fr 1.5fr;
+                gap: 12px;
+            }
+
+            .gallery-wrapper .swiper-slide {
+                width: 100% !important;
+            }
         }
     </style>
     @php
@@ -66,7 +96,12 @@
                     <!-- LEFT LARGE IMAGE -->
                     <div class="gallery-item gallery-item--large swiper-slide open-gallery"
                         data-open-tab="galleryTabsDestination" data-bs-toggle="modal" data-bs-target="#galleryModal">
-                        <img class="img-fluid" src="{{ asset('storage/' . $package->thumb->image_path) }}" alt="">
+                        {{-- <img class="img-fluid" src="{{ asset('frontend/assets/package-banner.png') }}" alt=""> --}}
+                        <img class="img-fluid"
+                            src="{{ $package->thumb?->image_path
+                                ? asset('storage/' . $package->thumb->image_path)
+                                : asset('frontend/assets/package-details-banner.png') }}"
+                            alt="">
                         <button class="view-gallery-btn stretched-link" data-bs-toggle="modal"
                             data-bs-target="#galleryModal" data-open-tab="galleryTabsDestination">
                             <i class="fa-regular fa-image"></i>
@@ -92,64 +127,63 @@
 
                             <div class="gallery-item half">
 
-                            <img class="img-fluid" src="{{ $gallery_image1 ?? '' }}" alt="">
+                                <img class="img-fluid" src="{{ $gallery_image1 ?? '' }}" alt="">
                             </div>
 
                             <div class="gallery-item  half open-gallery" data-open-tab="galleryTabsProperty"
-                            data-bs-toggle="modal" data-bs-target="#galleryModal">
-                            <img class="img-fluid" src="{{ $gallery_image2 ?? '' }}" alt="">
-                            <p class="p-small">{{ __('gallery.gallery') }}</p>
+                                data-bs-toggle="modal" data-bs-target="#galleryModal">
+                                <img class="img-fluid" src="{{ $gallery_image2 ?? '' }}" alt="">
+                                <p class="p-small">{{ __('gallery.gallery') }}</p>
                             </div>
 
                         </div>
 
-                        <div class="d-flex flex-column gap-2">
-                                 <div class="gallery-item half">
-                                    <?php
-                                    $imagePathToDo = match (true) {
-                                        !empty($finalArray['todo'][0]['thumb']) => asset('storage/' . $finalArray['todo'][0]['thumb']->image_path),
+                        <div class="d-flex flex-column gap-2" data-open-tab="galleryTabsActivities" data-bs-toggle="modal"
+                            data-bs-target="#galleryModal">
+                            <div class="gallery-item half">
+                                <?php
+                                $imagePathToDo = match (true) {
+                                    !empty($finalArray['todo'][0]['thumb']) => asset('storage/' . $finalArray['todo'][0]['thumb']->image_path),
 
-                                        !empty($finalArray['event'][0]['thumb']) => asset('storage/' . $finalArray['event'][0]['thumb']->image_path),
+                                    !empty($finalArray['event'][0]['thumb']) => asset('storage/' . $finalArray['event'][0]['thumb']->image_path),
 
-                                        !empty($finalArray['hotel'][0]['thumb']) => asset('storage/' . $finalArray['hotel'][0]['thumb']->image_path),
-
-                                        !empty($package->thumb) => asset('storage/' . $package->thumb->image_path),
-
-                                        default => asset('frontend/assets/package-banner.png'),
-                                    };
-                                    ?>
-                                        <img class="img-fluid" src="{{ $imagePathToDo }}" alt="">
-                                        <p class="p-small">{{ __('package.gallery.activities') }}</p>
-
-
-                                </div>
-
-                                <div class="gallery-item  half open-gallery" data-open-tab="galleryTabsActivities"
-                                    data-bs-toggle="modal" data-bs-target="#galleryModal">
-                                    @php
-                                $imagePathEvent = match (true) {
-                                    !empty($finalArray['event'][0]['thumb']) => asset(
-                                        'storage/' . $finalArray['event'][0]['thumb']->image_path,
-                                    ),
-
-                                    !empty($finalArray['todo'][0]['thumb']) => asset(
-                                        'storage/' . $finalArray['todo'][0]['thumb']->image_path,
-                                    ),
-
-                                    !empty($finalArray['hotel'][0]['thumb']) => asset(
-                                        'storage/' . $finalArray['hotel'][0]['thumb']->image_path,
-                                    ),
+                                    !empty($finalArray['hotel'][0]['thumb']) => asset('storage/' . $finalArray['hotel'][0]['thumb']->image_path),
 
                                     !empty($package->thumb) => asset('storage/' . $package->thumb->image_path),
 
                                     default => asset('frontend/assets/package-banner.png'),
                                 };
+                                ?>
+                                <img class="img-fluid" src="{{ $imagePathToDo }}" alt="">
+                                <p class="p-small">{{ __('package.gallery.activities') }}</p>
 
 
-                            @endphp
-                                    <img class="img-fluid" src="{{ $imagePathEvent }}" alt="">
-                                    <p class="p-small">{{ __('package.gallery.events') }}</p>
-                                </div>
+                            </div>
+
+                            <div class="gallery-item  half open-gallery">
+                                @php
+                                    $imagePathEvent = match (true) {
+                                        !empty($finalArray['event'][0]['thumb']) => asset(
+                                            'storage/' . $finalArray['event'][0]['thumb']->image_path,
+                                        ),
+
+                                        !empty($finalArray['todo'][0]['thumb']) => asset(
+                                            'storage/' . $finalArray['todo'][0]['thumb']->image_path,
+                                        ),
+
+                                        !empty($finalArray['hotel'][0]['thumb']) => asset(
+                                            'storage/' . $finalArray['hotel'][0]['thumb']->image_path,
+                                        ),
+
+                                        !empty($package->thumb) => asset('storage/' . $package->thumb->image_path),
+
+                                        default => asset('frontend/assets/package-banner.png'),
+                                    };
+
+                                @endphp
+                                <img class="img-fluid" src="{{ $imagePathEvent }}" alt="">
+                                <p class="p-small">{{ __('package.gallery.events') }}</p>
+                            </div>
 
 
                         </div>
@@ -268,8 +302,7 @@
                             </a> --}}
 
 
-                            <input type="hidden" name="slug" value="{{ $package->slug }}"
-                                form="packageCheckoutForm">
+                            <input type="hidden" name="slug" value="{{ $package->slug }}" form="packageCheckoutForm">
 
                             <input type="hidden" name="day_items_extra" id="dayItemsExtraInput"
                                 form="packageCheckoutForm">

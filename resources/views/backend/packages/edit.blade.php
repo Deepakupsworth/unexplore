@@ -2,7 +2,7 @@
 
 @section('content')
     {{-- ================= ERRORS ================= --}}
-    @if ($errors->any())
+    {{-- @if ($errors->any())
         <div class="alert alert-danger mb-6">
             <strong>Please fix the following errors:</strong>
             <ul class="mt-2 list-disc list-inside">
@@ -11,10 +11,10 @@
                 @endforeach
             </ul>
         </div>
-    @endif
+    @endif --}}
 
     @php
-    $selectedTags = $package?->tags->pluck('id')->toArray() ?? [];
+        $selectedTags = $package?->tags->pluck('id')->toArray() ?? [];
     @endphp
 
     <style>
@@ -259,12 +259,8 @@
 
                                         <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
                                             @foreach ($tags as $tag)
-                                                <x-admin.form.checkbox
-                                                    name="tags[]"
-                                                    :value="$tag->id"
-                                                    :checked="in_array($tag->id, $selectedTags)"
-                                                    :label="$tag->name"
-                                                />
+                                                <x-admin.form.checkbox name="tags[]" :value="$tag->id" :checked="in_array($tag->id, $selectedTags)"
+                                                    :label="$tag->name" />
                                             @endforeach
                                         </div>
 
@@ -355,25 +351,33 @@
                     const row = window.existingCities?.[i] || {};
 
                     citiesContainer.insertAdjacentHTML('beforeend', `
-            <div class="grid grid-cols-3 gap-4 mb-3">
-                <select class="form-control" name="cities[${i}][city_id]">
-                    <option value="">Select City</option>
-                    ${cities.map(c =>
-                        `<option value="${c.id}" ${c.id == row.city_id ? 'selected' : ''}>
-                                                                                    ${c.slug}
-                                                                                </option>`
-                    ).join('')}
-                </select>
+    <div class="grid grid-cols-3 gap-4 mb-3">
 
-                <input class="form-control"
-                       name="cities[${i}][nights]"
-                       value="${row.nights ?? 1}">
+        <select class="form-control"
+                name="cities[${i}][city_id]"
+                required>
+            <option value="">Select City</option>
+            ${cities.map(c =>
+                `<option value="${c.id}" ${c.id == row.city_id ? 'selected' : ''}>
+                            ${c.slug}
+                        </option>`
+            ).join('')}
+        </select>
 
-                <input class="form-control"
-                       name="cities[${i}][sort_order]"
-                       value="${row.sort_order ?? (i + 1)}">
-            </div>
-            `);
+        <input class="form-control"
+               type="number"
+               min="1"
+               name="cities[${i}][nights]"
+               value="${row.nights ?? 1}"
+               required>
+
+        <input class="form-control"
+               type="number"
+               min="1"
+               name="cities[${i}][sort_order]"
+               value="${row.sort_order ?? (i + 1)}">
+    </div>
+`);
                 }
             }
 
@@ -398,8 +402,8 @@
                 <option value="">Activity Type</option>
                 ${['hotel','event','todo','transport'].map(t =>
                     `<option value="${t}" ${item.item_type === t ? 'selected' : ''}>
-                                                                                ${t.charAt(0).toUpperCase()+t.slice(1)}
-                                                                            </option>`
+                                                                                        ${t.charAt(0).toUpperCase()+t.slice(1)}
+                                                                                    </option>`
                 ).join('')}
             </select>
 
@@ -454,8 +458,8 @@
                     <option value="">Select City</option>
                     ${cities.map(c =>
                         `<option value="${c.id}" ${c.id == dayData.city_id ? 'selected' : ''}>
-                                                                                    ${c.slug}
-                                                                                </option>`
+                                                                                            ${c.slug}
+                                                                                        </option>`
                     ).join('')}
                 </select>
 

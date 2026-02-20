@@ -42,7 +42,7 @@
             {{-- Default Fallback Video --}}
             <video class="hero-banner__video" autoplay muted loop playsinline
                 poster="{{ asset('frontend/assets/hero-banner-bg.png') }}">
-                <source src="{{ asset('frontend/assets/videos/seekers-entry-video.mp4') }}" type="video/mp4">
+                <source src="{{ asset('frontend/assets/Video_intro.mp4') }}" type="video/mp4">
                 {{ __('common.video_not_supported') }}
             </video>
         @endif
