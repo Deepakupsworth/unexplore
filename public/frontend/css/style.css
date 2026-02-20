@@ -3964,6 +3964,7 @@
 
   .gallery-item.half {
     height: calc(340px / 2 - 4px);
+
   }
 
   .gallery-item.full img {
