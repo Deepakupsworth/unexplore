@@ -36,14 +36,21 @@
 <div class="package-listing__filter-section">
 
     {{-- HEADER --}}
-    <div class="package-listing__filter-section-header">
+    <!-- <div class="package-listing__filter-section-header">
         <h6>{{ __('packages.filters.title') }}</h6>
+    </div> -->
+    <div class="package-listing__filter-section-header d-md-none d-flex justify-content-between align-items-center mb-3 filter-header">
+        <h6>{{ __('packages.filters.title') }}</h6>
+                
+        <button class="btn btn-sm btn-outline-secondary" id="closeFilters">
+            ✕
+        </button>
     </div>
 
-    <div class="package-listing__filter-items">
+    <div class="package-listing__filter-items filter-body">
 
         {{-- 🔍 SEARCH --}}
-        <div class="package-listing__filter-item">
+        <div class="package-listing__filter-item ">
             <p class="p-large package-listing__filter-title">
                 {{ __('packages.filters.search') }}
             </p>
@@ -51,7 +58,7 @@
             <div class="input-group mb-3 package-listing__search-bar">
                 <input type="text" name="search" value="{{ request('search') }}" class="form-control"
                     placeholder="{{ __('packages.filters.search_placeholder') }}">
-                <button class="btn" type="button">
+                <button class="btn" type="button" id="eventSearchBtn">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </button>
             </div>
@@ -234,6 +241,11 @@
             </div>
         </div>
 
+    </div>
+    <div class="d-md-none position-sticky bottom-0 bg-white pt-3 pb-2 border-top filter-footer">
+        <button class="btn btn-success w-100" id="applyFilters">
+            Apply Filters
+        </button>
     </div>
 </div>
 

@@ -6,6 +6,43 @@
 
 @section('content')
     {{-- @dd($things) --}}
+
+    <style>
+  @media (max-width: 768px) {
+
+        body.filter-open {
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .package-listing__filter-section {
+            position: fixed;
+            inset: 0;
+            background: #fff;
+            z-index: 9999;
+
+            display: none;              /* 🔥 hidden by default */
+            flex-direction: column;
+        }
+
+        .package-listing__filter-section.active {
+            display: flex;              /* 🔥 show only when active */
+        }
+
+        .filter-header,
+        .filter-footer {
+            flex-shrink: 0;
+        }
+
+        .filter-body {
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .filtet-mob-button{
+            margin:20px;
+        }
+}</style>
     <!-- 1. TO DO THING SEARCH: BANNER -->
     <section class="package-listing__banner">
         <div class="container">
@@ -19,19 +56,30 @@
     <!-- 2. TO DO THING SEARCH -->
     <section class="package-listing to-do-things-search">
         <div class="container">
+            <div class="filtet-mob-button">
+                <button class="btn btn-outline-primary d-md-none mb-3" id="openFilters">
+                    Filters
+                </button>
+            </div>
             <div class="package-listing__filters">
                 <div class="package-listing__filter-section">
-                    <div class="package-listing__filter-section-header">
-                        <h6>{{ __('things.filters.title') }}</h6>
+                    
+                    <div class="package-listing__filter-section-header d-md-none d-flex justify-content-between align-items-center mb-3 filter-header">
+                    <h6>{{ __('things.filters.title') }}</h6>
+                  
+                    <button class="btn btn-sm btn-outline-secondary" id="closeFilters">
+                        ✕
+                    </button>
+                
                     </div>
-                    <div class="package-listing__filter-items">
+                    <div class="package-listing__filter-items filter-body">
                         <div class="package-listing__filter-item">
                             <p class="p-large package-listing__filter-title">{{ __('things.filters.search.title') }}</p>
                             <div class="input-group mb-3 package-listing__search-bar">
                                 <input type="text" class="form-control"
                                     placeholder="{{ __('things.filters.search.placeholder') }}"
                                     aria-label="Browse Package, Location">
-                                <button class="btn" type="button">
+                                <button class="btn" type="button" id="eventSearchBtn">
                                     <i class="fa-solid fa-magnifying-glass"></i>
                                 </button>
                             </div>
@@ -228,6 +276,12 @@
                                 </div>
                             </div> -->
                     </div>
+
+                    <div class="d-md-none position-sticky bottom-0 bg-white pt-3 pb-2 border-top filter-footer">
+                            <button class="btn btn-success w-100" id="applyFilters">
+                                Apply Filters
+                            </button>
+                        </div>
                 </div>
                 <div class="package-listing__results">
                     <div class="package-listing__results-header gap-2">
@@ -433,4 +487,30 @@
             });
         });
     </script>
+    <script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const filter   = document.querySelector('.package-listing__filter-section');
+    const openBtn  = document.getElementById('openFilters');
+    const closeBtn = document.getElementById('closeFilters');
+    const applyBtn = document.getElementById('applyFilters');
+    const searchBtn = document.getElementById('eventSearchBtn');
+
+    function openFilter() {
+        if (window.innerWidth > 768) return;
+        filter.classList.add('active');
+        document.body.classList.add('filter-open');
+    }
+
+    function closeFilter() {
+        filter.classList.remove('active');
+        document.body.classList.remove('filter-open');
+    }
+
+    openBtn?.addEventListener('click', openFilter);
+    closeBtn?.addEventListener('click', closeFilter);
+    applyBtn?.addEventListener('click', closeFilter);
+    searchBtn?.addEventListener('click', closeFilter);
+});
+</script>
 @endpush
