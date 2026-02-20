@@ -279,7 +279,7 @@
                                         @endif
 
                                         <input type="file" name="thumb"
-                                            class="form-control @error('thumb') error-input @enderror">
+                                            class="form-control @error('thumb') error-input @enderror" required>
 
                                         @error('thumb')
                                             <p class="error-text">{{ $message }}</p>

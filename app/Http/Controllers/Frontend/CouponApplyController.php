@@ -104,13 +104,18 @@ class CouponApplyController extends Controller
             // IMPORTANT: avoid $package->price crash
             $checkout = session('checkout');
 
-            if (!$checkout || !isset($checkout['final_total'])) {
+            // print_r($checkout );die;
+            if (
+                !$checkout ||
+                !isset($checkout['pricing']) ||
+                !isset($checkout['pricing']['final_total'])
+            ) {
                 return response()->json([
                     'message' => 'Checkout session expired'
                 ], 422);
             }
 
-            $basePrice = (float) $checkout['final_total'];
+            $basePrice = (float) $checkout['pricing']['final_total'];
 
             /* ================= DISCOUNT ================= */
             if ($coupon->discount_type === 'percentage') {
@@ -141,7 +146,7 @@ class CouponApplyController extends Controller
 
             // 🔒 SAFE JSON RESPONSE (no HTML)
             return response()->json([
-                'message' => 'Something went wrong. Please try again.'
+                'message' => $e->getMessage()
             ], 500);
         }
     }

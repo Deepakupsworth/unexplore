@@ -214,7 +214,7 @@
                 {{-- ADDITIONAL INFO --}}
                 <div class="fromGroup mb-4">
                     <label class="form-label">Thumbnail</label>
-                    <input type="file" class="form-control @error('thumb') error-input @enderror" name="thumb">
+                    <input type="file" class="form-control @error('thumb') error-input @enderror" name="thumb" required>
                     @error('thumb')
                         <p class="error-text">{{ $message }}</p>
                     @enderror

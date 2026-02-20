@@ -172,12 +172,12 @@
                         </p>
                     </div>
 
-                    <div class="section__header-CTA">
+                    {{-- <div class="section__header-CTA">
                         <a href="{{ route('things.to.do') }}" class="btn btn-primary rounded-pill">
                             {{ __('common.view_all') }}
                             <i class="fa-solid fa-angles-right"></i>
                         </a>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>
@@ -189,40 +189,41 @@
                     <div class="swiper-wrapper">
 
                         <div class="stories-insight__carousel-item swiper-slide">
-                            <img src="{{ asset('frontend/assets/stories-insight-1.png') }}" alt="Story Image"
+                            <img  width="100%" src="{{ asset('frontend/assets/harrat-viewpoint-is-an.jpg')}}" alt="Story Image"
                                 class="img-fluid">
                             <div class="stories-insight__carousel-item-content">
                                 <p class="text-light2">
                                     {{ __('destination_details.stories.category') }}
                                 </p>
                                 <p class="p-large text-black stories-insight__carousel-title">
-                                    {{ __('destination_details.stories.title_sample') }}
+                                    Harrat Viewpoint in Alula
                                 </p>
                             </div>
                         </div>
 
                         <div class="stories-insight__carousel-item swiper-slide">
-                            <img src="{{ asset('frontend/assets/stories-insight-1.png') }}" alt="Story Image"
+                            <img  width="100%" src="{{ asset('frontend/assets/aedacdf96dc343aeb62ad421d60c0bc6.webp') }}" alt="Story Image"
                                 class="img-fluid">
                             <div class="stories-insight__carousel-item-content">
                                 <p class="text-light2">
                                     {{ __('destination_details.stories.category') }}
                                 </p>
                                 <p class="p-large text-black stories-insight__carousel-title">
-                                    {{ __('destination_details.stories.title_sample') }}
+                                    {{-- {{ __('destination_details.stories.title_sample') }} --}}
+                                    At-Turaif World Heritage Site in Diriyah
                                 </p>
                             </div>
                         </div>
 
                         <div class="stories-insight__carousel-item swiper-slide">
-                            <img src="{{ asset('frontend/assets/stories-insight-1.png') }}" alt="Story Image"
+                            <img width="100%" src="{{ asset('frontend/assets/Floating-mosque.jpg') }}" alt="Story Image"
                                 class="img-fluid">
                             <div class="stories-insight__carousel-item-content">
                                 <p class="text-light2">
                                     {{ __('destination_details.stories.category') }}
                                 </p>
                                 <p class="p-large text-black stories-insight__carousel-title">
-                                    {{ __('destination_details.stories.title_sample') }}
+                                    Jeddah’s floating mosque in Jeddah
                                 </p>
                             </div>
                         </div>

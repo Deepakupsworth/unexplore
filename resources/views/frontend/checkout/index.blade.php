@@ -286,8 +286,8 @@
                         resetTravellerForm(slotType);
                     }
 
-                    document.getElementById('travellerSearchInput').value = '';
-                    document.getElementById('travellerSearchResults').innerHTML = '';
+                    // document.getElementById('travellerSearchInput').value = '';
+                    // document.getElementById('travellerSearchResults').innerHTML = '';
                 });
 
             });
@@ -301,8 +301,8 @@
                 searchTraveller(e.target.value.trim());
             }, 400);
 
-            document.getElementById('travellerSearchInput')
-                .addEventListener('input', debouncedSearch);
+            // document.getElementById('travellerSearchInput')
+            //     .addEventListener('input', debouncedSearch);
 
         });
 
@@ -429,8 +429,8 @@
                         item.addEventListener('click', function() {
                             fillForm(traveller);
                             resultsBox.innerHTML = '';
-                            document.getElementById('travellerSearchInput').value =
-                                traveller.first_name + " " + traveller.last_name;
+                            // document.getElementById('travellerSearchInput').value =
+                            //     traveller.first_name + " " + traveller.last_name;
                         });
 
                         resultsBox.appendChild(item);
@@ -754,6 +754,11 @@
 
                     if (!ok) {
                         errorBox.innerText = data.message || 'Invalid coupon';
+                        iziToast.error({
+                            title: 'Coupon Failed',
+                            message: data.message || 'Invalid coupon',
+                            position: 'topRight'
+                        });
                         errorBox.classList.remove('d-none');
                         return;
                     }
