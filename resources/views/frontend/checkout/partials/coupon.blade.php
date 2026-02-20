@@ -1,9 +1,8 @@
 {{-- ================= REQUIRED HIDDEN DATA ================= --}}
 <input type="hidden" id="packageId" value="{{ $package->id }}">
 
-
 {{-- ================= COUPON INPUT ================= --}}
-{{-- <div class="card pkg-details__pricing-card checkout-pricing-card mt-3">
+<div class="card pkg-details__pricing-card checkout-pricing-card mt-3">
     <p class="fw-600">{{ __('checkout.coupons_offers') }}</p>
 
     <div class="input-group mt-3 package-listing__search-bar checkout-pricing-card__search-bar">
@@ -14,7 +13,7 @@
     </div>
 
     <p id="couponError" class="text-danger p-small mt-2 d-none"></p>
-</div> --}}
+</div>
 
 {{-- ================= COUPON LIST ================= --}}
 @if ($coupons->count())
@@ -60,7 +59,7 @@
                         {{ $coupon->title }}
                     </p>
 
-                    <button disabled type="button" class="btn apply-btn w-100 rounded-pill"
+                    <button  type="button" class="btn apply-btn w-100 rounded-pill"
                         onclick="applyCoupon('{{ $coupon->code }}')">
                         {{ __('checkout.apply_code') }}
                     </button>
