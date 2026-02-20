@@ -139,9 +139,10 @@
                         </div>
 
                         <div class="d-flex flex-column gap-2" >
-                            <div class="gallery-item half" data-open-tab="galleryTabsProperty" data-bs-toggle="modal"
+                            <div class="gallery-item half open-gallery"  @if(!empty(@$finalArray['todo'][0]['thumb'])) data-open-tab="galleryTabsProperty" @else data-open-tab="galleryTabsActivities" @endif  data-bs-toggle="modal"
                             data-bs-target="#galleryModal">
                                 <?php
+
                                 $imagePathToDo = match (true) {
                                     !empty($finalArray['todo'][0]['thumb']) => asset('storage/' . $finalArray['todo'][0]['thumb']->image_path),
 
@@ -155,12 +156,18 @@
                                 };
                                 ?>
                                 <img class="img-fluid" src="{{ $imagePathToDo }}" alt="">
-                                <p class="p-small">{{ __('package.gallery.activities') }}</p>
+                                <p class="p-small">
+                                @if(!empty(@$finalArray['todo'][0]['thumb'])) 
+                                {{ __('package.gallery.activities') }} 
+                                @else 
+                                {{ __('package.gallery.events') }}
+                                 @endif
+                                </p>
 
 
                             </div>
 
-                            <div class="gallery-item  half open-gallery" data-open-tab="galleryTabsActivities" data-bs-toggle="modal"
+                            <div class="gallery-item  half open-gallery" @if(!empty(@$finalArray['event'][0]['thumb'])) data-open-tab="galleryTabsActivities" @else data-open-tab="galleryTabsProperty" @endif data-bs-toggle="modal"
                             data-bs-target="#galleryModal">
                                 @php
                                     $imagePathEvent = match (true) {
@@ -183,7 +190,13 @@
 
                                 @endphp
                                 <img class="img-fluid" src="{{ $imagePathEvent }}" alt="">
-                                <p class="p-small">{{ __('package.gallery.events') }}</p>
+                                <p class="p-small">
+                                @if(!empty(@$finalArray['event'][0]['thumb'])) 
+                                {{ __('package.gallery.events') }}
+                                @else 
+                                {{ __('package.gallery.activities') }} 
+                                @endif
+                            </p>
                             </div>
 
 
