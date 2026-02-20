@@ -3,6 +3,8 @@
 
 @section('meta_description', '')
 @section('content')
+
+
     <script>
         window.CHECKOUT = {
             adults: {{ (int) ($checkout['adults'] ?? 0) }},
@@ -163,7 +165,7 @@
 
                             <div class="col-md-6 col-lg-4">
                                 <label class="form-label">{{ __('checkout.gender') }} *</label>
-                                <select id="gender" class="form-select" required>
+                                <select id="gender" class="form-select form-control" required>
                                     <option value="">{{ __('checkout.select') }}</option>
                                     <option value="male">{{ __('checkout.male') }}</option>
                                     <option value="female">{{ __('checkout.female') }}</option>
@@ -173,7 +175,7 @@
                             <div class="col-md-6 col-lg-4">
                                 <label class="form-label">{{ __('checkout.country') }} *</label>
 
-                                <select id="country" class="form-select" required>
+                                <select id="country" class="form-select myCountry" required>
                                     <option value="">{{ __('checkout.select_country') }}</option>
 
                                     @foreach ($countries as $country)
@@ -182,7 +184,7 @@
                                         </option>
                                     @endforeach
                                 </select>
-                            </div>
+                            </div> 
 
 
 
@@ -252,6 +254,33 @@
                     const modalTab = document.querySelector(`.trav-btn[data-slot="${index}"]`);
                     if (modalTab) {
                         modalTab.click();
+                        
+                     
+                         // ✅ ALWAYS target the single select
+                                const $countrySelect = $('#travellerModal .myCountry');
+
+                                // 🔥 destroy only if already initialized
+                                if ($countrySelect.hasClass('select2-hidden-accessible')) {
+                                    $countrySelect.select2('destroy');
+                                }
+
+                                // ✅ init Select2 correctly inside modal
+                                $countrySelect.select2({
+                                    dropdownParent: $('#travellerModal'),
+                                    width: '100%',
+                                    placeholder: "{{ __('checkout.select_country') }}",
+                                    allowClear: true
+                                });
+
+                                // ✅ restore saved value (if exists for this traveller)
+                                // const selectedCountry = $('.trav-btn.active').data('country');
+                                // if (selectedCountry) {
+                                //     $countrySelect.val(selectedCountry).trigger('change');
+                                // } else {
+                                //     $countrySelect.val(null).trigger('change'); // 🔥 prevents first option auto-select
+                                // }
+
+                
                     }
                 });
 
@@ -823,4 +852,6 @@
             return Number(val).toLocaleString('en-IN');
         }
     </script>
+
+ 
 @endsection
