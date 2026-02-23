@@ -21,6 +21,7 @@ class PackageDayItem extends Model
         'start_time',
         'end_time',
         'sort_order',
+        'package_id'
     ];
 
     protected $casts = [
@@ -67,5 +68,10 @@ class PackageDayItem extends Model
     public function packageDay()
     {
         return $this->belongsTo(PackageDay::class);
+    }
+
+    public function package()
+    {
+        return $this->belongsTo(Package::class);
     }
 }

@@ -415,6 +415,7 @@ class PackageController extends Controller
                         'start_time' => $item['start_time'] ?? null,
                         'end_time'   => $item['end_time'] ?? null,
                         'sort_order' => $item['sort_order'] ?? 0,
+                        'package_id' =>  $package->id,
                     ]);
                 }
             }
@@ -684,4 +685,7 @@ class PackageController extends Controller
 
         return back()->with('success', 'All package slugs updated successfully');
     }
+
+
+
 }

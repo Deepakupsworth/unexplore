@@ -10,7 +10,7 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $query = User::query();
+        $query = User::withCount('bookings'); // 🔥 important
 
         /* 🔍 Search */
         if ($request->filled('search')) {

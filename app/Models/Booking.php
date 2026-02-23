@@ -86,4 +86,8 @@ class Booking extends Model
     {
         return $this->hasMany(\App\Models\BookingPayment::class);
     }
+
+    public function billingAddress(){
+        return $this->hasOne(BookingBillingAddress::class);
+    }
 }

@@ -1198,7 +1198,7 @@
 
                 <!-- BEGIN: Notification Dropdown -->
                 <!-- Notifications Dropdown area -->
-                {{-- @include('backend.includes.notification_sec') --}}
+                @include('backend.includes.notification_sec')
                 <!-- END: Notification Dropdown -->
 
                 <!-- BEGIN: Profile Dropdown -->

@@ -21,6 +21,7 @@ use App\Http\Controllers\Frontend\Event\EventController as FrontendEventControll
 use App\Http\Controllers\DemoJsonController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Frontend\Blog\BlogController;
+use App\Http\Controllers\Admin\BlogController as AdminBlogController;
 use App\Http\Controllers\Frontend\Checkout\CheckoutController;
 use App\Http\Controllers\Admin\PackageController as AdminPackageController;
 use App\Http\Controllers\Admin\PackagePricingController;
@@ -37,10 +38,12 @@ use App\Http\Controllers\Admin\CompanyDetailController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PackagePolicyController;
 use App\Http\Controllers\Admin\TagController;
+use App\Http\Controllers\Admin\TestController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\Frontend\InfoPageController;
+use Illuminate\Support\Facades\Mail;
 
 // routes/web.php
 Route::get('/lang/{locale}', function ($locale) {
@@ -154,6 +157,32 @@ Route::get('/events-filter', [FrontendEventController::class, 'filter'])->name('
 
 
 Route::middleware(['auth', 'admin'])->group(function () {
+
+    // Notification
+    Route::post('/admin/notifications/{id}/read', function ($id) {
+
+        $notification = auth()->user()
+            ->notifications()
+            ->where('id', $id)
+            ->first();
+
+        if ($notification && is_null($notification->read_at)) {
+            $notification->markAsRead();
+        }
+
+        return response()->json([
+            'success' => true
+        ]);
+    })->name('notifications.read');
+
+    Route::post('/admin/notifications/mark-all-read', function () {
+        auth()->user()->unreadNotifications->markAsRead();
+
+        return back();
+    })->name('notifications.markAllRead');
+
+    Route::get('/admin/fix-package-day-items', [TestController::class, 'backfillPackageId'])
+    ->name('admin.fix.package.day.items');
 
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])
         ->name('admin.dashboard');
@@ -469,6 +498,14 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::post('company-details/save', [CompanyDetailController::class, 'save'])
             ->name('company-details.save');
     });
+
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::get('blogs', [AdminBlogController::class, 'index'])->name('blogs.index');
+        Route::get('blogs/create', [AdminBlogController::class, 'create'])->name('blogs.create');
+        Route::get('blogs/edit/{id}', [AdminBlogController::class, 'edit'])->name('blogs.edit');
+        Route::post('blogs/save', [AdminBlogController::class, 'save'])->name('blogs.save');
+        Route::delete('blogs/delete/{id}', [AdminBlogController::class, 'delete'])->name('blogs.delete');
+    });
 });
 
 
@@ -558,7 +595,9 @@ Route::get('/to-do-things-search', [ToDoThingsController::class, 'search'])->nam
 
 // blog routes
 Route::get('/blogs', [BlogController::class, 'index'])->name('blogs.view');
-Route::get('/blog-details', [BlogController::class, 'detail'])->name('blog.details');
+Route::get('/blogs/{slug}', [BlogController::class, 'detail'])
+    ->name('blogs.detail');
+// Route::get('/blog-details', [BlogController::class, 'detail'])->name('blog.details');
 
 
 // checkout route

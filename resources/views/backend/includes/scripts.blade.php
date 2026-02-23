@@ -45,3 +45,29 @@
         });
     });
 </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        document.querySelectorAll('.notification-link').forEach(link => {
+
+            link.addEventListener('click', function(e) {
+
+                const id = this.dataset.id;
+
+                // fire and forget (navigation continue karega)
+                fetch(`/admin/notifications/${id}/read`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json'
+                    }
+                });
+
+                // ⚠️ navigation ko block nahi kar rahe
+            });
+
+        });
+
+    });
+</script>

@@ -111,4 +111,10 @@ class User extends Authenticatable
     {
         return $this->hasOne(BookingBillingAddress::class);
     }
+
+    // User.php
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
 }

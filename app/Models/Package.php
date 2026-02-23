@@ -179,13 +179,14 @@ class Package extends Model
         );
     }
 
-   public function tags()
+    public function tags()
     {
         return $this->morphToMany(Tag::class, 'taggable');
     }
 
 
-    public function policies(){
+    public function policies()
+    {
         return $this->belongsToMany(PackagePolicy::class);
     }
 
@@ -193,7 +194,7 @@ class Package extends Model
     {
         return $this->morphMany(SeoMeta::class, 'metaable');
     }
- 
+
 
     public function seoMeta($languageId = null)
     {
@@ -201,8 +202,16 @@ class Package extends Model
 
         return $this->seo()
             ->where('language_code', $language_code)
+
             ->first();
     }
+
+
+    public function dayItems()
+    {
+        return $this->hasMany(PackageDayItem::class);
+    }
+
 
 
 }
