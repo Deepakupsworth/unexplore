@@ -423,7 +423,7 @@
                         </div> --}}
                     </div>
                 </div>
-                {{-- <div class="col-md-8">
+                <div class="col-md-8">
                     <div class="news-event__carousel-container">
                         <div class="news-event__carousel-prev">
                             <i class="fa-solid fa-arrow-left"></i>
@@ -480,9 +480,9 @@
                             <i class="fa-solid fa-arrow-right"></i>
                         </div>
                     </div>
-                </div> --}}
+                </div>
 
-                <div class="col-md-8">
+                {{-- <div class="col-md-8">
                     <div class="news-event__carousel-container">
 
                         <div class="news-event__carousel-prev">
@@ -534,7 +534,7 @@
                         </div>
 
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
     </section>
