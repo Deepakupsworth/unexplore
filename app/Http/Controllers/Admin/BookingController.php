@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Exception;
 
-use App\Enums\BookingStatus;
 use App\Enums\PaymentStatus;
 use App\Mail\BookingCancelledMail;
 use App\Mail\BookingCompletedMail;
@@ -56,7 +55,8 @@ class BookingController extends Controller
             'package.translation', // meta info
             'travellers',
             'snapshot',
-            'days.dayItems'            // ✅ real relation
+            'days.dayItems',            // ✅ real relation
+            'billingAddress'
         ]);
 
         // Snapshot JSON (safe)

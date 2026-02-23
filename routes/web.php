@@ -37,6 +37,7 @@ use App\Http\Controllers\Admin\CompanyDetailController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PackagePolicyController;
 use App\Http\Controllers\Admin\TagController;
+use App\Http\Controllers\Admin\TestController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\NewsletterController;
@@ -154,6 +155,9 @@ Route::get('/events-filter', [FrontendEventController::class, 'filter'])->name('
 
 
 Route::middleware(['auth', 'admin'])->group(function () {
+
+    Route::get('/admin/fix-package-day-items', [TestController::class, 'backfillPackageId'])
+    ->name('admin.fix.package.day.items');
 
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])
         ->name('admin.dashboard');

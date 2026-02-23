@@ -1,6 +1,6 @@
  <!-- BEGIN: Sidebar -->
  <!-- BEGIN: Sidebar -->
- <div class="sidebar-wrapper group">
+ <div class="sidebar-wrapper group h-screen flex flex-col">
      <div id="bodyOverlay" class="w-screen h-screen fixed top-0 bg-slate-900 bg-opacity-50 backdrop-blur-sm z-10 hidden">
      </div>
      <div class="logo-segment">
@@ -31,8 +31,10 @@
          class="nav_shadow h-[60px] absolute top-[80px] nav-shadow z-[1] w-full transition-all duration-200 pointer-events-none
       opacity-0">
      </div>
-     <div class="sidebar-menus bg-white dark:bg-slate-800 py-2 px-4 h-[calc(100%-80px)] overflow-y-auto z-50"
-         id="sidebar_menus">
+     <div
+    class="sidebar-menus bg-white dark:bg-slate-800 py-2 px-4 flex-1 min-h-0 overflow-y-auto"
+    id="sidebar_menus"
+>
          {{-- <ul class="sidebar-menu">
              <li class="sidebar-menu-title">MENU</li>
 
@@ -254,6 +256,15 @@
                     <span class="flex items-center">
                         <iconify-icon class="nav-icon" icon="heroicons-outline:building-office"></iconify-icon>
                         <span>Company Details</span>
+                    </span>
+                </x-sidebar-link>
+            </li>
+
+            <li>
+                <x-sidebar-link href="{{ route('admin.users.index') }}">
+                    <span class="flex items-center">
+                        <iconify-icon class="nav-icon" icon="heroicons-outline:users"></iconify-icon>
+                        <span>Users</span>
                     </span>
                 </x-sidebar-link>
             </li>

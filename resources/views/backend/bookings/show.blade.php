@@ -1,7 +1,6 @@
 @extends('backend.layout')
 
 @section('content')
-
     {{-- Breadcrumb --}}
     <div class="mb-5">
         <ul class="flex items-center gap-2 text-sm">
@@ -297,6 +296,74 @@
 
 
             </div>
+        </div>
+    </div>
+
+
+    {{-- ================= CUSTOMER DETAILS ================= --}}
+    <div class="card mb-6">
+        <header class="card-header">
+            <h4 class="card-title">Customer Details</h4>
+        </header>
+
+        <div class="card-body p-4">
+
+            @php
+                $addr = $booking->billingAddress;
+            @endphp
+
+            @if ($addr)
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                    <div>
+                        <p class="text-sm text-slate-500">Full Name</p>
+                        <p class="font-medium">{{ $addr->full_name }}</p>
+                    </div>
+
+                    <div>
+                        <p class="text-sm text-slate-500">Phone</p>
+                        <p class="font-medium">{{ $addr->phone }}</p>
+                    </div>
+
+                    <div>
+                        <p class="text-sm text-slate-500">Email</p>
+                        <p class="font-medium">{{ $addr->email ?? '—' }}</p>
+                    </div>
+
+                    <div>
+                        <p class="text-sm text-slate-500">City</p>
+                        <p class="font-medium">{{ $addr->city }}</p>
+                    </div>
+
+                    <div>
+                        <p class="text-sm text-slate-500">Address</p>
+                        <p class="font-medium">{{ $addr->address_line1 }}</p>
+                    </div>
+
+                    <div>
+                        <p class="text-sm text-slate-500">Postal Code</p>
+                        <p class="font-medium">{{ $addr->postal_code }}</p>
+                    </div>
+
+                    @if ($addr->company_name)
+                        <div>
+                            <p class="text-sm text-slate-500">Company</p>
+                            <p class="font-medium">{{ $addr->company_name }}</p>
+                        </div>
+                    @endif
+
+                    @if ($addr->gst_number)
+                        <div>
+                            <p class="text-sm text-slate-500">GST</p>
+                            <p class="font-medium">{{ $addr->gst_number }}</p>
+                        </div>
+                    @endif
+
+                </div>
+            @else
+                <p class="text-slate-400">No customer details found</p>
+            @endif
+
         </div>
     </div>
 
