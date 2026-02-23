@@ -248,6 +248,18 @@
                 </x-sidebar-link>
             </li>
 
+            <li>
+                <x-sidebar-link href="{{ route('admin.blogs.index') }}">
+                    <span class="flex items-center">
+                        <iconify-icon
+                            class="nav-icon"
+                            icon="heroicons-outline:newspaper">
+                        </iconify-icon>
+                        <span>Blogs</span>
+                    </span>
+                </x-sidebar-link>
+            </li>
+
 
             <li class="sidebar-menu-title">SETTINGS</li>
 

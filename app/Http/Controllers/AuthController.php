@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\UserRegisteredMail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,6 +24,49 @@ class AuthController extends Controller
         return view('auth.register');
     }
 
+    // public function register(Request $request)
+    // {
+    //     $validated = $request->validate([
+    //         'first_name' => 'required|string|max:50',
+    //         'last_name'  => 'required|string|max:50',
+    //         'email'      => 'required|email|unique:users,email',
+    //         'password'   => 'required|min:8|confirmed',
+    //         'terms'      => 'accepted',
+    //     ], [
+    //         'terms.accepted' => 'You must accept the Terms & Conditions',
+    //     ]);
+
+    //     try {
+    //         DB::beginTransaction();
+
+    //         User::create([
+    //             'first_name'      => $validated['first_name'],
+    //             'last_name'       => $validated['last_name'],
+    //             'email'           => $validated['email'],
+    //             'password'        => Hash::make($validated['password']),
+    //             'role'            => 'user',
+    //             'terms_accepted'  => true,
+    //         ]);
+
+    //         DB::commit();
+
+    //         return redirect()
+    //             ->route('login')
+    //             ->with('success', 'Account created successfully! Please login.');
+
+    //     } catch (Throwable $e) {
+    //         DB::rollBack();
+
+    //         Log::error('Register failed', [
+    //             'error' => $e->getMessage(),
+    //         ]);
+
+    //         return back()
+    //             ->withInput()
+    //             ->with('error', 'Something went wrong. Please try again.');
+    //     }
+    // }
+
     public function register(Request $request)
     {
         $validated = $request->validate([
@@ -38,22 +82,31 @@ class AuthController extends Controller
         try {
             DB::beginTransaction();
 
-            User::create([
-                'first_name'      => $validated['first_name'],
-                'last_name'       => $validated['last_name'],
-                'email'           => $validated['email'],
-                'password'        => Hash::make($validated['password']),
-                'role'            => 'user',
-                'terms_accepted'  => true,
+            $user = User::create([
+                'first_name'     => $validated['first_name'],
+                'last_name'      => $validated['last_name'],
+                'email'          => $validated['email'],
+                'password'       => Hash::make($validated['password']),
+                'role'           => 'user',
+                'terms_accepted' => true,
             ]);
 
             DB::commit();
+
+            // ✅ SEND MAIL (safe)
+            try {
+                Mail::to($user->email)->send(new UserRegisteredMail($user));
+            } catch (\Throwable $e) {
+                Log::warning('Welcome mail failed', [
+                    'error' => $e->getMessage()
+                ]);
+            }
 
             return redirect()
                 ->route('login')
                 ->with('success', 'Account created successfully! Please login.');
 
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             DB::rollBack();
 
             Log::error('Register failed', [

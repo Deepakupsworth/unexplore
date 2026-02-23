@@ -63,6 +63,7 @@
 
     @yield('scripts')
 
+
     <!-- Footer End -->
     <!-- scripts -->
     @include('backend.includes.scripts')

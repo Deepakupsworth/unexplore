@@ -18,7 +18,6 @@ use App\Models\{
     Package,
     ThingToDo,
     Transport,
-    UserAddress,
 };
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -26,6 +25,7 @@ use Illuminate\Support\Str;
 use Carbon\Carbon;
 
 use App\Mail\BookingConfirmationMail;
+use App\Mail\BookingReceivedMail;
 use App\Services\BookingPaymentService;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
@@ -115,6 +115,7 @@ class BookingController extends Controller
             $billingData = array_filter($request->input('billing', []));
             $billingData['user_id'] = auth()->id();
 
+
             // UserAddress::updateOrCreate(
             //     [
             //         'user_id' => auth()->id(),
@@ -168,73 +169,6 @@ class BookingController extends Controller
                 ]);
             }
 
-            /* ===== DAYS + ITEMS ===== */
-            // foreach ($package->days as $dayIndex => $day) {
-
-            //     $bookingDay = BookingDay::create([
-            //         'booking_id'      => $booking->id,
-            //         'original_day_id' => $day->id,
-            //         'day_number'      => $dayIndex + 1,
-            //         'date'            => $startDate->copy()->addDays($dayIndex),
-            //         'city_id'         => $day->city_id,
-            //         'city_name'       => $day->city?->translation?->name,
-            //         'meta_json'       => $day->toArray(),
-            //     ]);
-
-            //     foreach ($day->items as $itemIndex => $item) {
-
-            //         $title = null;
-            //         $image = null;
-
-            //         switch ($item->item_type) {
-            //             case 'hotel':
-            //                 $title = $item->hotel?->translation?->name;
-            //                 $image = $item->hotel?->thumb?->image_path;
-            //                 break;
-
-            //             case 'todo':
-            //                 $title = $item->todo?->translation?->name;
-            //                 $image = $item->todo?->thumb?->image_path;
-            //                 break;
-
-            //             case 'event':
-            //                 $title = $item->event?->translation?->title;
-            //                 $image = $item->event?->thumb?->image_path;
-            //                 break;
-
-            //             case 'transport':
-            //                 $title = $item->transport?->translation?->name;
-            //                 $image = $item->transport?->thumb?->image_path;
-            //                 break;
-            //         }
-
-            //         BookingDayItem::create([
-            //             'booking_day_id'   => $bookingDay->id,
-            //             'item_type'        => $item->item_type,
-            //             'original_item_id' => $item->item_id,
-            //             'title'            => $title ?? 'N/A',
-            //             'description'      => $item->description,
-            //             'start_time'       => $item->start_time
-            //                 ? Carbon::parse($item->start_time)->format('H:i:s')
-            //                 : null,
-            //             'end_time'         => $item->end_time
-            //                 ? Carbon::parse($item->end_time)->format('H:i:s')
-            //                 : null,
-            //             'sort_order'       => $itemIndex,
-            //             'extra_price'      => $item->extra_price ?? 0,
-            //             'is_optional'      => $item->is_optional ?? 0,
-            //             'is_selected'      => 1,
-            //             'meta_json'        => [
-            //                 'item_id'    => $item->item_id,
-            //                 'item_type'  => $item->item_type,
-            //                 'title'      => $title,
-            //                 'image_path' => $image,
-            //             ],
-            //         ]);
-            //     }
-            // }
-
-
             /* ================= DAY ITEMS FROM SESSION ================= */
             $selectedDayItems = collect($checkout['day_items'] ?? [])
                 ->mapWithKeys(fn($v, $k) => [(string)$k => $v])
@@ -243,8 +177,6 @@ class BookingController extends Controller
             $dayItemPrices = collect($checkout['day_item_prices'] ?? [])
                 ->mapWithKeys(fn($v, $k) => [(string)$k => $v])
                 ->toArray();
-
-            // dd( $checkout['day_item_prices'] );
 
             /* ===== DAYS + ITEMS ===== */
             foreach ($package->days as $dayIndex => $day) {
@@ -380,20 +312,6 @@ class BookingController extends Controller
 
 
             /* ===== SNAPSHOT ===== */
-            // BookingSnapshot::create([
-            //     'booking_id' => $booking->id,
-            //     'snapshot_json' => [
-            //         'thumb' => $package->thumb ?? null,
-            //         'checkout' => $checkout,
-            //         'coupon'   => [
-            //             'code'     => $couponCode,
-            //             'discount' => $couponDiscount,
-            //             'final'    => $finalPayable,
-            //         ],
-            //         'package'  => $package->toArray(),
-            //         'created'  => now()->toDateTimeString(),
-            //     ],
-            // ]);
 
             $booking->load(['days.dayItems']);
 
@@ -452,10 +370,23 @@ class BookingController extends Controller
         /* ========================= 7️⃣ MAIL ========================= */
 
         try {
-            Mail::to(auth()->user()->email)
-                ->send(new BookingConfirmationMail($booking));
+
+            $booking->load([
+                'billingAddress',
+                'package.translation',
+            ]);
+
+            $email = $booking->billingAddress?->email
+                ?? $booking->user?->email;
+
+            Mail::to($email)->send(
+                new BookingReceivedMail($booking)
+            );
         } catch (\Throwable $e) {
-            Log::warning('Booking mail failed', ['error' => $e->getMessage()]);
+            Log::error('Booking received mail failed', [
+                'booking_id' => $booking->id,
+                'error' => $e->getMessage(),
+            ]);
         }
 
         /* ========================= CLEAN SESSION ========================= */

@@ -44,7 +44,12 @@ class Blog extends Model
     {
         $lang = $languageCode ?? current_lang() ?? 'en';
         return $this->hasOne(BlogTranslation::class)
-                    ->where('language_code', $lang);
+
+            ->where('language_code', $lang);
     }
 
+    public function images()
+    {
+        return $this->morphMany(Image::class, 'imageable');
+    }
 }

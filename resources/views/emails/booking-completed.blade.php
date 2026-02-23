@@ -1,80 +1,104 @@
-<!DOCTYPE html>
-<html>
+@extends('emails.layouts.app')
 
-<head>
-    <meta charset="utf-8">
-    <title>Booking Completed</title>
-</head>
+@section('title', 'Booking Completed')
 
-<body style="font-family: Arial, sans-serif; background:#f7f7f7; padding:20px">
+@section('content')
 
-    <table width="100%" cellpadding="0" cellspacing="0">
+    <!-- HEADING -->
+    <h2 style="margin:0 0 16px 0;font-size:22px;color:#16a34a;">
+        Booking Completed 🎉
+    </h2>
+
+    <p style="margin:0 0 18px 0;font-size:14px;">
+        Hello <strong>{{ $booking?->billingAddress?->full_name ?? ($booking?->user?->first_name ?? 'Customer') }}</strong>,
+    </p>
+
+    <p style="margin:0 0 24px 0;color:#555;">
+        We’re delighted to inform you that your booking has been
+        <strong>successfully completed</strong>.
+    </p>
+
+    <!-- INFO CARD -->
+    <table width="100%" cellpadding="0" cellspacing="0"
+        style="background:#f9fafb;border:1px solid #eeeeee;border-radius:8px;">
         <tr>
-            <td align="center">
-                <table width="600" style="background:#ffffff; padding:24px; border-radius:8px">
+            <td style="padding:16px;">
+
+                <table width="100%" cellpadding="6" cellspacing="0" style="font-size:14px;color:#333;">
 
                     <tr>
+                        <td style="color:#6b7280;width:45%;">Booking Code</td>
+                        <td><strong>{{ $booking->booking_code }}</strong></td>
+                    </tr>
+
+                    <tr>
+                        <td style="color:#6b7280;">Package</td>
+                        <td><strong>{{ $booking->package?->translation?->title ?? '—' }}</strong></td>
+                    </tr>
+
+                    <tr>
+                        <td style="color:#6b7280;">Travel Dates</td>
                         <td>
-
-                            <h2 style="color:#16a34a;">Booking Completed 🎉</h2>
-
-                            <p>Hello <strong>{{ $booking?->user?->first_name ?? '' }}</strong>,</p>
-
-                            <p>
-                                We’re delighted to inform you that your booking has been
-                                <strong>successfully completed</strong>.
-                            </p>
-
-                            <hr>
-
-                            <p><strong>Booking Code:</strong> {{ $booking->booking_code }}</p>
-
-                            <p><strong>Package:</strong>
-                                {{ $booking->package?->translation?->title ?? '—' }}
-                            </p>
-
-                            <p><strong>Travel Dates:</strong>
+                            <strong>
                                 {{ \Carbon\Carbon::parse($booking?->travel_start_date)->format('d M Y') }}
                                 →
                                 {{ \Carbon\Carbon::parse($booking?->travel_end_date)->format('d M Y') }}
-                            </p>
+                            </strong>
+                        </td>
+                    </tr>
 
-                            <p><strong>Total Travellers:</strong>
-                                {{ $booking?->total_person }}
-                            </p>
+                    <tr>
+                        <td style="color:#6b7280;">Total Travellers</td>
+                        <td><strong>{{ $booking?->total_person }}</strong></td>
+                    </tr>
 
-                            <p><strong>Total Amount Paid:</strong>
+                    <tr>
+                        <td style="color:#6b7280;">Total Amount Paid</td>
+                        <td>
+                            <strong style="color:#16a34a;font-size:16px;">
                                 {{ $booking?->booking_currency }}
                                 {{ number_format($booking?->booking_total_amount, 2) }}
-                            </p>
+                            </strong>
+                        </td>
+                    </tr>
 
-                            <hr>
-
-                            <p style="color:#555;">
-                                We hope you had a wonderful experience with us.
-                                Your feedback means a lot and helps us improve our services.
-                            </p>
-
-                            <p>
-                                If you have any questions or need assistance with future bookings,
-                                feel free to reach out to our support team anytime.
-                            </p>
-
-                            <br>
-
-                            <p>
-                                Warm regards,<br>
-                                <strong>Unexplored Saudi</strong>
-                            </p>
-
+                    <tr>
+                        <td style="color:#6b7280;">Status</td>
+                        <td>
+                            <span
+                                style="
+        background:#dcfce7;
+        color:#166534;
+        padding:4px 10px;
+        border-radius:999px;
+        font-size:12px;
+        font-weight:bold;
+        display:inline-block;
+    ">
+                                {{ $booking->status->label() }}
+                            </span>
                         </td>
                     </tr>
 
                 </table>
+
             </td>
         </tr>
     </table>
 
-</body>
+    <!-- MESSAGE -->
+    <p style="margin:24px 0 0 0;color:#555;">
+        We hope you had a wonderful experience with us.
+        Your feedback means a lot and helps us improve our services.
+    </p>
 
-</html>
+    <p style="margin:12px 0 0 0;color:#555;">
+        If you need assistance with future bookings, our support team is always here to help.
+    </p>
+
+    <p style="margin:22px 0 0 0;">
+        Warm regards,<br>
+        <strong>Unxplord Saudi</strong>
+    </p>
+
+@endsection

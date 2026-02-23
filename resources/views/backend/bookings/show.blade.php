@@ -336,13 +336,18 @@
                     </div>
 
                     <div>
-                        <p class="text-sm text-slate-500">Address</p>
-                        <p class="font-medium">{{ $addr->address_line1 }}</p>
+                        <p class="text-sm text-slate-500">Country</p>
+                        <p class="font-medium">{{ country_name($addr->country_code ?? '' )}}</p>
                     </div>
 
                     <div>
                         <p class="text-sm text-slate-500">Postal Code</p>
                         <p class="font-medium">{{ $addr->postal_code }}</p>
+                    </div>
+
+                    <div>
+                        <p class="text-sm text-slate-500">Address</p>
+                        <p class="font-medium">{{ $addr->address_line1 }}</p>
                     </div>
 
                     @if ($addr->company_name)
