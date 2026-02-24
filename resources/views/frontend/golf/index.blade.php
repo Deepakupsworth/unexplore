@@ -1,33 +1,35 @@
 @extends('frontend.layout')
-@section('title','Saudi Arabia Golf Travel Packages | Luxury Golf Experiences')
+@section('title', 'Saudi Arabia Golf Travel Packages | Luxury Golf Experiences')
 
-@section('meta_description', 'Discover premium golf travel packages in Saudi Arabia. Enjoy championship courses, luxury stays, VIP services, and curated golf experiences tailored to your trip.')
+@section('meta_description', 'Discover premium golf travel packages in Saudi Arabia. Enjoy championship courses, luxury
+    stays, VIP services, and curated golf experiences tailored to your trip.')
 
 @section('content')
 
-<style>
-   .golf-banner {
-    width: 100%;
-    background-position: center;
-}
+    <style>
+        .golf-banner {
+            width: 100%;
+            background-position: center;
+        }
 
-@media (max-width: 768px) {
-.golf-booking-cta__content {
-    width: 100%;
-}
-
-</style>
+        @media (max-width: 768px) {
+            .golf-booking-cta__content {
+                width: 100%;
+            }
+        }
+    </style>
     <!-- 1. THING TO DO NATURE: BANNER SECTION  -->
     <section class="hero-banner hero-banner-fullscreen">
         {{-- <video class="hero-banner__video" autoplay muted loop playsinline poster="../assets/hero-banner-bg.png">
             <source src="{{ asset('frontend/assets/videos/seekers-entry-video.mp4')}}" type="video/mp4">
             Your browser does not support the video tag.
         </video> --}}
-        <img class="hero-banner__image" src="{{ asset('frontend/assets/pexels-nathan-nedley-20160-92858.jpg')}}" alt="Banner">
+        <img class="hero-banner__image" src="{{ asset('frontend/assets/pexels-nathan-nedley-20160-92858.jpg') }}"
+            alt="Banner">
         <div class="container">
             <div class="dest-details-banner__content">
                 <h1 class="text-white">The World Golf Championships in <strong>Riyadh </strong></h1>
-                <img src="{{ asset('frontend/assets/hero-banner-vision.png')}}" alt="Vision 2030"
+                <img src="{{ asset('frontend/assets/hero-banner-vision.png') }}" alt="Vision 2030"
                     class="dest-details-banner__vision d-none-sm d-none-md golf-banner">
             </div>
         </div>
@@ -39,21 +41,23 @@
             <div class="golf-locations__carousel swiper">
                 <div class="swiper-wrapper">
                     <div class="golf-locations__item swiper-slide">
-                        <img class="img-fluid" src="{{ asset('frontend/assets/liv-golf-riyadh-banner.jpg')}}" alt="Golf">
+                        <img class="img-fluid" src="{{ asset('frontend/assets/liv-golf-riyadh-banner.jpg') }}"
+                            alt="Golf">
                         <div class="golf-locations__item-content">
                             <p class="p-large fw-600">LIV Golf Riyadh Is a New Chapter in Saudi Golf</p>
                             <p class="p-small">Riyadh</p>
                         </div>
                     </div>
                     <div class="golf-locations__item swiper-slide">
-                        <img class="img-fluid" src="{{ asset('frontend/assets/pif-saudi-ladies-international.jpg')}}" alt="Golf">
+                        <img class="img-fluid" src="{{ asset('frontend/assets/pif-saudi-ladies-international.jpg') }}"
+                            alt="Golf">
                         <div class="golf-locations__item-content">
                             <p class="p-large fw-600">PIF Saudi Ladies International Showcases Golf’s Rising Stars</p>
                             <p class="p-small">Riyadh</p>
                         </div>
                     </div>
                     <div class="golf-locations__item swiper-slide">
-                        <img class="img-fluid" src="{{ asset('frontend/assets/key-details.jpg')}}" alt="Golf">
+                        <img class="img-fluid" src="{{ asset('frontend/assets/key-details.jpg') }}" alt="Golf">
                         <div class="golf-locations__item-content">
                             <p class="p-large fw-600">Plan Your Golf Trip to Riyadh</p>
                             <p class="p-small">Dubai, UAE</p>
@@ -61,7 +65,9 @@
                     </div>
                     <div class="golf-locations__item swiper-slide">
 
-                        <img class="img-fluid" src="{{ asset('frontend/assets/4GJDmtGKUbCGdtXWvunfEhokLb9PwZcvG0v1qnIu1.jpg')}}" alt="Golf">
+                        <img class="img-fluid"
+                            src="{{ asset('frontend/assets/4GJDmtGKUbCGdtXWvunfEhokLb9PwZcvG0v1qnIu1.jpg') }}"
+                            alt="Golf">
                         <div class="golf-locations__item-content">
                             <p class="p-large fw-600">Riyadh Hosts the Grand Launch</p>
                             <p class="p-small">Riyadh</p>
@@ -122,17 +128,20 @@
                         <div class="news-event__carousel swiper">
                             <div class="news-event__carousel-wrapper swiper-wrapper">
                                 <div class="news-event__carousel-item swiper-slide">
-                                    <img src="{{ asset('frontend/assets/Xv8vEjXDRONOu6W5FWqnHlBlnedCbgSXTfBeIvtR.jpg')}}" alt="News" class="img-fluid">
+                                    <img src="{{ asset('frontend/assets/Xv8vEjXDRONOu6W5FWqnHlBlnedCbgSXTfBeIvtR.jpg') }}"
+                                        alt="News" class="img-fluid">
                                     <div class="news-event__carousel-item-info">
                                         <div class="small news-event__carousel-item-date mb-2">
                                             <i class="fa-solid fa-calendar"></i>
                                             Nov 28 | 15:30
                                         </div>
-                                        <h6>Golf Saudi’s all-star ambassador line-up set to inspire crowds at PIF Saudi Ladies International</h6>
+                                        <h6>Golf Saudi’s all-star ambassador line-up set to inspire crowds at PIF Saudi
+                                            Ladies International</h6>
                                     </div>
                                 </div>
                                 <div class="news-event__carousel-item swiper-slide">
-                                    <img src="{{ asset('frontend/assets/H0ajxteL3yyGSSdKwAeSOywWya4CZzXkRaxDT3py.jpg')}}" alt="News" class="img-fluid">
+                                    <img src="{{ asset('frontend/assets/H0ajxteL3yyGSSdKwAeSOywWya4CZzXkRaxDT3py.jpg') }}"
+                                        alt="News" class="img-fluid">
                                     <div class="news-event__carousel-item-info">
                                         <div class="small news-event__carousel-item-date mb-2">
                                             <i class="fa-solid fa-calendar"></i>
@@ -142,17 +151,20 @@
                                     </div>
                                 </div>
                                 <div class="news-event__carousel-item swiper-slide">
-                                    <img src="{{ asset('frontend/assets/5fUogN7IkY3GsFR0mn4z1OUgJ0NfwtTroYld9Y3e.jpg')}}" alt="News" class="img-fluid">
+                                    <img src="{{ asset('frontend/assets/5fUogN7IkY3GsFR0mn4z1OUgJ0NfwtTroYld9Y3e.jpg') }}"
+                                        alt="News" class="img-fluid">
                                     <div class="news-event__carousel-item-info">
                                         <div class="small news-event__carousel-item-date mb-2">
                                             <i class="fa-solid fa-calendar"></i>
                                             Nov 28 | 15:30
                                         </div>
-                                        <h6>SAUDI OPEN PRESENTED BY PIF: THOMPSON AND HELLGREN ENTERTAIN WITH HEAD-TO-HEAD CLASH</h6>
+                                        <h6>SAUDI OPEN PRESENTED BY PIF: THOMPSON AND HELLGREN ENTERTAIN WITH HEAD-TO-HEAD
+                                            CLASH</h6>
                                     </div>
                                 </div>
                                 <div class="news-event__carousel-item swiper-slide">
-                                    <img src="{{ asset('frontend/assets/cVwse29xZsxeIe0MzbaWXoRBdIARVavfNffAvi34.jpg')}}" alt="News" class="img-fluid">
+                                    <img src="{{ asset('frontend/assets/cVwse29xZsxeIe0MzbaWXoRBdIARVavfNffAvi34.jpg') }}"
+                                        alt="News" class="img-fluid">
                                     <div class="news-event__carousel-item-info">
                                         <div class="small news-event__carousel-item-date mb-2">
                                             <i class="fa-solid fa-calendar"></i>
@@ -181,37 +193,41 @@
                         Saudi</p>
                 </div>
                 <!-- <div class="section__header-CTA">
-                    <a href="#" class="btn btn-primary rounded-pill">
-                        View All
-                        <i class="fa-solid fa-angles-right"></i>
-                    </a>
-                </div> -->
+                        <a href="#" class="btn btn-primary rounded-pill">
+                            View All
+                            <i class="fa-solid fa-angles-right"></i>
+                        </a>
+                    </div> -->
             </div>
             <div class="golf-highlights__carousel swiper">
                 <div class="swiper-wrapper">
                     <div class="golf-highlights__item swiper-slide">
-                        <img class="img-fluid" src="{{ asset('frontend/assets/xwh4kckjwrkeglratxrn.webp')}}" alt="Highlight">
+                        <img class="img-fluid" src="{{ asset('frontend/assets/xwh4kckjwrkeglratxrn.webp') }}"
+                            alt="Highlight">
                         <div class="golf-highlights__item-content">
                             <div class="badge carousel-badge">Riyadh</div>
                             <p class="p-large mt-2 fw-600">Photos: Ryder Cup Day 3</p>
                         </div>
                     </div>
                     <div class="golf-highlights__item swiper-slide">
-                        <img class="img-fluid" src="{{ asset('frontend/assets/vdya8k1q594rx1thonix.webp')}}" alt="Highlight">
+                        <img class="img-fluid" src="{{ asset('frontend/assets/vdya8k1q594rx1thonix.webp') }}"
+                            alt="Highlight">
                         <div class="golf-highlights__item-content">
                             <div class="badge carousel-badge">Riyadh</div>
                             <p class="p-large mt-2 fw-600">Photos: LIV Golf Riyadh, Round 1</p>
                         </div>
                     </div>
                     <div class="golf-highlights__item swiper-slide">
-                        <img class="img-fluid" src="{{ asset('frontend/assets/jugcukfqplsyichop5on.webp')}}" alt="Highlight">
+                        <img class="img-fluid" src="{{ asset('frontend/assets/jugcukfqplsyichop5on.webp') }}"
+                            alt="Highlight">
                         <div class="golf-highlights__item-content">
                             <div class="badge carousel-badge">Riyadh</div>
                             <p class="p-large mt-2 fw-600">Photos: LIV Golf Riyadh, Final Round </p>
                         </div>
                     </div>
                     <div class="golf-highlights__item swiper-slide">
-                        <img class="img-fluid" src="{{ asset('frontend/assets/e0gtwxml4n8qpfomg3eb.jpeg')}}" alt="Highlight">
+                        <img class="img-fluid" src="{{ asset('frontend/assets/e0gtwxml4n8qpfomg3eb.jpeg') }}"
+                            alt="Highlight">
                         <div class="golf-highlights__item-content">
                             <div class="badge carousel-badge">Riyadh</div>
                             <p class="p-large mt-2 fw-600">Photos: LIV Golf Riyadh Preview</p>
@@ -242,7 +258,7 @@
             <div class="row">
                 <div class="col-md-6 col-lg-3">
                     <div class="golf-usp__item text-center p-2">
-                        <img src="{{ asset('frontend/assets/icons/golf-usp-1.svg')}}" alt="USP" class="mb-3">
+                        <img src="{{ asset('frontend/assets/icons/golf-usp-1.svg') }}" alt="USP" class="mb-3">
                         <p class="p-large fw-600 my-2 text-light2">Dedicated Golf Experts</p>
                         <p class="p-small text-light2">Unrivalled golf travel expertise on over 3500 destinations in 24
                             countries.</p>
@@ -250,7 +266,7 @@
                 </div>
                 <div class="col-md-6 col-lg-3">
                     <div class="golf-usp__item text-center p-2">
-                        <img src="{{ asset('frontend/assets/icons/golf-usp-2.svg')}}" alt="USP" class="mb-3">
+                        <img src="{{ asset('frontend/assets/icons/golf-usp-2.svg') }}" alt="USP" class="mb-3">
                         <p class="p-large fw-600 my-2 text-light2">Value You Can Trust</p>
                         <p class="p-small text-light2">Unrivalled golf travel expertise on over 3500 destinations in 24
                             countries.</p>
@@ -258,7 +274,7 @@
                 </div>
                 <div class="col-md-6 col-lg-3">
                     <div class="golf-usp__item text-center p-2">
-                        <img src="{{ asset('frontend/assets/icons/golf-usp-3.svg')}}" alt="USP" class="mb-3">
+                        <img src="{{ asset('frontend/assets/icons/golf-usp-3.svg') }}" alt="USP" class="mb-3">
                         <p class="p-large fw-600 my-2 text-light2">Personalised Service</p>
                         <p class="p-small text-light2">Unrivalled golf travel expertise on over 3500 destinations in 24
                             countries.</p>
@@ -266,7 +282,7 @@
                 </div>
                 <div class="col-md-6 col-lg-3">
                     <div class="golf-usp__item text-center p-2">
-                        <img src="{{ asset('frontend/assets/icons/golf-usp-1.svg')}}" alt="USP" class="mb-3">
+                        <img src="{{ asset('frontend/assets/icons/golf-usp-1.svg') }}" alt="USP" class="mb-3">
                         <p class="p-large fw-600 my-2 text-light2">Best in Industry Protection</p>
                         <p class="p-small text-light2">Unrivalled golf travel expertise on over 3500 destinations in 24
                             countries.</p>

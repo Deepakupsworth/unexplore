@@ -23,13 +23,22 @@
     <div class="bg-white dark:bg-slate-800 rounded-xl shadow overflow-hidden">
 
         {{-- HEADER --}}
-        <div class="px-6 py-4 border-b dark:border-slate-700">
+        <div class="flex justify-between px-6 py-4 border-b dark:border-slate-700">
+           <div>
             <h2 class="text-xl font-semibold capitalize">
                 {{ $event->translations->first()->title ?? 'Event' }}
             </h2>
             <p class="text-sm text-slate-500">
                 {{ $event->city?->slug }}
             </p>
+           </div>
+
+            <div>
+                <a href="{{ route('admin.seo.edit', ['type' => 'event', 'id' => $event?->id]) }}"
+                    class="btn btn-primary">
+                     Add Meta
+                 </a>
+            </div>
 
         </div>
 

@@ -74,19 +74,19 @@
                 <ul class="exclusive-offers__carousel-features-list">
 
                     @if ($groupedItems->has('hotel'))
-                        <li><span>{{ $groupedItems['hotel']->count() }} Hotels</span></li>
+                        <li><span>{{ $groupedItems['hotel']->count() }}  {{ __('booking.hotels') }}</span></li>
                     @endif
 
                     @if ($groupedItems->has('event'))
-                        <li><span>{{ $groupedItems['event']->count() }} Activities</span></li>
+                        <li><span>{{ $groupedItems['event']->count() }}  {{ __('booking.activities') }}</span></li>
                     @endif
 
                     @if ($groupedItems->has('todo'))
-                        <li><span>{{ $groupedItems['todo']->count() }} Things To Do</span></li>
+                        <li><span>{{ $groupedItems['todo']->count() }} {{ __('booking.things_to_do') }}</span></li>
                     @endif
 
                     @if ($groupedItems->has('transport'))
-                        <li><span>{{ $groupedItems['transport']->count() }} Transport</span></li>
+                        <li><span>{{ $groupedItems['transport']->count() }} {{ __('booking.transport') }}</span></li>
                     @endif
 
                 </ul>
@@ -109,7 +109,7 @@
                         data-days='@json($daysPayload)'
                         data-currency-icon="{{ asset(currency_icon_path($booking->booking_currency, 'light')) }}"
                         data-payments='@json($booking->payments)'>
-                        View Details
+                        {{ __('booking.view_details') }}
                         <i class="fa-solid fa-chevron-right"></i>
                     </button>
                 </div>

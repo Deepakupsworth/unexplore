@@ -14,6 +14,10 @@
         </div>
 
         <div class="flex gap-3">
+            <a href="{{ route('admin.seo.edit', ['type' => 'package', 'id' => $package->id]) }}"
+                class="btn btn-primary">
+                 Add Meta
+             </a>
             <a href="{{ route('admin.packages.edit', $package) }}" class="btn btn-dark">
                 Edit Package
             </a>
@@ -22,8 +26,6 @@
             </a>
         </div>
     </div>
-
-
 
     <div class="space-y-10">
 
@@ -237,11 +239,13 @@
 
 
          {{-- ================= POLICIES ================= --}}
+         @if(count($policies))
 
          @include('backend.packages.partials.policy-card', [
             'package' => $package,
             'policies' => $policies,
         ])
+        @endif
 
         {{-- ================= MODALS & SCRIPTS ================= --}}
 

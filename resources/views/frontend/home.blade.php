@@ -29,6 +29,7 @@
             <div class="row">
                 <div class="col-lg-8 mx-auto">
                     <div class="hero-banner__content">
+                        <x-frontend.hero-search />
                         <h1 class="hero-banner__heading text-white">{!! __('home.hero.title') !!}</h1>
                         <h2 class="text-white h4">{{ __('home.hero.subtitle') }}</h2>
                         <p class="hero-banner__desc"> {{ __('home.hero.description') }}</p>
@@ -38,8 +39,11 @@
                             <i class="fa-solid fa-angles-right"></i>
                         </button>
                     </a>
+
                     </div>
                 </div>
+
+
             </div>
         </div>
 

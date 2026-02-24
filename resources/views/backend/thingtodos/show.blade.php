@@ -21,20 +21,29 @@
     <div class="bg-white dark:bg-slate-800 rounded-xl shadow overflow-hidden">
 
         {{-- HEADER --}}
-        <div class="px-6 py-4 border-b dark:border-slate-700">
-            <h2 class="text-xl font-semibold capitalize">
-                {{ $thing->translation?->name }}
-            </h2>
-            <p class="text-sm text-slate-500">
-                @forelse ($thing->thingCategories as $tc)
-                    {{ $tc->category?->translation?->name }}
-                    @if (!$loop->last)
-                        ,
-                    @endif
-                @empty
-                    —
-                @endforelse
-            </p>
+        <div class="flex justify-between px-6 py-4 border-b dark:border-slate-700">
+            <div>
+                <h2 class="text-xl font-semibold capitalize">
+                    {{ $thing->translation?->name }}
+                </h2>
+                <p class="text-sm text-slate-500">
+                    @forelse ($thing->thingCategories as $tc)
+                        {{ $tc->category?->translation?->name }}
+                        @if (!$loop->last)
+                            ,
+                        @endif
+                    @empty
+                        —
+                    @endforelse
+                </p>
+            </div>
+
+            <div>
+                <a href="{{ route('admin.seo.edit', ['type' => 'todo', 'id' => $thing?->id]) }}"
+                    class="btn btn-primary">
+                     Add Meta
+                 </a>
+            </div>
         </div>
 
         {{-- MAIN GRID --}}

@@ -1,161 +1,141 @@
 <style>
-    /* ============================= */
-    /* HERO SEARCH — FINAL PREMIUM   */
-    /* ============================= */
 
-    .hero-banner {
-        position: relative;
-    }
 
-    /* Container */
-    .hero-search-box {
-        position: relative;
-        width: 100%;
-        max-width: 820px;
-    }
 
-    /* Glass Form */
-    .hero-search-form {
-        background: rgba(255, 255, 255, 0.12);
-        backdrop-filter: blur(14px);
-        -webkit-backdrop-filter: blur(14px);
-        padding: 14px;
-        border-radius: 60px;
-        border: 1px solid rgba(255, 255, 255, 0.25);
-        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.25);
-        transition: all 0.3s ease;
-    }
+/* ============================= */
+/* SEARCH BOX POSITION */
+/* ============================= */
 
-    /* subtle hover lift */
-    .hero-search-form:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 14px 45px rgba(0, 0, 0, 0.35);
-    }
+.hero-search-box {
+    position: relative;
+    width: 100%;
+    margin-bottom: 20px;
+}
 
-    /* ============================= */
-    /* INPUT + SELECT */
-    /* ============================= */
+/* ============================= */
+/* MAIN SEARCH WRAPPER */
+/* ============================= */
 
-    .hero-search-input,
-    .hero-search-select {
-        border-radius: 40px !important;
-        background: rgba(255, 255, 255, 0.92) !important;
-        border: none !important;
-        height: 54px;
-        font-weight: 500;
-        padding-left: 18px;
+.search-input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: #f1f1f1;
+    border-radius: 24px;
+    padding: 8px;
+    box-shadow: 0 12px 35px rgba(0,0,0,0.18);
+    transition: all .25s ease;
+}
 
-    }
+.search-input-wrap:hover {
+    box-shadow: 0 16px 45px rgba(0,0,0,0.22);
+}
 
-    /* focus state */
-    .hero-search-input:focus,
-    .hero-search-select:focus {
-        box-shadow: 0 0 0 3px rgba(31, 143, 74, 0.15);
-        background: #ffffff !important;
-    }
+/* ============================= */
+/* SEARCH ICON */
+/* ============================= */
 
-    /* placeholder */
-    .hero-search-input::placeholder {
-        color: #7a7a7a;
-        font-weight: 400;
-    }
+.search-icon {
+    position: absolute;
+    left: 22px;
+    color: #8c8c8c;
+    font-size: 18px;
+}
 
-    /* ============================= */
-    /* SEARCH BUTTON */
-    /* ============================= */
+/* ============================= */
+/* INPUT FIELD */
+/* ============================= */
 
-    .hero-search-btn {
-        border-radius: 40px !important;
-        height: 54px;
-        font-weight: 600;
-        background: linear-gradient(135deg, #1f8f4a, #26a65b);
-        border: none;
-        color: #fff;
-        transition: all 0.25s ease;
-    }
+.search-input-new {
+    flex: 1;
+    height: 36px;
+    border: none;
+    background: transparent;
+    padding-left: 55px;
+    padding-right: 20px;
+    font-size: 18px;
+    font-weight: 500;
+    color: #555;
+    outline: none;
+}
 
-    /* hover */
-    .hero-search-btn:hover {
-        background: linear-gradient(135deg, #167a3d, #1f8f4a);
-        transform: translateY(-1px);
-    }
+.search-input-new::placeholder {
+    color: #9a9a9a;
+    font-weight: 500;
+}
 
-    /* icon spacing */
-    .hero-search-btn i {
-        margin-right: 6px;
-    }
+/* ============================= */
+/* SEARCH BUTTON — THEME GREEN */
+/* ============================= */
 
-    /* ============================= */
-    /* HERO CONTENT ALIGNMENT */
-    /* ============================= */
+.search-btn-new {
+    height: 46px;
+    padding: 0 42px;
+    border: none;
+    border-radius: 50px;
+    background: linear-gradient(135deg, #169754, #1fb86a);
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+    transition: all .25s ease;
+}
+
+.search-btn-new:hover {
+    background: linear-gradient(135deg, #12824a, #169754);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 25px rgba(22,151,84,0.35);
+}
+
+/* ============================= */
+/* INPUT FOCUS BORDER */
+/* ============================= */
+
+.search-input-wrap:focus-within {
+    box-shadow:
+        0 12px 35px rgba(0,0,0,0.18),
+        0 0 0 3px rgba(22,151,84,0.15);
+}
+/* ============================= */
+/* RESPONSIVE */
+/* ============================= */
+
+@media (max-width: 768px) {
 
     .hero-banner__content {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
+        max-width: 100%;
     }
 
-    /* ============================= */
-    /* MOBILE RESPONSIVE */
-    /* ============================= */
-
-    @media (max-width: 991px) {
-        .hero-search-box {
-            max-width: 100%;
-        }
+    .search-input-new {
+        height: 48px;
+        font-size: 14px;
     }
 
-    @media (max-width: 768px) {
-        .hero-search-form {
-            border-radius: 24px;
-            padding: 12px;
-        }
-
-        .hero-search-input,
-        .hero-search-select,
-        .hero-search-btn {
-            height: 48px;
-            border-radius: 14px !important;
-            font-size: 14px;
-        }
+    .search-btn-new {
+        height: 48px;
+        padding: 0 22px;
+        font-size: 14px;
     }
 
-    @media (max-width: 576px) {
-        .hero-search-form .row {
-            gap: 10px;
-        }
-
-        .hero-search-box {
-            margin-bottom: 24px;
-        }
+    .search-input-wrap {
+        border-radius: 24px;
     }
+}
 </style>
 <div class="hero-search-box">
-    <form action="" method="GET" class="hero-search-form">
-        <div class="row g-2 align-items-center">
+    <form action="{{ route('packages.index') }}" method="GET" class="hero-search-form-new">
 
-            {{-- Category --}}
-            <div class="col-md-3">
-                <select name="type" class="form-select hero-search-select">
-                    <option value="packages">Packages</option>
-                    <option value="things">Things To Do</option>
-                    <option value="events">Events</option>
-                </select>
-            </div>
+        <div class="search-input-wrap">
 
-            {{-- Keyword --}}
-            <div class="col-md-6">
-                <input type="text" name="keyword" class="form-control hero-search-input"
-                    placeholder="Search destinations, experiences..." value="{{ request('keyword') }}">
-            </div>
+            <i class="fa fa-search search-icon"></i>
 
-            {{-- Button --}}
-            <div class="col-md-3">
-                <button type="submit" class="btn btn-primary w-100 hero-search-btn">
-                    <i class="fa fa-search"></i> Search
-                </button>
-            </div>
+            <input required type="text" name="search" class="search-input-new" placeholder="Search destinations like AlUla, Riyadh..."
+                value="{{ request('search') }}">
+
+            <button type="submit" class="search-btn-new">
+                Search
+            </button>
 
         </div>
+
     </form>
 </div>
