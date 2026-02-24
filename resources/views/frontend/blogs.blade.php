@@ -28,7 +28,7 @@
             </div>
             <div class="row blog-cards-wrapper gy-4">
                 <div class="col-md-6 col-lg-4">
-                   
+
                     <div class="blog-card">
                         <div class="blog-card-img-wrapper">
                             <img src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?w=800"
@@ -51,7 +51,7 @@
                             </div>
                         </div>
                     </div>
-                  
+
                 </div>
                 <div class="col-md-6 col-lg-4">
                     <div class="blog-card">

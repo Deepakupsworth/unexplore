@@ -151,7 +151,7 @@ class PageController extends Controller
             }
         );
 
-        return view('frontend.home', $homeData);
+        return view('frontend.pages.home', $homeData);
     }
 
     public function about_us()
@@ -218,12 +218,12 @@ class PageController extends Controller
             ->latest()
             ->take(12)
             ->get();
-        return view('frontend.about-us', compact('packages', 'favouriteCities'));
+        return view('frontend.pages.about-us', compact('packages', 'favouriteCities'));
     }
 
     public function contact_us()
     {
-        return view('frontend.contact-us');
+        return view('frontend.pages.contact-us');
     }
 
 

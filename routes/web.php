@@ -31,7 +31,7 @@ use App\Http\Controllers\Frontend\ToDoThings\ToDoThingsController;
 use App\Models\Event;
 use App\Http\Controllers\Frontend\Profile\ProfileController as FrontendProfileController;
 use App\Http\Controllers\Frontend\Destination\DestinationController as FrontendDestinationController;
-use App\Http\Controllers\Frontend\{TravellerController, AddressController, AccountController, CouponApplyController, SearchController};
+use App\Http\Controllers\Frontend\{TravellerController, AddressController, AccountController, CouponApplyController};
 use App\Http\Controllers\Frontend\Booking\BookingController;
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 use App\Http\Controllers\Admin\CompanyDetailController;
@@ -43,7 +43,6 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\Frontend\InfoPageController;
-use Illuminate\Support\Facades\Mail;
 
 // routes/web.php
 Route::get('/lang/{locale}', function ($locale) {
@@ -535,7 +534,6 @@ Route::get('/basic_form', function () {
 Route::get('/basic_table', function () {
     return view('backend.pages.basic_table');
 })->name('table.view');
-
 
 
 // Frontend Routes
