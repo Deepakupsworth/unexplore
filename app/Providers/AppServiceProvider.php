@@ -21,6 +21,13 @@ use App\Observers\PackageObserver;
 use App\Models\Booking;
 use App\Observers\BookingObserver;
 
+use Illuminate\Database\Eloquent\Relations\Relation;
+use App\Models\Hotel;
+
+use App\Models\Transport;
+
+
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -39,6 +46,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Relation::morphMap([
+        //     'hotel'     => Hotel::class,
+        //     'event'     => Event::class,
+        //     'transport' => Transport::class,
+        //     'todo'      => ThingToDo::class,
+        // ]);
+        
         // $locale = Session::get('locale', config('app.locale'));
         // App::setLocale($locale);
         // Event::observe(EventObserver::class);

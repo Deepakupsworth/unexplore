@@ -4,6 +4,8 @@
 @section('meta_description', \Illuminate\Support\Str::limit(strip_tags($package?->translation?->description), 160))
 
 @section('content')
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
     <style>
         .selectable-card {
             cursor: pointer;
@@ -434,6 +436,8 @@
                     const index = activeSlot.dataset.index;
                     const itemId = activeWrapper.dataset.itemId;
 
+                    console.log(dayId);
+
                     const list = document.getElementById('dayItemList');
                     list.innerHTML = '';
                     selectedClone = null;
@@ -462,11 +466,14 @@
                     list.appendChild(currentCard);
 
                     /* ================= OPTIONS ================= */
-                    fetch(`/package-day-option/${dayId}/${type}`)
+                    fetch(`/package-day-option/${dayId}/${type}/${index}`)
                         .then(r => r.json())
                         .then(res => {
+                            console.log(res.newData);
 
                             res.data.forEach(option => {
+
+                                console.log(option);
 
                                 const model = option[type];
                                 if (!model || model.id == itemId) return;
@@ -478,7 +485,7 @@
                                 /* image */
                                 const img = wrapper.querySelector('img');
                                 if (img && model.thumb?.image_path) {
-                                    img.src = `/storage/${model.thumb.image_path}`;
+                                    img.src = "{{ asset('storage') }}/" + model.thumb.image_path;
                                 }
 
                                 /* title */
@@ -581,11 +588,18 @@
                     const editBtn = activeSlot.querySelector('.editDayItemsBtn');
                     if (editBtn) editBtn.dataset.itemId = itemId;
 
+                    const csrfToken = document
+                    .querySelector('meta[name="csrf-token"]')
+                    .getAttribute('content');
+
+                    //alert(csrfToken);
+
                     /* SAVE TO SESSION */
-                    fetch('/save-package-day-item-session', {
+                    fetch('/save-save-package-day-item-session', {
                         method: 'POST',
+                        credentials: 'same-origin',
                         headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'X-CSRF-TOKEN': csrfToken,
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({
@@ -720,11 +734,17 @@
             function storeTravellerSession() {
                 // console.log('testing');
 
+                const csrfToken = document
+    .querySelector('meta[name="csrf-token"]')
+    .getAttribute('content');
+
+
+
                 fetch('/store-traveller-session', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        'X-CSRF-TOKEN': csrfToken
                     },
                     body: JSON.stringify({
                         adults: document.getElementById('adultCount')?.innerText ?? 0,

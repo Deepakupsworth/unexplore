@@ -344,9 +344,7 @@ class PageController extends Controller
                 'translation' => fn($q) =>
                 $q->where('language_code', $language),
                 'cities.city',
-                'price',
-                'days.items.transport',
-                'days.items.hotel'
+                'price'
             ])
             ->where('status', 'active')
             ->whereHas('tags', function ($q) {
@@ -355,6 +353,7 @@ class PageController extends Controller
             ->latest()
             ->take(12)
             ->get();
+            
         return view('frontend.about-us', compact('packages', 'favouriteCities'));
     }
 

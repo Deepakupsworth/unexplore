@@ -217,8 +217,6 @@ class DestinationController extends Controller
                 $q->where('language_code', $language),
                 'cities.city',
                 'price',
-                'days.items.transport',
-                'days.items.hotel'
             ])
             ->where('status', 'active')
             ->latest()
