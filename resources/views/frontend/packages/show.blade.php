@@ -21,7 +21,6 @@
 
         .selectable-card-wrapper.active {
             border-color: #198754;
-
             background-color: #f6fffa;
         }
 
@@ -48,7 +47,6 @@
                 grid-template-columns: 1.5fr 1fr 1.5fr;
                 gap: 12px;
             }
-
             .gallery-wrapper .swiper-slide {
                 width: 100% !important;
             }
@@ -157,9 +155,9 @@
                                 ?>
                                 <img class="img-fluid" src="{{ $imagePathToDo }}" alt="">
                                 <p class="p-small">
-                                @if(!empty(@$finalArray['todo'][0]['thumb'])) 
-                                {{ __('package.gallery.activities') }} 
-                                @else 
+                                @if(!empty(@$finalArray['todo'][0]['thumb']))
+                                {{ __('package.gallery.activities') }}
+                                @else
                                 {{ __('package.gallery.events') }}
                                  @endif
                                 </p>
@@ -191,10 +189,10 @@
                                 @endphp
                                 <img class="img-fluid" src="{{ $imagePathEvent }}" alt="">
                                 <p class="p-small">
-                                @if(!empty(@$finalArray['event'][0]['thumb'])) 
+                                @if(!empty(@$finalArray['event'][0]['thumb']))
                                 {{ __('package.gallery.events') }}
-                                @else 
-                                {{ __('package.gallery.activities') }} 
+                                @else
+                                {{ __('package.gallery.activities') }}
                                 @endif
                             </p>
                             </div>

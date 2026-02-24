@@ -360,7 +360,7 @@ class PackageController extends Controller
 
     public function show(string $slug)
     {
-        //session()->flush();
+        // session()->flush();
 
         $language = current_lang();
 
@@ -432,6 +432,7 @@ class PackageController extends Controller
                             if ($type !== 'hotel') unset($option['hotel']);
                             if ($type !== 'todo')  unset($option['todo']);
                             if ($type !== 'event') unset($option['event']);
+                            if ($type !== 'transport') unset($option['transport']);
 
                             return $option;
                         })
@@ -456,32 +457,71 @@ class PackageController extends Controller
         $todoIds  = [];
         $transportIds = [];
 
+        // foreach ($package->days as $day) {
+
+        //     foreach ($day->items as $index => $item) {
+
+        //         $type = $item->item_type;
+
+        //         // 🔑 SESSION OVERRIDE → else DEFAULT
+        //         $selectedItemId =
+        //             $sessionItems[$day->id][$type][$index]
+        //             ?? $item->item_id;
+
+        //         if ($type === 'hotel') {
+        //             $hotelIds[] = $selectedItemId;
+        //         }
+
+        //         if ($type === 'event') {
+        //             $eventIds[] = $selectedItemId;
+        //         }
+
+        //         if ($type === 'todo') {
+        //             $todoIds[] = $selectedItemId;
+        //         }
+        //         if ($type === 'transport') {
+        //             $transportIds[] = $selectedItemId;
+        //         }
+        //     }
+        // }
         foreach ($package->days as $day) {
 
-            foreach ($day->items as $index => $item) {
+            // Group items by type FIRST
 
-                $type = $item->item_type;
+            $itemsByType = $day->items->groupBy('item_type');
 
-                // 🔑 SESSION OVERRIDE → else DEFAULT
-                $selectedItemId =
-                    $sessionItems[$day->id][$type][$index]
-                    ?? $item->item_id;
+            foreach ($itemsByType as $type => $items) {
 
-                if ($type === 'hotel') {
-                    $hotelIds[] = $selectedItemId;
+                // Reset index per type (0,1,2…)
+
+                $items = $items->values();
+
+                foreach ($items as $index => $item) {
+
+                    $selectedItemId =
+
+                        $sessionItems[$day->id][$type][$index]
+
+                        ?? $item->item_id;
+
+                    match ($type) {
+
+                        'hotel'     => $hotelIds[]     = $selectedItemId,
+
+                        'event'     => $eventIds[]     = $selectedItemId,
+
+                        'todo'      => $todoIds[]      = $selectedItemId,
+
+                        'transport' => $transportIds[] = $selectedItemId,
+
+                        default     => null,
+
+                    };
+
                 }
 
-                if ($type === 'event') {
-                    $eventIds[] = $selectedItemId;
-                }
-
-                if ($type === 'todo') {
-                    $todoIds[] = $selectedItemId;
-                }
-                if ($type === 'transport') {
-                    $transportIds[] = $selectedItemId;
-                }
             }
+
         }
 
 

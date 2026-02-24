@@ -34,11 +34,11 @@ class SeoController extends Controller
         $seoMetas = $item->seo
             ->keyBy('language_code');
 
-        
-        
+
+
     $defaultSeo = [];
 
-    foreach ($languages as $lang) 
+    foreach ($languages as $lang)
     {
 
         $code = strtolower($lang->code);
@@ -86,8 +86,8 @@ class SeoController extends Controller
         ];
     }
 
-    
-    
+
+
 
     return view('backend.admin.seo.form', [
         'item'      => $item,
@@ -95,19 +95,19 @@ class SeoController extends Controller
         'languages' => $languages,
         'currencies'=> $currencies,
         'seoMetas'  => $seoMetas,
-        'defaultSeo' => $defaultSeo, 
+        'defaultSeo' => $defaultSeo,
     ]);
     }
 
-    
+
     public function update(Request $request, string $type, int $id)
     {
         $item = $this->resolveModel($type, $id);
 
         //print_r($request->all());die;
-    
+
         foreach ($request->seo as $languageCode => $data) {
-    
+
             \App\Helpers\SeoHelper::saveSeo(
                 $item,
                 $languageCode, // 👈 locale / language_code
@@ -120,7 +120,7 @@ class SeoController extends Controller
                 ]
             );
         }
-    
+
         return redirect()->back()->with('success', 'SEO updated for all languages');
     }
 }

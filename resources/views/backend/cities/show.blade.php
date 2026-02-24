@@ -15,18 +15,26 @@
         <a href="{{ route('cities.edit', $city->id) }}" class="btn btn-dark">
             Edit City
         </a>
+
     </div>
 
     <div class="bg-white dark:bg-slate-800 rounded-xl shadow overflow-hidden">
 
         {{-- HEADER --}}
-        <div class="px-6 py-4 border-b dark:border-slate-700">
-            <h2 class="text-xl font-semibold">
-                {{ $city->translation?->name ?? 'City' }}
-            </h2>
-            <p class="text-sm text-slate-500">
-                Slug: {{ $city->slug }}
-            </p>
+        <div class="flex justify-between px-6 py-4 border-b dark:border-slate-700">
+            <div>
+                <h2 class="text-xl font-semibold">
+                    {{ $city->translation?->name ?? 'City' }}
+                </h2>
+                <p class="text-sm text-slate-500">
+                    Slug: {{ $city->slug }}
+                </p>
+            </div>
+
+            <a href="{{ route('admin.seo.edit', ['type' => 'city', 'id' => $city->id]) }}"
+                class="btn btn-primary">
+                 Add Meta
+             </a>
         </div>
 
         {{-- MAIN GRID --}}

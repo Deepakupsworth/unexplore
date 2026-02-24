@@ -209,22 +209,28 @@
                     </span>
                 </x-sidebar-link>
             </li>
-            <li>
-                <x-sidebar-link href="{{ url('/admin/packages') }}">
+
+            <li class="">
+                <a href="javascript:void(0)" class="navItem">
                     <span class="flex items-center">
                         <iconify-icon class="nav-icon" icon="heroicons-outline:archive-box"></iconify-icon>
-                        <span>Package</span>
+                        <span>Packages</span>
                     </span>
-                </x-sidebar-link>
-            </li>
-            <li>
-                <x-sidebar-link href="{{ route('admin.package-policies.index') }}">
-                    <span class="flex items-center">
-                        <iconify-icon class="nav-icon" icon="heroicons-outline:document-text"></iconify-icon>
-                        <span>Package Policies</span>
-                    </span>
-                </x-sidebar-link>
-            </li>
+                  <iconify-icon class="icon-arrow" icon="heroicons-outline:chevron-right"></iconify-icon>
+                </a>
+                <ul class="sidebar-submenu">
+                    <li>
+                        <x-sidebar-link href="{{ url('/admin/packages') }}">
+                            All
+                        </x-sidebar-link>
+                    </li>
+                    <li>
+                        <x-sidebar-link href="{{ route('admin.package-policies.index') }}">
+                            Policy
+                        </x-sidebar-link>
+                    </li>
+                </ul>
+              </li>
 
             <li>
                 <x-sidebar-link href="{{ route('admin.tags.index') }}">

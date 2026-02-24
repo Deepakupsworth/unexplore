@@ -132,8 +132,9 @@
                                 {{ $booking->total_child }}C)
                             </x-admin.table.td>
 
-                            <x-admin.table.td>
-                                ₹{{ number_format($booking->booking_total_amount) }}
+                            <x-admin.table.td class="flex gap-2">
+                                <img src="{{ asset(currency_icon_path(null, 'light')) }}">
+                                {{ number_format($booking->booking_total_amount) }}
                             </x-admin.table.td>
 
                             <x-admin.table.td>
@@ -168,7 +169,7 @@
         </div>
     </div>
 
-  
+
 
     <script>
 document.addEventListener('DOMContentLoaded', function () {

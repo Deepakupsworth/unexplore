@@ -11,7 +11,7 @@
                 <div class="blog-details__header p-4">
 
                     <p class="blog-category-badge rounded-4 text-black fw-500 w-fit">
-                        Blog
+                        {{ __('blog.category') }}
                     </p>
 
                     <h1 class="fw-600 text-white mt-3 mb-4 h3">
@@ -25,7 +25,7 @@
                                 <i class="fa-solid fa-circle-user"></i>
                             </div>
                             <p class="text-white">
-                                {{ $blog->user?->first_name ?? 'Admin' }}
+                                {{ $blog->user?->first_name ?? __('blog.admin') }}
                             </p>
                         </div>
 
@@ -58,7 +58,11 @@
                 {{-- SEARCH --}}
                 <div class="card pkg-details__pricing-card checkout-pricing-card py-4">
                     <div class="input-group package-listing__search-bar">
-                        <input type="text" class="form-control" placeholder="Browse blogs">
+                        <input
+                            type="text"
+                            class="form-control"
+                            placeholder="{{ __('blog.search_placeholder') }}"
+                        >
                         <button class="btn" type="button">
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </button>
@@ -67,7 +71,9 @@
 
                 {{-- ================= RECENT BLOGS ================= --}}
                 <div class="card pkg-details__pricing-card checkout-pricing-card py-4 mt-3">
-                    <p class="p-large package-listing__filter-title">Recent Blogs</p>
+                    <p class="p-large package-listing__filter-title">
+                        {{ __('blog.recent_blogs') }}
+                    </p>
 
                     <div class="blog-details__recent-wrapper">
 
@@ -88,7 +94,9 @@
 
                             </div>
                         @empty
-                            <p class="text-muted">No recent blogs</p>
+                            <p class="text-muted">
+                                {{ __('blog.no_recent_blogs') }}
+                            </p>
                         @endforelse
 
                     </div>
@@ -97,16 +105,16 @@
                 {{-- HELP CARD --}}
                 <div class="card pkg-details__pricing-card py-4 mt-3">
                     <p class="p-large">
-                        Do you have questions or need more information?
+                        {{ __('blog.help_text') }}
                     </p>
                     <button class="btn btn-outline-secondary rounded-pill fw-600 mt-3 pkg-details__get-more-help-btn">
-                        Get More Help
+                        {{ __('blog.get_more_help') }}
                     </button>
                 </div>
 
                 {{-- SHARE --}}
                 <div class="py-4 mt-4">
-                    <p>Share</p>
+                    <p>{{ __('blog.share') }}</p>
 
                     @php
                         $shareUrl = url()->current();
