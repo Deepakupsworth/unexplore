@@ -16,6 +16,7 @@ use App\Models\Language;
 use App\Models\Hotel;
 use App\Models\Event;
 use App\Models\PackageCategory;
+use App\Models\PackageDay;
 use App\Models\PackageDayItem;
 use App\Models\PackageDayItemOption;
 use App\Models\PackagePolicy;
@@ -307,10 +308,6 @@ class PackageController extends Controller
             'pricing.currency'         => 'required|string|size:3',
             'pricing.original_price'   => 'required|numeric|min:0',
             'pricing.per_person_price' => 'required|numeric|min:0',
-
-            // 'thumb'     => 'nullable|image|max:2048',
-            // 'gallery'   => 'nullable|array',
-            // 'gallery.*' => 'image|max:2048',
         ]);
 
         DB::beginTransaction();
@@ -328,33 +325,17 @@ class PackageController extends Controller
             ]);
 
             if (!$package->exists) {
-
-                $currentLang = strtolower(app()->getLocale() ?? 'en');
-
-                // 1️⃣ Try current language title
-                $title = $request->translations[$currentLang]['title'] ?? null;
-
-                // 2️⃣ Fallback: first non-empty title
-                if (empty($title)) {
-                    $title = collect($request->translations)
-                        ->pluck('title')
-                        ->filter()
-                        ->first();
-                }
-
-                // 3️⃣ Final safety
-                if (empty($title)) {
-                    $title = 'package';
-                }
+                $title = collect($request->translations ?? [])
+                    ->pluck('title')
+                    ->filter()
+                    ->first() ?? 'package';
 
                 $package->slug = Str::slug($title) . '-' . time();
             }
 
-
             $package->save();
 
-
-            /* ================= PACKAGE CATEGORIES (MULTI) ================= */
+            /* ================= CATEGORIES ================= */
             PackageCategory::where('package_id', $package->id)->delete();
 
             foreach ($request->category_ids as $categoryId) {
@@ -365,16 +346,18 @@ class PackageController extends Controller
             }
 
             /* ================= TRANSLATIONS ================= */
-            $package->translations()->delete();
+            if ($request->filled('translations')) {
+                $package->translations()->delete();
 
-            foreach ($request->translations as $lang => $tr) {
-                if (!empty($tr['title'])) {
-                    $package->translations()->create([
-                        'language_code' => strtolower($lang),
-                        'title'         => $tr['title'],
-                        'sub_title'     => $tr['sub_title'] ?? null,
-                        'description'   => $tr['description'] ?? null,
-                    ]);
+                foreach ($request->translations as $lang => $tr) {
+                    if (!empty($tr['title'])) {
+                        $package->translations()->create([
+                            'language_code' => strtolower($lang),
+                            'title'         => $tr['title'],
+                            'sub_title'     => $tr['sub_title'] ?? null,
+                            'description'   => $tr['description'] ?? null,
+                        ]);
+                    }
                 }
             }
 
@@ -383,110 +366,94 @@ class PackageController extends Controller
             $package->availabilities()->create($request->availability);
 
             /* ================= CITIES ================= */
-            $package->cities()->delete();
+            if ($request->filled('cities')) {
+                $package->cities()->delete();
 
-            foreach ($request->cities ?? [] as $row) {
-                if (empty($row['city_id'])) continue;
-
-                $package->cities()->create([
-                    'city_id'    => $row['city_id'],
-                    'nights'     => $row['nights'] ?? 1,
-                    'sort_order' => $row['sort_order'] ?? 0,
-                ]);
-            }
-
-            /* ================= DAYS & ITEMS ================= */
-            $package->days()->delete();
-
-            foreach ($request->days ?? [] as $dayNo => $day) {
-                if (empty($day['city_id'])) continue;
-
-                $dayModel = $package->days()->create([
-                    'day_number' => $dayNo,
-                    'city_id'    => $day['city_id'],
-                ]);
-
-                foreach ($day['items'] ?? [] as $item) {
-                    if (empty($item['item_type']) || empty($item['item_id'])) continue;
-
-                    $dayModel->items()->create([
-                        'item_type'  => $item['item_type'],
-                        'item_id'    => $item['item_id'],
-                        'start_time' => $item['start_time'] ?? null,
-                        'end_time'   => $item['end_time'] ?? null,
-                        'sort_order' => $item['sort_order'] ?? 0,
-                        'package_id' =>  $package->id,
-                    ]);
-                }
-            }
-
-            /* ================= PRICING ================= */
-            $package->price()->delete();
-            $package->price()->create($request->pricing);
-
-            /* ================= ADDITIONAL INFO ================= */
-            $package->infos()->delete();
-
-            foreach ($request->infos ?? [] as $info) {
-
-                if (empty($info['type'])) continue;
-
-                $hasContent = collect($info['translations'] ?? [])
-                    ->whereNotNull('content')
-                    ->where('content', '!=', '')
-                    ->count();
-
-                if (!$hasContent) continue;
-
-                $infoModel = $package->infos()->create([
-                    'type' => $info['type']
-                ]);
-
-                foreach ($info['translations'] ?? [] as $lang => $tr) {
-                    if (!empty($tr['content'])) {
-                        $infoModel->translations()->create([
-                            'language_code' => strtolower($lang),
-                            'title'         => $tr['title'] ?? null,
-                            'content'       => $tr['content'],
+                foreach ($request->cities as $row) {
+                    if (!empty($row['city_id'])) {
+                        $package->cities()->create([
+                            'city_id'    => $row['city_id'],
+                            'nights'     => $row['nights'] ?? 1,
+                            'sort_order' => $row['sort_order'] ?? 0,
                         ]);
                     }
                 }
             }
 
-            /* ================= MEDIA ================= */
-            if ($request->hasFile('thumb')) {
-                if ($package->thumb) {
-                    Storage::disk('public')->delete($package->thumb->image_path);
-                    $package->thumb()->delete();
+            /* =======================================================
+               🔥 DAYS & ITEMS — SAFE (OPTIONS WILL NOT DELETE)
+               ======================================================= */
+
+            if ($request->filled('days')) {
+
+                $existingDayIds = $package->days()->pluck('id')->toArray();
+                $keepDayIds = [];
+
+                foreach ($request->days as $dayNo => $dayData) {
+
+                    if (empty($dayData['city_id'])) continue;
+
+                    // ✅ UPDATE OR CREATE DAY
+                    $dayModel = $package->days()->updateOrCreate(
+                        [
+                            'package_id' => $package->id,
+                            'day_number' => $dayNo,
+                        ],
+                        [
+                            'city_id' => $dayData['city_id'],
+                        ]
+                    );
+
+                    $keepDayIds[] = $dayModel->id;
+
+                    /* ---------- ITEMS SAFE UPDATE ---------- */
+
+                    if (isset($dayData['items'])) {
+
+                        // ❌ ONLY delete items of this day (OPTIONS SAFE)
+                        $dayModel->items()->delete();
+
+                        foreach ($dayData['items'] as $item) {
+                            if (empty($item['item_type']) || empty($item['item_id'])) {
+                                continue;
+                            }
+
+                            $dayModel->items()->create([
+                                'item_type'  => $item['item_type'],
+                                'item_id'    => $item['item_id'],
+                                'start_time' => $item['start_time'] ?? null,
+                                'end_time'   => $item['end_time'] ?? null,
+                                'sort_order' => $item['sort_order'] ?? 0,
+                                'package_id' => $package->id,
+                            ]);
+                        }
+                    }
                 }
-                storeImage($package, $request->thumb, 'package/thumbs', 'thumb', 'en', true);
+
+                // ✅ DELETE removed days ONLY
+                $daysToDelete = array_diff($existingDayIds, $keepDayIds);
+
+                if (!empty($daysToDelete)) {
+                    PackageDay::whereIn('id', $daysToDelete)->delete();
+                }
             }
 
-            if ($request->hasFile('gallery')) {
-                foreach ($request->gallery as $img) {
-                    storeImage($package, $img, 'package/gallery', 'gallery');
-                }
-            }
-
+            /* ================= PRICING ================= */
+            $package->price()->updateOrCreate([], $request->pricing);
 
             /* ================= TAGS ================= */
-            if ($request->has('tags')) {
-                $package->tags()->sync($request->tags);
-            } else {
-                $package->tags()->detach();
-            }
-
+            $package->tags()->sync($request->tags ?? []);
 
             DB::commit();
 
             return redirect()
                 ->route('admin.packages.index')
                 ->with('success', 'Package saved successfully');
+
         } catch (\Throwable $e) {
 
             DB::rollBack();
 
-            // 🔥 Log exact error for debugging
             Log::error('Package Save Failed', [
                 'error' => $e->getMessage(),
                 'file'  => $e->getFile(),

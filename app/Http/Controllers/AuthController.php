@@ -24,49 +24,6 @@ class AuthController extends Controller
         return view('auth.register');
     }
 
-    // public function register(Request $request)
-    // {
-    //     $validated = $request->validate([
-    //         'first_name' => 'required|string|max:50',
-    //         'last_name'  => 'required|string|max:50',
-    //         'email'      => 'required|email|unique:users,email',
-    //         'password'   => 'required|min:8|confirmed',
-    //         'terms'      => 'accepted',
-    //     ], [
-    //         'terms.accepted' => 'You must accept the Terms & Conditions',
-    //     ]);
-
-    //     try {
-    //         DB::beginTransaction();
-
-    //         User::create([
-    //             'first_name'      => $validated['first_name'],
-    //             'last_name'       => $validated['last_name'],
-    //             'email'           => $validated['email'],
-    //             'password'        => Hash::make($validated['password']),
-    //             'role'            => 'user',
-    //             'terms_accepted'  => true,
-    //         ]);
-
-    //         DB::commit();
-
-    //         return redirect()
-    //             ->route('login')
-    //             ->with('success', 'Account created successfully! Please login.');
-
-    //     } catch (Throwable $e) {
-    //         DB::rollBack();
-
-    //         Log::error('Register failed', [
-    //             'error' => $e->getMessage(),
-    //         ]);
-
-    //         return back()
-    //             ->withInput()
-    //             ->with('error', 'Something went wrong. Please try again.');
-    //     }
-    // }
-
     public function register(Request $request)
     {
         $validated = $request->validate([
