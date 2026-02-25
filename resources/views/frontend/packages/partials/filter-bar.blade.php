@@ -1,6 +1,7 @@
 @php
     $availability = $package->availabilities->first();
     $minDate = $availability ? \Carbon\Carbon::parse($availability->available_from)->format('Y-m-d') : null;
+    $maxDate = $availability ? \Carbon\Carbon::parse($availability->available_to)->format('Y-m-d') : null;
 @endphp
 
 <section class="mb-2 mt-4 package-filter-bar-section" id="packageFilterBar">
@@ -67,7 +68,7 @@
             {{-- DATE --}}
             <div class="pkg-fil-bar__input-wrapper flex-center">
                 <label>{{ __('package.pricing.starting_from') }}</label>
-                <input type="date" id="packageDate" value="{{ $filter_data['date'] ?? $minDate }}" min="{{ $minDate }}">
+                <input type="date" id="packageDate" value="{{ $filter_data['date'] ?? $minDate }}" min="{{ $minDate }}" max="{{ $maxDate }}" required>
             </div>
 
             {{-- PERSONS --}}
@@ -170,7 +171,7 @@
                     <div class="pkg-fil-bar__input-wrapper flex-center mb-2">
                         <label>Starting Date</label>
 
-                        <input type="date" id="packageDateNew" value="{{ $filter_data['date'] ?? $minDate }}" min="{{ $minDate }}">
+                        <input type="date" id="packageDateNew" value="{{ $filter_data['date'] ?? $minDate }}" min="{{ $minDate }}" max="{{ $maxDate }}" required>
 
                     </div>
                     <div class="pkg-fil-bar__input-wrapper flex-center">
@@ -237,17 +238,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const dateNew  = document.getElementById('packageDateNew');
     const dateMain = document.getElementById('packageDate');
+    const startDateInput = document.getElementById('startDateInput');
+                    
 
     if (!dateNew || !dateMain) return;
 
     // When New Date Changes → Update Main
     dateNew.addEventListener('change', function() {
         dateMain.value = this.value;
+        startDateInput.value = this.value;
     });
 
     // When Main Date Changes → Update New
     dateMain.addEventListener('change', function() {
         dateNew.value = this.value;
+        startDateInput.value = this.value;
     });
 
 });

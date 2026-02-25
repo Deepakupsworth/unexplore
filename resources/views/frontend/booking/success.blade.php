@@ -7,7 +7,6 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-6 col-md-8">
-
                 <div class="card border-0 shadow-lg rounded-4 text-center p-4 p-md-5">
 
                     {{-- ICON --}}
@@ -24,7 +23,7 @@
                     {{-- SUBTITLE --}}
                     <p class="text-muted mb-4">
                         {{ __('checkout.thank_you') }}
-                        <strong class="text-dark">UNXplord Saudi</strong>.
+                        <strong class="text-dark">Unxplord Saudi</strong>.
                         <br>
                         {{ __('checkout.booking_received') }}
                     </p>
@@ -51,6 +50,15 @@
                                 {{ __('checkout.ready_journey') }}
                             </p>
                         </div>
+
+                        {{-- @if(!empty($booking)) --}}
+                        <div class="text-center">
+                            <a href="{{ route('account', ['tab' => 'bookings']) }}" class="btn btn-success rounded-pill px-4 fw-500 my-3">
+                                <i class="fa-solid fa-receipt me-1"></i>
+                                {{__('booking.view_bookings')}}
+                            </a>
+                        </div>
+                        {{-- @endif --}}
                     </div>
 
                     {{-- ACTIONS --}}
@@ -67,7 +75,6 @@
                     </div>
 
                 </div>
-
             </div>
         </div>
     </div>

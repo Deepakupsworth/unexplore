@@ -302,6 +302,21 @@ class PackageController extends Controller
                 )
             )
 
+            ->when($request->start_date, function ($q) use ($request) {
+                $q->whereHas('availabilities', function ($c) use ($request) {
+                    $c->where('available_from', '<=', $request->start_date)
+                      ->where('available_to', '>=', $request->start_date);
+                });
+            })
+
+            ->when($request->adult || $request->children, function ($q) use ($request) {
+
+                $totalPersons = (int)$request->adult + (int)$request->children;
+            
+                $q->where('max_persons', '>=', $totalPersons);
+            
+            })
+
             /* 📦 PACKAGE TYPE */
             ->when($request->package_type, fn ($q) =>
                 $q->whereIn('package_type', (array) $request->package_type)

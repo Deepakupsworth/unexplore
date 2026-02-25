@@ -55,7 +55,7 @@
                     <tr>
                         <td style="color:#6b7280;">Total Amount Paid</td>
                         <td>
-                            <img src="{{ url(asset(currency_icon_path($booking->booking_currency, 'light'))) }}">
+                            <img src="{{t(currency_icon_path($booking->booking_currency, 'light'))) }}">
                             &nbsp;
                             <strong style="color:#16a34a;font-size:16px;">
                                 {{ number_format($booking?->booking_total_amount, 2) }}

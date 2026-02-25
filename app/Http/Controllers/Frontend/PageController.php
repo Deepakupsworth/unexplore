@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Cache;
 use App\Models\Tag;
 use App\Models\Blog;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
+
 
 class PageController extends Controller
 {
@@ -151,7 +153,7 @@ class PageController extends Controller
             }
         );
 
-        return view('frontend.home', $homeData);
+        return view('frontend.pages.home', $homeData);
     }
 
     public function about_us()
@@ -216,13 +218,12 @@ class PageController extends Controller
             ->latest()
             ->take(12)
             ->get();
-            
-        return view('frontend.about-us', compact('packages', 'favouriteCities'));
+        return view('frontend.pages.about-us', compact('packages', 'favouriteCities'));
     }
 
     public function contact_us()
     {
-        return view('frontend.contact-us');
+        return view('frontend.pages.contact-us');
     }
 
 
@@ -244,5 +245,35 @@ class PageController extends Controller
     public function termsConditions()
     {
         return view('frontend.pages.terms-conditions');
+    }
+
+    public function search(Request $request)
+    {
+        $q = trim($request->query('q', ''));
+        $language = $this->language;
+ 
+        $cities = City::query()
+            ->whereHas('translation', function ($query) use ($q, $language) {
+                $query->where('language_code', $language);
+ 
+                if ($q !== '') {
+                    $query->where('name', 'LIKE', "%{$q}%");
+                }
+            })
+            ->with([
+                'translation' => fn($t) =>
+                    $t->where('language_code', $language)
+            ])
+            ->limit(20)
+            ->get()
+            ->map(function ($city) {
+                return [
+                    'id'   => $city->id,
+                    'name' => $city->translation->name ?? '',
+                    'slug' => $city->slug,
+                ];
+            });
+ 
+        return response()->json($cities);
     }
 }
