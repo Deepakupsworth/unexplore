@@ -20,7 +20,7 @@ class ContactMessageMail extends Mailable
 
     public function build()
     {
-        return $this->subject('📩 New Contact Form Submission')
+        return $this->subject('New Contact Form Submission')
             ->view('emails.contact-mail')->with([
                 'first_name' => $this->contact->first_name,
                 'last_name'  => $this->contact->last_name,

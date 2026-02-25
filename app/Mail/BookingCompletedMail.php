@@ -20,7 +20,7 @@ class BookingCompletedMail extends Mailable
 
     public function build()
     {
-        return $this->subject('Your Booking Has Been Completed 🎉')
+        return $this->subject('Your Booking Has Been Completed')
             ->view('emails.booking-completed');
     }
 }

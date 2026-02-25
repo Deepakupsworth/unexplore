@@ -20,7 +20,7 @@ class UserRegisteredMail extends Mailable
 
     public function build()
     {
-        return $this->subject('Welcome to Unxplord Saudi 🎉')
+        return $this->subject('Welcome to Unxplord Saudi')
             ->view('emails.user-registered');
     }
 }

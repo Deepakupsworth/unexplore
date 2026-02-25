@@ -3,7 +3,7 @@
 @section('title', 'New Contact Message')
 
 @section('content')
-    <h2 style="margin-top:0;">📩 New Contact Form Submission</h2>
+    <h2 style="margin-top:0;">New Contact Form Submission</h2>
 
     <table width="100%" cellpadding="6" cellspacing="0">
         <tr>

@@ -6,7 +6,7 @@
 
     <!-- HEADING -->
     <h2 style="margin:0 0 16px 0;font-size:22px;color:#16a34a;">
-        Booking Completed 🎉
+        Booking Completed
     </h2>
 
     <p style="margin:0 0 18px 0;font-size:14px;">

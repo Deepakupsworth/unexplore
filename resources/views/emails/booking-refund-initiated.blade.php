@@ -6,7 +6,7 @@
 
     <!-- HEADING -->
     <h2 style="margin:0 0 16px 0;font-size:22px;color:#16a34a;">
-        Refund Initiated 💸
+        Refund Initiated
     </h2>
 
     <p style="margin:0 0 18px 0;font-size:14px;">
@@ -42,7 +42,7 @@
                     <tr>
                         <td style="color:#6b7280;">Refund Amount</td>
                         <td>
-                            <img src="{{ url(asset(currency_icon_path($booking->booking_currency, 'light'))) }}">
+                            <img src="{{asset(currency_icon_path($booking->booking_currency, 'light')) }}">
                             &nbsp;
                             <strong style="color:#16a34a;font-size:16px;">
                                 {{ $payment->currency }}

@@ -1,11 +1,11 @@
-@extends('emails.layouts.master')
+@extends('emails.layouts.app')
 
 @section('title', 'Welcome to Unxplord Saudi')
 
 @section('content')
 
     <h2 style="margin-top:0;color:#0a6b3c;font-size:22px;">
-        Welcome to Unxplord Saudi 🎉
+        Welcome to Unxplord Saudi
     </h2>
 
     <p style="font-size:14px;color:#4b5563;">
@@ -16,18 +16,6 @@
         Your account has been successfully created. You can now explore amazing travel
         experiences across Saudi Arabia.
     </p>
-
-    <!-- INFO BOX -->
-    {{-- <table width="100%" cellpadding="0" cellspacing="0" style="background:#f1f5f9;border-radius:8px;margin:20px 0;">
-        <tr>
-            <td style="padding:16px;font-size:14px;color:#334155;">
-
-                <strong>Email:</strong> {{ $user->email }}<br>
-                <strong>Status:</strong> Active
-
-            </td>
-        </tr>
-    </table> --}}
 
     <!-- CTA BUTTON -->
     <table width="100%" cellpadding="0" cellspacing="0" style="margin:24px 0;">
