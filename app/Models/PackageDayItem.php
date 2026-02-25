@@ -9,6 +9,8 @@ use App\Models\Transport;
 use App\Models\Event;
 use App\Models\PackageDay;
 use App\Models\ThingToDo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+
 
 class PackageDayItem extends Model
 {
@@ -34,36 +36,47 @@ class PackageDayItem extends Model
         return $this->belongsTo(PackageDay::class);
     }
 
-    public function transport()
-    {
-        return $this->belongsTo(Transport::class, 'item_id');
-    }
-
-    public function hotel()
-    {
-        return $this->belongsTo(Hotel::class, 'item_id');
-    }
-
-    public function event()
-    {
-        return $this->belongsTo(Event::class, 'item_id');
-    }
-
-    public function todo()
-    {
-        return $this->belongsTo(ThingToDo::class, 'item_id');
-    }
-
-    public function item()
-    {
-        return match ($this->item_type) {
-            'hotel'     => $this->hotel(),
-            'transport' => $this->transport(),
-            'event'     => $this->event(),
-            'todo'      => $this->todo(),
-            default     => null,
-        };
-    }
+    /* ---------------------------------
+     | MANUAL ITEM RESOLVER (SCOPED)
+     |----------------------------------*/
+     public function getItemAttribute()
+     {
+         if (! $this->item_type || ! $this->item_id) {
+             return null;
+         }
+ 
+         return match ($this->item_type) {
+             'hotel'     => Hotel::find($this->item_id),
+             'event'     => Event::find($this->item_id),
+             'todo'      => ThingToDo::find($this->item_id),
+             'transport' => Transport::find($this->item_id),
+             default     => null,
+         };
+     }
+ 
+     /* ---------------------------------
+      | TYPE-SAFE SHORTCUT ACCESSORS
+      |----------------------------------*/
+ 
+     public function getHotelAttribute()
+     {
+         return $this->item_type === 'hotel' ? $this->item : null;
+     }
+ 
+     public function getEventAttribute()
+     {
+         return $this->item_type === 'event' ? $this->item : null;
+     }
+ 
+     public function getTodoAttribute()
+     {
+         return $this->item_type === 'todo' ? $this->item : null;
+     }
+ 
+     public function getTransportAttribute()
+     {
+         return $this->item_type === 'transport' ? $this->item : null;
+     }
 
     public function packageDay()
     {

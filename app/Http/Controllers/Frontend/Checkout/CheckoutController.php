@@ -183,20 +183,12 @@ class CheckoutController extends Controller
 
         /* ================= PACKAGE ================= */
         $package = Package::with([
-            'days.items.hotel.translation' => fn($q) => $q->where('language_code', $language),
-            'days.items.hotel.thumb',
-            'days.items.todo.translation' => fn($q) => $q->where('language_code', $language),
-            'days.items.todo.thumb',
-            'days.items.event.translation' => fn($q) => $q->where('language_code', $language),
-            'days.items.event.thumb',
-            'days.options.hotel.translation' => fn($q) => $q->where('language_code', $language),
-            'days.options.hotel.thumb',
-            'days.options.todo.translation' => fn($q) => $q->where('language_code', $language),
-            'days.options.todo.thumb',
-            'days.options.event.translation' => fn($q) => $q->where('language_code', $language),
-            'days.options.event.thumb',
-            'days.options.transport.translation' => fn($q) => $q->where('language_code', $language),
-            'days.options.transport.thumb',
+            'thumb',
+            'translation',
+            'cities',
+            'availabilities',
+            'days.items',
+            'days.options',
             'availabilities',
             'translation',
             'days.city.translation',
@@ -238,80 +230,84 @@ class CheckoutController extends Controller
             })
             ->get();
 
-        /* ================= DAY OPTIONS ================= */
-        $dayWiseOptions = [];
-
-        foreach ($package->days as $day) {
-            $dayWiseOptions[$day->id] = $day->options
-                ->groupBy('item_type')
-                ->map(function ($items, $type) {
-
-                    return $items
-                        ->keyBy('item_id')
-                        ->map(function ($option) use ($type) {
-
-                            if ($type !== 'hotel') unset($option['hotel']);
-                            if ($type !== 'todo') unset($option['todo']);
-                            if ($type !== 'event') unset($option['event']);
-                            if ($type !== 'transport') unset($option['transport']);
-
-                            return $option;
-                        })
-                        ->toArray();
-                })
-                ->toArray();
-        }
+        /* -------------------------------------------------
+          | DAY WISE OPTIONS
+          |--------------------------------------------------*/
+          $dayWiseOptions = [];
+     
+          foreach ($package->days as $day) {
+              $dayWiseOptions[$day->id] = $day->options
+                  ->groupBy('item_type')
+                  ->map(fn ($items) => $items->keyBy('item_id')->toArray())
+                  ->toArray();
+          }
 
         /* ================= SESSION DAY ITEMS ================= */
         $sessionItems = session("package_day_items.{$package->id}", []);
 
         /* ================= MASTER LISTS ================= */
         $hotelIds = [];
-        $eventIds = [];
-        $todoIds  = [];
-        $transportIds = [];
+         $eventIds = [];
+         $todoIds  = [];
+         $transportIds = [];
+     
+         foreach ($package->days as $day) {
+             foreach ($day->items as $index => $item) {
+     
+                 $type = $item->item_type;
+     
+                 $selectedItemId =
+                     $sessionItems[$day->id][$type][$index]
+                     ?? $item->item_id;
+     
+                 if ($type === 'hotel') {
+                     $hotelIds[] = $selectedItemId;
+                 } elseif ($type === 'event') {
+                     $eventIds[] = $selectedItemId;
+                 } elseif ($type === 'todo') {
+                     $todoIds[] = $selectedItemId;
+                 } elseif ($type === 'transport') {
+                     $transportIds[] = $selectedItemId;
+                 }
+             }
+         }
+     
+         $hotelIds     = array_unique($hotelIds);
+         $eventIds     = array_unique($eventIds);
+         $todoIds      = array_unique($todoIds);
+         $transportIds = array_unique($transportIds);
+     
+         /* -------------------------------------------------
+          | LOAD REAL MODELS (BATCH)
+          |--------------------------------------------------*/
+         $allHotels = Hotel::with([
+             'translation' => fn ($t) => $t->where('language_code', $language),
+             'thumb',
+             'gallery',
+         ])->whereIn('id', $hotelIds)->get()->keyBy('id');
+     
+         $allEvents = Event::with([
+             'translation' => fn ($t) => $t->where('language_code', $language),
+             'thumb',
+             'gallery',
+         ])->whereIn('id', $eventIds)->get()->keyBy('id');
+     
+         $allTodos = ThingToDo::with([
+             'translation' => fn ($t) => $t->where('language_code', $language),
+             'thumb',
+             'gallery',
+         ])->whereIn('id', $todoIds)->get()->keyBy('id');
+     
+         $allTransports = Transport::with([
+             'translation' => fn ($t) => $t->where('language_code', $language),
+             'thumb',
+         ])->whereIn('id', $transportIds)->get()->keyBy('id');
 
-        foreach ($package->days as $day) {
-            foreach ($day->items as $index => $item) {
 
-                $type = $item->item_type;
-
-                $selectedItemId =
-                    $sessionItems[$day->id][$type][$index]
-                    ?? $item->item_id;
-
-                if ($type === 'hotel') $hotelIds[] = $selectedItemId;
-                if ($type === 'event') $eventIds[] = $selectedItemId;
-                if ($type === 'todo')  $todoIds[]  = $selectedItemId;
-                if ($type === 'transport') $transportIds[] = $selectedItemId;
-            }
-        }
-
-        $allHotels = Hotel::with(['translation', 'thumb'])
-            ->whereIn('id', array_unique($hotelIds))
-            ->get()
-            ->keyBy('id');
-
-        $allEvents = Event::with(['translation', 'thumb'])
-            ->whereIn('id', array_unique($eventIds))
-            ->get()
-            ->keyBy('id');
-
-        $allTodos = ThingToDo::with(['translation', 'thumb'])
-            ->whereIn('id', array_unique($todoIds))
-            ->get()
-            ->keyBy('id');
-
-        $allTransports = Transport::with(['translation', 'thumb'])
-            ->whereIn('id', array_unique($transportIds))
-            ->get()
-            ->keyBy('id');
-
-        /* ================= USER SAVED TRAVELLERS ================= */
-        $savedTravellers = Traveller::where('user_id', $user->id)
-            ->orderBy('id')
-            ->get();
-
+         $savedTravellers = Traveller::where('user_id', $user->id)
+         ->orderBy('id')
+         ->get();
+         
         $travellers = [];
         $usedIds = [];
 

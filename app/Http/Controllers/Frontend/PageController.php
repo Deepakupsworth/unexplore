@@ -12,7 +12,7 @@ use App\Models\Tag;
 use App\Models\Blog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
+
 
 class PageController extends Controller
 {
@@ -209,9 +209,7 @@ class PageController extends Controller
                 'translation' => fn($q) =>
                 $q->where('language_code', $language),
                 'cities.city',
-                'price',
-                'days.items.transport',
-                'days.items.hotel'
+                'price'
             ])
             ->where('status', 'active')
             ->whereHas('tags', function ($q) {
@@ -247,5 +245,35 @@ class PageController extends Controller
     public function termsConditions()
     {
         return view('frontend.pages.terms-conditions');
+    }
+
+    public function search(Request $request)
+    {
+        $q = trim($request->query('q', ''));
+        $language = $this->language;
+
+        $cities = City::query()
+            ->whereHas('translation', function ($query) use ($q, $language) {
+                $query->where('language_code', $language);
+
+                if ($q !== '') {
+                    $query->where('name', 'LIKE', "%{$q}%");
+                }
+            })
+            ->with([
+                'translation' => fn($t) =>
+                    $t->where('language_code', $language)
+            ])
+            ->limit(20)
+            ->get()
+            ->map(function ($city) {
+                return [
+                    'id'   => $city->id,
+                    'name' => $city->translation->name ?? '',
+                    'slug' => $city->slug,
+                ];
+            });
+
+        return response()->json($cities);
     }
 }
