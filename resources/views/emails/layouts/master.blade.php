@@ -67,5 +67,4 @@
     </table>
 
 </body>
-<?php die() ?>
 </html>
