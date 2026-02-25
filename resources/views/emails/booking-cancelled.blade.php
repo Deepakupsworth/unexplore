@@ -6,14 +6,14 @@
 
     <!-- HEADING -->
     <h2 style="margin:0 0 16px 0;font-size:22px;color:#dc2626;">
-        Booking Cancelled ❌
+        Booking Cancelled
     </h2>
 
     <p style="margin:0 0 18px 0;font-size:14px;">
         Hello
         <strong>
             {{ $booking?->billingAddress?->full_name ?? ($booking?->user?->first_name ?? 'Customer') }}
-        </strong>,
+        </strong>
     </p>
 
     <p style="margin:0 0 24px 0;color:#555;">

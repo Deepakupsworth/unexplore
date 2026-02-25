@@ -23,11 +23,34 @@
                     style="max-width:600px;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 18px rgba(0,0,0,0.06);">
 
                     <!-- HEADER -->
+                    <!-- HEADER -->
                     <tr>
-                        <td align="center"
-                            style="background:linear-gradient(135deg,#0a6b3c,#0f8f52);padding:26px 20px;">
-                            <img src="https://unxplordsaudi.com/frontend/assets/logo-white.png" alt="Unxplord Saudi"
-                                style="height:42px;display:block;">
+                        <td style="padding:24px 24px;background:#ffffff;border-bottom:1px solid #eeeeee;">
+
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                <tr>
+
+                                    <!-- LEFT (optional spacer for balance) -->
+                                    <td align="left" valign="middle" style="width:33%;font-size:12px;color:#6b7280;">
+                                        &nbsp;
+                                    </td>
+
+                                    <!-- CENTER LOGO -->
+                                    <td align="center" valign="middle" style="width:34%;">
+
+                                        <img src="https://unxplordsaudi.com/frontend/assets/logo.png"
+                                            alt="Unxplord Saudi" style="height:46px;display:block;margin:0 auto;">
+
+                                    </td>
+
+                                    <!-- RIGHT (optional spacer for symmetry) -->
+                                    <td align="right" valign="middle" style="width:33%;font-size:12px;color:#6b7280;">
+                                        &nbsp;
+                                    </td>
+
+                                </tr>
+                            </table>
+
                         </td>
                     </tr>
 
@@ -45,33 +68,11 @@
                         </td>
                     </tr>
 
-                    <!-- SUPPORT BOX -->
-                    <tr>
-                        <td style="padding:22px 30px;background:#fafafa;">
-                            <table width="100%" cellpadding="0" cellspacing="0">
-                                <tr>
-                                    <td style="font-size:13px;color:#666;">
-                                        Need help with your booking?<br>
-                                        Contact our support team anytime.
-                                    </td>
-                                    <td align="right">
-                                        <a href="#"
-                                            style="background:#0a6b3c;color:#ffffff;text-decoration:none;
-                                      padding:10px 18px;border-radius:6px;font-size:13px;
-                                      display:inline-block;font-weight:bold;">
-                                            Contact Support
-                                        </a>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-
                     <!-- FOOTER -->
-                    <tr>
+                    {{-- <tr>
                         <td align="center" style="padding:24px 20px;font-size:12px;color:#8a8a8a;background:#ffffff;">
-
-                            <strong style="color:#333;">Unxplord Saudi</strong><br>
+                            <img src="https://unxplordsaudi.com/frontend/assets/logo.png" alt="Unxplord Saudi"
+                                style="height:42px;display:block;"><br />
                             Saudi Arabia Travel Experiences
 
                             <div style="margin-top:10px;">
@@ -81,6 +82,49 @@
                             <div style="margin-top:8px;">
                                 This is an automated email — please do not reply.
                             </div>
+                        </td>
+                    </tr> --}}
+
+                    <!-- FOOTER -->
+                    <tr>
+                        <td style="padding:24px 24px;background:#ffffff;border-top:1px solid #eeeeee;">
+
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                <tr>
+
+                                    <!-- LEFT SIDE -->
+                                    <td align="left" valign="top" style="font-size:12px;color:#6b7280;">
+
+                                        <img src="https://unxplordsaudi.com/frontend/assets/logo.png"
+                                            alt="Unxplord Saudi" style="height:40px;display:block;margin-bottom:8px;">
+
+                                        <div style="font-size:12px;color:#6b7280;">
+                                            Saudi Arabia Travel Experiences
+                                        </div>
+
+                                    </td>
+
+                                    <!-- RIGHT SIDE -->
+                                    <td align="right" valign="top"
+                                        style="font-size:12px;color:#8a8a8a;line-height:1.6;">
+
+                                        <div>
+                                            © {{ date('Y') }} Unxplord Saudi
+                                        </div>
+
+                                        <div style="margin-top:6px;">
+                                            All rights reserved.
+                                        </div>
+
+                                        <div style="margin-top:8px;font-size:11px;color:#9ca3af;">
+                                            This is an automated email — please do not reply.
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+                            </table>
+
                         </td>
                     </tr>
 
@@ -92,6 +136,6 @@
     </table>
 
 </body>
+<?php die(); ?>
 
 </html>
-
