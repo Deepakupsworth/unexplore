@@ -116,7 +116,12 @@
             'events',
             'booking*',
             'products',
-            'info*'
+            'info*',
+            'privacy-policy',
+            'terms-conditions',
+            'cookie-policy',
+            'faqs',
+            'blogs*'
         ];
     @endphp
 

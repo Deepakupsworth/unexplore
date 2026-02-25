@@ -29,6 +29,7 @@
             <div class="row">
                 <div class="col-lg-8 mx-auto">
                     <div class="hero-banner__content">
+                        <x-frontend.hero-search />
                         <h1 class="hero-banner__heading text-white">{!! __('home.hero.title') !!}</h1>
                         <h2 class="text-white h4">{{ __('home.hero.subtitle') }}</h2>
                         <p class="hero-banner__desc"> {{ __('home.hero.description') }}</p>
@@ -38,8 +39,11 @@
                             <i class="fa-solid fa-angles-right"></i>
                         </button>
                     </a>
+
                     </div>
                 </div>
+
+
             </div>
         </div>
 
@@ -481,6 +485,60 @@
                         </div>
                     </div>
                 </div>
+
+                {{-- <div class="col-md-8">
+                    <div class="news-event__carousel-container">
+
+                        <div class="news-event__carousel-prev">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </div>
+
+                        <div class="news-event__carousel swiper">
+                            <div class="news-event__carousel-wrapper swiper-wrapper">
+
+                                @forelse($blogs as $blog)
+                                    @php
+                                        $title = $blog->translation?->title ?? '—';
+                                        $image = $blog->thumb?->image_path
+                                            ? asset('storage/' . $blog->thumb->image_path)
+                                            : asset('frontend/assets/news-event1.jpg');
+                                    @endphp
+
+                                    <div class="news-event__carousel-item swiper-slide">
+                                        <a class="text-decoration-none text-dark" href="{{ route('blogs.detail', $blog->slug) }}">
+
+                                            <img src="{{ $image }}"
+                                                 alt="{{ $title }}"
+                                                 class="img-fluid">
+
+                                            <div class="news-event__carousel-item-info">
+
+                                                <div class="small news-event__carousel-item-date mb-2">
+                                                    <i class="fa-solid fa-calendar"></i>
+                                                    {{ optional($blog->published_at)->format('M d | H:i') }}
+                                                </div>
+
+                                                <h6>{{ Str::limit($title, 80) }}</h6>
+
+                                            </div>
+                                        </a>
+                                    </div>
+
+                                @empty
+                                    <div class="p-4 text-center">
+                                        No blogs found
+                                    </div>
+                                @endforelse
+
+                            </div>
+                        </div>
+
+                        <div class="news-event__carousel-next">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </div>
+
+                    </div>
+                </div> --}}
             </div>
         </div>
     </section>

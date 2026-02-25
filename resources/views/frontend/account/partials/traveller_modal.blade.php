@@ -3,8 +3,11 @@
         <div class="modal-content">
 
             <div class="modal-header">
-                <p class="modal-title fw-600">Add Traveller</p>
-                <button class="btn-close" data-bs-dismiss="modal"></button>
+                <p class="modal-title fw-600">
+                    {{ __('traveller.add_title') }}
+                </p>
+                <button class="btn-close" data-bs-dismiss="modal"
+                        aria-label="{{ __('common.close') }}"></button>
             </div>
 
             <div class="modal-body">
@@ -14,35 +17,56 @@
 
                     <div class="row">
                         <div class="col-sm-6 mb-4">
-                            <label class="form-label">First Name</label>
+                            <label class="form-label">
+                                {{ __('traveller.first_name') }}
+                            </label>
                             <input class="form-control" name="first_name" required>
                         </div>
+
                         <div class="col-sm-6 mb-4">
-                            <label class="form-label">Last Name</label>
+                            <label class="form-label">
+                                {{ __('traveller.last_name') }}
+                            </label>
                             <input class="form-control" name="last_name" required>
                         </div>
+
                         <div class="col-sm-6 mb-4">
-                            <label class="form-label">DOB</label>
-                            <input  min="{{ now()->subYears(100)->format('Y-m-d') }}"
-                            max="{{ now()->format('Y-m-d') }}" type="date" class="form-control" name="dob">
+                            <label class="form-label">
+                                {{ __('traveller.dob') }}
+                            </label>
+                            <input
+                                min="{{ now()->subYears(100)->format('Y-m-d') }}"
+                                max="{{ now()->format('Y-m-d') }}"
+                                type="date"
+                                class="form-control"
+                                name="dob">
                         </div>
+
                         <div class="col-sm-6 mb-4">
-                            <label class="form-label">Type</label>
+                            <label class="form-label">
+                                {{ __('traveller.type') }}
+                            </label>
                             <select name="type" class="form-select">
-                                <option value="adult">Adult</option>
-                                <option value="child">Child</option>
+                                <option value="adult">{{ __('traveller.type_adult') }}</option>
+                                <option value="child">{{ __('traveller.type_child') }}</option>
                             </select>
                         </div>
+
                         <div class="col-sm-6 mb-4">
-                            <label class="form-label">Gender</label>
+                            <label class="form-label">
+                                {{ __('traveller.gender') }}
+                            </label>
                             <select name="gender" class="form-select">
-                                <option value="">Select</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
+                                <option value="">{{ __('common.select') }}</option>
+                                <option value="male">{{ __('traveller.gender_male') }}</option>
+                                <option value="female">{{ __('traveller.gender_female') }}</option>
                             </select>
                         </div>
+
                         <div class="col-sm-6 mb-2">
-                            <label class="form-label">Country</label>
+                            <label class="form-label">
+                                {{ __('traveller.country') }}
+                            </label>
                             <select name="country" class="form-select" required>
                                 <option value="">
                                     {{ __('checkout.select_country') }}
@@ -60,11 +84,13 @@
             </div>
 
             <div class="modal-footer">
-                <button class="btn btn-outline-secondary rounded-pill" data-bs-dismiss="modal">
-                    Cancel
+                <button class="btn btn-outline-secondary rounded-pill"
+                        data-bs-dismiss="modal">
+                    {{ __('common.cancel') }}
                 </button>
-                <button class="btn btn-primary rounded-pill" onclick="saveTraveller()">
-                    Save
+                <button class="btn btn-primary rounded-pill"
+                        onclick="saveTraveller()">
+                    {{ __('common.save') }}
                 </button>
             </div>
 

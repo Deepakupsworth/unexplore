@@ -37,13 +37,13 @@
                                 {{ __('footer.information') }}
                             </p>
                             <ul class="list-unstyled">
-                                <li><a href="#" class="footer-link">{{ __('footer.link.terms_conditions') }}</a>
+                                <li><a href="{{route('terms-conditions')}}" class="footer-link">{{ __('footer.link.terms_conditions') }}</a>
                                 </li>
-                                <li><a href="#" class="footer-link">{{ __('footer.link.privacy_policy') }}</a>
+                                <li><a href="{{route('privacy-policy')}}" class="footer-link">{{ __('footer.link.privacy_policy') }}</a>
                                 </li>
-                                <li><a href="#" class="footer-link">{{ __('footer.link.faqs') }}</a></li>
+                                <li><a href="{{route('faqs')}}" class="footer-link">{{ __('footer.link.faqs') }}</a></li>
                                 <li><a href="#" class="footer-link">{{ __('footer.link.news_events') }}</a></li>
-                                <li><a href="#" class="footer-link">{{ __('footer.link.cookie_policy') }}</a>
+                                <li><a href="{{route('cookie-policy')}}" class="footer-link">{{ __('footer.link.cookie_policy') }}</a>
                                 </li>
                             </ul>
                         </div>
@@ -57,7 +57,7 @@
                                         class="footer-link">{{ __('footer.link.about_us') }}</a></li>
                                 <li><a href="{{ asset('/contact-us') }}"
                                         class="footer-link">{{ __('footer.link.contact_us') }}</a></li>
-                                <li><a href="#" class="footer-link">{{ __('footer.link.sitemap') }}</a></li>
+                                {{-- <li><a href="#" class="footer-link">{{ __('footer.link.sitemap') }}</a></li> --}}
                             </ul>
                         </div>
 
@@ -130,21 +130,21 @@
                 {{ __('footer.copyright') }}
             </span>
             <span>
-                <a href="#" class="footer-link text-white mx-2">
+                <a href="{{route('terms-conditions')}}" class="footer-link text-white mx-2">
                     {{ __('footer.bottom.terms') }}
                 </a>
                 &bull;
-                <a href="#" class="footer-link text-white mx-2">
+                <a href="{{route('privacy-policy')}}" class="footer-link text-white mx-2">
                     {{ __('footer.bottom.privacy') }}
                 </a>
                 &bull;
-                <a href="#" class="footer-link text-white mx-2">
+                <a href="{{route('cookie-policy')}}" class="footer-link text-white mx-2">
                     {{ __('footer.bottom.cookie') }}
                 </a>
-                &bull;
+                {{-- &bull;
                 <a href="#" class="footer-link text-white mx-2">
                     {{ __('footer.bottom.sitemap') }}
-                </a>
+                </a> --}}
             </span>
         </div>
     </div>

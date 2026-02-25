@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\UserRegisteredMail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -38,22 +39,31 @@ class AuthController extends Controller
         try {
             DB::beginTransaction();
 
-            User::create([
-                'first_name'      => $validated['first_name'],
-                'last_name'       => $validated['last_name'],
-                'email'           => $validated['email'],
-                'password'        => Hash::make($validated['password']),
-                'role'            => 'user',
-                'terms_accepted'  => true,
+            $user = User::create([
+                'first_name'     => $validated['first_name'],
+                'last_name'      => $validated['last_name'],
+                'email'          => $validated['email'],
+                'password'       => Hash::make($validated['password']),
+                'role'           => 'user',
+                'terms_accepted' => true,
             ]);
 
             DB::commit();
+
+            // ✅ SEND MAIL (safe)
+            try {
+                Mail::to($user->email)->send(new UserRegisteredMail($user));
+            } catch (\Throwable $e) {
+                Log::warning('Welcome mail failed', [
+                    'error' => $e->getMessage()
+                ]);
+            }
 
             return redirect()
                 ->route('login')
                 ->with('success', 'Account created successfully! Please login.');
 
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             DB::rollBack();
 
             Log::error('Register failed', [

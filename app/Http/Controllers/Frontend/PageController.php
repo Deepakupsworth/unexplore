@@ -9,6 +9,7 @@ use App\Models\ThingToDo;
 use App\Models\Package;
 use Illuminate\Support\Facades\Cache;
 use App\Models\Tag;
+use App\Models\Blog;
 use Illuminate\Support\Facades\DB;
 
 class PageController extends Controller
@@ -20,157 +21,6 @@ class PageController extends Controller
         $this->language = current_lang();
     }
 
-
-
-    // public function index()
-    // {
-    //     $language = $this->language; // en, de, ar
-
-    //     Cache::forget("home_page_data_{$language}");
-
-
-    //     $homeData = Cache::remember(
-    //         "home_page_data_{$language}",
-    //         now()->addMinutes(30),
-    //         function () use ($language) {
-
-    //             /* ================= FAVOURITE TAG ================= */
-    //             $favouriteTagId = Tag::where('slug', 'favourite')->value('id');
-
-    //             /* ================= CITIES ================= */
-
-    //             $citiesBaseQuery = City::with([
-    //                 'translation' => fn($q) =>
-    //                 $q->where('language_code', $language),
-    //                 'thumb'
-    //             ]);
-
-    //             $cities = $favouriteTagId
-    //                 ? (clone $citiesBaseQuery)
-    //                 ->whereHas(
-    //                     'tags',
-    //                     fn($q) =>
-    //                     $q->where('tags.id', $favouriteTagId)
-    //                 )
-    //                 ->take(6)
-    //                 ->get()
-    //                 : collect();
-
-    //             if ($cities->isEmpty()) {
-    //                 $cities = $citiesBaseQuery
-    //                     ->latest()
-    //                     ->take(6)
-    //                     ->get();
-    //             }
-
-
-    //             /* ================= THINGS TO DO ================= */
-    //             $thingsBaseQuery = ThingToDo::with([
-    //                 'translation' => fn($q) =>
-    //                 $q->where('language_code', $language),
-    //                 'thumb',
-    //                 'city.translationData',
-    //             ])
-    //             ->withCount([
-    //                 'packageDayItems as package_count' => function ($q) {
-    //                     $q->whereHas(
-    //                         'packageDay.package',
-    //                         fn($q2) => $q2->where('status', 'active')
-    //                     )
-    //                     ->join('package_days', 'package_day_items.package_day_id', '=', 'package_days.id')
-    //                     ->select(DB::raw('COUNT(DISTINCT package_days.package_id)'));
-    //                 }
-    //             ])
-    //                 ->having('package_count', '>', 0);
-
-    //             $things = $favouriteTagId
-    //                 ? (clone $thingsBaseQuery)
-    //                 ->whereHas(
-    //                     'tags',
-    //                     fn($q) =>
-    //                     $q->where('tags.id', $favouriteTagId)
-    //                 )
-    //                 ->take(12)
-    //                 ->get()
-    //                 : collect();
-
-    //             if ($things->isEmpty()) {
-    //                 $things = $thingsBaseQuery
-    //                     ->orderByDesc('package_count')
-    //                     ->take(12)
-    //                     ->get();
-    //             }
-    //             $activeEventCondition = function ($q) {
-    //                 $q->where(function ($q2) {
-    //                     $q2->whereNull('start_date')
-    //                         ->orWhereDate('start_date', '>=', now());
-    //                 });
-    //             };
-
-    //             /* ================= EVENTS ================= */
-    //             $eventsBaseQuery = Event::with([
-    //                 'translation',
-    //                 'thumb',
-    //                 'city.translation',
-    //                 'category.translation',
-    //                 'eventCategories.category.translationData'
-    //             ])
-    //                 ->where('status', 1)
-    //                 ->where($activeEventCondition);
-
-
-    //             $events = $favouriteTagId
-    //                 ? (clone $eventsBaseQuery)
-    //                 ->whereHas(
-    //                     'tags',
-    //                     fn($q) =>
-    //                     $q->where('tags.id', $favouriteTagId)
-    //                 )
-    //                 ->take(6)
-    //                 ->get()
-    //                 : collect();
-
-    //             if ($events->isEmpty()) {
-    //                 $events = $eventsBaseQuery
-    //                     ->latest()
-    //                     ->take(6)
-    //                     ->get();
-    //             }
-
-    //             /* ================= PACKAGES ================= */
-    //             $packagesBaseQuery = Package::with([
-    //                 'translation' => fn($q) =>
-    //                 $q->where('language_code', $language),
-    //                 'cities.city',
-    //                 'price',
-    //                 'thumb',
-    //             ])
-    //                 ->where('status', 'active');
-
-    //             $packages = $favouriteTagId
-    //                 ? (clone $packagesBaseQuery)
-    //                 ->whereHas(
-    //                     'tags',
-    //                     fn($q) =>
-    //                     $q->where('tags.id', $favouriteTagId)
-    //                 )
-    //                 ->take(6)
-    //                 ->get()
-    //                 : collect();
-
-    //             if ($packages->isEmpty()) {
-    //                 $packages = $packagesBaseQuery
-    //                     ->latest()
-    //                     ->take(6)
-    //                     ->get();
-    //             }
-
-    //             return compact('things', 'events', 'packages', 'cities');
-    //         }
-    //     );
-
-    //     return view('frontend.home', $homeData);
-    // }
     public function index()
     {
         $language = $this->language; // en, de, ar
@@ -284,7 +134,20 @@ class PageController extends Controller
                         ->get();
                 }
 
-                return compact('things', 'events', 'packages', 'cities');
+                /* ================= BLOGS ================= */
+                $blogs = Blog::with([
+                    'translation' => fn($q) =>
+                    $q->where('language_code', $language),
+                    'thumb',
+                    'user'
+                ])
+                    ->where('is_published', true)
+                    // ->whereNotNull('published_at')
+                    ->latest('published_at')
+                    ->take(5)
+                    ->get();
+
+                return compact('things', 'events', 'packages', 'cities', 'blogs');
             }
         );
 

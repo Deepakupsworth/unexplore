@@ -36,10 +36,10 @@ class BookingController extends Controller
             )
             ->when(
                 $request->payment_status,
-                fn ($q) =>
-                    $q->whereHas('payments', function ($p) use ($request) {
-                        $p->where('status', $request->payment_status);
-                    })
+                fn($q) =>
+                $q->whereHas('payments', function ($p) use ($request) {
+                    $p->where('status', $request->payment_status);
+                })
             )
             ->latest()
             ->paginate(15)
@@ -94,6 +94,15 @@ class BookingController extends Controller
             'status' => $request->status
         ]);
 
+        $booking->load([
+            'package.translation',
+            'billingAddress',
+            'days.dayItems'
+        ]);
+
+        $email = $booking->billingAddress?->email
+            ?? $booking->user?->email
+            ?? auth()->user()?->email;
         /*
     |--------------------------------------------------------------------------
     | 🔔 STATUS BASED EMAILS
@@ -101,8 +110,10 @@ class BookingController extends Controller
     */
 
         // ❌ Cancellation Mail
+
         if ($oldStatus !== 'cancelled' && $request->status === 'cancelled') {
-            Mail::to($booking->user->email)
+
+            Mail::to($email)
                 ->send(new BookingCancelledMail(
                     $booking,
                     $request->reason ?? null
@@ -111,7 +122,8 @@ class BookingController extends Controller
 
         // ✅ Completion Mail
         if ($oldStatus !== 'completed' && $request->status === 'completed') {
-            Mail::to($booking->user->email)
+
+            Mail::to($email)
                 ->send(new BookingCompletedMail($booking));
         }
         return back()->with('success', 'Booking status updated successfully.');

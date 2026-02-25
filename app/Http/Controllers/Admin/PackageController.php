@@ -681,7 +681,4 @@ class PackageController extends Controller
 
         return back()->with('success', 'All package slugs updated successfully');
     }
-
-
-
 }
