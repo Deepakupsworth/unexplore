@@ -43,6 +43,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\Frontend\InfoPageController;
+use App\Http\Controllers\TestController as ControllersTestController;
 
 // routes/web.php
 Route::get('/lang/{locale}', function ($locale) {
@@ -678,3 +679,7 @@ Route::prefix('info')->name('info.')->group(function () {
         ->name('getting-around');
 });
 
+
+Route::get('/booking/show', [ControllersTestController::class, 'showBooking']);
+Route::get('/cities/search', [PageController::class, 'search'])
+    ->name('cities.search');
