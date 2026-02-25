@@ -72,8 +72,12 @@ if (!function_exists('currency_show')) {
 
 if (!function_exists('currency_icon_path')) {
 
-    function currency_icon_path(?string $currencyCode = null, string $variant = 'default'): string
-    {
+    function currency_icon_path(
+        ?string $currencyCode = null,
+        string $variant = 'default',
+        string $format = 'svg'
+    ): string {
+
         $currencyCode = $currencyCode
             ?? session('currency')
             ?? config('app.base_currency', 'SAR');
@@ -85,14 +89,21 @@ if (!function_exists('currency_icon_path')) {
             $variant = 'default';
         }
 
+        // allowed formats
+        $allowedFormats = ['svg', 'png'];
+
+        if (!in_array($format, $allowedFormats)) {
+            $format = 'svg';
+        }
+
         $suffix = $variant === 'default' ? '' : '-' . $variant;
 
         return match ($currencyCode) {
-            'SAR' => "frontend/assets/icons/riyal{$suffix}.svg",
-            'USD' => "frontend/assets/icons/usd{$suffix}.svg",
-            'EUR' => "frontend/assets/icons/euro{$suffix}.svg",
-            'AED' => "frontend/assets/icons/aed{$suffix}.svg",
-            default => "frontend/assets/icons/riyal{$suffix}.svg",
+            'SAR' => "frontend/assets/icons/riyal{$suffix}.{$format}",
+            'USD' => "frontend/assets/icons/usd{$suffix}.{$format}",
+            'EUR' => "frontend/assets/icons/euro{$suffix}.{$format}",
+            'AED' => "frontend/assets/icons/aed{$suffix}.{$format}",
+            default => "frontend/assets/icons/riyal{$suffix}.{$format}",
         };
     }
 }

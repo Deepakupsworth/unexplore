@@ -13,6 +13,7 @@ use Exception;
 use App\Enums\PaymentStatus;
 use App\Mail\BookingCancelledMail;
 use App\Mail\BookingCompletedMail;
+use App\Mail\BookingConfirmationMail;
 use Illuminate\Support\Facades\Mail;
 
 class BookingController extends Controller
@@ -88,7 +89,7 @@ class BookingController extends Controller
             'reason' => 'nullable|string|max:255',
         ]);
 
-        $oldStatus = $booking->status;
+        $oldStatus = $booking->status->value;
 
         $booking->update([
             'status' => $request->status
@@ -108,6 +109,12 @@ class BookingController extends Controller
     | 🔔 STATUS BASED EMAILS
     |--------------------------------------------------------------------------
     */
+    // ✅ Confirmation Mail
+        if ($oldStatus !== 'confirmed' && $request->status === 'confirmed') {
+
+            Mail::to($email)
+                ->send(new BookingConfirmationMail($booking));
+        }
 
         // ❌ Cancellation Mail
 
@@ -122,7 +129,6 @@ class BookingController extends Controller
 
         // ✅ Completion Mail
         if ($oldStatus !== 'completed' && $request->status === 'completed') {
-
             Mail::to($email)
                 ->send(new BookingCompletedMail($booking));
         }
