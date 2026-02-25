@@ -21,7 +21,7 @@ class BookingReceivedMail extends Mailable
 
     public function build()
     {
-        return $this->subject('Booking Received')
+        return $this->subject('Booking Request Received | Unxplord Saudi')
             ->view('emails.booking-received')->with([
                 'booking' => $this->booking,
             ]);

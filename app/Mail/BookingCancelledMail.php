@@ -22,7 +22,7 @@ class BookingCancelledMail extends Mailable
 
     public function build()
     {
-        return $this->subject('Your Booking Has Been Cancelled')
+        return $this->subject('Booking Cancelled | Unxplord Saudi')
             ->view('emails.booking-cancelled');
     }
 }

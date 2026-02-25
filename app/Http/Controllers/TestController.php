@@ -26,7 +26,7 @@ class TestController extends Controller
             return 'Booking not found';
         }
 
-        return view('emails.booking-completed',compact('booking'));
+        return view('emails.booking-cancelled',compact('booking'));
         // ✅ TEMP testing output
         // return response()->json($booking);
     }

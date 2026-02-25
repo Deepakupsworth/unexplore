@@ -41,8 +41,8 @@
 
                     <tr>
                         <td style="color:#6b7280;">Refund Amount</td>
-                        <td style="display:flex; align-items:center; gap:6px;">
-                            <img width="18" height="18" src="{{asset(currency_icon_path($booking->booking_currency, 'light')) }}">
+                        <td  style="vertical-align:middle; display:inline-block;">
+                            <img width="16" height="16" src="{{asset(currency_icon_path($booking->booking_currency, 'light')) }}">
                             <strong style="color:#16a34a;font-size:16px;">
                                 {{ $payment->currency }}
                                 {{ number_format($payment->amount, 2) }}
