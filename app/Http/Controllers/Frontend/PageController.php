@@ -248,34 +248,4 @@ class PageController extends Controller
     {
         return view('frontend.pages.terms-conditions');
     }
-
-    public function search(Request $request)
-    {
-        $q = trim($request->query('q', ''));
-        $language = $this->language;
-
-        $cities = City::query()
-            ->whereHas('translation', function ($query) use ($q, $language) {
-                $query->where('language_code', $language);
-
-                if ($q !== '') {
-                    $query->where('name', 'LIKE', "%{$q}%");
-                }
-            })
-            ->with([
-                'translation' => fn($t) =>
-                    $t->where('language_code', $language)
-            ])
-            ->limit(20)
-            ->get()
-            ->map(function ($city) {
-                return [
-                    'id'   => $city->id,
-                    'name' => $city->translation->name ?? '',
-                    'slug' => $city->slug,
-                ];
-            });
-
-        return response()->json($cities);
-    }
 }
