@@ -23,7 +23,7 @@ class BookingRefundInitiatedMail extends Mailable
 
     public function build()
     {
-        return $this->subject('Refund Initiated for Your Booking')
+        return $this->subject('Refund Initiated | Unxplord Saudi')
             ->view('emails.booking-refund-initiated');
     }
 }

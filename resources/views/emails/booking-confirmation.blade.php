@@ -42,8 +42,8 @@
 
                     <tr>
                         <td style="color:#6b7280;">Total Amount</td>
-                        <td style="display:flex; align-items:center; gap:6px;">
-                            <img width="18" height="18" src="{{ url(asset(currency_icon_path($booking->booking_currency, 'light','png'))) }}">
+                        <td style="vertical-align:middle; display:inline-block;">
+                            <img width="16" height="16" src="{{ url(asset(currency_icon_path($booking->booking_currency, 'light','png'))) }}">
                             <strong style="color:#0a6b3c;font-size:16px;">
                                 {{ number_format($booking->booking_total_amount) }}
                             </strong>
