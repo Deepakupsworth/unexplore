@@ -1,7 +1,6 @@
 @extends('backend.layout')
 
 @section('content')
-
     @php
         $selectedTags = $package?->tags->pluck('id')->toArray() ?? [];
     @endphp
@@ -50,6 +49,23 @@
                                 id="tabs-home-tab" data-bs-toggle="pill" data-bs-target="#tabs-home" role="tab"
                                 aria-controls="tabs-home" aria-selected="true">Basic Information</a>
                         </li>
+
+                        <li class="nav-item" role="presentation">
+                            <a href="#tabs-itinerary"
+                                class="nav-link w-full block font-medium text-sm font-Inter leading-tight capitalize border-x-0 border-t-0 border-b border-transparent px-4 pb-2 my-2 hover:border-transparent focus:border-transparent dark:text-slate-300"
+                                data-bs-toggle="pill" role="tab">
+                                Itinerary
+                            </a>
+                        </li>
+
+                        <li class="nav-item" role="presentation">
+                            <a href="#tabs-gallery"
+                                class="nav-link w-full block font-medium text-sm font-Inter leading-tight capitalize border-x-0 border-t-0 border-b border-transparent px-4 pb-2 my-2 hover:border-transparent focus:border-transparent dark:text-slate-300"
+                                data-bs-toggle="pill" role="tab">
+                                Gallery
+                            </a>
+                        </li>
+
                         <li class="nav-item" role="presentation">
                             <a href="#tabs-profile"
                                 class="nav-link w-full block font-medium text-sm font-Inter leading-tight capitalize border-x-0 border-t-0 border-b border-transparent px-4 pb-2 my-2 hover:border-transparent focus:border-transparent dark:text-slate-300"
@@ -58,14 +74,13 @@
                         </li>
 
                     </ul>
-                    <div class="tab-content" id="tabs-tabContent">
-                        <div class="tab-pane fade show active" id="tabs-home" role="tabpanel"
-                            aria-labelledby="tabs-home-tab">
-                            <form method="POST" action="{{ route('admin.packages.update', $package) }}"
-                                enctype="multipart/form-data">
-                                @csrf
-                                @method('PUT')
-
+                    <form method="POST" action="{{ route('admin.packages.update', $package) }}"
+                        enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+                        <div class="tab-content" id="tabs-tabContent">
+                            <div class="tab-pane fade show active" id="tabs-home" role="tabpanel"
+                                aria-labelledby="tabs-home-tab">
                                 <div class="bg-white rounded-xl shadow p-6 space-y-10">
 
                                     {{-- ================= BASIC INFO ================= --}}
@@ -86,33 +101,6 @@
                                         </div>
 
                                         <div>
-                                            <label class="form-label">Duration Days *</label>
-                                            <input id="duration_days" type="number" class="form-control"
-                                                name="duration_days"
-                                                value="{{ old('duration_days', $package->duration_days) }}">
-                                        </div>
-
-                                        <div>
-                                            <label class="form-label">Duration Nights *</label>
-                                            <input id="duration_nights" type="number" class="form-control"
-                                                name="duration_nights"
-                                                value="{{ old('duration_nights', $package->duration_nights) }}">
-                                        </div>
-
-                                        <div>
-                                            <label class="form-label">Base Persons</label>
-                                            <input class="form-control" name="base_persons"
-                                                value="{{ old('base_persons', $package->base_persons) }}">
-                                        </div>
-
-                                        <div>
-                                            <label class="form-label">Max Persons *</label>
-                                            <input class="form-control" name="max_persons"
-                                                value="{{ old('max_persons', $package->max_persons) }}">
-                                        </div>
-
-
-                                        <div>
                                             <label class="form-label">Package Status *</label>
                                             <select name="status" class="form-control" required>
                                                 <option value="draft"
@@ -128,6 +116,81 @@
                                                     Inactive
                                                 </option>
                                             </select>
+                                        </div>
+                                        {{-- Tags --}}
+                                        <div>
+                                            <label class="form-label block mb-2">Tags</label>
+
+                                            <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                                @foreach ($tags as $tag)
+                                                    <x-admin.form.checkbox name="tags[]" :value="$tag->id"
+                                                        :checked="in_array($tag->id, $selectedTags)" :label="$tag->name" />
+                                                @endforeach
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    {{-- ================= AVAILABILITY ================= --}}
+                                    <h3 class="text-lg font-semibold">Availability</h3>
+
+                                    @php
+                                        $avail = $package->availabilities->first();
+                                    @endphp
+
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="form-label">Available From</label>
+                                            <input type="date" class="form-control" name="availability[available_from]"
+                                                value="{{ old('availability.available_from', optional($avail?->available_from)->format('Y-m-d')) }}">
+                                        </div>
+
+                                        <div>
+                                            <label class="form-label">Available To</label>
+                                            <input type="date" class="form-control" name="availability[available_to]"
+                                                value="{{ old('availability.available_to', optional($avail?->available_to)->format('Y-m-d')) }}">
+                                        </div>
+                                        {{-- Booking Start Date --}}
+                                        <div>
+                                            <label class="form-label">Booking Start Date</label>
+                                            <input type="date" class="form-control"
+                                                name="availability[booking_start_date]"
+                                                value="{{ old('availability.booking_start_date', optional($avail?->booking_start_date)->format('Y-m-d')) }}">
+                                        </div>
+
+                                        {{-- Booking End Date --}}
+                                        <div>
+                                            <label class="form-label">Booking End Date</label>
+                                            <input type="date" class="form-control" name="availability[booking_end_date]"
+                                                value="{{ old('availability.booking_end_date', optional($avail?->booking_end_date)->format('Y-m-d')) }}">
+                                        </div>
+                                    </div>
+
+                                    {{-- ================= PRICING ================= --}}
+                                    <h3 class="text-lg font-semibold">Pricing</h3>
+
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="form-label">Currency</label>
+                                            <input class="form-control" name="pricing[currency]"
+                                                value="{{ old('pricing.currency', $package->price->currency ?? 'SAR') }}">
+                                        </div>
+
+                                        <div>
+                                            <label class="form-label">Price (Per Person)</label>
+                                            <input class="form-control" name="pricing[per_person_price]"
+                                                value="{{ old('pricing.per_person_price', $package->price->per_person_price ?? '') }}">
+                                        </div>
+
+                                        <div>
+                                            <label class="form-label">Discount Price(Per Person)</label>
+                                            <input class="form-control" name="pricing[discount_price]"
+                                                value="{{ old('pricing.discount_price', $package->price->discount_price ?? '') }}">
+                                        </div>
+
+                                        <div>
+                                            <label class="form-label">Total Price</label>
+                                            <input class="form-control" name="pricing[original_price]"
+                                                value="{{ old('pricing.original_price', $package->price->original_price ?? '') }}">
                                         </div>
                                     </div>
 
@@ -167,42 +230,40 @@
                                         </div>
                                     @endforeach
 
-                                    {{-- ================= AVAILABILITY ================= --}}
-                                    <h3 class="text-lg font-semibold">Availability</h3>
+                                    <button class="btn btn-success mt-6">Update Package</button>
 
-                                    @php
-                                        $avail = $package->availabilities->first();
-                                    @endphp
-
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="tabs-itinerary">
+                                <div class="bg-white rounded-xl shadow p-6 space-y-10">
+                                    <h3 class="text-lg font-semibold">Itinerary</h3>
                                     <div class="grid grid-cols-2 gap-4">
                                         <div>
-                                            <label class="form-label">Available From</label>
-                                            <input type="date" class="form-control" name="availability[available_from]"
-                                                value="{{ old('availability.available_from', optional($avail?->available_from)->format('Y-m-d')) }}">
+                                            <label class="form-label">Duration Days *</label>
+                                            <input id="duration_days" type="number" class="form-control"
+                                                name="duration_days"
+                                                value="{{ old('duration_days', $package->duration_days) }}">
                                         </div>
 
                                         <div>
-                                            <label class="form-label">Available To</label>
-                                            <input type="date" class="form-control" name="availability[available_to]"
-                                                value="{{ old('availability.available_to', optional($avail?->available_to)->format('Y-m-d')) }}">
-                                        </div>
-                                        {{-- Booking Start Date --}}
-                                        <div>
-                                            <label class="form-label">Booking Start Date</label>
-                                            <input type="date" class="form-control"
-                                                name="availability[booking_start_date]"
-                                                value="{{ old('availability.booking_start_date', optional($avail?->booking_start_date)->format('Y-m-d')) }}">
+                                            <label class="form-label">Duration Nights *</label>
+                                            <input id="duration_nights" type="number" class="form-control"
+                                                name="duration_nights"
+                                                value="{{ old('duration_nights', $package->duration_nights) }}">
                                         </div>
 
-                                        {{-- Booking End Date --}}
                                         <div>
-                                            <label class="form-label">Booking End Date</label>
-                                            <input type="date" class="form-control"
-                                                name="availability[booking_end_date]"
-                                                value="{{ old('availability.booking_end_date', optional($avail?->booking_end_date)->format('Y-m-d')) }}">
+                                            <label class="form-label">Base Persons</label>
+                                            <input class="form-control" name="base_persons"
+                                                value="{{ old('base_persons', $package->base_persons) }}">
+                                        </div>
+
+                                        <div>
+                                            <label class="form-label">Max Persons *</label>
+                                            <input class="form-control" name="max_persons"
+                                                value="{{ old('max_persons', $package->max_persons) }}">
                                         </div>
                                     </div>
-
 
                                     {{-- ================= CITIES ================= --}}
                                     <h3 class="text-lg font-semibold">Cities & Nights</h3>
@@ -211,51 +272,12 @@
                                     {{-- ================= DAYS ================= --}}
                                     <h3 class="text-lg font-semibold">Day Wise Itinerary</h3>
                                     <div id="daysContainer"></div>
-
-                                    {{-- ================= PRICING ================= --}}
-                                    <h3 class="text-lg font-semibold">Pricing</h3>
-
-                                    <div class="grid grid-cols-2 gap-4">
-                                        <div>
-                                            <label class="form-label">Currency</label>
-                                            <input class="form-control" name="pricing[currency]"
-                                                value="{{ old('pricing.currency', $package->price->currency ?? 'SAR') }}">
-                                        </div>
-
-                                        <div>
-                                            <label class="form-label">Price (Per Person)</label>
-                                            <input class="form-control" name="pricing[per_person_price]"
-                                                value="{{ old('pricing.per_person_price', $package->price->per_person_price ?? '') }}">
-                                        </div>
-
-                                        <div>
-                                            <label class="form-label">Discount Price(Per Person)</label>
-                                            <input class="form-control" name="pricing[discount_price]"
-                                                value="{{ old('pricing.discount_price', $package->price->discount_price ?? '') }}">
-                                        </div>
-
-                                        <div>
-                                            <label class="form-label">Total Price</label>
-                                            <input class="form-control" name="pricing[original_price]"
-                                                value="{{ old('pricing.original_price', $package->price->original_price ?? '') }}">
-                                        </div>
-                                    </div>
-
-                                    {{-- Tags --}}
-
-                                    <div class="mb-6">
-                                        <label class="form-label mb-2 block">Tags</label>
-
-                                        <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
-                                            @foreach ($tags as $tag)
-                                                <x-admin.form.checkbox name="tags[]" :value="$tag->id" :checked="in_array($tag->id, $selectedTags)"
-                                                    :label="$tag->name" />
-                                            @endforeach
-                                        </div>
-
-                                    </div>
-
-
+                                    <button class="btn btn-success mt-6">Update Package</button>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="tabs-gallery">
+                                <div class="bg-white rounded-xl shadow p-6 space-y-10">
+                                    <h3 class="text-lg font-semibold">Gallery</h3>
                                     {{-- ================= THUMBNAIL ================= --}}
                                     <div>
                                         <label class="form-label">Thumbnail</label>
@@ -277,20 +299,20 @@
 
                                     <x-admin.form.gallery :model="$package"
                                         deleteRoute="{{ route('gallery.delete', ':id') }}" />
-
                                     <button class="btn btn-success mt-6">Update Package</button>
 
                                 </div>
-                            </form>
-                        </div>
-                        <div class="tab-pane fade" id="tabs-profile" role="tabpanel" aria-labelledby="tabs-profile-tab">
-                            @include('backend.packages.partials.additional-info.index', [
-                                'package' => $package, // 🔥 edit ke liye IMPORTANT
-                                'languages' => $languages,
-                            ])
-                        </div>
+                            </div>
+                            <div class="tab-pane fade" id="tabs-profile" role="tabpanel"
+                                aria-labelledby="tabs-profile-tab">
+                                @include('backend.packages.partials.additional-info.index', [
+                                    'package' => $package, // 🔥 edit ke liye IMPORTANT
+                                    'languages' => $languages,
+                                ])
+                            </div>
 
-                    </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -328,6 +350,28 @@
                 transport: transports
             };
 
+            // 🔥 TRACK USED ITEMS PER DAY
+            function getUsedItems(day) {
+                const used = {
+                    hotel: new Set(),
+                    event: new Set(),
+                    todo: new Set(),
+                    transport: new Set()
+                };
+
+                const dayData = window.existingDays?.find(x => x.day_number == day);
+
+                if (dayData?.items) {
+                    dayData.items.forEach(it => {
+                        if (it.item_type && it.item_id) {
+                            used[it.item_type]?.add(String(it.item_id));
+                        }
+                    });
+                }
+
+                return used;
+            }
+
             /* ======================================================
                CITIES (NIGHTS) RENDER – EDIT SAFE
             ====================================================== */
@@ -348,8 +392,8 @@
             <option value="">Select City</option>
             ${cities.map(c =>
                 `<option value="${c.id}" ${c.id == row.city_id ? 'selected' : ''}>
-                            ${c.slug}
-                        </option>`
+                                                                                                            ${c.slug}
+                                                                                                        </option>`
             ).join('')}
         </select>
 
@@ -375,50 +419,63 @@
             ====================================================== */
             function activityBlock(day, index, item = {}) {
 
+                const used = getUsedItems(day);
+                const currentId = String(item.item_id || '');
+
                 let optionsHTML = '';
+
                 if (item.item_type && itemsMap[item.item_type]) {
                     optionsHTML = itemsMap[item.item_type]
-                        .map(o =>
-                            `<option value="${o.id}" ${o.id == item.item_id ? 'selected' : ''}>
-                        ${o.name ?? o.title}
-                    </option>`
-                        ).join('');
+                        .filter(o => {
+                            const oid = String(o.id);
+
+                            // ✅ allow current selected
+                            if (oid === currentId) return true;
+
+                            // ❌ block already used
+                            return !used[item.item_type]?.has(oid);
+                        })
+                        .map(o => `
+            <option value="${o.id}" ${o.id == item.item_id ? 'selected' : ''}>
+                ${o.name ?? o.title}
+            </option>
+        `).join('');
                 }
 
                 return `
-        <div class="border p-3 mb-3">
-            <select class="form-control mb-2 activity-type">
-                <option value="">Activity Type</option>
-                ${['hotel','event','todo','transport'].map(t =>
-                    `<option value="${t}" ${item.item_type === t ? 'selected' : ''}>
+<div class="border p-3 mb-3">
+    <select class="form-control mb-2 activity-type">
+        <option value="">Activity Type</option>
+        ${['hotel','event','todo','transport'].map(t =>
+            `<option value="${t}" ${item.item_type === t ? 'selected' : ''}>
                                                                                         ${t.charAt(0).toUpperCase()+t.slice(1)}
                                                                                     </option>`
-                ).join('')}
-            </select>
+        ).join('')}
+    </select>
 
-            <select class="form-control mb-2 item-select"
-                    name="days[${day}][items][${index}][item_id]">
-                <option value="">Select Item</option>
-                ${optionsHTML}
-            </select>
+    <select class="form-control mb-2 item-select"
+            name="days[${day}][items][${index}][item_id]">
+        <option value="">Select Item</option>
+        ${optionsHTML}
+    </select>
 
-            <input type="hidden"
-                   name="days[${day}][items][${index}][item_type]"
-                   value="${item.item_type ?? ''}">
+    <input type="hidden"
+           name="days[${day}][items][${index}][item_type]"
+           value="${item.item_type ?? ''}">
 
-            <label class="form-label">Start Time</label>
-            <input type="time"
-                   class="form-control mb-2"
-                   name="days[${day}][items][${index}][start_time]"
-                   value="${item.start_time ?? ''}">
+    <label class="form-label">Start Time</label>
+    <input type="time"
+           class="form-control mb-2"
+           name="days[${day}][items][${index}][start_time]"
+           value="${item.start_time ?? ''}">
 
-            <label class="form-label">End Time</label>
-            <input type="time"
-                   class="form-control"
-                   name="days[${day}][items][${index}][end_time]"
-                   value="${item.end_time ?? ''}">
-        </div>
-        `;
+    <label class="form-label">End Time</label>
+    <input type="time"
+           class="form-control"
+           name="days[${day}][items][${index}][end_time]"
+           value="${item.end_time ?? ''}">
+</div>
+`;
             }
 
             /* ======================================================
@@ -447,8 +504,8 @@
                     <option value="">Select City</option>
                     ${cities.map(c =>
                         `<option value="${c.id}" ${c.id == dayData.city_id ? 'selected' : ''}>
-                                                                                            ${c.slug}
-                                                                                        </option>`
+                                                                                                                                                                            ${c.slug}
+                                                                                                                                                                        </option>`
                     ).join('')}
                 </select>
 
@@ -493,11 +550,20 @@
                 const select = wrap.querySelector('.item-select');
                 select.innerHTML = '<option value="">Select Item</option>';
 
+                // ✅ NEW SMART FILTER
+                const day = wrap.closest('.activities').dataset.day;
+                const used = getUsedItems(day);
+                const currentId = select.value;
+
                 (itemsMap[type] || []).forEach(item => {
-                    select.insertAdjacentHTML(
-                        'beforeend',
-                        `<option value="${item.id}">${item.name ?? item.title}</option>`
-                    );
+                    const idStr = String(item.id);
+
+                    if (idStr === currentId || !used[type]?.has(idStr)) {
+                        select.insertAdjacentHTML(
+                            'beforeend',
+                            `<option value="${item.id}">${item.name ?? item.title}</option>`
+                        );
+                    }
                 });
             });
 
