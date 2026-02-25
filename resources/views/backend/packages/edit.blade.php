@@ -1,17 +1,6 @@
 @extends('backend.layout')
 
 @section('content')
-    {{-- ================= ERRORS ================= --}}
-    {{-- @if ($errors->any())
-        <div class="alert alert-danger mb-6">
-            <strong>Please fix the following errors:</strong>
-            <ul class="mt-2 list-disc list-inside">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif --}}
 
     @php
         $selectedTags = $package?->tags->pluck('id')->toArray() ?? [];
