@@ -23,16 +23,28 @@ class CategoryController extends Controller
     {
         $query = Category::with('translation');
 
+        $categoryTypes = collect(CategoryType::cases())
+        ->map(function ($case) {
+            return [
+                'label' => ucfirst($case->value),
+                'value' => $case->value,
+            ];
+        })
+        ->values();
+
         // 🔍 Search by category name (English)
         if ($request->filled('search')) {
             $query->whereHas('translation', function ($q) use ($request) {
                 $q->where('name', 'like', '%' . $request->search . '%');
             });
         }
+        if ($request->filled('category_type')) {
+            $query->where('type', $request->category_type);
+        }
 
         $categories = $query->latest()->paginate(10)->withQueryString();
 
-        return view('backend.categories.index', compact('categories'));
+        return view('backend.categories.index', compact('categories','categoryTypes'));
     }
 
 
