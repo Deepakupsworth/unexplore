@@ -34,15 +34,15 @@
                 <div class="card h-full">
                     <div class="card-body grid grid-cols-3 gap-6 p-4">
                         <div>
-                            <p class="text-xs text-slate-500">Type</p>
+                            <p class="text-xs text-slate-500 mb-2">Type</p>
                             <p class="font-medium">{{ $transport->type }}</p>
                         </div>
                         <div>
-                            <p class="text-xs text-slate-500">Capacity</p>
+                            <p class="text-xs text-slate-500 mb-2">Capacity</p>
                             <p class="">{{ $transport->capacity }}</p>
                         </div>
                         <div>
-                            <p class="text-xs text-slate-500">Contact Number</p>
+                            <p class="text-xs text-slate-500 mb-2">Contact Number</p>
                             <p class="">{{ $transport->contact_number }}</p>
                         </div>
                         <div>
@@ -116,71 +116,71 @@
                 <header class="flex mb-5 items-center border-b border-slate-100 dark:border-slate-700 pb-5 -mx-6 px-6">
                     <div class="flex-1">
                         <div class="card-title text-slate-900 dark:text-white">
-                            Transport Descriptions
+                            Descriptions
                         </div>
                     </div>
                 </header>
 
                 <div class="card-text h-full">
+                    <div class="border rounded p-4">
+                        {{-- Tabs --}}
+                        <ul class="nav nav-tabs flex flex-col md:flex-row flex-wrap list-none border-b-0 pl-0 mb-4"
+                            id="hotel-lang-tabs" role="tablist">
 
-                    {{-- Tabs --}}
-                    <ul class="nav nav-tabs flex flex-col md:flex-row flex-wrap list-none border-b-0 pl-0 mb-4"
-                        id="hotel-lang-tabs" role="tablist">
+                            @foreach ($transport->translations as $t)
+                                <li class="nav-item" role="presentation">
+                                    <a href="#lang-{{ $t->language_code }}"
+                                        class="nav-link w-full block font-medium text-sm leading-tight capitalize
+                                border-x-0 border-t-0 border-b border-transparent px-4 pb-2 my-2
+                                {{ $loop->first ? 'active' : '' }} dark:text-slate-300"
+                                        id="tab-{{ $t->language_code }}" data-bs-toggle="pill"
+                                        data-bs-target="#lang-{{ $t->language_code }}" role="tab"
+                                        aria-controls="lang-{{ $t->language_code }}"
+                                        aria-selected="{{ $loop->first ? 'true' : 'false' }}">
+                                        {{ strtoupper($t->language_code) }}
+                                    </a>
+                                </li>
+                            @endforeach
 
-                        @foreach ($transport->translations as $t)
-                            <li class="nav-item" role="presentation">
-                                <a href="#lang-{{ $t->language_code }}"
-                                    class="nav-link w-full block font-medium text-sm leading-tight capitalize
-                            border-x-0 border-t-0 border-b border-transparent px-4 pb-2 my-2
-                            {{ $loop->first ? 'active' : '' }} dark:text-slate-300"
-                                    id="tab-{{ $t->language_code }}" data-bs-toggle="pill"
-                                    data-bs-target="#lang-{{ $t->language_code }}" role="tab"
-                                    aria-controls="lang-{{ $t->language_code }}"
-                                    aria-selected="{{ $loop->first ? 'true' : 'false' }}">
-                                    {{ strtoupper($t->language_code) }}
-                                </a>
-                            </li>
-                        @endforeach
+                        </ul>
 
-                    </ul>
+                        {{-- Tab Content --}}
+                        <div class="tab-content" id="hotel-lang-tabsContent">
 
-                    {{-- Tab Content --}}
-                    <div class="tab-content" id="hotel-lang-tabsContent">
+                            @foreach ($transport->translations as $t)
+                                <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}"
+                                    id="lang-{{ $t->language_code }}">
 
-                        @foreach ($transport->translations as $t)
-                            <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}"
-                                id="lang-{{ $t->language_code }}">
+                                    <div class="space-y-6">
 
-                                <div class="space-y-6">
-
-                                    {{-- Hotel Title --}}
-                                    <div class="bg-white dark:bg-slate-900 rounded-xl shadow p-6">
-                                        <p class="text-xs uppercase tracking-wide text-slate-500 mb-1">
-                                            Transport Name
-                                        </p>
-                                        <h3 class="text-2xl font-semibold text-slate-900 dark:text-white">
-                                            {{ $t->name }}
-                                        </h3>
-                                    </div>
-
-                                    {{-- Description --}}
-                                    <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-6">
-                                        <p class="text-xs uppercase tracking-wide text-slate-500 mb-2">
-                                            Description
-                                        </p>
-                                        <div class="prose max-w-none text-slate-700 dark:text-slate-300 leading-relaxed">
-                                            {!! $t->description ?? '<span class="text-slate-400">No description provided</span>' !!}
+                                        {{-- Hotel Title --}}
+                                        <div class="bg-white dark:bg-slate-900 rounded-xl shadow p-6">
+                                            <p class="text-xs uppercase tracking-wide text-slate-500 mb-1">
+                                                Transport Name
+                                            </p>
+                                            <h3 class="text-2xl font-semibold text-slate-900 dark:text-white">
+                                                {{ $t->name }}
+                                            </h3>
                                         </div>
+
+                                        {{-- Description --}}
+                                        <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-6">
+                                            <p class="text-xs uppercase tracking-wide text-slate-500 mb-2">
+                                                Description
+                                            </p>
+                                            <div class="prose max-w-none text-slate-700 dark:text-slate-300 leading-relaxed">
+                                                {!! $t->description ?? '<span class="text-slate-400">No description provided</span>' !!}
+                                            </div>
+                                        </div>
+
                                     </div>
 
                                 </div>
+                            @endforeach
 
-                            </div>
-                        @endforeach
+                        </div>
 
                     </div>
-
-
 
                 </div>
 
