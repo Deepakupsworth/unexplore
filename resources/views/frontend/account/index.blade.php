@@ -618,4 +618,16 @@
                 .replace(/\b\w/g, c => c.toUpperCase());
         }
     </script>
+    <script>
+        $('.addreessCountry').select2({
+            dropdownParent: $('#addAddressModal')
+            });
+    </script>
+    <script>
+    $('.travellerCountry').select2({
+        dropdownParent: $('#travellerModal')
+        });
+    </script>
+
+
 @endpush

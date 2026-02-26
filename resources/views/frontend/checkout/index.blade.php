@@ -855,5 +855,9 @@
         }
     </script>
 
+<script>
+        $('.selectCountrySelect2').select2();
+        </script>
+
  
 @endsection
