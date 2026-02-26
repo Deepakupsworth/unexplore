@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\TransportController;
 use App\Http\Controllers\Admin\AdminCouponController;
 use App\Http\Controllers\Admin\SeoController;
 use App\Http\Controllers\Frontend\Event\EventController as FrontendEventController;
+use App\Http\Controllers\Admin\TranslationController;
 
 use App\Http\Controllers\DemoJsonController;
 use App\Http\Controllers\HomeController;
@@ -335,6 +336,13 @@ Route::middleware(['auth', 'admin'])->group(function () {
             Route::post('/save', [TransportController::class, 'save'])->name('transports.save');
             Route::delete('/{id}', [TransportController::class, 'delete'])->name('transports.delete');
         });
+    });
+
+    Route::prefix('admin/translations')->group(function () {
+        Route::get('/', [TranslationController::class, 'index']);
+        Route::get('{group}', [TranslationController::class, 'edit']);
+        Route::post('update-one', [TranslationController::class, 'updateOne']);
+        Route::post('update-all', [TranslationController::class, 'updateAll']);
     });
 
     Route::prefix('admin')->name('admin.')->group(function () {

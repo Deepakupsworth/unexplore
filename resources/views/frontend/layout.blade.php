@@ -16,6 +16,14 @@
             text-overflow: ellipsis !important;
         }
 
+        .package-title-clamp {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;      /* number of lines */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
         .swiper-slide .exclusive-offers__carousel-item {
             display: flex;
             flex-direction: column;
@@ -79,6 +87,10 @@
             border-radius: 0.375rem;
             display: flex;
             align-items: center;
+        }
+        .select2-container--default
+        {
+            width:100% !important;
         }
         .select2-container--default .select2-selection--single .select2-selection__rendered {
             line-height: normal;

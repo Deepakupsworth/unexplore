@@ -58,7 +58,7 @@
         <div class="exclusive-offers__carousel-item-info">
 
             <div class="d-flex justify-content-between align-items-start mb-1">
-                <h6 class="fw-bold mb-0 text-ellipsis-1">
+                <h6 class="fw-bold mb-0 package-title-clamp">
                     {{ $title }}
                 </h6>
 

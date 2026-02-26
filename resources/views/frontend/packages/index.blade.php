@@ -60,6 +60,8 @@
             margin: 25px 0px -18px 5px;
         }
 }
+
+
 </style>
 
 @section('content')
