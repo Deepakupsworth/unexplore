@@ -32,6 +32,20 @@
                         <input type="text" name="search" value="{{ request('search') }}"
                             placeholder="Search category..." class="form-control">
                     </div>
+
+                    <div class="fromGroup">
+                        <label class="form-label">Category Type</label>
+                        <select name="category_type" class="form-control">
+                            <option value="">Select Category Type</option>
+
+                            @foreach($categoryTypes as $type)
+                                <option value="{{ $type['value'] }}"
+                                    {{ request('category_type') == $type['value'] ? 'selected' : '' }}>
+                                    {{ $type['label'] }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
 
                 <div class="flex justify-end gap-2 mt-4">
