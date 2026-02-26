@@ -55,14 +55,7 @@ class BookingController extends Controller
         $package = Package::with([
             'thumb',
             'days.city.translation',
-            'days.items.hotel.translation',
-            'days.items.hotel.thumb',
-            'days.items.todo.translation',
-            'days.items.todo.thumb',
-            'days.items.event.translation',
-            'days.items.event.thumb',
-            'days.items.transport.translation',
-            'days.items.transport.thumb',
+            'days.items'
         ])->findOrFail($checkout['package_id']);
 
         if ($package->days->isEmpty()) {

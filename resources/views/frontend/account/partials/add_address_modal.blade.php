@@ -33,7 +33,7 @@
 
                     <div class="mb-3">
                         <label class="form-label">{{ __('address.country') }}</label>
-                        <select name="country" class="form-select" required>
+                        <select name="country" class="form-select addreessCountry" required>
                             <option value="">
                                 {{ __('checkout.select_country') }}
                             </option>

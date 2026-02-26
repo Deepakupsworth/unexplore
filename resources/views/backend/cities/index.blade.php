@@ -40,7 +40,7 @@
                     {{-- Country --}}
                     <div class="fromGroup">
                         <label class="form-label">Country</label>
-                        <select name="country_id" class="form-control">
+                        <select name="country_id" class="form-control selectCountrySelect2">
                             <option value="">All Countries</option>
                             @foreach ($countries as $id => $country)
                                 <option value="{{ $id }}" {{ request('country_id') == $id ? 'selected' : '' }}>

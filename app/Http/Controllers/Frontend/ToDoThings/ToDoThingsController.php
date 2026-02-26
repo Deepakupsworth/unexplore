@@ -38,6 +38,8 @@ class ToDoThingsController extends Controller
             $lang
         )->paginate(12)->withQueryString();
 
+        //print_r($things);die;
+
         return view('frontend.thingstodo.index', compact(
             'things',
             'cities',
@@ -125,7 +127,6 @@ class ToDoThingsController extends Controller
             ->with([
                 'translation' => fn($q) =>
                 $q->where('language_code', $language),
-
                 'thumb',
                 'gallery',
 
@@ -224,8 +225,7 @@ class ToDoThingsController extends Controller
                 $q->where('language_code', $language),
                 'cities.city',
                 'price',
-                'days.items.transport',
-                'days.items.hotel'
+               
             ])
             ->where('status', 'active')
             ->latest()
@@ -301,9 +301,7 @@ class ToDoThingsController extends Controller
                 'translation' => fn($q) =>
                 $q->where('language_code', $language),
                 'cities.city',
-                'price',
-                'days.items.transport',
-                'days.items.hotel'
+                'price'
             ])
             ->where('status', 'active')
             ->latest()

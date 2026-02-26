@@ -12,7 +12,244 @@
         .explore-saudi__map {
             width: 250px;
         }
+
+        </style>
+        <style>
+
+.hero-search-wrapper {
+    position: relative;
+    margin-top: 40px;
+}
+
+.hb-card,
+.booking-card,
+.hero-search-wrapper {
+    overflow: visible !important;
+}
+
+/* TABS */
+.booking-tabs {
+    background: #ffffff;
+    display: inline-flex;
+    padding: 8px;
+    border-radius: 50px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    margin-bottom: -25px;
+    position: relative;
+    z-index: 2;
+}
+
+.booking-tabs .tab-btn {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 10px 18px;
+    border-radius: 50px;
+    font-weight: 500;
+    color: #666;
+    cursor: pointer;
+}
+
+.booking-tabs .tab-btn.active {
+    background: #169754;
+    color: #fff;
+}
+
+/* CENTERED CARD */
+.booking-card {
+    background: #ffffff;
+
+    padding: 35px;
+    border-radius: 20px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+}
+
+/* FLEX ROW */
+.booking-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* FIELD */
+.hb-field {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+
+}
+
+/* LABEL */
+.hb-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #7a7a7a;
+    display: flex;
+    align-items: center;
+}
+
+/* INPUT PILL */
+.hb-input-pill {
+    background: #f4f4f4;
+    padding: 14px 22px;
+    border-radius: 50px;
+    position: relative;
+
+
+}
+
+
+.hb-input-pill input,
+.hb-input-pill select {
+    border: none;
+    background: transparent;
+    outline: none;
+    width: 100%;
+    font-size: 14px;
+}
+
+/* SEARCH BUTTON */
+.hb-search-btn {
+    background:
+    #169754;
+    color: #fff;
+    border: none;
+    padding: 16px 35px;
+    border-radius: 50px;
+    font-weight: 600;
+}
+
+/* COMING */
+.coming-box {
+    text-align: center;
+    padding: 60px 0;
+}
+
+/* TAB LOGIC */
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+.hb-input-pill .travellers-dropdown
+    {
+        width:85% !important;
+    }
     </style>
+    <style>
+        /* ============================= */
+/* MOBILE RESPONSIVE */
+/* ============================= */
+
+@media (max-width: 992px) {
+
+/* Reduce top overlap */
+.hero-search-wrapper {
+    /* margin-top: -40px; */
+    margin-top: 15px;
+}
+
+/* Tabs scrollable */
+.booking-tabs {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 15px;
+    padding: 8px;
+    gap: 10px;
+}
+
+.booking-tabs .tab-btn {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    padding: 8px 16px;
+    font-size: 14px;
+}
+
+/* Card padding smaller */
+.booking-card {
+    padding: 25px 15px;
+    border-radius: 15px;
+    position: relative;
+    /* z-index: 100; */
+}
+
+/* Stack fields vertically */
+.booking-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+}
+
+.hb-field {
+    width: 100%;
+    position: relative;
+}
+
+/* Input pills full width */
+.hb-input-pill {
+    padding: 12px 18px;
+}
+
+/* Search button full width */
+.hb-search-btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 50px;
+}
+
+.booking-tabs::-webkit-scrollbar {
+    display: none;
+}
+.booking-tabs {
+    scrollbar-width: none;
+}
+.hb-input-pill select {
+        position: relative;
+
+    }
+
+    .hb-input-pill .travellers-dropdown
+    {
+        width:75% !important;
+    }
+
+}
+
+
+.city-suggestion-box {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: #ffffff;
+    border-radius: 15px;
+    margin-top: 8px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+    max-height: 250px;
+    overflow-y: auto;
+    z-index: 9999;
+    padding: 10px 0;
+}
+
+.city-suggestion-box div {
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.city-suggestion-box div:hover {
+    background: #f2f2f2;
+}
+
+.city-suggestion-box::-webkit-scrollbar {
+    width: 5px;
+}
+
+.city-suggestion-box::-webkit-scrollbar-thumb {
+    background: #ddd;
+    border-radius: 10px;
+}
+        </style>
     <!-- HEADER -->
     <div id="header"></div>
     <!-- Page main content here -->
@@ -29,6 +266,7 @@
             <div class="row">
                 <div class="col-lg-8 mx-auto">
                     <div class="hero-banner__content">
+                        <?php /**<x-frontend.hero-search /> **/?>
                         <h1 class="hero-banner__heading text-white">{!! __('home.hero.title') !!}</h1>
                         <h2 class="text-white h4">{{ __('home.hero.subtitle') }}</h2>
                         <p class="hero-banner__desc"> {{ __('home.hero.description') }}</p>
@@ -98,8 +336,142 @@
                 </div>
             </div>
         </div>
-    </section>
 
+
+    </section>
+    <div class="hero-search-wrapper">
+
+    <div class="container">
+
+        <!-- TABS -->
+        <div class="booking-tabs">
+            <button class="tab-btn active" data-tab="package">Package</button>
+            <button class="tab-btn" data-tab="flight">Flights</button>
+            <button class="tab-btn" data-tab="hotel">Hotels</button>
+            <button class="tab-btn" data-tab="event">Events</button>
+        </div>
+
+        <!-- SEARCH CARD -->
+        <div class="booking-card">
+
+            <div class="tab-content active" id="package">
+            <form method="GET" action="{{route('packages.index')}}">
+                <div class="booking-row">
+
+                        <div class="hb-field">
+                                <span class="hb-label">
+                                    <i class="fa-solid fa-location-dot me-2"></i>{{__('home.filter.destination')}}
+                                </span>
+                                <div class="hb-input-pill">
+                                <input required type="text" id="citySearchInput" class="search-input-new"
+                                    placeholder="{{__('home.filter.destination.label')}}"
+                                    autocomplete="off">
+                                    <input type="hidden" name="cities[]"  id="cityIdInput">
+
+
+                                    <!-- <input type="text" placeholder="Yogyakarta"> -->
+                                </div>
+                                <div id="citySuggestionBox" class="city-suggestion-box d-none"></div>
+                        </div>
+
+                        <div class="hb-field">
+                            <span class="hb-label">
+                                <i class="fa-solid fa-user me-2"></i>{{__('package.pricing.person')}}
+                            </span>
+                            <div class="hb-input-pill">
+                                <div class="w-100 d-flex justify-content-between align-items-center gap-1"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    <p class="text-truncate traveller-summary">3 Adults, Economy</p>
+                                    <i class="fa-solid fa-angle-down"></i>
+                                </div>
+                                <div class="dropdown-menu travellers-dropdown p-3 shadow-lg" id="travellerComponent">
+
+                                    <!-- Adults -->
+                                    <div class="traveller-row d-flex justify-content-between align-items-center mb-3">
+                                        <div>
+                                            <strong>{{__('package.traveller.adults')}}</strong>
+                                            <p class="text-muted small m-0">{{__('package.traveller.adults_age')}}</p>
+                                        </div>
+
+                                        <div class="traveller-counter d-flex align-items-center gap-2">
+                                            <button type="button" class="traveller-counter-btn minus">
+                                                <i class="fa-solid fa-minus"></i>
+                                            </button>
+                                            <span class="count" data-type="adults">1</span>
+                                            <input type="hidden" name="adult" id="home_adults" value="1">
+                                            <button type="button" class="traveller-counter-btn plus">
+                                                <i class="fa-solid fa-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Children -->
+                                    <div class="traveller-row d-flex justify-content-between align-items-center mb-3">
+                                        <div>
+                                            <strong>{{__('package.traveller.children')}}</strong>
+                                            <p class="text-muted small m-0">{{__('package.traveller.children_age')}}</p>
+                                        </div>
+
+                                        <div class="traveller-counter d-flex align-items-center gap-2">
+                                            <button type="button" class="traveller-counter-btn minus">
+                                                <i class="fa-solid fa-minus"></i>
+                                            </button>
+                                            <span class="count" data-type="children">0</span>
+                                            <input type="hidden" name="children" id="home_children" value="0">
+                                            <button type="button" class="traveller-counter-btn plus">
+                                                <i class="fa-solid fa-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="hb-field">
+                            <span class="hb-label">
+                                <i class="fa-solid fa-calendar me-2"></i>{{__('package.modal.starting_date')}}
+                            </span>
+                            <div class="hb-input-pill">
+                                <input type="date" name="start_date" min="{{date('y-m-d')}}">
+                            </div>
+                        </div>
+                        <div class="hb-field">
+                            <span class="hb-label">
+
+                            </span>
+                            <div class="mt-1">
+                            <button class="hb-search-btn">
+                            {{__('packages.filters.search')}}
+                            </button>
+                            </div>
+                        </div>
+
+
+                </div>
+
+                                </form>
+
+
+
+            </div>
+
+            <div class="tab-content" id="flight">
+                <div class="coming-box">Flights Coming Soon </div>
+            </div>
+            <div class="tab-content" id="hotel">
+                <div class="coming-box">Hotels Coming Soon </div>
+            </div>
+            <div class="tab-content" id="event">
+                <div class="coming-box">Events Coming Soon </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
     <!-- 2. PLAN TRIP SECTION  -->
     <section class="plan-trip section-padding" id="plan-trip">
         <div class="container">
@@ -587,6 +959,163 @@
             });
         });
     </script>
+    <script>
+document.querySelectorAll('.tab-btn').forEach(button => {
+    button.addEventListener('click', function() {
+
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        this.classList.add('active');
+
+        let tab = this.getAttribute('data-tab');
+
+        document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.remove('active');
+        });
+
+        document.getElementById(tab).classList.add('active');
+    });
+});
+</script>
+<script>
+    const input = document.getElementById('citySearchInput');
+    const box = document.getElementById('citySuggestionBox');
+    const form = input.closest('form');
+
+    let debounceTimer;
+
+    // 🔥 fetch helper
+    function fetchCities(query = '') {
+        fetch('/cities/search?q=' + encodeURIComponent(query))
+            .then(res => res.json())
+            .then(renderCities)
+            .catch(() => box.classList.add('d-none'));
+    }
+
+    // ✅ typing → only after 2 chars
+    input.addEventListener('input', function () {
+        const query = this.value.trim();
+
+        clearTimeout(debounceTimer);
+
+        if (query.length < 2) {
+            box.classList.add('d-none');
+            return;
+        }
+
+        debounceTimer = setTimeout(() => {
+            fetchCities();
+        }, 300);
+    });
+
+    // ✅ render
+    function renderCities(cities) {
+        if (!cities || !cities.length) {
+            box.innerHTML = `<div class="city-suggestion-item">No destinations found</div>`;
+            box.classList.remove('d-none');
+            return;
+        }
+
+        box.innerHTML = cities.map(city => `
+            <div class="city-suggestion-item"
+                 data-name="${city.name}" data-id="${city.id}">
+                <span>${city.name}</span>
+            </div>
+        `).join('');
+
+        box.classList.remove('d-none');
+    }
+
+    // 🚀 ✅ CLICK → FILL + AUTO SUBMIT
+    box.addEventListener('click', function (e) {
+        const item = e.target.closest('.city-suggestion-item');
+        if (!item) return;
+
+        // fill input
+        input.value = item.dataset.name;
+
+        // Store ID in hidden input
+    document.getElementById("cityIdInput").value = item.dataset.id;
+        console.log(item);
+
+        // hide dropdown
+        box.classList.add('d-none');
+
+        // 🔥 small delay for smooth UX
+        // setTimeout(() => {
+        //     form.submit();
+        // }, 150);
+    });
+
+    // ✅ outside click
+    document.addEventListener('click', function (e) {
+        if (!e.target.closest('.search-input-wrap')) {
+            box.classList.add('d-none');
+        }
+    });
+    </script>
+<script>
+(function () {
+
+    const wrapper = document.getElementById("travellerComponent");
+    if (!wrapper) return;
+
+    const summaryEl = document.querySelector(".traveller-summary");
+
+    const adultsSpan = wrapper.querySelector('[data-type="adults"]');
+    const childrenSpan = wrapper.querySelector('[data-type="children"]');
+
+    const adultsInput = document.getElementById("home_adults");
+    const childrenInput = document.getElementById("home_children");
+
+    function updateSummary() {
+
+        const adults = parseInt(adultsSpan.innerText);
+        const children = parseInt(childrenSpan.innerText);
+
+        // 🔥 Update hidden inputs
+        adultsInput.value = adults;
+        childrenInput.value = children;
+
+        let text = adults + " Adult" + (adults > 1 ? "s" : "");
+
+        if (children > 0) {
+            text += ", " + children + " Child" + (children > 1 ? "ren" : "");
+        }
+
+        summaryEl.innerText = text;
+    }
+
+    wrapper.querySelectorAll(".traveller-counter-btn").forEach(btn => {
+
+        btn.addEventListener("click", function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const countEl = this.parentElement.querySelector(".count");
+            const type = countEl.dataset.type;
+
+            let count = parseInt(countEl.innerText);
+
+            if (this.classList.contains("plus")) {
+                count++;
+            } else {
+                if (type === "adults" && count <= 1) return;
+                if (type === "children" && count <= 0) return;
+                count--;
+            }
+
+            countEl.innerText = count;
+            updateSummary();
+        });
+
+    });
+
+    // Update on page load
+    updateSummary();
+
+})();
+</script>
+
     @endpush
 
 @endsection

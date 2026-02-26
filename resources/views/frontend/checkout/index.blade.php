@@ -12,19 +12,21 @@
         };
     </script>
 
-    @php
+  <?php
         use Carbon\Carbon;
 
         $availability = $package->availabilities;
 
         $startDate = $availability?->available_from ? Carbon::parse($availability->available_from) : null;
+        $startDate = Carbon::parse($checkout['start_date']);
 
         $endDate = $startDate ? $startDate->copy()->addDays($package->duration_days - 1) : null;
 
         // fallback values (agar dynamic selection abhi nahi hai)
         $rooms = 1;
         $adults = 3;
-    @endphp
+
+    ?>
 
     <section class="checkout-section">
         <div class="container">
@@ -852,6 +854,10 @@
             return Number(val).toLocaleString('en-IN');
         }
     </script>
+
+<script>
+        $('.selectCountrySelect2').select2();
+        </script>
 
  
 @endsection

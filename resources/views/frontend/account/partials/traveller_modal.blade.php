@@ -67,7 +67,7 @@
                             <label class="form-label">
                                 {{ __('traveller.country') }}
                             </label>
-                            <select name="country" class="form-select" required>
+                            <select name="country" class="form-select travellerCountry" required>
                                 <option value="">
                                     {{ __('checkout.select_country') }}
                                 </option>

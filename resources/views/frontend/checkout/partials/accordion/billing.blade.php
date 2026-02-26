@@ -62,7 +62,7 @@
                             $selectedCountry = old('billing.country_code') ?? $defaultBilling?->country_code;
                         @endphp
 
-                        <select name="billing[country_code]" class="form-select" required>
+                        <select name="billing[country_code]" class="form-select selectCountrySelect2" required>
                             <option value="">{{ __('checkout.select_country') }}</option>
 
                             @foreach ($countries as $country)

@@ -26,7 +26,7 @@
                 <h2 class="text-xl font-semibold capitalize">
                     {{ $thing->translation?->name }}
                 </h2>
-                <p class="text-sm text-slate-500">
+                <p class="text-sm text-slate-500 capitalize">
                     @forelse ($thing->thingCategories as $tc)
                         {{ $tc->category?->translation?->name }}
                         @if (!$loop->last)
@@ -39,10 +39,9 @@
             </div>
 
             <div>
-                <a href="{{ route('admin.seo.edit', ['type' => 'todo', 'id' => $thing?->id]) }}"
-                    class="btn btn-primary">
-                     Add Meta
-                 </a>
+                <a href="{{ route('admin.seo.edit', ['type' => 'todo', 'id' => $thing?->id]) }}" class="btn btn-primary">
+                    Add Meta
+                </a>
             </div>
         </div>
 
@@ -55,19 +54,21 @@
                     <div class="card-body grid grid-cols-2 gap-6 p-4">
 
                         <div>
-                            <p class="text-xs text-slate-500">City</p>
+                            <p class="text-xs text-slate-500 mb-2">City</p>
                             <p class="font-medium">
                                 {{ $thing->city?->translation?->name ?? '—' }}
                             </p>
                         </div>
 
                         <div>
-                            <p class="text-xs text-slate-500">Categories</p>
+                            <p class="text-xs text-slate-500 mb-2">Categories</p>
                             <p class="font-medium">
                                 @forelse ($thing->thingCategories as $tc)
-                                <span class="badge bg-success-500 text-success-500 bg-opacity-30 capitalize rounded-3xl"> {{ $tc->category?->translation?->name }}</span>
+                                    <span
+                                        class="badge bg-success-500 text-success-500 bg-opacity-30 capitalize rounded-3xl mb-1">
+                                        {{ $tc->category?->translation?->name }}</span>
                                     @if (!$loop->last)
-                                        ,
+
                                     @endif
                                 @empty
                                     —
@@ -77,25 +78,24 @@
 
 
                         <div>
-                            <p class="text-xs text-slate-500">Latitude</p>
+                            <p class="text-xs text-slate-500 mb-2">Latitude</p>
                             <p class="font-medium">{{ $thing->latitude ?? '—' }}</p>
                         </div>
 
                         <div>
-                            <p class="text-xs text-slate-500">Longitude</p>
+                            <p class="text-xs text-slate-500 mb-2">Longitude</p>
                             <p class="font-medium">{{ $thing->longitude ?? '—' }}</p>
                         </div>
 
                         <div>
-                            <p class="text-xs text-slate-500">Location</p>
+                            <p class="text-xs text-slate-500 mb-2">Location</p>
                             <p class="font-medium">{{ $thing->location ?? '—' }}</p>
                         </div>
 
                         <div class="col-span-2">
-                            <p class="text-xs text-slate-500">Video URL</p>
+                            <p class="text-xs text-slate-500 mb-2">Video URL</p>
                             @if ($thing->video_url)
-                                <a href="{{ $thing->video_url }}" target="_blank"
-                                    class="text-primary-600 underline text-sm">
+                                <a href="{{ $thing->video_url }}" target="_blank" class="btn btn-outline-primary btn-sm">
                                     View Video
                                 </a>
                             @else
@@ -143,47 +143,49 @@
         {{-- TRANSLATIONS WITH WORKING TABS --}}
         <div class="card mt-8">
             <div class="card-body p-6">
-
                 <h4 class="text-lg font-semibold mb-4">
-                    Thing To Do Descriptions
+                    Descriptions
                 </h4>
 
-                {{-- TAB BUTTONS --}}
-                <div class="flex gap-2 mb-6">
+                <div class="border rounded p-4">
+
+                    {{-- TAB BUTTONS --}}
+                    <div class="flex gap-2 mb-6">
+                        @foreach ($thing->translations as $t)
+                            <button type="button"
+                                class="lang-tab px-4 py-2 rounded border text-sm font-medium
+                                    {{ $loop->first ? 'bg-slate-800 text-white' : 'bg-slate-100 text-slate-700' }}"
+                                data-lang="{{ $t->language_code }}">
+                                {{ strtoupper($t->language_code) }}
+                            </button>
+                        @endforeach
+                    </div>
+
+                    {{-- TAB CONTENT --}}
                     @foreach ($thing->translations as $t)
-                        <button type="button"
-                            class="lang-tab px-4 py-2 rounded border text-sm font-medium
-                                {{ $loop->first ? 'bg-slate-800 text-white' : 'bg-slate-100 text-slate-700' }}"
-                            data-lang="{{ $t->language_code }}">
-                            {{ strtoupper($t->language_code) }}
-                        </button>
+                        <div class="lang-content {{ $loop->first ? '' : 'hidden' }}" id="lang-{{ $t->language_code }}">
+
+                            <div class="space-y-6">
+
+                                <div class="bg-white dark:bg-slate-900">
+                                    <div class="mb-4">
+                                        <p class="text-xs capitalize text-slate-500 mb-2">Name</p>
+                                        <h3 class="text-2xl font-semibold">
+                                            {{ $t->name }}
+                                        </h3>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs capitalize text-slate-600 mb-2">About</p>
+                                        <div class="prose max-w-none">
+                                            {!! $t->about ?? '<span class="text-slate-400">No description</span>' !!}
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
                     @endforeach
                 </div>
-
-                {{-- TAB CONTENT --}}
-                @foreach ($thing->translations as $t)
-                    <div class="lang-content {{ $loop->first ? '' : 'hidden' }}" id="lang-{{ $t->language_code }}">
-
-                        <div class="space-y-6">
-
-                            <div class="bg-white dark:bg-slate-900 rounded-xl shadow p-6">
-                                <p class="text-xs uppercase text-slate-500 mb-1">Name</p>
-                                <h3 class="text-2xl font-semibold">
-                                    {{ $t->name }}
-                                </h3>
-                            </div>
-
-                            <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-6">
-                                <p class="text-xs uppercase text-slate-500 mb-2">About</p>
-                                <div class="prose max-w-none">
-                                    {!! $t->about ?? '<span class="text-slate-400">No description</span>' !!}
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                @endforeach
-
             </div>
         </div>
 

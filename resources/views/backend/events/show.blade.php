@@ -24,20 +24,19 @@
 
         {{-- HEADER --}}
         <div class="flex justify-between px-6 py-4 border-b dark:border-slate-700">
-           <div>
-            <h2 class="text-xl font-semibold capitalize">
-                {{ $event->translations->first()->title ?? 'Event' }}
-            </h2>
-            <p class="text-sm text-slate-500">
-                {{ $event->city?->slug }}
-            </p>
-           </div>
+            <div>
+                <h2 class="text-xl font-semibold capitalize">
+                    {{ $event->translations->first()->title ?? 'Event' }}
+                </h2>
+                <p class="text-sm text-slate-500 capitalize">
+                    {{ $event->city?->slug }}
+                </p>
+            </div>
 
             <div>
-                <a href="{{ route('admin.seo.edit', ['type' => 'event', 'id' => $event?->id]) }}"
-                    class="btn btn-primary">
-                     Add Meta
-                 </a>
+                <a href="{{ route('admin.seo.edit', ['type' => 'event', 'id' => $event?->id]) }}" class="btn btn-primary">
+                    Add Meta
+                </a>
             </div>
 
         </div>
@@ -50,28 +49,29 @@
                 <div class="card h-full">
                     <div class="card-body grid grid-cols-2 gap-6 p-4">
                         <div>
-                            <p class="text-sm text-slate-500">Categories</p>
-                                @forelse ($event->eventCategories as $index => $eventCategory)
-                                <span class="badge bg-success-500 text-success-500 bg-opacity-30 capitalize rounded-3xl">{{  $eventCategory->category?->translation?->name }} </span>
-                                    @if (!$loop->last)
-                                        ,
-                                    @endif
-                                @empty
-                                    —
-                                @endforelse
+                            <p class="text-sm text-slate-500 mb-2">Categories</p>
+                            @forelse ($event->eventCategories as $index => $eventCategory)
+                                <span
+                                    class="badge bg-success-500 text-success-500 bg-opacity-30 capitalize rounded-3xl">{{ $eventCategory->category?->translation?->name }}
+                                </span>
+                                @if (!$loop->last)
+                                @endif
+                            @empty
+                                —
+                            @endforelse
                         </div>
                         <div>
-                            <p class="text-xs text-slate-500">Start Date</p>
+                            <p class="text-xs text-slate-500 mb-2">Start Date</p>
                             <p class="font-medium">{{ $event->start_date ?? '—' }}</p>
                         </div>
 
                         <div>
-                            <p class="text-xs text-slate-500">End Date</p>
+                            <p class="text-xs text-slate-500 mb-2">End Date</p>
                             <p class="font-medium">{{ $event->end_date ?? '—' }}</p>
                         </div>
 
                         <div>
-                            <p class="text-xs text-slate-500">Opening Time</p>
+                            <p class="text-xs text-slate-500 mb-2">Opening Time</p>
                             @if ($event->opening_time)
                                 <p class="font-medium">
                                     {{ Carbon::parse($event->opening_time)->format('h:i A') }}
@@ -80,7 +80,7 @@
                         </div>
 
                         <div>
-                            <p class="text-xs text-slate-500">Closing Time</p>
+                            <p class="text-xs text-slate-500 mb-2">Closing Time</p>
                             @if ($event->closing_time)
                                 <p class="font-medium">
                                     {{ Carbon::parse($event->closing_time)->format('h:i A') }}
@@ -89,27 +89,27 @@
                         </div>
 
                         <div>
-                            <p class="text-xs text-slate-500">Opening Days</p>
+                            <p class="text-xs text-slate-500 mb-2">Opening Days</p>
                             <p class="font-medium">{{ $event->opening_days ?? '—' }}</p>
                         </div>
 
                         <div>
-                            <p class="text-xs text-slate-500">Capacity</p>
+                            <p class="text-xs text-slate-500 mb-2">Capacity</p>
                             <p class="font-medium">{{ $event->capacity ?? '—' }}</p>
                         </div>
 
                         <div>
-                            <p class="text-xs text-slate-500">Status</p>
+                            <p class="text-xs text-slate-500 mb-2">Status</p>
                             {!! status_badge($event->status) !!}
                         </div>
 
                         <div>
-                            <p class="text-xs text-slate-500">Location</p>
+                            <p class="text-xs text-slate-500 mb-2">Location</p>
                             <p class="font-medium">{{ $event->location ?? '—' }}</p>
                         </div>
 
                         <div>
-                            <p class="text-xs text-slate-500">City</p>
+                            <p class="text-xs text-slate-500 mb-2">City</p>
                             <p class="font-medium">{{ $event->city?->slug ?? '—' }}</p>
                         </div>
 
@@ -151,59 +151,68 @@
         {{-- TRANSLATIONS (CUSTOM TABS) --}}
         <div class="card mt-8">
             <div class="card-body p-6">
+                <div class="border p-4 rounded">
 
-                <h4 class="text-lg font-semibold mb-4">
-                    Event Descriptions
-                </h4>
+                    <h4 class="text-lg font-semibold mb-4">
+                        Event Descriptions
+                    </h4>
 
-                {{-- TAB BUTTONS --}}
-                <div class="flex gap-2 mb-6">
-                    @foreach ($event->translations as $t)
-                        <button type="button"
-                            class="lang-tab px-4 py-2 rounded border text-sm font-medium
+                    {{-- TAB BUTTONS --}}
+                    <div class="flex gap-2 mb-6">
+                        @foreach ($event->translations as $t)
+                            <button type="button"
+                                class="lang-tab px-4 py-2 rounded border text-sm font-medium
                                 {{ $loop->first ? 'bg-slate-800 text-white' : 'bg-slate-100 text-slate-700' }}"
-                            data-lang="{{ $t->language_code }}">
-                            {{ strtoupper($t->language_code) }}
-                        </button>
-                    @endforeach
-                </div>
-
-                {{-- TAB CONTENT --}}
-                @foreach ($event->translations as $t)
-                    <div class="lang-content {{ $loop->first ? '' : 'hidden' }}" id="lang-{{ $t->language_code }}">
-
-                        <div class="space-y-6">
-
-                            <div class="bg-white dark:bg-slate-900 rounded-xl shadow p-6">
-                                <p class="text-xs uppercase text-slate-500 mb-1">Event Title</p>
-                                <h3 class="text-2xl font-semibold">
-                                    {{ $t->title }}
-                                </h3>
-
-                                @if ($t->sub_title)
-                                    <p class="text-sm text-slate-500 mt-2">
-                                        {{ $t->sub_title }}
-                                    </p>
-                                @endif
-                            </div>
-
-                            <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-6">
-                                <p class="text-xs uppercase text-slate-500 mb-2">Description</p>
-                                <div class="prose max-w-none">
-                                    {!! $t->description ?? '<span class="text-slate-400">No description</span>' !!}
-                                </div>
-                            </div>
-
-                            @if ($t->url)
-                                <a href="{{ $t->url }}" target="_blank" class="btn btn-outline-primary btn-sm">
-                                    SEO URL
-                                </a>
-                            @endif
-
-                        </div>
+                                data-lang="{{ $t->language_code }}">
+                                {{ strtoupper($t->language_code) }}
+                            </button>
+                        @endforeach
                     </div>
-                @endforeach
 
+                    {{-- TAB CONTENT --}}
+                    @foreach ($event->translations as $t)
+                        <div class="lang-content {{ $loop->first ? '' : 'hidden' }}" id="lang-{{ $t->language_code }}">
+
+                            <div class="space-y-6">
+
+                                <div class="bg-white dark:bg-slate-900 rounded-xl shadow p-6">
+                                    <div class="mb-4">
+                                        <p class="text-xs uppercase text-slate-500 mb-2">Title</p>
+                                        <h3 class="text-2xl font-semibold capitalize">
+                                            {{ $t->title }}
+                                        </h3>
+                                    </div>
+
+                                    @if ($t->sub_title)
+                                        <div class="mb-4">
+                                            <p class="text-xs uppercase text-slate-500 mb-2">Sub Title</p>
+                                            <h3 class="text-sm dark:bg-slate-500">
+                                                {{ $t->sub_title }}
+                                            </h3>
+                                        </div>
+                                    @endif
+                                    <div>
+                                        <p class="text-xs capitalize text-slate-500 mb-2">Description</p>
+                                        <div class="prose max-w-none">
+                                            {!! $t->description ?? '<span class="text-slate-400">No description</span>' !!}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    @if ($t->url)
+                                        <a href="{{ $t->url }}" target="_blank"
+                                            class="btn btn-outline-primary btn-sm">
+                                            SEO URL
+                                        </a>
+                                    @endif
+                                </div>
+
+                            </div>
+                        </div>
+                    @endforeach
+
+                </div>
             </div>
         </div>
 

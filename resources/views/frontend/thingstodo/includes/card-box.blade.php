@@ -5,7 +5,7 @@
 @endphp
 <div class="upcoming-event__carousel-item swiper-slide position-relative">
     <div class="upcoming-event__carousel-item-img">
-        <img src="{{ asset('storage/' . $thing->thumb->image_path) }}" alt="Event" class="img-fluid">
+        <img src="{{ asset('storage/' . $thing->thumb?->image_path) }}" alt="Event" class="img-fluid">
     </div>
     <div class="upcoming-event__carousel-item-info">
         <button class="btn btn-primary rounded-pill btn-sm gap-1"><i class="fa-solid fa-location-dot"></i>

@@ -45,7 +45,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div class="input-area mb-4">
                         <label class="form-label">Country <span class="text-red-500">*</span></label>
-                        <select name="country_id" class="form-control" required>
+                        <select name="country_id" class="form-control selectCountrySelect2" required>
                             <option value="">Select Country</option>
                             @foreach ($countries as $id => $name)
                                 <option value="{{ $id }}"

@@ -35,6 +35,18 @@
         .info-lang-section.active {
             display: block
         }
+
+        #daysContainer select.form-control.item-select
+        {
+            margin-top:15px;
+            margin-bottom:15px;
+        }
+        .select2-container
+        {
+            margin-top:15px !important;
+            margin-bottom:15px !important;
+
+        }
     </style>
     <div class="card">
         <div class="card-body flex flex-col p-6">
@@ -74,19 +86,22 @@
                         </li>
 
                     </ul>
-                    <form method="POST" action="{{ route('admin.packages.update', $package) }}"
-                        enctype="multipart/form-data">
-                        @csrf
-                        @method('PUT')
-                        <div class="tab-content" id="tabs-tabContent">
-                            <div class="tab-pane fade show active" id="tabs-home" role="tabpanel"
-                                aria-labelledby="tabs-home-tab">
-                                <div class="bg-white rounded-xl shadow p-6 space-y-10">
+
+                    <div class="tab-content" id="tabs-tabContent">
+
+                        <div class="tab-pane fade show active" id="tabs-home" role="tabpanel"
+                            aria-labelledby="tabs-home-tab">
+                            <div class="bg-white rounded-xl shadow p-6 space-y-10">
+                                <form method="POST" action="{{ route('admin.packages.update', $package) }}"
+                                    enctype="multipart/form-data">
+                                    @csrf
+                                    @method('PUT')
+                                    <input type="hidden" name="update_section" value="basic">
 
                                     {{-- ================= BASIC INFO ================= --}}
-                                    <h3 class="text-lg font-semibold">Basic Information</h3>
+                                    <h3 class="text-lg font-semibold mb-2">Basic Information</h3>
 
-                                    <div class="grid grid-cols-2 gap-4">
+                                    <div class="grid grid-cols-2 gap-4 mb-4">
 
                                         <x-admin.form.category-select label="Package Categories" :categories="$categories"
                                             name="category_ids" :selected="$package?->packageCategories->pluck('category_id')->toArray()" multiple required />
@@ -94,7 +109,7 @@
 
                                         <div>
                                             <label class="form-label">Package Type *</label>
-                                            <select name="package_type" class="form-control">
+                                            <select name="package_type" class="form-control selectCountrySelect2">
                                                 <option value="fixed" @selected($package->package_type == 'fixed')>Fixed</option>
                                                 <option value="customized" @selected($package->package_type == 'customized')>Customized</option>
                                             </select>
@@ -102,7 +117,7 @@
 
                                         <div>
                                             <label class="form-label">Package Status *</label>
-                                            <select name="status" class="form-control" required>
+                                            <select name="status" class="form-control selectCountrySelect2" required>
                                                 <option value="draft"
                                                     {{ old('status', $package->status) == 'draft' ? 'selected' : '' }}>
                                                     Draft
@@ -131,13 +146,13 @@
                                         </div>
                                     </div>
                                     {{-- ================= AVAILABILITY ================= --}}
-                                    <h3 class="text-lg font-semibold">Availability</h3>
+                                    <h3 class="text-lg font-semibold mb-2">Availability</h3>
 
                                     @php
-                                        $avail = $package->availabilities->first();
+                                        $avail = $package->availability;
                                     @endphp
 
-                                    <div class="grid grid-cols-2 gap-4">
+                                    <div class="grid grid-cols-2 gap-4 mb-4 p-2 border">
                                         <div>
                                             <label class="form-label">Available From</label>
                                             <input type="date" class="form-control" name="availability[available_from]"
@@ -166,14 +181,29 @@
                                     </div>
 
                                     {{-- ================= PRICING ================= --}}
-                                    <h3 class="text-lg font-semibold">Pricing</h3>
+                                    <h3 class="text-lg font-semibold mb-2">Pricing</h3>
+                                    <input type="hidden" name="pricing[currency]" value="{{ $baseCurrency }}">
 
-                                    <div class="grid grid-cols-2 gap-4">
-                                        <div>
-                                            <label class="form-label">Currency</label>
-                                            <input class="form-control" name="pricing[currency]"
-                                                value="{{ old('pricing.currency', $package->price->currency ?? 'SAR') }}">
-                                        </div>
+                                    <div class="grid grid-cols-2 gap-4 mb-4 border p-2">
+
+                                        {{-- <div>
+                                            <label class="form-label">Currency *</label>
+
+                                            <select class="form-control" name="pricing[currency]" required>
+                                                @foreach ($currencies as $currency)
+                                                    <option value="{{ $currency->code ?? $currency['code'] }}"
+                                                        {{ old('pricing.currency', $package->price->currency ?? 'SAR') == ($currency->code ?? $currency['code'])
+                                                            ? 'selected'
+                                                            : '' }}>
+
+                                                        {{ $currency->code ?? $currency['code'] }}
+                                                        -
+                                                        {{ $currency->name ?? $currency['name'] }}
+
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div> --}}
 
                                         <div>
                                             <label class="form-label">Price (Per Person)</label>
@@ -195,49 +225,95 @@
                                     </div>
 
                                     {{-- ================= TRANSLATIONS ================= --}}
-                                    <h3 class="text-lg font-semibold">Package Translations</h3>
-
-                                    <div class="flex gap-2 border-b pb-2 mb-4">
+                                    <h3 class="text-lg font-semibold mb-2">Package Translations</h3>
+                                    <div class="border p-2">
+                                        {{-- <div class="flex gap-2 pb-2 mb-4">
                                         @foreach ($languages as $lang)
                                             <button type="button" class="lang-btn {{ $loop->first ? 'active' : '' }}"
                                                 data-lang="{{ strtolower($lang->code) }}">
                                                 {{ strtoupper($lang->code) }}
                                             </button>
                                         @endforeach
-                                    </div>
+                                    </div> --}}
 
-                                    @foreach ($languages as $lang)
                                         @php
-                                            $code = strtolower($lang->code);
-                                            $trans = $package->translations->firstWhere('language_code', $code);
+                                            $sortedLanguages = $languages->sortBy(function ($lang) {
+                                                return strtolower($lang->code) === 'en' ? 0 : 1;
+                                            });
                                         @endphp
 
-                                        <div class="lang-section {{ $loop->first ? 'active' : '' }}"
-                                            id="lang-{{ $code }}">
-
-                                            <label class="form-label">Title *</label>
-                                            <input class="form-control mb-3"
-                                                name="translations[{{ $code }}][title]"
-                                                value="{{ old("translations.$code.title", $trans->title ?? '') }}">
-
-                                            <label class="form-label">Sub Title</label>
-                                            <input class="form-control mb-3"
-                                                name="translations[{{ $code }}][sub_title]"
-                                                value="{{ old("translations.$code.sub_title", $trans->sub_title ?? '') }}">
-
-                                            <label class="form-label">Description</label>
-                                            <textarea class="editor form-control h-28" name="translations[{{ $code }}][description]">{{ old("translations.$code.description", $trans->description ?? '') }}</textarea>
+                                        <div class="flex gap-2 pb-2 mb-4">
+                                            @foreach ($sortedLanguages as $lang)
+                                                <button type="button"
+                                                    class="lang-btn {{ strtolower($lang->code) === 'en' ? 'active' : '' }}"
+                                                    data-lang="{{ strtolower($lang->code) }}">
+                                                    {{ strtoupper($lang->code) }}
+                                                </button>
+                                            @endforeach
                                         </div>
-                                    @endforeach
 
-                                    <button class="btn btn-success mt-6">Update Package</button>
+                                        {{-- @foreach ($languages as $lang)
+                                            @php
+                                                $code = strtolower($lang->code);
+                                                $trans = $package->translations->firstWhere('language_code', $code);
+                                            @endphp
 
-                                </div>
+                                            <div class="lang-section {{ $loop->first ? 'active' : '' }}"
+                                                id="lang-{{ $code }}">
+
+                                                <label class="form-label">Title *</label>
+                                                <input class="form-control mb-3"
+                                                    name="translations[{{ $code }}][title]"
+                                                    value="{{ old("translations.$code.title", $trans->title ?? '') }}">
+
+                                                <label class="form-label">Sub Title</label>
+                                                <input class="form-control mb-3"
+                                                    name="translations[{{ $code }}][sub_title]"
+                                                    value="{{ old("translations.$code.sub_title", $trans->sub_title ?? '') }}">
+
+                                                <label class="form-label">Description</label>
+                                                <textarea class="editor form-control h-28" name="translations[{{ $code }}][description]">{{ old("translations.$code.description", $trans->description ?? '') }}</textarea>
+                                            </div>
+                                        @endforeach --}}
+                                        @foreach ($sortedLanguages as $lang)
+                                            @php
+                                                $code = strtolower($lang->code);
+                                                $trans = $package->translations->firstWhere('language_code', $code);
+                                            @endphp
+
+                                            <div class="lang-section {{ $code === 'en' ? 'active' : '' }}"
+                                                id="lang-{{ $code }}">
+
+                                                <label class="form-label">Title *</label>
+                                                <input class="form-control mb-3"
+                                                    name="translations[{{ $code }}][title]"
+                                                    value="{{ old("translations.$code.title", $trans->title ?? '') }}">
+
+                                                <label class="form-label">Sub Title</label>
+                                                <input class="form-control mb-3"
+                                                    name="translations[{{ $code }}][sub_title]"
+                                                    value="{{ old("translations.$code.sub_title", $trans->sub_title ?? '') }}">
+
+                                                <label class="form-label">Description</label>
+                                                <textarea class="editor form-control h-28" name="translations[{{ $code }}][description]">{{ old("translations.$code.description", $trans->description ?? '') }}</textarea>
+
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                    <button class="btn btn-success mt-6">Update Basic Info</button>
+                                </form>
                             </div>
-                            <div class="tab-pane fade" id="tabs-itinerary">
-                                <div class="bg-white rounded-xl shadow p-6 space-y-10">
+                        </div>
+                        <div class="tab-pane fade" id="tabs-itinerary">
+                            <div class="bg-white rounded-xl shadow p-6 space-y-10">
+                                <form method="POST" action="{{ route('admin.packages.update', $package) }}">
+
+                                    @csrf
+                                    @method('PUT')
+
+                                    <input type="hidden" name="update_section" value="itinerary">
                                     <h3 class="text-lg font-semibold">Itinerary</h3>
-                                    <div class="grid grid-cols-2 gap-4">
+                                    <div class="grid grid-cols-2 gap-4 mb-4">
                                         <div>
                                             <label class="form-label">Duration Days *</label>
                                             <input id="duration_days" type="number" class="form-control"
@@ -266,31 +342,39 @@
                                     </div>
 
                                     {{-- ================= CITIES ================= --}}
-                                    <h3 class="text-lg font-semibold">Cities & Nights</h3>
-                                    <div id="citiesContainer"></div>
+                                    <h3 class="text-lg font-semibold mb-2">Cities & Nights</h3>
+                                    <div id="citiesContainer" class="mb-4"></div>
 
                                     {{-- ================= DAYS ================= --}}
-                                    <h3 class="text-lg font-semibold">Day Wise Itinerary</h3>
+                                    <h3 class="text-lg font-semibold mb-2">Day Wise Itinerary</h3>
                                     <div id="daysContainer"></div>
-                                    <button class="btn btn-success mt-6">Update Package</button>
-                                </div>
+                                    <button class="btn btn-success mt-6">Update Itinerary</button>
+                                </form>
                             </div>
-                            <div class="tab-pane fade" id="tabs-gallery">
-                                <div class="bg-white rounded-xl shadow p-6 space-y-10">
+                        </div>
+                        <div class="tab-pane fade" id="tabs-gallery">
+                            <div class="bg-white rounded-xl shadow p-6 space-y-10">
+                                <form method="POST" action="{{ route('admin.packages.update', $package) }}"
+                                    enctype="multipart/form-data">
+
+                                    @csrf
+                                    @method('PUT')
+                                    <input type="hidden" name="update_section" value="media">
                                     <h3 class="text-lg font-semibold">Gallery</h3>
                                     {{-- ================= THUMBNAIL ================= --}}
-                                    <div>
+                                    <div class="mb-4 mt-2">
                                         <label class="form-label">Thumbnail</label>
 
                                         {{-- Existing Thumbnail Preview --}}
+
+                                        <input type="file" name="thumb"
+                                            class="form-control mb-4 @error('thumb') error-input @enderror">
 
                                         @if ($package->thumb)
                                             <img src="{{ asset('storage/' . $package->thumb->image_path) }}"
                                                 class="h-24 w-24 object-cover rounded border">
                                         @endif
 
-                                        <input type="file" name="thumb"
-                                            class="form-control @error('thumb') error-input @enderror">
 
                                         @error('thumb')
                                             <p class="error-text">{{ $message }}</p>
@@ -299,20 +383,22 @@
 
                                     <x-admin.form.gallery :model="$package"
                                         deleteRoute="{{ route('gallery.delete', ':id') }}" />
-                                    <button class="btn btn-success mt-6">Update Package</button>
+                                    <button type="submit" class="btn btn-success mt-6">
+                                        Update Media
+                                    </button>
+                                </form>
 
-                                </div>
                             </div>
-                            <div class="tab-pane fade" id="tabs-profile" role="tabpanel"
-                                aria-labelledby="tabs-profile-tab">
-                                @include('backend.packages.partials.additional-info.index', [
-                                    'package' => $package, // 🔥 edit ke liye IMPORTANT
-                                    'languages' => $languages,
-                                ])
-                            </div>
-
                         </div>
-                    </form>
+                        <div class="tab-pane fade" id="tabs-profile" role="tabpanel" aria-labelledby="tabs-profile-tab">
+                            @include('backend.packages.partials.additional-info.index', [
+                                'package' => $package, // 🔥 edit ke liye IMPORTANT
+                                'languages' => $languages,
+                            ])
+                        </div>
+
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -384,34 +470,50 @@
                     const row = window.existingCities?.[i] || {};
 
                     citiesContainer.insertAdjacentHTML('beforeend', `
-    <div class="grid grid-cols-3 gap-4 mb-3">
+            <div class="border rounded p-4 mb-4 bg-gray-50">
 
-        <select class="form-control"
-                name="cities[${i}][city_id]"
-                required>
-            <option value="">Select City</option>
-            ${cities.map(c =>
-                `<option value="${c.id}" ${c.id == row.city_id ? 'selected' : ''}>
-                                                                                                            ${c.slug}
-                                                                                                        </option>`
-            ).join('')}
-        </select>
+                <h5 class="font-semibold mb-3">City ${i + 1}</h5>
 
-        <input class="form-control"
-               type="number"
-               min="1"
-               name="cities[${i}][nights]"
-               value="${row.nights ?? 1}"
-               required>
+                <div class="grid grid-cols-3 gap-4">
 
-        <input class="form-control"
-               type="number"
-               min="1"
-               name="cities[${i}][sort_order]"
-               value="${row.sort_order ?? (i + 1)}">
-    </div>
-`);
+                    <div>
+                        <label class="form-label">Select City *</label>
+                        <select class="form-control selectCountrySelect2"
+                                name="cities[${i}][city_id]"
+                                required>
+                            <option value="">Select City</option>
+                            ${cities.map(c =>
+                                `<option value="${c.id}" ${c.id == row.city_id ? 'selected' : ''}>
+                                                                    ${c.slug}
+                                                                </option>`
+                            ).join('')}
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="form-label">Number of Nights *</label>
+                        <input class="form-control"
+                               type="number"
+                               min="1"
+                               name="cities[${i}][nights]"
+                               value="${row.nights ?? 1}"
+                               required>
+                    </div>
+
+                    <div>
+                        <label class="form-label">Sort Order</label>
+                        <input class="form-control"
+                               type="number"
+                               min="1"
+                               name="cities[${i}][sort_order]"
+                               value="${row.sort_order ?? (i + 1)}">
+                    </div>
+
+                </div>
+            </div>
+        `);
                 }
+
             }
 
             /* ======================================================
@@ -444,16 +546,16 @@
 
                 return `
 <div class="border p-3 mb-3">
-    <select class="form-control mb-2 activity-type">
+    <select class="form-control selectCountrySelect2 mb-4 activity-type">
         <option value="">Activity Type</option>
         ${['hotel','event','todo','transport'].map(t =>
             `<option value="${t}" ${item.item_type === t ? 'selected' : ''}>
-                                                                                        ${t.charAt(0).toUpperCase()+t.slice(1)}
-                                                                                    </option>`
+                                                                                                                                                ${t.charAt(0).toUpperCase()+t.slice(1)}
+                                                                                                                                            </option>`
         ).join('')}
     </select>
 
-    <select class="form-control mb-2 item-select"
+    <select class="form-control mb-2 item-select selectCountrySelect2"
             name="days[${day}][items][${index}][item_id]">
         <option value="">Select Item</option>
         ${optionsHTML}
@@ -476,6 +578,7 @@
            value="${item.end_time ?? ''}">
 </div>
 `;
+
             }
 
             /* ======================================================
@@ -499,13 +602,13 @@
             <div class="border rounded p-4 mb-6">
                 <h4 class="font-semibold mb-2">Day ${d}</h4>
 
-                <select class="form-control mb-2"
+                <select class="form-control selectCountrySelect2 mb-2"
                         name="days[${d}][city_id]">
                     <option value="">Select City</option>
                     ${cities.map(c =>
                         `<option value="${c.id}" ${c.id == dayData.city_id ? 'selected' : ''}>
-                                                                                                                                                                            ${c.slug}
-                                                                                                                                                                        </option>`
+                                                                                                                                                                                                                                    ${c.slug}
+                                                                                                                                                                                                                                </option>`
                     ).join('')}
                 </select>
 
@@ -521,6 +624,7 @@
             </div>
             `);
                 }
+
             }
 
             /* ======================================================
@@ -534,6 +638,8 @@
                 const index = box.children.length;
 
                 box.insertAdjacentHTML('beforeend', activityBlock(day, index));
+                // $('.selectCountrySelect2').select2();
+
             });
 
             /* ======================================================
@@ -548,7 +654,9 @@
                 wrap.querySelector('input[name*="[item_type]"]').value = type;
 
                 const select = wrap.querySelector('.item-select');
+                select.classList.add("selectCountrySelect2");
                 select.innerHTML = '<option value="">Select Item</option>';
+
 
                 // ✅ NEW SMART FILTER
                 const day = wrap.closest('.activities').dataset.day;

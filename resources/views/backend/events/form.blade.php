@@ -126,8 +126,8 @@
 
                         <div class="grid grid-cols-2 gap-4">
 
-                            <x-admin.form.select label="City" name="city_id" :options="$cities" :selected="$model->city_id"
-                                required />
+                            <x-admin.form.select  label="City" name="city_id" :options="$cities" :selected="$model->city_id"
+                                required class="selectCountrySelect2" />
 
                             {{-- <x-admin.form.category-select label="Event Category" :categories="$categories" :selected="$model->category_id"
                                 required /> --}}

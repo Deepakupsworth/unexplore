@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\CategoryType;
 use App\Http\Controllers\Controller;
 use App\Models\Transport;
 use App\Models\TransportTranslation;
@@ -10,6 +11,8 @@ use App\Models\Language;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Enums\TransportType;
+use App\Models\Category;
+
 class TransportController extends Controller
 {
     public function index(Request $request)
@@ -34,6 +37,9 @@ class TransportController extends Controller
             $query->where('city_id', $request->city_id);
         }
 
+        if($request->filled('cities_ids')){
+            $query->whereIn('city_id', $request->cities_ids);
+        }
         // 🚗 Type filter
         if ($request->filled('type')) {
             $query->where('type', $request->type);
@@ -48,7 +54,10 @@ class TransportController extends Controller
 
         $cities = City::pluck('slug', 'id');
 
-        return view('backend.transports.index', compact('transports', 'cities'));
+        $categories = Category::whereType(CategoryType::TRANSPORT)
+        ->pluck('slug', 'id');
+
+        return view('backend.transports.index', compact('transports', 'cities','categories'));
     }
 
 

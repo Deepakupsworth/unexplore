@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
 use App\Models\Package;
 use App\Models\Category;
 use App\Models\City;
+use App\Models\Currency;
 use App\Models\Language;
 use App\Models\Hotel;
 use App\Models\Event;
@@ -53,9 +54,10 @@ class PackageController extends Controller
             })
 
             // 📂 CATEGORY
-            ->when($request->category_id, function ($q) use ($request) {
-                $q->where('category_id', $request->category_id);
+            ->when($request->category_ids, function ($q) use ($request) {
+                $q->where('category_id', $request->category_ids);
             })
+
 
             // ⚡ STATUS
             ->when($request->status, function ($q) use ($request) {
@@ -66,7 +68,10 @@ class PackageController extends Controller
             ->paginate(20)
             ->withQueryString();
 
-        return view('backend.packages.index', compact('packages'));
+            $categories = Category::whereType(CategoryType::PACKAGE)
+            ->pluck('slug', 'id');
+
+        return view('backend.packages.index', compact('packages','categories'));
     }
 
 
@@ -79,9 +84,10 @@ class PackageController extends Controller
     /* ================= EDIT ================= */
     public function edit(Package $package)
     {
+
         $package->load([
             'translations',
-            'availabilities',
+            'availability',
             'cities',
             'days.items',
             'price',
@@ -90,7 +96,12 @@ class PackageController extends Controller
             'gallery',
             'tags'
         ]);
-        return $this->editForm($package);
+
+        $currencies = Currency::where('status', 1)->get();
+        $defaultCurrency = Currency::where('is_base', 1)->first();
+        $baseCurrency = $defaultCurrency?->code ?? 'SAR';
+
+        return $this->editForm($package, $currencies, $baseCurrency);
     }
 
     public function show(Package $package)
@@ -102,7 +113,7 @@ class PackageController extends Controller
             'policies.translation',
             'category.translation',
             'packageCategories.category.translation',
-            'availabilities',
+            'availability',
             'cities.city',
             'days.items',
             'days.options',
@@ -211,12 +222,14 @@ class PackageController extends Controller
     }
 
     /* ================= EDIT FORM ================= */
-    private function editForm(Package $package)
+    private function editForm(Package $package, $currencies, $baseCurrency)
     {
 
         return view('backend.packages.edit', array_merge(
             $this->commonFormData(),
-            ['package' => $package]
+            ['package' => $package],
+            ['currencies' => $currencies],
+            ['baseCurrency' => $baseCurrency]
         ));
     }
 
@@ -230,7 +243,12 @@ class PackageController extends Controller
         $translationFilter = fn($q) =>
         $q->whereRaw('LOWER(language_code) = ?', [$lang]);
 
+        $defaultCurrency = Currency::where('is_base', 1)->first();
+        $baseCurrency = $defaultCurrency?->code ?? 'SAR';
+
         return [
+            'currencies' => Currency::where('status', 1)->get(),
+            'baseCurrency' => $baseCurrency,
             'categories' => Category::where('type', CategoryType::PACKAGE)
                 ->with('translation')
                 ->get(),
@@ -288,191 +306,527 @@ class PackageController extends Controller
     }
 
     /* ================= SAVE LOGIC ================= */
+    // private function persist(Request $request, Package $package)
+    // {
+    //     $request->validate([
+    //         'tags'   => 'nullable|array',
+    //         'tags.*' => 'exists:tags,id',
+    //         'category_ids'   => 'required|array|min:1',
+    //         'category_ids.*' => 'exists:categories,id',
+
+    //         'package_type'    => 'required|in:fixed,customized',
+    //         'duration_days'   => 'required|integer|min:1',
+    //         'duration_nights' => 'required|integer|min:0',
+    //         'max_persons'     => 'required|integer|min:1',
+
+    //         'availability.available_from' => 'required|date',
+    //         'availability.available_to'   => 'required|date|after_or_equal:availability.available_from',
+
+    //         'pricing.currency'         => 'required|string|size:3',
+    //         'pricing.original_price'   => 'required|numeric|min:0',
+    //         'pricing.per_person_price' => 'required|numeric|min:0',
+    //     ]);
+
+    //     DB::beginTransaction();
+
+    //     try {
+
+    //         /* ================= PACKAGE ================= */
+    //         $package->fill([
+    //             'package_type'    => $request->package_type,
+    //             'duration_days'   => $request->duration_days,
+    //             'duration_nights' => $request->duration_nights,
+    //             'base_persons'    => $request->base_persons ?? 2,
+    //             'max_persons'     => $request->max_persons,
+    //             'status'          => $request->status ?? 'draft',
+    //         ]);
+
+    //         if (!$package->exists) {
+    //             $currentLang = strtolower(app()->getLocale() ?? 'en');
+
+    //             $title = $request->translations[$currentLang]['title']
+    //                 ?? collect($request->translations)->pluck('title')->filter()->first()
+    //                 ?? 'package';
+
+    //             $package->slug = Str::slug($title) . '-' . time();
+    //         }
+
+    //         $package->save();
+
+    //         /* ================= CATEGORIES (NO DELETE) ================= */
+    //         foreach ($request->category_ids as $categoryId) {
+    //             PackageCategory::firstOrCreate([
+    //                 'package_id'  => $package->id,
+    //                 'category_id' => $categoryId,
+    //             ]);
+    //         }
+
+    //         /* ================= TRANSLATIONS (NO DELETE) ================= */
+    //         foreach ($request->translations as $lang => $tr) {
+
+    //             if (empty($tr['title'])) continue;
+
+    //             $package->translations()->updateOrCreate(
+    //                 [
+    //                     'language_code' => strtolower($lang),
+    //                 ],
+    //                 [
+    //                     'title'       => $tr['title'],
+    //                     'sub_title'   => $tr['sub_title'] ?? null,
+    //                     'description' => $tr['description'] ?? null,
+    //                 ]
+    //             );
+    //         }
+
+    //         /* ================= AVAILABILITY (NO DELETE) ================= */
+    //         $package->availabilities()->updateOrCreate(
+    //             [],
+    //             $request->availability
+    //         );
+
+    //         /* ================= CITIES (NO DELETE) ================= */
+    //         foreach ($request->cities ?? [] as $row) {
+
+    //             if (empty($row['city_id'])) continue;
+
+    //             $package->cities()->updateOrCreate(
+    //                 [
+    //                     'city_id' => $row['city_id'],
+    //                 ],
+    //                 [
+    //                     'nights'     => $row['nights'] ?? 1,
+    //                     'sort_order' => $row['sort_order'] ?? 0,
+    //                 ]
+    //             );
+    //         }
+
+    //         /* ================= DAYS & ITEMS (NO DELETE) ================= */
+    //         if ($request->filled('days')) {
+
+    //             foreach ($request->days as $dayNo => $day) {
+
+    //                 $dayNo = (int) $dayNo;
+
+    //                 if (empty($day['city_id'])) continue;
+
+    //                 $dayModel = $package->days()->updateOrCreate(
+    //                     [
+    //                         'package_id' => $package->id,
+    //                         'day_number' => $dayNo,
+    //                     ],
+    //                     [
+    //                         'city_id' => $day['city_id'],
+    //                     ]
+    //                 );
+
+    //                 foreach ($day['items'] ?? [] as $item) {
+
+    //                     $type = strtolower(trim($item['item_type'] ?? ''));
+    //                     $id   = $item['item_id'] ?? null;
+
+    //                     if (!$type || !$id) continue;
+
+    //                     $dayModel->items()->updateOrCreate(
+    //                         [
+    //                             'package_day_id' => $dayModel->id,
+    //                             'item_type'      => $type,
+    //                             'item_id'        => $id,
+    //                         ],
+    //                         [
+    //                             'start_time' => $item['start_time'] ?? null,
+    //                             'end_time'   => $item['end_time'] ?? null,
+    //                             'sort_order' => $item['sort_order'] ?? 0,
+    //                             'package_id' => $package->id,
+    //                         ]
+    //                     );
+    //                 }
+    //             }
+    //         }
+
+    //         /* ================= PRICING (NO DELETE) ================= */
+    //         $package->price()->updateOrCreate([], $request->pricing);
+
+    //         /* ================= ADDITIONAL INFO (NO DELETE) ================= */
+    //         foreach ($request->infos ?? [] as $info) {
+
+    //             if (empty($info['type'])) continue;
+
+    //             $infoModel = $package->infos()->updateOrCreate(
+    //                 [
+    //                     'type' => $info['type']
+    //                 ],
+    //                 []
+    //             );
+
+    //             foreach ($info['translations'] ?? [] as $lang => $tr) {
+
+    //                 if (empty($tr['content'])) continue;
+
+    //                 $infoModel->translations()->updateOrCreate(
+    //                     [
+    //                         'language_code' => strtolower($lang),
+    //                     ],
+    //                     [
+    //                         'title'   => $tr['title'] ?? null,
+    //                         'content' => $tr['content'],
+    //                     ]
+    //                 );
+    //             }
+    //         }
+
+    //         /* ================= MEDIA ================= */
+    //         if ($request->hasFile('thumb')) {
+    //             if ($package->thumb) {
+    //                 Storage::disk('public')->delete($package->thumb->image_path);
+    //                 $package->thumb()->delete(); // file replace allowed
+    //             }
+    //             storeImage($package, $request->thumb, 'package/thumbs', 'thumb', 'en', true);
+    //         }
+
+    //         if ($request->hasFile('gallery')) {
+    //             foreach ($request->gallery as $img) {
+    //                 storeImage($package, $img, 'package/gallery', 'gallery');
+    //             }
+    //         }
+
+    //         /* ================= TAGS ================= */
+    //         $package->tags()->sync($request->tags ?? []);
+
+    //         DB::commit();
+
+    //         return redirect()
+    //             ->route('admin.packages.index')
+    //             ->with('success', 'Package saved successfully');
+    //     } catch (\Throwable $e) {
+
+    //         DB::rollBack();
+
+    //         Log::error('Package Save Failed', [
+    //             'error' => $e->getMessage(),
+    //             'file'  => $e->getFile(),
+    //             'line'  => $e->getLine(),
+    //         ]);
+
+    //         return back()
+    //             ->withInput()
+    //             ->with('error', 'Something went wrong while saving the package.');
+    //     }
+    // }
+
     private function persist(Request $request, Package $package)
     {
-        $request->validate([
-            'tags'   => 'nullable|array',
-            'tags.*' => 'exists:tags,id',
-            'category_ids'   => 'required|array|min:1',
-            'category_ids.*' => 'exists:categories,id',
+        /*
+    |--------------------------------------------------------------------------
+    | Detect Mode
+    |--------------------------------------------------------------------------
+    */
+        $section = $request->input('update_section'); // null in create
+        $isPartialUpdate = !empty($section);
+        /*
+    |--------------------------------------------------------------------------
+    | Validation Rules
+    |--------------------------------------------------------------------------
+    */
+        $rules = [];
 
-            'package_type'    => 'required|in:fixed,customized',
-            'duration_days'   => 'required|integer|min:1',
-            'duration_nights' => 'required|integer|min:0',
-            'max_persons'     => 'required|integer|min:1',
+        // ================= FULL CREATE =================
+        if (!$isPartialUpdate) {
 
-            'availability.available_from' => 'required|date',
-            'availability.available_to'   => 'required|date|after_or_equal:availability.available_from',
+            $rules = [
+                'tags'   => 'nullable|array',
+                'tags.*' => 'exists:tags,id',
 
-            'pricing.currency'         => 'required|string|size:3',
-            'pricing.original_price'   => 'required|numeric|min:0',
-            'pricing.per_person_price' => 'required|numeric|min:0',
-        ]);
+                'category_ids'   => 'required|array|min:1',
+                'category_ids.*' => 'exists:categories,id',
+
+                'package_type'    => 'required|in:fixed,customized',
+                'duration_days'   => 'required|integer|min:1',
+                'duration_nights' => 'required|integer|min:0',
+                'max_persons'     => 'required|integer|min:1',
+
+                'availability.available_from' => 'required|date',
+                'availability.available_to'   => 'required|date|after_or_equal:availability.available_from',
+
+                'pricing.currency'         => 'required|string|size:3',
+                'pricing.original_price'   => 'required|numeric|min:0',
+                'pricing.per_person_price' => 'required|numeric|min:0',
+            ];
+        }
+
+        // ================= PARTIAL UPDATE =================
+        else {
+
+            switch ($section) {
+
+                case 'basic':
+                    $rules = [
+                        'category_ids' => 'required|array|min:1',
+                        'package_type' => 'required',
+                        'status'       => 'required',
+                        'availability.available_from' => 'nullable|date',
+                        'availability.available_to'   => 'nullable|date|after_or_equal:availability.available_from',
+                        'availability.booking_start_date' => 'nullable|date',
+                        'availability.booking_end_date'   => 'nullable|date|after_or_equal:availability.booking_start_date',
+                        'pricing.currency'         => 'required|string|size:3',
+                        'pricing.original_price'   => 'required|numeric|min:0',
+                        'pricing.per_person_price' => 'required|numeric|min:0',
+                    ];
+                    break;
+
+                case 'itinerary':
+                    $rules = [
+                        'duration_days'   => 'required|integer|min:1',
+                        'duration_nights' => 'required|integer|min:0',
+                        'max_persons'     => 'required|integer|min:1',
+                    ];
+                    break;
+
+                case 'media':
+                    $rules = [
+                        'thumb' => 'nullable|image|max:4096',
+                        'gallery.*' => 'nullable|image|max:4096',
+                    ];
+                    break;
+
+                case 'additional':
+                    $rules = [
+                        'infos' => 'nullable|array',
+                    ];
+                    break;
+            }
+        }
+
+        $request->validate($rules);
 
         DB::beginTransaction();
 
         try {
 
-            /* ================= PACKAGE ================= */
-            $package->fill([
-                'package_type'    => $request->package_type,
-                'duration_days'   => $request->duration_days,
-                'duration_nights' => $request->duration_nights,
-                'base_persons'    => $request->base_persons ?? 2,
-                'max_persons'     => $request->max_persons,
-                'status'          => $request->status ?? 'draft',
-            ]);
+            /*
+        |--------------------------------------------------------------------------
+        | PACKAGE CORE SAVE
+        |--------------------------------------------------------------------------
+        */
+            if (!$isPartialUpdate || in_array($section, ['basic', 'itinerary'])) {
 
-            if (!$package->exists) {
-                $currentLang = strtolower(app()->getLocale() ?? 'en');
-
-                $title = $request->translations[$currentLang]['title']
-                    ?? collect($request->translations)->pluck('title')->filter()->first()
-                    ?? 'package';
-
-                $package->slug = Str::slug($title) . '-' . time();
-            }
-
-            $package->save();
-
-            /* ================= CATEGORIES (NO DELETE) ================= */
-            foreach ($request->category_ids as $categoryId) {
-                PackageCategory::firstOrCreate([
-                    'package_id'  => $package->id,
-                    'category_id' => $categoryId,
+                $package->fill([
+                    'package_type'    => $request->package_type ?? $package->package_type,
+                    'duration_days'   => $request->duration_days ?? $package->duration_days,
+                    'duration_nights' => $request->duration_nights ?? $package->duration_nights,
+                    'base_persons'    => $request->base_persons ?? $package->base_persons,
+                    'max_persons'     => $request->max_persons ?? $package->max_persons,
+                    'status'          => $request->status ?? $package->status,
                 ]);
+
+                // slug only on create
+                if (!$package->exists) {
+
+                    $currentLang = strtolower(app()->getLocale() ?? 'en');
+
+                    $title = $request->translations[$currentLang]['title']
+                        ?? collect($request->translations ?? [])->pluck('title')->filter()->first()
+                        ?? 'package';
+
+                    $package->slug = Str::slug($title) . '-' . time();
+                }
+
+                $package->save();
             }
 
-            /* ================= TRANSLATIONS (NO DELETE) ================= */
-            foreach ($request->translations as $lang => $tr) {
-
-                if (empty($tr['title'])) continue;
-
-                $package->translations()->updateOrCreate(
-                    [
-                        'language_code' => strtolower($lang),
-                    ],
-                    [
-                        'title'       => $tr['title'],
-                        'sub_title'   => $tr['sub_title'] ?? null,
-                        'description' => $tr['description'] ?? null,
-                    ]
-                );
+            /*
+        |--------------------------------------------------------------------------
+        | CATEGORIES
+        |--------------------------------------------------------------------------
+        */
+            if (!$isPartialUpdate || $section === 'basic') {
+                foreach ($request->category_ids ?? [] as $categoryId) {
+                    PackageCategory::firstOrCreate([
+                        'package_id'  => $package->id,
+                        'category_id' => $categoryId,
+                    ]);
+                }
             }
 
-            /* ================= AVAILABILITY (NO DELETE) ================= */
-            $package->availabilities()->updateOrCreate(
-                [],
-                $request->availability
-            );
+            /*
+        |--------------------------------------------------------------------------
+        | TRANSLATIONS
+        |--------------------------------------------------------------------------
+        */
+            if (!$isPartialUpdate || $section === 'basic') {
+                foreach ($request->translations ?? [] as $lang => $tr) {
 
-            /* ================= CITIES (NO DELETE) ================= */
-            foreach ($request->cities ?? [] as $row) {
+                    if (empty($tr['title'])) continue;
 
-                if (empty($row['city_id'])) continue;
-
-                $package->cities()->updateOrCreate(
-                    [
-                        'city_id' => $row['city_id'],
-                    ],
-                    [
-                        'nights'     => $row['nights'] ?? 1,
-                        'sort_order' => $row['sort_order'] ?? 0,
-                    ]
-                );
-            }
-
-            /* ================= DAYS & ITEMS (NO DELETE) ================= */
-            if ($request->filled('days')) {
-
-                foreach ($request->days as $dayNo => $day) {
-
-                    $dayNo = (int) $dayNo;
-
-                    if (empty($day['city_id'])) continue;
-
-                    $dayModel = $package->days()->updateOrCreate(
+                    $package->translations()->updateOrCreate(
+                        ['language_code' => strtolower($lang)],
                         [
-                            'package_id' => $package->id,
-                            'day_number' => $dayNo,
-                        ],
-                        [
-                            'city_id' => $day['city_id'],
+                            'title'       => $tr['title'],
+                            'sub_title'   => $tr['sub_title'] ?? null,
+                            'description' => $tr['description'] ?? null,
                         ]
                     );
+                }
+            }
 
-                    foreach ($day['items'] ?? [] as $item) {
+            /*
+        |--------------------------------------------------------------------------
+        | AVAILABILITY
+        |--------------------------------------------------------------------------
+        */
+            if (!$isPartialUpdate || $section === 'basic') {
 
-                        $type = strtolower(trim($item['item_type'] ?? ''));
-                        $id   = $item['item_id'] ?? null;
+                if ($request->has('availability')) {
 
-                        if (!$type || !$id) continue;
+                    $package->availability()->updateOrCreate(
+                        ['package_id' => $package->id],   // 🔥 IMPORTANT
+                        [
+                            'available_from'     => $request->availability['available_from'] ?? null,
+                            'available_to'       => $request->availability['available_to'] ?? null,
+                            'booking_start_date' => $request->availability['booking_start_date'] ?? null,
+                            'booking_end_date'   => $request->availability['booking_end_date'] ?? null,
+                        ]
+                    );
+                }
+            }  /*
+        |--------------------------------------------------------------------------
+        | CITIES
+        |--------------------------------------------------------------------------
+        */
+            if (!$isPartialUpdate || $section === 'itinerary') {
+                foreach ($request->cities ?? [] as $row) {
 
-                        $dayModel->items()->updateOrCreate(
+                    if (empty($row['city_id'])) continue;
+
+                    $package->cities()->updateOrCreate(
+                        ['city_id' => $row['city_id']],
+                        [
+                            'nights'     => $row['nights'] ?? 1,
+                            'sort_order' => $row['sort_order'] ?? 0,
+                        ]
+                    );
+                }
+            }
+
+            /*
+        |--------------------------------------------------------------------------
+        | DAYS & ITEMS
+        |--------------------------------------------------------------------------
+        */
+            if (!$isPartialUpdate || $section === 'itinerary') {
+
+                if ($request->filled('days')) {
+
+                    foreach ($request->days as $dayNo => $day) {
+
+                        $dayNo = (int) $dayNo;
+                        if (empty($day['city_id'])) continue;
+
+                        $dayModel = $package->days()->updateOrCreate(
                             [
-                                'package_day_id' => $dayModel->id,
-                                'item_type'      => $type,
-                                'item_id'        => $id,
+                                'package_id' => $package->id,
+                                'day_number' => $dayNo,
                             ],
                             [
-                                'start_time' => $item['start_time'] ?? null,
-                                'end_time'   => $item['end_time'] ?? null,
-                                'sort_order' => $item['sort_order'] ?? 0,
-                                'package_id' => $package->id,
+                                'city_id' => $day['city_id'],
+                            ]
+                        );
+
+                        foreach ($day['items'] ?? [] as $item) {
+
+                            $type = strtolower(trim($item['item_type'] ?? ''));
+                            $id   = $item['item_id'] ?? null;
+
+                            if (!$type || !$id) continue;
+
+                            $dayModel->items()->updateOrCreate(
+                                [
+                                    'package_day_id' => $dayModel->id,
+                                    'item_type'      => $type,
+                                    'item_id'        => $id,
+                                ],
+                                [
+                                    'start_time' => $item['start_time'] ?? null,
+                                    'end_time'   => $item['end_time'] ?? null,
+                                    'sort_order' => $item['sort_order'] ?? 0,
+                                    'package_id' => $package->id,
+                                ]
+                            );
+                        }
+                    }
+                }
+            }
+
+            /*
+        |--------------------------------------------------------------------------
+        | PRICING
+        |--------------------------------------------------------------------------
+        */
+            if (!$isPartialUpdate || $section === 'basic') {
+                if ($request->filled('pricing')) {
+                    $package->price()->updateOrCreate([], $request->pricing);
+                }
+            }
+
+            /*
+        |--------------------------------------------------------------------------
+        | ADDITIONAL INFO
+        |--------------------------------------------------------------------------
+        */
+            if (!$isPartialUpdate || $section === 'additional') {
+                foreach ($request->infos ?? [] as $info) {
+
+                    if (empty($info['type'])) continue;
+
+                    $infoModel = $package->infos()->updateOrCreate(
+                        ['type' => $info['type']],
+                        []
+                    );
+
+                    foreach ($info['translations'] ?? [] as $lang => $tr) {
+
+                        if (empty($tr['content'])) continue;
+
+                        $infoModel->translations()->updateOrCreate(
+                            ['language_code' => strtolower($lang)],
+                            [
+                                'title'   => $tr['title'] ?? null,
+                                'content' => $tr['content'],
                             ]
                         );
                     }
                 }
             }
 
-            /* ================= PRICING (NO DELETE) ================= */
-            $package->price()->updateOrCreate([], $request->pricing);
+            /*
+        |--------------------------------------------------------------------------
+        | MEDIA
+        |--------------------------------------------------------------------------
+        */
+            if (!$isPartialUpdate || $section === 'media') {
 
-            /* ================= ADDITIONAL INFO (NO DELETE) ================= */
-            foreach ($request->infos ?? [] as $info) {
+                if ($request->hasFile('thumb')) {
+                    if ($package->thumb) {
+                        Storage::disk('public')->delete($package->thumb->image_path);
+                        $package->thumb()->delete();
+                    }
+                    storeImage($package, $request->thumb, 'package/thumbs', 'thumb', 'en', true);
+                }
 
-                if (empty($info['type'])) continue;
-
-                $infoModel = $package->infos()->updateOrCreate(
-                    [
-                        'type' => $info['type']
-                    ],
-                    []
-                );
-
-                foreach ($info['translations'] ?? [] as $lang => $tr) {
-
-                    if (empty($tr['content'])) continue;
-
-                    $infoModel->translations()->updateOrCreate(
-                        [
-                            'language_code' => strtolower($lang),
-                        ],
-                        [
-                            'title'   => $tr['title'] ?? null,
-                            'content' => $tr['content'],
-                        ]
-                    );
+                if ($request->hasFile('gallery')) {
+                    foreach ($request->gallery as $img) {
+                        storeImage($package, $img, 'package/gallery', 'gallery');
+                    }
                 }
             }
 
-            /* ================= MEDIA ================= */
-            if ($request->hasFile('thumb')) {
-                if ($package->thumb) {
-                    Storage::disk('public')->delete($package->thumb->image_path);
-                    $package->thumb()->delete(); // file replace allowed
-                }
-                storeImage($package, $request->thumb, 'package/thumbs', 'thumb', 'en', true);
+            /*
+        |--------------------------------------------------------------------------
+        | TAGS
+        |--------------------------------------------------------------------------
+        */
+            if (!$isPartialUpdate || $section === 'basic') {
+                $package->tags()->sync($request->tags ?? []);
             }
-
-            if ($request->hasFile('gallery')) {
-                foreach ($request->gallery as $img) {
-                    storeImage($package, $img, 'package/gallery', 'gallery');
-                }
-            }
-
-            /* ================= TAGS ================= */
-            $package->tags()->sync($request->tags ?? []);
 
             DB::commit();
 

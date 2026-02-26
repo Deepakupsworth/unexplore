@@ -15,7 +15,7 @@
         <header class="card-header flex justify-between items-center">
             <h4 class="card-title">Transports</h4>
             <a href="{{ route('transports.create') }}" class="btn btn-dark">
-                + Add Transpor
+                + Add Transport
             </a>
         </header>
 
@@ -35,20 +35,14 @@
                     {{-- City --}}
                     <div class="fromGroup">
                         <label class="form-label">City</label>
-                        <select name="city_id" class="form-control">
-                            <option value="">All Cities</option>
-                            @foreach ($cities as $id => $city)
-                                <option value="{{ $id }}" {{ request('city_id') == $id ? 'selected' : '' }}>
-                                    {{ $city }}
-                                </option>
-                            @endforeach
+                        <select id="seachcities" name="cities_ids[]" class="form-control select2" multiple>
                         </select>
                     </div>
 
                     {{-- Type --}}
                     <div class="fromGroup">
                         <label class="form-label">Type</label>
-                        <select name="type" class="form-control">
+                        <select name="type" class="form-control selectCountrySelect2">
                             <option value="">All</option>
                             <option value="car" {{ request('type') == 'car' ? 'selected' : '' }}>Car
                             </option>
@@ -64,7 +58,7 @@
                     {{-- Status --}}
                     <div class="fromGroup">
                         <label class="form-label">Status</label>
-                        <select name="status" class="form-control">
+                        <select name="status" class="form-control selectCountrySelect2">
                             <option value="">All</option>
                             <option value="1" {{ request('status') === '1' ? 'selected' : '' }}>Active
                             </option>
@@ -152,4 +146,59 @@
             <div class="mt-6">{{ $transports->links() }}</div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            $('.selectCountrySelect2').select2();
+        const el = document.getElementById('seachcities');
+        if (!el) return;
+
+        const selectedIds = @json(request('cities_ids', []));
+
+        // Initialize Select2 with AJAX search
+        $(el).select2({
+            placeholder: 'Search cities',
+            width: '100%',
+            minimumInputLength: 1,
+            ajax: {
+                url: '/admin/cities/search',
+                dataType: 'json',
+                delay: 300,
+                data: function (params) {
+                    return {
+                        q: params.term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data.map(item => ({
+                            id: item.id,
+                            text: item.title
+                        }))
+                    };
+                },
+                cache: true
+            }
+        });
+
+        // Load selected IDs (important for GET filter)
+        if (selectedIds.length > 0) {
+            $.ajax({
+                url: '/admin/cities/seachIds',
+                type: 'GET',
+                data: {
+                    ids: selectedIds
+                },
+                success: function (data) {
+                    data.forEach(item => {
+                        const option = new Option(item.title, item.id, true, true);
+                        el.append(option);
+                    });
+                    $(el).trigger('change');
+                }
+            });
+        }
+
+    });
+    </script>
 @endsection

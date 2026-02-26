@@ -1,6 +1,20 @@
 @extends('backend.layout')
 @section('content')
 
+ {{-- ================= HEADER ================= --}}
+
+ <div class="mb-5">
+    <ul class="flex items-center gap-2 text-sm">
+        <li class="text-primary-500">
+            <a href="{{ url('/admin/dashboard') }}">
+                <iconify-icon icon="heroicons-outline:home"></iconify-icon>
+            </a>
+        </li>
+        <li class="text-slate-400">/</li>
+        <li class="text-slate-700 font-medium">Blogs</li>
+    </ul>
+</div>
+
 <div class="card">
     <header class="card-header flex justify-between">
         <h4 class="card-title">Blogs</h4>

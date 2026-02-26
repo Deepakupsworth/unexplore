@@ -38,6 +38,11 @@ class Package extends Model
             ->where('language_code', app()->getLocale());
     }
 
+    public function availability()
+    {
+        return $this->hasOne(PackageAvailability::class);
+    }
+
     /* ================= AVAILABILITY ================= */
     public function availabilities()
     {
@@ -211,7 +216,4 @@ class Package extends Model
     {
         return $this->hasMany(PackageDayItem::class);
     }
-
-
-
 }

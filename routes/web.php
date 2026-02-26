@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\TransportController;
 use App\Http\Controllers\Admin\AdminCouponController;
 use App\Http\Controllers\Admin\SeoController;
 use App\Http\Controllers\Frontend\Event\EventController as FrontendEventController;
+use App\Http\Controllers\Admin\TranslationController;
 
 use App\Http\Controllers\DemoJsonController;
 use App\Http\Controllers\HomeController;
@@ -82,13 +83,6 @@ Route::middleware([RedirectIfAuthenticated::class])->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/checkout', [CheckoutController::class, 'show'])
-        ->name('checkout.view');
-
-    Route::post('/checkout/book', [BookingController::class, 'store'])
-        ->name('checkout.book');
-    Route::get('/booking/success', [BookingController::class, 'success'])
-        ->name('booking.success');
     Route::get('/test-booking-mail', [BookingController::class, 'testBookingMail']);
 
     Route::post(
@@ -108,6 +102,15 @@ Route::middleware(['auth', 'user'])->group(function () {
 
     Route::get('/account/load', [AccountController::class, 'loadTab'])
         ->name('account.load');
+
+    Route::get('/checkout', [CheckoutController::class, 'show'])
+        ->name('checkout.view');
+
+    Route::post('/checkout/book', [BookingController::class, 'store'])
+        ->name('checkout.book');
+
+    Route::get('/booking/success', [BookingController::class, 'success'])
+        ->name('booking.success');
 
     Route::post('/account/addresses', [AddressController::class, 'store']);
     Route::get('/account/addresses/{id}', [AddressController::class, 'show']);
@@ -337,6 +340,13 @@ Route::middleware(['auth', 'admin'])->group(function () {
         });
     });
 
+    Route::prefix('admin/translations')->group(function () {
+        Route::get('/', [TranslationController::class, 'index']);
+        Route::get('{group}', [TranslationController::class, 'edit']);
+        Route::post('update-one', [TranslationController::class, 'updateOne']);
+        Route::post('update-all', [TranslationController::class, 'updateAll']);
+    });
+
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::prefix('packages')->name('packages.')->group(function () {
 
@@ -552,7 +562,7 @@ Route::get('/destination-details/{slug?}', [HomeController::class, 'destination_
 Route::get('/package-listing', [FrontendPackageController::class, 'list'])->name('package.listing');
 
 Route::get('/package-details', [FrontendPackageController::class, 'details'])->name('package.details');
-Route::get('/package-day-option/{id}/{type}', [FrontendPackageController::class, 'packageDayOption'])->name('package.details.options');
+Route::get('/package-day-option/{id}/{type}/{index}', [FrontendPackageController::class, 'packageDayOption'])->name('package.details.options');
 
 Route::post('/store-traveller-session', [FrontendPackageController::class, 'storeSession'])
     ->name('store.traveller.session');
@@ -560,9 +570,9 @@ Route::post('/store-traveller-session', [FrontendPackageController::class, 'stor
 Route::get('/package/{slug}/gallery', [FrontendPackageController::class, 'gallery'])
     ->name('package.gallery');
 
-Route::get('/package-day-option/{id}/{type}', [FrontendPackageController::class, 'packageDayOption'])->name('package.details.option');
+Route::get('/package-day-option/{id}/{type}/{index}', [FrontendPackageController::class, 'packageDayOption'])->name('package.details.option');
 
-Route::post('/save-package-day-item-session', [FrontendPackageController::class, 'savePackageDayItemSession'])->name('package.day.item.option.session');
+Route::any('/save-save-package-day-item-session', [FrontendPackageController::class, 'savePackageDayItemSession'])->name('package.day.item.option.session');
 
 
 Route::post(
@@ -677,3 +687,7 @@ Route::prefix('info')->name('info.')->group(function () {
     Route::get('/getting-around', [InfoPageController::class, 'gettingAround'])
         ->name('getting-around');
 });
+
+Route::get('/cities/search', [PageController::class, 'search'])
+    ->name('cities.search');
+

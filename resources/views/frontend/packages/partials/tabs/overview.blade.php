@@ -253,11 +253,21 @@
 
                                 {{-- ================= EVENT ================= --}}
                                 @php
+
+                               
                                     $sessionEventIds = $sessionItems[$day->id]['event'] ?? null;
 
-                                    $events = $sessionEventIds
-                                        ? $allEvents->whereIn('id', $sessionEventIds)
-                                        : $day->items->where('item_type', 'event')->map->event;
+                                 
+                                    if ($sessionEventIds) {
+                                       
+                                    // session exists → show selected
+                                    $events = $allEvents->whereIn('id', array_values($sessionEventIds));
+                                   
+                                    } else {
+                                        // first time → show package default
+                                        $events = $day->items->where('item_type', 'event')->map(fn($i) => $i->event);
+                                    }
+
                                 @endphp
 
                                 @if ($events->count())

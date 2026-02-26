@@ -731,7 +731,7 @@
     background-size: cover;
     color: var(--color-white);
     position: relative;
-    height: 100vh;
+    height: 100vh !important;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;

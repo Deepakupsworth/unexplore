@@ -15,6 +15,8 @@ use App\Models\Transport;
 use App\Services\Frontend\Package\PackageService;
 use Illuminate\Http\Request;
 use App\Support\PriceCalculator;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+
 
 class PackageController extends Controller
 {
@@ -44,119 +46,139 @@ class PackageController extends Controller
 
         /* ================= MAIN QUERY ================= */
         //print_r($request->rating);die;
+
         $packagesQuery = Package::query()
-            ->with([
-                'translations',
-                'cities.city.translations',
-                'price',
-                'days.items.transport',
-                'days.items.hotel',
-            ])->where('status','active')
+            ->with(['translations', 'cities.city.translations', 'price']);
 
-            /* 🔍 SEARCH */
-            ->when($request->search, function ($q) use ($request) {
-                $q->where(function ($qq) use ($request) {
-                    $qq->whereHas(
-                        'translations',
-                        fn($t) =>
-                        $t->where('title', 'like', "%{$request->search}%")
-                    )
-                        ->orWhereHas(
-                            'cities.city.translations',
-                            fn($ct) =>
-                            $ct->where('name', 'like', "%{$request->search}%")
-                        );
-                });
-            })
+        $packagesQuery = $this->applyPackageFilters($packagesQuery, $request);
 
-            /* 💰 BUDGET RANGE FILTER (NEW) */
-            ->when(
-                $request->filled('min_price') || $request->filled('max_price'),
-                function ($q) use ($request) {
+        // $packagesQuery = Package::query()
+        //     ->with([
+        //         'translations',
+        //         'cities.city.translations',
+        //         'price',
+                
+        //     ])->where('status','active')
 
-                    $min = (int) ($request->min_price ?? 0);
-                    $max = (int) ($request->max_price ?? PHP_INT_MAX);
+        //     /* 🔍 SEARCH */
+        //     ->when($request->search, function ($q) use ($request) {
+        //         $q->where(function ($qq) use ($request) {
+        //             $qq->whereHas(
+        //                 'translations',
+        //                 fn($t) =>
+        //                 $t->where('title', 'like', "%{$request->search}%")
+        //             )
+        //                 ->orWhereHas(
+        //                     'cities.city.translations',
+        //                     fn($ct) =>
+        //                     $ct->where('name', 'like', "%{$request->search}%")
+        //                 );
+        //         });
+        //     })
 
-                    $q->whereHas('price', function ($priceQuery) use ($min, $max) {
-                        $priceQuery->whereBetween('per_person_price', [$min, $max]);
-                    });
-                }
-            )
+        //     /* 💰 BUDGET RANGE FILTER (NEW) */
+        //     ->when(
+        //         $request->filled('min_price') || $request->filled('max_price'),
+        //         function ($q) use ($request) {
+
+        //             $min = (int) ($request->min_price ?? 0);
+        //             $max = (int) ($request->max_price ?? PHP_INT_MAX);
+
+        //             $q->whereHas('price', function ($priceQuery) use ($min, $max) {
+        //                 $priceQuery->whereBetween('per_person_price', [$min, $max]);
+        //             });
+        //         }
+        //     )
 
 
+        //     ->when($request->rating, function ($q) use ($request) {
 
-            /* ⭐ HOTEL RATING */
-            ->when(
-                $request->rating,
-                fn($q) =>
-                // $q->whereHas(
-                //     'days.items.hotel',
-                //     fn($h) =>
-                //     $h->whereIn('star_rating', (array) $request->rating)
-                // )
-                $q->whereDoesntHave('days.items.hotel', fn ($h) =>
-                    $h->whereNotIn('star_rating', (array) $request->rating)
-                )
-            )
+        //         $ratings = (array) $request->rating;
+            
+        //         $q->whereHas('dayItems', function ($dayItem) use ($ratings) {
+            
+        //             $dayItem->whereHasMorph(
+        //                 'item',
+        //                 [Hotel::class], // 🔒 ONLY hotels
+        //                 function ($hotel) use ($ratings) {
+        //                     $hotel->whereIn('star_rating', $ratings);
+        //                 }
+        //             );
+            
+        //         });
+            
+        //     })
 
-            /* 🌍 CITY */
-            ->when(
-                $request->cities,
-                fn($q) =>
-                $q->whereHas(
-                    'cities',
-                    fn($c) =>
-                    $c->whereIn('city_id', (array) $request->cities)
-                )
-            )
+        //     /* 🌍 CITY */
+        //     ->when(
+        //         $request->cities,
+        //         fn($q) =>
+        //         $q->whereHas(
+        //             'cities',
+        //             fn($c) =>
+        //             $c->whereIn('city_id', (array) $request->cities)
+        //         )
+        //     )
 
-            ->when(
-                $request->city,
-                fn($q) =>
-                $q->whereHas(
-                    'cities',
-                    fn($c) =>
-                    $c->where('city_id',$request->city)
-                )
-            )
+        //     ->when(
+        //         $request->city,
+        //         fn($q) =>
+        //         $q->whereHas(
+        //             'cities',
+        //             fn($c) =>
+        //             $c->where('city_id',$request->city)
+        //         )
+        //     )
 
-            /* 📦 PACKAGE TYPE */
-            ->when(
-                $request->package_type,
-                fn($q) =>
-                $q->whereIn('package_type', (array) $request->package_type)
-            )
+        //     /* 📦 PACKAGE TYPE */
+        //     ->when(
+        //         $request->package_type,
+        //         fn($q) =>
+        //         $q->whereIn('package_type', (array) $request->package_type)
+        //     )
 
-            /* 🎯 TODO / EVENT FILTERS */
-            ->when(
-                $request->todo_category,
-                fn($q) =>
-                $q->whereHas(
-                    'days.items.todo',
-                    fn($t) =>
-                    $t->where('category_id', $request->todo_category)
-                )
-            )
-            ->when(
-                $request->todo_id,
-                fn($q) =>
-                $q->whereHas(
-                    'days.items',
-                    fn($i) =>
-                    $i->where('item_type', 'todo')
-                        ->where('item_id', $request->todo_id)
-                )
-            )
-            ->when(
-                $request->event_id,
-                fn($q) =>
-                $q->whereHas(
-                    'days.items',
-                    fn($i) =>
-                    $i->where('item_type', 'event')
-                        ->where('item_id', $request->event_id)
-                )
-            );
+        //     /* 🎯 TODO / EVENT FILTERS */
+        //     ->when($request->todo_category, function ($q) use ($request) {
+        //         $q->whereHas('days.items', function ($item) use ($request) {
+        //             $item->whereHasMorph(
+        //                 'item',
+        //                 [ThingToDo::class],
+        //                 function ($todo) use ($request) {
+        //                     $todo->where('category_id', $request->todo_category);
+        //                 }
+        //             );
+        //         });
+        //     })
+            
+        //     /* =========================
+        //      | TODO ID FILTER
+        //      |=========================*/
+        //     ->when($request->todo_id, function ($q) use ($request) {
+        //         $q->whereHas('days.items', function ($item) use ($request) {
+        //             $item->whereHasMorph(
+        //                 'item',
+        //                 [ThingToDo::class],
+        //                 function ($todo) use ($request) {
+        //                     $todo->where('id', $request->todo_id);
+        //                 }
+        //             );
+        //         });
+        //     })
+            
+        //     /* =========================
+        //      | EVENT ID FILTER
+        //      |=========================*/
+        //     ->when($request->event_id, function ($q) use ($request) {
+        //         $q->whereHas('days.items', function ($item) use ($request) {
+        //             $item->whereHasMorph(
+        //                 'item',
+        //                 [Event::class],
+        //                 function ($event) use ($request) {
+        //                     $event->where('id', $request->event_id);
+        //                 }
+        //             );
+        //         });
+        //     });
 
         /* ================= SORT ================= */
 
@@ -178,9 +200,12 @@ class PackageController extends Controller
 
         /* ================= PAGINATION ================= */
 
+        
         $packages = $packagesQuery
             ->paginate(20)
             ->withQueryString();
+
+            //print_r($packages->toArray());die;
 
         /* ================= PRICE CALCULATION ================= */
 
@@ -217,6 +242,115 @@ class PackageController extends Controller
         ));
     }
 
+
+    private function applyPackageFilters($query, Request $request)
+    {
+        return $query
+            ->where('status', 'active')
+
+            /* 🔍 SEARCH */
+            ->when($request->search, function ($q) use ($request) {
+                $q->where(function ($qq) use ($request) {
+                    $qq->whereHas('translations', fn ($t) =>
+                        $t->where('title', 'like', "%{$request->search}%")
+                    )->orWhereHas('cities.city.translations', fn ($ct) =>
+                        $ct->where('name', 'like', "%{$request->search}%")
+                    );
+                });
+            })
+
+            /* 💰 PRICE RANGE */
+            ->when(
+                $request->filled('min_price') || $request->filled('max_price'),
+                function ($q) use ($request) {
+                    $min = (int) ($request->min_price ?? 0);
+                    $max = (int) ($request->max_price ?? PHP_INT_MAX);
+
+                    $q->whereHas('price', fn ($p) =>
+                        $p->whereBetween('per_person_price', [$min, $max])
+                    );
+                }
+            )
+
+            /* ⭐ HOTEL RATING */
+            ->when($request->rating, function ($q) use ($request) {
+
+                $ratings = (array) $request->rating;
+            
+                $q->whereHas('dayItems', function ($di) use ($ratings) {
+            
+                    $di->where('item_type', 'hotel')
+                       ->whereIn('item_id', function ($sub) use ($ratings) {
+                           $sub->select('id')
+                               ->from('hotels')
+                               ->whereIn('star_rating', $ratings);
+                       });
+            
+                });
+            })
+
+            /* 🌍 CITIES */
+            ->when($request->cities, fn ($q) =>
+                $q->whereHas('cities', fn ($c) =>
+                    $c->whereIn('city_id', (array) $request->cities)
+                )
+            )
+
+            ->when($request->city, fn ($q) =>
+                $q->whereHas('cities', fn ($c) =>
+                    $c->where('city_id', $request->city)
+                )
+            )
+
+            ->when($request->start_date, function ($q) use ($request) {
+                $q->whereHas('availabilities', function ($c) use ($request) {
+                    $c->where('available_from', '<=', $request->start_date)
+                      ->where('available_to', '>=', $request->start_date);
+                });
+            })
+
+            ->when($request->adult || $request->children, function ($q) use ($request) {
+
+                $totalPersons = (int)$request->adult + (int)$request->children;
+            
+                $q->where('max_persons', '>=', $totalPersons);
+            
+            })
+
+            /* 📦 PACKAGE TYPE */
+            ->when($request->package_type, fn ($q) =>
+                $q->whereIn('package_type', (array) $request->package_type)
+            )
+
+           // 🎯 TODO CATEGORY
+            ->when($request->todo_category, function ($q) use ($request) {
+                $q->whereHas('dayItems', function ($di) use ($request) {
+                    $di->where('item_type', 'todo')
+                    ->whereIn('item_id', function ($sub) use ($request) {
+                        $sub->select('id')
+                            ->from('thing_to_dos') // your table name
+                            ->where('category_id', $request->todo_category);
+                    });
+                });
+            })
+
+            // 🎯 TODO ID
+            ->when($request->todo_id, function ($q) use ($request) {
+                $q->whereHas('dayItems', function ($di) use ($request) {
+                    $di->where('item_type', 'todo')
+                    ->where('item_id', $request->todo_id);
+                });
+            })
+
+            // 🎯 EVENT ID
+            ->when($request->event_id, function ($q) use ($request) {
+                $q->whereHas('dayItems', function ($di) use ($request) {
+                    $di->where('item_type', 'event')
+                    ->where('item_id', $request->event_id);
+                });
+            });
+    }
+
     /**
      * =========================
      * AJAX FILTER LOAD
@@ -229,76 +363,9 @@ class PackageController extends Controller
 
         /* ================= MAIN QUERY ================= */
         $packagesQuery = Package::query()
-            ->with([
-                'translations',
-                'cities.city.translations',
-                'price',
-                'days.items.transport',
-                'days.items.hotel',
-            ])->where('status','active')
-
-            /* 🔍 SEARCH */
-            ->when($request->search, function ($q) use ($request) {
-                $q->where(function ($qq) use ($request) {
-                    $qq->whereHas(
-                        'translations',
-                        fn($t) =>
-                        $t->where('title', 'like', "%{$request->search}%")
-                    )
-                        ->orWhereHas(
-                            'cities.city.translations',
-                            fn($ct) =>
-                            $ct->where('name', 'like', "%{$request->search}%")
-                        );
-                });
-            })
-
-            /* 💰 BUDGET RANGE FILTER (NEW) */
-            ->when(
-                $request->filled('min_price') || $request->filled('max_price'),
-                function ($q) use ($request) {
-
-                    $min = (int) ($request->min_price ?? 0);
-                    $max = (int) ($request->max_price ?? PHP_INT_MAX);
-
-                    $q->whereHas('price', function ($priceQuery) use ($min, $max) {
-                        $priceQuery->whereBetween('per_person_price', [$min, $max]);
-                    });
-                }
-            )
-
-
-            /* ⭐ HOTEL RATING */
-            ->when(
-                $request->rating,
-                fn($q) =>
-                // $q->whereHas(
-                //     'days.items.hotel',
-                //     fn($h) =>
-                //     $h->whereIn('star_rating', (array) $request->rating)
-                // )
-                $q->whereDoesntHave('days.items.hotel', fn ($h) =>
-                    $h->whereNotIn('star_rating', (array) $request->rating)
-                )
-            )
-
-            /* 🌍 CITIES */
-            ->when(
-                $request->cities,
-                fn($q) =>
-                $q->whereHas(
-                    'cities',
-                    fn($c) =>
-                    $c->whereIn('city_id', (array) $request->cities)
-                )
-            )
-
-            /* 📦 PACKAGE TYPE */
-            ->when(
-                $request->package_type,
-                fn($q) =>
-                $q->whereIn('package_type', (array) $request->package_type)
-            );
+            ->with(['translations', 'cities.city.translations', 'price']);
+    
+         $packagesQuery = $this->applyPackageFilters($packagesQuery, $request);
 
         /* ================= SORT ================= */
 
@@ -358,229 +425,168 @@ class PackageController extends Controller
      */
 
 
-    public function show(string $slug)
-    {
-        // session()->flush();
+     public function show(string $slug)
+     {
+         $language = current_lang();
+         //session()->flush();
+     
+         /* -------------------------------------------------
+          | LOAD PACKAGE (NO POLYMORPHIC EAGER LOADING)
+          |--------------------------------------------------*/
+         $package = Package::with([
+             'thumb',
+             'gallery',
+             'translation',
+             'cities',
+             'availabilities',
+             'days.items',
+             'days.options',
+         ])
+         ->where('slug', $slug)
+         ->firstOrFail();
+     
+         /* -------------------------------------------------
+          | CITY → NIGHTS
+          |--------------------------------------------------*/
+         $places = collect($package->days)
+             ->groupBy('city_id')
+             ->map(function ($days) {
+                 $city = $days->first()->city;
+     
+                 return [
+                     'city'   => $city?->translation?->name ?? 'Unknown',
+                     'nights' => max(1, $days->count() - 1),
+                 ];
+             })
+             ->values();
+     
+         /* -------------------------------------------------
+          | DAY WISE OPTIONS
+          |--------------------------------------------------*/
+         $dayWiseOptions = [];
+     
+         foreach ($package->days as $day) {
+             $dayWiseOptions[$day->id] = $day->options
+                 ->groupBy('item_type')
+                 ->map(fn ($items) => $items->keyBy('item_id')->toArray())
+                 ->toArray();
+         }
+     
 
-        $language = current_lang();
+        // print_r($dayWiseOptions);die;
+         /* -------------------------------------------------
+          | SESSION OVERRIDE + COLLECT IDS
+          |--------------------------------------------------*/
+         $sessionItems = session("package_day_items.{$package->id}", []);
+         //print_r($sessionItems);
 
-        $package = Package::with([
-            'thumb',
-            'gallery',
-            'translation',
-            'cities',
-            'days.items.hotel.translation' => fn($q) => $q->where('language_code', $language),
-            'days.items.hotel.thumb',
-            'days.items.hotel.gallery',
-
-            'days.items.todo.translation' => fn($q) => $q->where('language_code', $language),
-            'days.items.todo.thumb',
-            'days.items.todo.gallery',
-
-            'days.items.event.translation' => fn($q) => $q->where('language_code', $language),
-            'days.items.event.thumb',
-            'days.items.event.gallery',
-
-            // ===== ✅ ADD THIS ONLY =====
-            'days.options.hotel.translation' => fn($q) => $q->where('language_code', $language),
-            'days.options.hotel.thumb',
-            'days.options.hotel.gallery',
-
-            'days.options.todo.translation' => fn($q) => $q->where('language_code', $language),
-            'days.options.todo.thumb',
-            'days.options.todo.gallery',
-
-
-            'days.options.event.translation' => fn($q) => $q->where('language_code', $language),
-            'days.options.event.thumb',
-            'days.options.event.gallery',
-            'availabilities',
-
-            'days.options.transport.translation' => fn($q) => $q->where('language_code', $language),
-            'days.options.transport.thumb',
-        ])->where('slug', $slug)->firstOrFail();
-
-
-        // 🔥 CITY → NIGHTS CALCULATION
-        $places = collect($package->days)
-            ->groupBy('city_id')
-            ->map(function ($days) {
-                $city = $days->first()->city;
-
-                return [
-                    'city'   => $city?->translation?->name ?? 'Unknown',
-                    'nights' => max(1, $days->count() - 1),
-                ];
-            })
-            ->values();
-
-        //print_r($package->toArray());die;
-
-        // ===== ✅ DAY WISE OPTIONS (FINAL STRUCTURE) =====
-        $dayWiseOptions = [];
-
-        foreach ($package->days as $day) {
-            $dayWiseOptions[$day->id] = $day->options
-                ->groupBy('item_type')
-                ->map(function ($items, $type) {
-
-                    return $items
-                        ->keyBy('item_id')
-                        ->map(function ($option) use ($type) {
-
-                            // remove unrelated relations
-                            if ($type !== 'hotel') unset($option['hotel']);
-                            if ($type !== 'todo')  unset($option['todo']);
-                            if ($type !== 'event') unset($option['event']);
-                            if ($type !== 'transport') unset($option['transport']);
-
-                            return $option;
-                        })
-                        ->toArray();
-                })
-                ->toArray();
-        }
-
-
-
-        //use of this array for gallery images
-        $finalArray =  $this->finalArray($package);
-        // print_r($finalArray);die;
-
-
-        //print_r($dayWiseOptions);die;
-        $sessionItems = session("package_day_items.{$package->id}", []);
-        //print_r($sessionItems);
-
-        $hotelIds = [];
-        $eventIds = [];
-        $todoIds  = [];
-        $transportIds = [];
-
-        // foreach ($package->days as $day) {
-
-        //     foreach ($day->items as $index => $item) {
-
-        //         $type = $item->item_type;
-
-        //         // 🔑 SESSION OVERRIDE → else DEFAULT
-        //         $selectedItemId =
-        //             $sessionItems[$day->id][$type][$index]
-        //             ?? $item->item_id;
-
-        //         if ($type === 'hotel') {
-        //             $hotelIds[] = $selectedItemId;
-        //         }
-
-        //         if ($type === 'event') {
-        //             $eventIds[] = $selectedItemId;
-        //         }
-
-        //         if ($type === 'todo') {
-        //             $todoIds[] = $selectedItemId;
-        //         }
-        //         if ($type === 'transport') {
-        //             $transportIds[] = $selectedItemId;
-        //         }
-        //     }
-        // }
-        foreach ($package->days as $day) {
+       
+     
+         $hotelIds = [];
+         $eventIds = [];
+         $todoIds  = [];
+         $transportIds = [];
+     
+         foreach ($package->days as $day) {
 
             // Group items by type FIRST
-
             $itemsByType = $day->items->groupBy('item_type');
-
+        
             foreach ($itemsByType as $type => $items) {
-
+        
                 // Reset index per type (0,1,2…)
-
                 $items = $items->values();
-
+        
                 foreach ($items as $index => $item) {
-
+        
                     $selectedItemId =
-
                         $sessionItems[$day->id][$type][$index]
-
                         ?? $item->item_id;
-
+        
                     match ($type) {
-
                         'hotel'     => $hotelIds[]     = $selectedItemId,
-
                         'event'     => $eventIds[]     = $selectedItemId,
-
                         'todo'      => $todoIds[]      = $selectedItemId,
-
                         'transport' => $transportIds[] = $selectedItemId,
-
                         default     => null,
-
                     };
-
                 }
-
             }
-
         }
+         $hotelIds     = array_unique($hotelIds);
+         $eventIds     = array_unique($eventIds);
+         $todoIds      = array_unique($todoIds);
+         $transportIds = array_unique($transportIds);
 
+         
 
+     
+         /* -------------------------------------------------
+          | LOAD REAL MODELS (BATCH)
+          |--------------------------------------------------*/
+         $allHotels = Hotel::with([
+             'translation' => fn ($t) => $t->where('language_code', $language),
+             'thumb',
+             'gallery',
+         ])->whereIn('id', $hotelIds)->get()->keyBy('id');
+     
+         $allEvents = Event::with([
+             'translation' => fn ($t) => $t->where('language_code', $language),
+             'thumb',
+             'gallery',
+         ])->whereIn('id', $eventIds)->get()->keyBy('id');
+     
+         $allTodos = ThingToDo::with([
+             'translation' => fn ($t) => $t->where('language_code', $language),
+             'thumb',
+             'gallery',
+         ])->whereIn('id', $todoIds)->get()->keyBy('id');
+     
+         $allTransports = Transport::with([
+             'translation' => fn ($t) => $t->where('language_code', $language),
+             'thumb',
+         ])->whereIn('id', $transportIds)->get()->keyBy('id');
 
-        // remove duplicates
-        $hotelIds = array_unique($hotelIds);
-
-        //print_r($hotelIds);die;
-        $eventIds = array_unique($eventIds);
-        $todoIds  = array_unique($todoIds);
-
-        $transportIds  = array_unique($transportIds);
-
-
-        // ✅ MASTER LIST (POPUP)
-        $allHotels = Hotel::with(['translation', 'thumb'])
-            ->whereIn('id', $hotelIds)
-            ->get()
-            ->keyBy('id');
-
-        $allEvents = Event::with(['translation', 'thumb'])
-            ->whereIn('id', $eventIds)
-            ->get()
-            ->keyBy('id');
-
-        $allTodos = ThingToDo::with(['translation', 'thumb'])
-            ->whereIn('id', $todoIds)
-            ->get()
-            ->keyBy('id');
-
-        $allTransports = Transport::with(['translation', 'thumb'])
-            ->whereIn('id', $transportIds)
-            ->get()
-            ->keyBy('id');
-
-
-        $filter_data = [];
-        $session_id_filter = "filter_package_" . $package->id;
-        if (!empty(session($session_id_filter))) {
-            $filter_data = session($session_id_filter);
-        }
-
-        //print_r($filter_data);die;
-
-
-
-        return view('frontend.packages.show', compact(
-            'package',
-            'allHotels',
-            'allTodos',
-            'allEvents',
-            'allTransports',
-            'dayWiseOptions',
-            'sessionItems',
-            'filter_data',
-            'finalArray',
-            'places'
-        ));
-    }
+         //print_r($allEvents->toArray());die;
+     
+         /* -------------------------------------------------
+          | ATTACH RESOLVED ITEM TO EACH DAY ITEM
+          |--------------------------------------------------*/
+        //  foreach ($package->days as $day) {
+        //      foreach ($day->items as $item) {
+        //          $item->resolved_item = match ($item->item_type) {
+        //              'hotel'     => $allHotels[$item->item_id]     ?? null,
+        //              'event'     => $allEvents[$item->item_id]     ?? null,
+        //              'todo'      => $allTodos[$item->item_id]      ?? null,
+        //              'transport' => $allTransports[$item->item_id] ?? null,
+        //              default     => null,
+        //          };
+        //      }
+        //  }
+     
+         /* -------------------------------------------------
+          | FILTER SESSION
+          |--------------------------------------------------*/
+         $filter_data = session("filter_package_{$package->id}", []);
+     
+         /* -------------------------------------------------
+          | FINAL ARRAY (GALLERY / SUMMARY)
+          |--------------------------------------------------*/
+         $finalArray = $this->finalArray($package);
+     
+         return view('frontend.packages.show', compact(
+             'package',
+             'allHotels',
+             'allTodos',
+             'allEvents',
+             'allTransports',
+             'dayWiseOptions',
+             'sessionItems',
+             'filter_data',
+             'finalArray',
+             'places'
+         ));
+     }
 
     public function finalArray($package)
     {
@@ -681,7 +687,91 @@ class PackageController extends Controller
     //         'data'   => $items
     //     ]);
     // }
+
+
+    /***
     public function packageDayOption($dayId, $type)
+    {
+        $language = current_lang();
+
+        if (!in_array($type, ['hotel', 'todo', 'event', 'transport'])) {
+            return response()->json([
+                'status'  => false,
+                'message' => 'Invalid item type'
+            ], 422);
+        }
+
+           
+            $currentDayItem = PackageDayItem::where('package_day_id', $dayId)
+            ->where('item_type', $type)
+            ->first();
+
+            $map = [
+                'hotel'     => Hotel::class,
+                'event'     => Event::class,
+                'todo'      => ThingToDo::class,
+                'transport' => Transport::class,
+                
+            ];
+            
+            $currentItem = $map[$currentDayItem->item_type]::with([
+                    'translation' => fn ($q) => $q->where('language_code', $language),
+                    'thumb',
+                ])
+                ->find($currentDayItem->item_id);
+            // $currentItem = PackageDayItem::with([
+            //     "$type.translation" => fn($q) => $q->where('language_code', $language),
+            //     "$type.thumb",
+            // ])
+            //     ->where('package_day_id', $dayId)
+            //     ->where('item_type', $type)
+            //     ->first(); // only ONE current item
+
+
+            
+            $optionItems = PackageDayItemOption::with([
+                "$type.translation" => fn($q) => $q->where('language_code', $language),
+                "$type.thumb",
+            ])
+                ->where('package_day_id', $dayId)
+                ->where('item_type', $type)
+                ->orderBy('sort_order')
+                ->get();
+
+                //print_r($optionItems->toArray());die;
+
+
+            $merged = collect();
+
+            if ($currentItem) {
+                $currentItem->is_selected = true;
+                $merged->push($currentItem);
+            }
+
+            foreach ($optionItems as $option) {
+
+                // Skip duplicate of current item
+                if (
+                    $currentItem &&
+                    $option->item_id === $currentItem->item_id
+                ) {
+                    continue;
+                }
+
+                $option->is_selected = false;
+                $merged->push($option);
+            }
+
+           
+        return response()->json([
+            'status' => true,
+            'type'   => $type,
+            'data'   => $merged->values()
+        ]);
+    }
+    **/
+
+    public function packageDayOption($dayId, $type, $index)
     {
         $language = current_lang();
 
@@ -697,13 +787,56 @@ class PackageController extends Controller
     | 1️⃣ CURRENT ITEM (FROM package_day_items)
     |--------------------------------------------------------------------------
     */
-        $currentItem = PackageDayItem::with([
-            "$type.translation" => fn($q) => $q->where('language_code', $language),
-            "$type.thumb",
-        ])
-            ->where('package_day_id', $dayId)
-            ->where('item_type', $type)
-            ->first(); // only ONE current item
+
+    
+
+    $currentDayItem = PackageDayItem::where('package_day_id', $dayId)
+    ->where('item_type', $type)
+    ->first();
+
+    try {
+        $index_wise_data = $this->getOtherSelectedPackageDayItemIdsWithSource($currentDayItem->package_id,$dayId,$type,$index);
+    
+    } catch (\Throwable $e) 
+    {
+        $index_wise_data = [];
+    }
+
+    $currentOption = null;
+
+    if ($currentDayItem) {
+        $currentOption = new PackageDayItemOption();
+        $currentOption->package_day_id = $currentDayItem->package_day_id;
+        $currentOption->item_type      = $currentDayItem->item_type;
+        $currentOption->item_id        = $currentDayItem->item_id;
+        $currentOption->sort_order     = -1; // force first
+        $currentOption->is_selected    = true;
+    
+        // 🔑 load polymorphic item relation manually
+        $map = [
+            'hotel'     => Hotel::class,
+            'event'     => Event::class,
+            'todo'      => ThingToDo::class,
+            'transport' => Transport::class,
+        ];
+    
+        $model = $map[$type];
+    
+        $currentOption->setRelation(
+            $type,
+            $model::with([
+                'translation' => fn ($q) => $q->where('language_code', $language),
+                'thumb',
+            ])->find($currentDayItem->item_id)
+        );
+    }
+        // $currentItem = PackageDayItem::with([
+        //     "$type.translation" => fn($q) => $q->where('language_code', $language),
+        //     "$type.thumb",
+        // ])
+        //     ->where('package_day_id', $dayId)
+        //     ->where('item_type', $type)
+        //     ->first(); // only ONE current item
 
 
         /*
@@ -720,6 +853,8 @@ class PackageController extends Controller
             ->orderBy('sort_order')
             ->get();
 
+            //print_r($optionItems->toArray());die;
+
 
         /*
     |--------------------------------------------------------------------------
@@ -729,26 +864,42 @@ class PackageController extends Controller
     | - mark is_selected = true
     | - remove duplicates from options
     */
-        $merged = collect();
+    $merged = collect();
 
-        if ($currentItem) {
-            $currentItem->is_selected = true;
-            $merged->push($currentItem);
+    if ($currentOption) {
+        $merged->push($currentOption);
+    }
+    
+    foreach ($optionItems as $option) {
+    
+        if ($currentOption && $option->item_id === $currentOption->item_id) {
+            continue;
         }
+    
+        $option->is_selected = false;
+        $merged->push($option);
+    }
 
-        foreach ($optionItems as $option) {
+    //print_r($merged->values()->toArray());die;
+    if(!empty(@$index_wise_data['data']))
+    {
+        $result_data = $index_wise_data['data'];
+        //print_r($result_data);
+       
+        $filtered = $merged->reject(function ($item) use ($result_data) {
+            return in_array($item['item_id'], $result_data);
+        })->values();
 
-            // Skip duplicate of current item
-            if (
-                $currentItem &&
-                $option->item_id === $currentItem->item_id
-            ) {
-                continue;
-            }
+        // print_r($filtered->toArray());
+        // die;
 
-            $option->is_selected = false;
-            $merged->push($option);
-        }
+        return response()->json([
+            'status' => true,
+            'type'   => $type,
+            'data'   => $filtered,
+            'newData' => $index_wise_data
+        ]);
+    }
 
         /*
     |--------------------------------------------------------------------------
@@ -758,13 +909,15 @@ class PackageController extends Controller
         return response()->json([
             'status' => true,
             'type'   => $type,
-            'data'   => $merged->values()
+            'data'   => $merged->values(),
+            'newData' => $index_wise_data
         ]);
     }
 
 
     public function savePackageDayItemSession(Request $request)
     {
+        //print_r('dd');die;
         $data = session("package_day_items.{$request->package_id}", []);
 
         $data[$request->day_id][$request->type][$request->index]
@@ -798,6 +951,77 @@ class PackageController extends Controller
         ]);
     }
 
+
+    function getSelectedPackageDayItemIds(int $packageId,int $dayId,string $type,int $index) {
+    
+        // Session (highest priority)
+        $sessionItems = session("package_day_items.$packageId", []);
+    
+        $sessionItemId = null;
+    
+        if (
+            isset($sessionItems[$dayId]) &&
+            isset($sessionItems[$dayId][$type]) &&
+            array_key_exists($index, $sessionItems[$dayId][$type])
+        ) {
+            $sessionItemId = $sessionItems[$dayId][$type][$index];
+        }
+    
+        // DB fallback (same order as UI)
+        $dayItems = PackageDayItem::where('package_day_id', $dayId)
+            ->where('item_type', $type)
+            ->orderBy('id') // must match foreach order
+            ->get()
+            ->values();
+    
+        $dbItemId = $dayItems[$index]->item_id ?? null;
+    
+        return [
+            'session_item_id' => $sessionItemId,
+            'db_item_id'      => $dbItemId,
+            'final_item_id'   => $sessionItemId ?? $dbItemId, // optional helper
+        ];
+    }
+
+    function getOtherSelectedPackageDayItemIds(int $packageId,int $dayId,string $type,int $currentIndex): array {
+    
+        $sessionItems = session("package_day_items.$packageId", []);
+    
+        // 1️⃣ Get DB items (same order as UI)
+        $dayItems = PackageDayItem::where('package_day_id', $dayId)
+            ->where('item_type', $type)
+            ->orderBy('id') // must match foreach order
+            ->get()
+            ->values();
+    
+        $result = [];
+    
+        foreach ($dayItems as $index => $dayItem) {
+    
+            // Skip current index
+            if ($index === $currentIndex) {
+                continue;
+            }
+    
+            // Session override if exists
+            if (
+                isset($sessionItems[$dayId]) &&
+                isset($sessionItems[$dayId][$type]) &&
+                array_key_exists($index, $sessionItems[$dayId][$type])
+            ) {
+                $result[] = $sessionItems[$dayId][$type][$index];
+            } else {
+                // DB fallback
+                if ($dayItem->item_id) {
+                    $result[] = $dayItem->item_id;
+                }
+            }
+        }
+    
+        // Remove nulls + duplicates
+        return array_values(array_unique(array_filter($result)));
+    }
+
     public function storeSession(Request $request)
     {
         $packageId = (int)$request->filter_package_unique_id;
@@ -828,4 +1052,67 @@ class PackageController extends Controller
             'finalArray'
         ));
     }
+
+    function getOtherSelectedPackageDayItemIdsWithSource(
+        int $packageId,
+        int $dayId,
+        string $type,
+        int $currentIndex
+    ): array {
+    
+        $sessionItems = session("package_day_items.$packageId", []);
+    
+        // DB items in SAME order as UI
+        $dayItems = PackageDayItem::where('package_day_id', $dayId)
+            ->where('item_type', $type)
+            ->orderBy('id') // must match foreach order
+            ->get()
+            ->values();
+    
+        $result = [];
+        $result2 = [];
+    
+        foreach ($dayItems as $index => $dayItem) {
+    
+            // Skip current index
+            if ($index === $currentIndex) {
+                continue;
+            }
+    
+            // Session value if exists
+            $sessionItemId = null;
+            if (
+                isset($sessionItems[$dayId]) &&
+                isset($sessionItems[$dayId][$type]) &&
+                array_key_exists($index, $sessionItems[$dayId][$type])
+            ) {
+                $sessionItemId = $sessionItems[$dayId][$type][$index];
+            }
+    
+            $dbItemId = $dayItem->item_id ?? null;
+    
+            $result[] = [
+                'index'            => $index,
+                'session_item_id'  => $sessionItemId,
+                'db_item_id'       => $dbItemId,
+                'final_item_id'    => $sessionItemId ?? $dbItemId,
+            ];
+           
+
+            if(!empty($sessionItemId))
+            {
+                $result2[] = (int)$sessionItemId;
+            }
+
+            if(!empty($dbItemId))
+            {
+                $result2[] = $dbItemId;
+            }
+        }
+        $result['data'] = $result2;
+    
+        return $result;
+    }
+
+   
 }

@@ -71,3 +71,11 @@
 
     });
 </script>
+
+
+<script>
+     document.addEventListener('DOMContentLoaded', function() {
+        $('.selectCountrySelect2').select2();
+    });
+</script>
+
