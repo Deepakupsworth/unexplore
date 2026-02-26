@@ -54,7 +54,7 @@
                     {{-- Status --}}
                     <div class="fromGroup">
                         <label class="form-label">Status</label>
-                        <select name="status" class="form-control">
+                        <select name="status" class="form-control selectCountrySelect2">
                             <option value="">All</option>
                             <option value="1" {{ request('status') === '1' ? 'selected' : '' }}>Active</option>
                             <option value="0" {{ request('status') === '0' ? 'selected' : '' }}>Inactive</option>

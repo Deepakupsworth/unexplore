@@ -61,7 +61,7 @@
                     <div>
                         <label class="form-label">Status</label>
                         <select name="status"
-                            class="form-control @error('status') border-red-500 ring-1 ring-red-500 @enderror">
+                            class="selectCountrySelect2 form-control @error('status') border-red-500 ring-1 ring-red-500 @enderror">
 
                             <option value="1" {{ old('status', $country->status) == 1 ? 'selected' : '' }}>
                                 Active</option>

@@ -17,7 +17,7 @@
 
                     {{-- TITLE --}}
                     <h2 class="fw-700 mb-2">
-                        {{ __('checkout.booking_confirmed') }} 🎉
+                        {{ __('checkout.booking_confirmed') }}
                     </h2>
 
                     {{-- SUBTITLE --}}

@@ -83,7 +83,7 @@
                 <div>
                     <label class="form-label">Category Type <span class="text-red-500">*</span></label>
 
-                    <select name="type" class="form-control" required>
+                    <select name="type" class="form-control selectCountrySelect2" required>
                         <option value="">Select Type</option>
 
                         @foreach ($types as $type)
