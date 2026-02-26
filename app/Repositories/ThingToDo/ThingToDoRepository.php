@@ -45,7 +45,7 @@ class ThingToDoRepository implements ThingToDoRepositoryInterface
 
 
         // 🗂 Category filter
-        if ($request->filled('category_id')) {
+        if ($request->filled('category_ids')) {
             $query->where('category_id', $request->category_id);
         }
 

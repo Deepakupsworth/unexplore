@@ -30,7 +30,9 @@ class ThingtodoController extends Controller
 
         // These are ONLY for filters
         $cities = \App\Models\City::pluck('slug', 'id');
-        $categories = \App\Models\Category::pluck('slug', 'id');
+
+        $categories = Category::whereType(CategoryType::THING_TO_DO)
+                ->pluck('slug', 'id');
 
         return view('backend.thingtodos.index', compact(
             'thingstodos',

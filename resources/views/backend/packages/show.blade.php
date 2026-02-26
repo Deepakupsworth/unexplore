@@ -86,7 +86,7 @@
         <section class="{{ $card }}">
             <h3 class="text-lg font-semibold mb-6 border-b pb-3">Availability</h3>
 
-            @php $avail = $package->availabilities->first(); @endphp
+            @php $avail = $package->availability; @endphp
 
             <div class="grid grid-cols-2 gap-6 text-sm">
                 <div>

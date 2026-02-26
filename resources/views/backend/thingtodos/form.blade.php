@@ -118,7 +118,7 @@
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label class="form-label">City *</label>
-                                <select name="city_id" class="form-control" required>
+                                <select name="city_id" class="form-control selectCountrySelect2" required>
                                     <option value="">Select City</option>
                                     @foreach ($cities as $id => $name)
                                         <option value="{{ $id }}"
