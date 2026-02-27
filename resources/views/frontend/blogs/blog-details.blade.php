@@ -38,7 +38,7 @@
 
                 {{-- IMAGE --}}
                 <div class="mt-3 blog-details__img-wrapper">
-                    <img
+                    <img width="100%"
                         class="img-fluid"
                         src="{{ $blog->thumb?->image_path ? asset('storage/'.$blog->thumb->image_path) : asset('frontend/assets/old-town.png') }}"
                         alt="{{ $blog->translation?->title }}"
