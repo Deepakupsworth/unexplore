@@ -11,7 +11,7 @@
                 <div class="blog-details__header p-4">
 
                     <p class="blog-category-badge rounded-4 text-black fw-500 w-fit">
-                        {{ __('blog.category') }}
+                        {{ $blog->category?->translation?->name }}
                     </p>
 
                     <h1 class="fw-600 text-white mt-3 mb-4 h3">
