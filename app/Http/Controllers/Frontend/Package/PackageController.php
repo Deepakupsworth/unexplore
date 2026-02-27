@@ -57,7 +57,7 @@ class PackageController extends Controller
         //         'translations',
         //         'cities.city.translations',
         //         'price',
-                
+
         //     ])->where('status','active')
 
         //     /* 🔍 SEARCH */
@@ -94,9 +94,9 @@ class PackageController extends Controller
         //     ->when($request->rating, function ($q) use ($request) {
 
         //         $ratings = (array) $request->rating;
-            
+
         //         $q->whereHas('dayItems', function ($dayItem) use ($ratings) {
-            
+
         //             $dayItem->whereHasMorph(
         //                 'item',
         //                 [Hotel::class], // 🔒 ONLY hotels
@@ -104,9 +104,9 @@ class PackageController extends Controller
         //                     $hotel->whereIn('star_rating', $ratings);
         //                 }
         //             );
-            
+
         //         });
-            
+
         //     })
 
         //     /* 🌍 CITY */
@@ -149,7 +149,7 @@ class PackageController extends Controller
         //             );
         //         });
         //     })
-            
+
         //     /* =========================
         //      | TODO ID FILTER
         //      |=========================*/
@@ -164,7 +164,7 @@ class PackageController extends Controller
         //             );
         //         });
         //     })
-            
+
         //     /* =========================
         //      | EVENT ID FILTER
         //      |=========================*/
@@ -200,7 +200,7 @@ class PackageController extends Controller
 
         /* ================= PAGINATION ================= */
 
-        
+
         $packages = $packagesQuery
             ->paginate(20)
             ->withQueryString();
@@ -276,16 +276,16 @@ class PackageController extends Controller
             ->when($request->rating, function ($q) use ($request) {
 
                 $ratings = (array) $request->rating;
-            
+
                 $q->whereHas('dayItems', function ($di) use ($ratings) {
-            
+
                     $di->where('item_type', 'hotel')
                        ->whereIn('item_id', function ($sub) use ($ratings) {
                            $sub->select('id')
                                ->from('hotels')
                                ->whereIn('star_rating', $ratings);
                        });
-            
+
                 });
             })
 
@@ -312,9 +312,9 @@ class PackageController extends Controller
             ->when($request->adult || $request->children, function ($q) use ($request) {
 
                 $totalPersons = (int)$request->adult + (int)$request->children;
-            
+
                 $q->where('max_persons', '>=', $totalPersons);
-            
+
             })
 
             /* 📦 PACKAGE TYPE */
@@ -364,7 +364,7 @@ class PackageController extends Controller
         /* ================= MAIN QUERY ================= */
         $packagesQuery = Package::query()
             ->with(['translations', 'cities.city.translations', 'price']);
-    
+
          $packagesQuery = $this->applyPackageFilters($packagesQuery, $request);
 
         /* ================= SORT ================= */
@@ -429,7 +429,7 @@ class PackageController extends Controller
      {
          $language = current_lang();
          //session()->flush();
-     
+
          /* -------------------------------------------------
           | LOAD PACKAGE (NO POLYMORPHIC EAGER LOADING)
           |--------------------------------------------------*/
@@ -444,7 +444,7 @@ class PackageController extends Controller
          ])
          ->where('slug', $slug)
          ->firstOrFail();
-     
+
          /* -------------------------------------------------
           | CITY → NIGHTS
           |--------------------------------------------------*/
@@ -452,26 +452,26 @@ class PackageController extends Controller
              ->groupBy('city_id')
              ->map(function ($days) {
                  $city = $days->first()->city;
-     
+
                  return [
                      'city'   => $city?->translation?->name ?? 'Unknown',
                      'nights' => max(1, $days->count() - 1),
                  ];
              })
              ->values();
-     
+
          /* -------------------------------------------------
           | DAY WISE OPTIONS
           |--------------------------------------------------*/
          $dayWiseOptions = [];
-     
+
          foreach ($package->days as $day) {
              $dayWiseOptions[$day->id] = $day->options
                  ->groupBy('item_type')
                  ->map(fn ($items) => $items->keyBy('item_id')->toArray())
                  ->toArray();
          }
-     
+
 
         // print_r($dayWiseOptions);die;
          /* -------------------------------------------------
@@ -480,29 +480,29 @@ class PackageController extends Controller
          $sessionItems = session("package_day_items.{$package->id}", []);
          //print_r($sessionItems);
 
-       
-     
+
+
          $hotelIds = [];
          $eventIds = [];
          $todoIds  = [];
          $transportIds = [];
-     
+
          foreach ($package->days as $day) {
 
             // Group items by type FIRST
             $itemsByType = $day->items->groupBy('item_type');
-        
+
             foreach ($itemsByType as $type => $items) {
-        
+
                 // Reset index per type (0,1,2…)
                 $items = $items->values();
-        
+
                 foreach ($items as $index => $item) {
-        
+
                     $selectedItemId =
                         $sessionItems[$day->id][$type][$index]
                         ?? $item->item_id;
-        
+
                     match ($type) {
                         'hotel'     => $hotelIds[]     = $selectedItemId,
                         'event'     => $eventIds[]     = $selectedItemId,
@@ -518,9 +518,9 @@ class PackageController extends Controller
          $todoIds      = array_unique($todoIds);
          $transportIds = array_unique($transportIds);
 
-         
 
-     
+
+
          /* -------------------------------------------------
           | LOAD REAL MODELS (BATCH)
           |--------------------------------------------------*/
@@ -529,26 +529,26 @@ class PackageController extends Controller
              'thumb',
              'gallery',
          ])->whereIn('id', $hotelIds)->get()->keyBy('id');
-     
+
          $allEvents = Event::with([
              'translation' => fn ($t) => $t->where('language_code', $language),
              'thumb',
              'gallery',
          ])->whereIn('id', $eventIds)->get()->keyBy('id');
-     
+
          $allTodos = ThingToDo::with([
              'translation' => fn ($t) => $t->where('language_code', $language),
              'thumb',
              'gallery',
          ])->whereIn('id', $todoIds)->get()->keyBy('id');
-     
+
          $allTransports = Transport::with([
              'translation' => fn ($t) => $t->where('language_code', $language),
              'thumb',
          ])->whereIn('id', $transportIds)->get()->keyBy('id');
 
          //print_r($allEvents->toArray());die;
-     
+
          /* -------------------------------------------------
           | ATTACH RESOLVED ITEM TO EACH DAY ITEM
           |--------------------------------------------------*/
@@ -563,17 +563,17 @@ class PackageController extends Controller
         //          };
         //      }
         //  }
-     
+
          /* -------------------------------------------------
           | FILTER SESSION
           |--------------------------------------------------*/
          $filter_data = session("filter_package_{$package->id}", []);
-     
+
          /* -------------------------------------------------
           | FINAL ARRAY (GALLERY / SUMMARY)
           |--------------------------------------------------*/
          $finalArray = $this->finalArray($package);
-     
+
          return view('frontend.packages.show', compact(
              'package',
              'allHotels',
@@ -701,7 +701,7 @@ class PackageController extends Controller
             ], 422);
         }
 
-           
+
             $currentDayItem = PackageDayItem::where('package_day_id', $dayId)
             ->where('item_type', $type)
             ->first();
@@ -711,9 +711,9 @@ class PackageController extends Controller
                 'event'     => Event::class,
                 'todo'      => ThingToDo::class,
                 'transport' => Transport::class,
-                
+
             ];
-            
+
             $currentItem = $map[$currentDayItem->item_type]::with([
                     'translation' => fn ($q) => $q->where('language_code', $language),
                     'thumb',
@@ -728,7 +728,7 @@ class PackageController extends Controller
             //     ->first(); // only ONE current item
 
 
-            
+
             $optionItems = PackageDayItemOption::with([
                 "$type.translation" => fn($q) => $q->where('language_code', $language),
                 "$type.thumb",
@@ -762,7 +762,7 @@ class PackageController extends Controller
                 $merged->push($option);
             }
 
-           
+
         return response()->json([
             'status' => true,
             'type'   => $type,
@@ -778,7 +778,7 @@ class PackageController extends Controller
         if (!in_array($type, ['hotel', 'todo', 'event', 'transport'])) {
             return response()->json([
                 'status'  => false,
-                'message' => 'Invalid item type'
+                'message' => __('package.invalid_item_type')
             ], 422);
         }
 
@@ -788,7 +788,7 @@ class PackageController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    
+
 
     $currentDayItem = PackageDayItem::where('package_day_id', $dayId)
     ->where('item_type', $type)
@@ -796,8 +796,8 @@ class PackageController extends Controller
 
     try {
         $index_wise_data = $this->getOtherSelectedPackageDayItemIdsWithSource($currentDayItem->package_id,$dayId,$type,$index);
-    
-    } catch (\Throwable $e) 
+
+    } catch (\Throwable $e)
     {
         $index_wise_data = [];
     }
@@ -811,7 +811,7 @@ class PackageController extends Controller
         $currentOption->item_id        = $currentDayItem->item_id;
         $currentOption->sort_order     = -1; // force first
         $currentOption->is_selected    = true;
-    
+
         // 🔑 load polymorphic item relation manually
         $map = [
             'hotel'     => Hotel::class,
@@ -819,9 +819,9 @@ class PackageController extends Controller
             'todo'      => ThingToDo::class,
             'transport' => Transport::class,
         ];
-    
+
         $model = $map[$type];
-    
+
         $currentOption->setRelation(
             $type,
             $model::with([
@@ -869,13 +869,13 @@ class PackageController extends Controller
     if ($currentOption) {
         $merged->push($currentOption);
     }
-    
+
     foreach ($optionItems as $option) {
-    
+
         if ($currentOption && $option->item_id === $currentOption->item_id) {
             continue;
         }
-    
+
         $option->is_selected = false;
         $merged->push($option);
     }
@@ -885,7 +885,7 @@ class PackageController extends Controller
     {
         $result_data = $index_wise_data['data'];
         //print_r($result_data);
-       
+
         $filtered = $merged->reject(function ($item) use ($result_data) {
             return in_array($item['item_id'], $result_data);
         })->values();
@@ -953,12 +953,12 @@ class PackageController extends Controller
 
 
     function getSelectedPackageDayItemIds(int $packageId,int $dayId,string $type,int $index) {
-    
+
         // Session (highest priority)
         $sessionItems = session("package_day_items.$packageId", []);
-    
+
         $sessionItemId = null;
-    
+
         if (
             isset($sessionItems[$dayId]) &&
             isset($sessionItems[$dayId][$type]) &&
@@ -966,16 +966,16 @@ class PackageController extends Controller
         ) {
             $sessionItemId = $sessionItems[$dayId][$type][$index];
         }
-    
+
         // DB fallback (same order as UI)
         $dayItems = PackageDayItem::where('package_day_id', $dayId)
             ->where('item_type', $type)
             ->orderBy('id') // must match foreach order
             ->get()
             ->values();
-    
+
         $dbItemId = $dayItems[$index]->item_id ?? null;
-    
+
         return [
             'session_item_id' => $sessionItemId,
             'db_item_id'      => $dbItemId,
@@ -984,25 +984,25 @@ class PackageController extends Controller
     }
 
     function getOtherSelectedPackageDayItemIds(int $packageId,int $dayId,string $type,int $currentIndex): array {
-    
+
         $sessionItems = session("package_day_items.$packageId", []);
-    
+
         // 1️⃣ Get DB items (same order as UI)
         $dayItems = PackageDayItem::where('package_day_id', $dayId)
             ->where('item_type', $type)
             ->orderBy('id') // must match foreach order
             ->get()
             ->values();
-    
+
         $result = [];
-    
+
         foreach ($dayItems as $index => $dayItem) {
-    
+
             // Skip current index
             if ($index === $currentIndex) {
                 continue;
             }
-    
+
             // Session override if exists
             if (
                 isset($sessionItems[$dayId]) &&
@@ -1017,7 +1017,7 @@ class PackageController extends Controller
                 }
             }
         }
-    
+
         // Remove nulls + duplicates
         return array_values(array_unique(array_filter($result)));
     }
@@ -1059,26 +1059,26 @@ class PackageController extends Controller
         string $type,
         int $currentIndex
     ): array {
-    
+
         $sessionItems = session("package_day_items.$packageId", []);
-    
+
         // DB items in SAME order as UI
         $dayItems = PackageDayItem::where('package_day_id', $dayId)
             ->where('item_type', $type)
             ->orderBy('id') // must match foreach order
             ->get()
             ->values();
-    
+
         $result = [];
         $result2 = [];
-    
+
         foreach ($dayItems as $index => $dayItem) {
-    
+
             // Skip current index
             if ($index === $currentIndex) {
                 continue;
             }
-    
+
             // Session value if exists
             $sessionItemId = null;
             if (
@@ -1088,16 +1088,16 @@ class PackageController extends Controller
             ) {
                 $sessionItemId = $sessionItems[$dayId][$type][$index];
             }
-    
+
             $dbItemId = $dayItem->item_id ?? null;
-    
+
             $result[] = [
                 'index'            => $index,
                 'session_item_id'  => $sessionItemId,
                 'db_item_id'       => $dbItemId,
                 'final_item_id'    => $sessionItemId ?? $dbItemId,
             ];
-           
+
 
             if(!empty($sessionItemId))
             {
@@ -1110,9 +1110,9 @@ class PackageController extends Controller
             }
         }
         $result['data'] = $result2;
-    
+
         return $result;
     }
 
-   
+
 }

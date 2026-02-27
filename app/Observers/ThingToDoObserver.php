@@ -5,24 +5,18 @@ namespace App\Observers;
 use App\Models\ThingToDo;
 use App\Models\Language;
 use Illuminate\Support\Facades\Cache;
+use App\Support\ClearsHomeCache;
 
 class ThingToDoObserver
 {
-    protected function clearHomePageCache(): void
-    {
-        Language::where('status', 'active')
-            ->pluck('code')
-            ->each(function ($lang) {
-                Cache::forget("home_page_data_{$lang}");
-            });
-    }
+    use ClearsHomeCache;
     /**
      * Handle the ThingToDo "created" event.
      */
     public function created(ThingToDo $thingToDo): void
     {
         //
-        $this->clearHomePageCache();
+        $this->clearTodoPageCache();
 
     }
 
@@ -32,7 +26,7 @@ class ThingToDoObserver
     public function updated(ThingToDo $thingToDo): void
     {
         //
-        $this->clearHomePageCache();
+        $this->clearTodoPageCache();
 
     }
 
@@ -42,6 +36,7 @@ class ThingToDoObserver
     public function deleted(ThingToDo $thingToDo): void
     {
         //
+        $this->clearTodoPageCache();
     }
 
     /**

@@ -5,24 +5,21 @@ namespace App\Observers;
 use App\Models\Package;
 use App\Models\Language;
 use Illuminate\Support\Facades\Cache;
+use App\Support\ClearsHomeCache;
+
 
 class PackageObserver
 {
-    protected function clearHomePageCache(): void
-    {
-        Language::where('status', 'active')
-            ->pluck('code')
-            ->each(function ($lang) {
-                Cache::forget("home_page_data_{$lang}");
-            });
-    }
+    use ClearsHomeCache;
+
+    
     /**
      * Handle the Package "created" event.
      */
     public function created(Package $package): void
     {
-        //
-        $this->clearHomePageCache();
+        $this->clearPackagePageCache();
+
 
     }
 
@@ -31,9 +28,7 @@ class PackageObserver
      */
     public function updated(Package $package): void
     {
-        //
-        $this->clearHomePageCache();
-
+        $this->clearPackagePageCache();
     }
 
     /**
@@ -41,7 +36,7 @@ class PackageObserver
      */
     public function deleted(Package $package): void
     {
-        //
+        $this->clearPackagePageCache();
     }
 
     /**

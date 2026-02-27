@@ -5,25 +5,18 @@ namespace App\Observers;
 use App\Models\Event;
 use App\Models\Language;
 use Illuminate\Support\Facades\Cache;
+use App\Support\ClearsHomeCache;
 
 class EventObserver
 {
-    protected function clearHomePageCache(): void
-    {
-        Language::where('status', 'active')
-            ->pluck('code')
-            ->each(function ($lang) {
-                Cache::forget("home_page_data_{$lang}");
-            });
-    }
-
+    use ClearsHomeCache;
     /**
      * Handle the Event "created" event.
      */
     public function created(Event $event): void
     {
         //
-        $this->clearHomePageCache();
+        $this->clearEventPageCache();
 
     }
 
@@ -33,7 +26,7 @@ class EventObserver
     public function updated(Event $event): void
     {
         //
-        $this->clearHomePageCache();
+        $this->clearEventPageCache();
 
     }
 
@@ -43,6 +36,7 @@ class EventObserver
     public function deleted(Event $event): void
     {
         //
+        $this->clearEventPageCache();
     }
 
     /**

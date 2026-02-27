@@ -54,7 +54,7 @@
                             </p>
                             <ul class="list-unstyled">
                                 <li><a href="{{ asset('/about-us') }}"
-                                        class="footer-link">{{ __('footer.link.about_us') }}</a></li>
+                                        class="footer-link">{{ __('about.section.title') }}</a></li>
                                 <li><a href="{{ asset('/contact-us') }}"
                                         class="footer-link">{{ __('footer.link.contact_us') }}</a></li>
                                 {{-- <li><a href="#" class="footer-link">{{ __('footer.link.sitemap') }}</a></li> --}}

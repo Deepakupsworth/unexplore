@@ -55,9 +55,9 @@ class AppServiceProvider extends ServiceProvider
         
         // $locale = Session::get('locale', config('app.locale'));
         // App::setLocale($locale);
-        // Event::observe(EventObserver::class);
-        // ThingToDo::observe(ThingToDoObserver::class);
-        //Package::observe(PackageObserver::class);
+        Event::observe(EventObserver::class);
+        ThingToDo::observe(ThingToDoObserver::class);
+        Package::observe(PackageObserver::class);
 
         Booking::observe(BookingObserver::class);
     }

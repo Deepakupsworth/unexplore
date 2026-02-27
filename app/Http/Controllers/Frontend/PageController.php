@@ -27,7 +27,7 @@ class PageController extends Controller
     {
         $language = $this->language; // en, de, ar
 
-        Cache::forget("home_page_data_{$language}");
+        //Cache::forget("home_page_data_{$language}");
 
         $homeData = Cache::remember(
             "home_page_data_{$language}",
@@ -63,7 +63,7 @@ class PageController extends Controller
                     ->withCount([
                         'packageDayItems as package_count' => function ($q) {
                             $q->whereHas(
-                                'packageDay.package',
+                                'package',
                                 fn($q2) => $q2->where('status', 'active')
                             )
                                 ->join('package_days', 'package_day_items.package_day_id', '=', 'package_days.id')
@@ -152,6 +152,8 @@ class PageController extends Controller
                 return compact('things', 'events', 'packages', 'cities', 'blogs');
             }
         );
+
+        //print_r($homeData);die;
 
         return view('frontend.pages.home', $homeData);
     }

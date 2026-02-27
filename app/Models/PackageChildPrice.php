@@ -17,6 +17,7 @@ class PackageChildPrice extends Model
         'price_value',
     ];
 
+    
     public function package()
     {
         return $this->belongsTo(Package::class);

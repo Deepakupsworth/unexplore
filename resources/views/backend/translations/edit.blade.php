@@ -1,50 +1,124 @@
-<h3>Editing: {{ $group }}</h3>
+@extends('backend.layout')
 
-<form method="POST" action="{{ url('admin/translations/update-all') }}">
-@csrf
-<input type="hidden" name="group" value="{{ $group }}">
+@section('content')
 
-<table border="1" cellpadding="6">
-<tr>
-    <th>Key</th>
-    <th>EN</th>
-    <th>DE</th>
-    <th>FR</th>
-    <th>Action</th>
-</tr>
+{{-- ================= HEADER ================= --}}
+<div class="mb-6 flex justify-between items-center">
+    <div>
+        <h3 class="text-lg font-semibold">
+            {{ $group === 'common' ? 'Common Translations (JSON)' : ucfirst($group).' Translations' }}
+        </h3>
+        <p class="text-sm text-slate-500">
+            {{ $group === 'common'
+                ? 'lang/{locale}.json'
+                : 'lang/{locale}/'.$group.'.php'
+            }}
+        </p>
+    </div>
 
-@foreach($rows as $key => $langs)
-<tr>
+    {{-- UPDATE ALL BUTTON --}}
+    <button form="updateAllForm" class="btn btn-success">
+        Update All
+    </button>
+</div>
 
-<td>{{ $key }}</td>
+{{-- ================= UPDATE ALL FORM ================= --}}
+<form id="updateAllForm"
+      method="POST"
+      action="{{ route('admin.translations.updateAll', $group) }}">
+    @csrf
 
-@foreach(['en','de','fr'] as $lang)
-<td>
-    <input
-        name="data[{{ $key }}][{{ $lang }}]"
-        value="{{ $langs[$lang] }}"
-    >
-</td>
-@endforeach
+    {{-- ================= TABLE ================= --}}
+    <div class="card">
+        <div class="card-body p-0 overflow-x-auto">
 
-<td>
-    <form method="POST" action="{{ url('admin/translations/update-one') }}">
-        @csrf
-        <input type="hidden" name="group" value="{{ $group }}">
-        <input type="hidden" name="key" value="{{ $key }}">
-        @foreach(['en','de','fr'] as $lang)
-            <input type="hidden"
-                   name="values[{{ $lang }}]"
-                   value="{{ $langs[$lang] }}">
-        @endforeach
-        <button>Update</button>
-    </form>
-</td>
+            <table class="min-w-full text-sm border-collapse">
+                <thead class="bg-slate-200">
+                    <tr>
+                        <th class="table-th w-48">Key</th>
 
-</tr>
-@endforeach
-</table>
+                        @foreach(array_keys(reset($rows) ?? []) as $locale)
+                            <th class="table-th text-center">
+                                {{ strtoupper($locale) }}
+                            </th>
+                        @endforeach
 
-<br>
-<button>Update All</button>
+                        <th class="table-th w-32 text-center">Action</th>
+                    </tr>
+                </thead>
+
+                <tbody class="divide-y">
+
+                    @forelse($rows as $key => $langs)
+                    <tr data-key="{{ $key }}">
+                        {{-- KEY --}}
+                        <td class="table-td font-mono text-xs text-slate-600">
+                            {{ $key }}
+                        </td>
+
+                        {{-- TRANSLATIONS --}}
+                        @foreach($langs as $locale => $value)
+                            <td class="table-td">
+                                <input type="text"
+                                       name="translations[{{ $key }}][{{ $locale }}]"
+                                       value="{{ $value }}"
+                                       class="form-control">
+                            </td>
+                        @endforeach
+
+                        {{-- UPDATE ONE --}}
+                        <td class="table-td text-center">
+                            <button type="button"
+                                    class="btn btn-sm btn-outline-primary update-one-btn">
+                                Update
+                            </button>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="100%" class="text-center py-10 text-slate-400">
+                            No translations found.
+                        </td>
+                    </tr>
+                    @endforelse
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
 </form>
+
+{{-- ================= UPDATE ONE SCRIPT ================= --}}
+<script>
+document.querySelectorAll('.update-one-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const row = btn.closest('tr');
+        const key = row.dataset.key;
+
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = "{{ route('admin.translations.updateOne', $group) }}";
+
+        // CSRF and key
+        form.innerHTML = `
+            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="key" value="${key}">
+        `;
+
+        // Only pick inputs for this key
+        row.querySelectorAll(`input[name^="translations[${key}]"]`).forEach(input => {
+            const clone = document.createElement('input');
+            clone.type = 'hidden';
+            clone.name = input.name;  // keeps name like translations[Welcome][en]
+            clone.value = input.value;
+            form.appendChild(clone);
+        });
+
+        document.body.appendChild(form);
+        form.submit();
+    });
+});
+</script>
+
+@endsection

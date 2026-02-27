@@ -16,4 +16,9 @@ class PackagePriceIncreasePerson extends Model
         'person_number',
         'additional_price',
     ];
+
+    public function package()
+    {
+        return $this->belongsTo(Package::class);
+    }
 }

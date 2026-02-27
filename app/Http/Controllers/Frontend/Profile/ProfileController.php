@@ -68,7 +68,7 @@ class ProfileController extends Controller
             );
         }
 
-        return back()->with('success', 'Profile updated successfully.');
+        return back()->with('success', __('account.updated_successfully'));
     }
 
     public function uploadProfileImage(Request $request)
@@ -84,7 +84,7 @@ class ProfileController extends Controller
             if (!$user) {
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'Unauthenticated'
+                    'message' => __('account.unauthenticated')
                 ], 401);
             }
 
@@ -105,7 +105,7 @@ class ProfileController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'Profile image updated successfully'
+                'message' =>  __('account.image_updated')
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
 
@@ -121,7 +121,7 @@ class ProfileController extends Controller
 
             return response()->json([
                 'status' => 'error',
-                'message' => 'Server error'
+                'message' => __('account.server_error')
             ], 500);
         }
     }
@@ -134,14 +134,14 @@ class ProfileController extends Controller
             if (!$user) {
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'Unauthenticated'
+                    'message' => __('account.unauthenticated')
                 ], 401);
             }
 
             if (!$user->profileImage) {
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'No profile image found'
+                    'message' => __('account.image_not_found')
                 ], 404);
             }
 
@@ -150,7 +150,7 @@ class ProfileController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'Profile image deleted successfully'
+                'message' => __('account.image_deleted')
             ]);
         } catch (\Throwable $e) {
 
@@ -160,7 +160,7 @@ class ProfileController extends Controller
 
             return response()->json([
                 'status' => 'error',
-                'message' => 'Server error'
+                'message' => __('acount.server_error')
             ], 500);
         }
     }

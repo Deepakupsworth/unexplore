@@ -449,42 +449,4 @@ class BookingController extends Controller
         ];
     }
 
-
-
-    public function testBookingMail()
-    {
-        // 🔹 Dummy booking object (assumed data)
-        $booking = new Booking([
-            'booking_code' => 'TEST-BK-1234',
-            'booking_total_amount' => 45000,
-            'travel_start_date' => now()->toDateString(),
-            'travel_end_date' => now()->addDays(5)->toDateString(),
-            'total_person' => 3,
-            'status' => 'pending',
-        ]);
-
-        // fake relations
-        $booking->setRelation('user', auth()->user());
-
-        $booking->setRelation('package', (object)[
-            'translation' => (object)[
-                'title' => 'Test Holiday Package'
-            ]
-        ]);
-
-        try {
-            Mail::to(auth()->user()->email)
-                ->send(new BookingConfirmationMail($booking));
-
-            return response()->json([
-                'success' => true,
-                'message' => '✅ Test booking email sent successfully'
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'error' => $e->getMessage()
-            ], 500);
-        }
-    }
 }
