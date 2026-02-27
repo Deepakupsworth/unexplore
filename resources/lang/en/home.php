@@ -50,6 +50,6 @@ return array (
   'pass.light' => 'Save up to 60% with',
   'pass.bold' => 'The Saudi Pass',
   'pass.cta' => 'Unlock Saudi Pass',
-  'home.filter.destination' => 'Destination',
-  'home.filter.destination.label' => 'Search destinations like AlUla, Riyadh...',
+  'filter.destination' => 'Destination',
+  'filter.destination.label' => 'Search destinations like AlUla, Riyadh...',
 );
