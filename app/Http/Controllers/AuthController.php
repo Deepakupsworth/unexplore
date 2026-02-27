@@ -33,7 +33,7 @@ class AuthController extends Controller
             'password'   => 'required|min:8|confirmed',
             'terms'      => 'accepted',
         ], [
-            'terms.accepted' => 'You must accept the Terms & Conditions',
+            'terms.accepted' => __('auth.terms_required'),
         ]);
 
         try {
@@ -61,7 +61,7 @@ class AuthController extends Controller
 
             return redirect()
                 ->route('login')
-                ->with('success', 'Account created successfully! Please login.');
+                ->with('success', __('auth.register_success'));
 
         } catch (\Throwable $e) {
             DB::rollBack();
@@ -72,7 +72,7 @@ class AuthController extends Controller
 
             return back()
                 ->withInput()
-                ->with('error', 'Something went wrong. Please try again.');
+                ->with('error', __('auth.register_failed'));
         }
     }
 
@@ -93,7 +93,7 @@ class AuthController extends Controller
 
         try {
             if (!Auth::attempt($credentials)) {
-                return back()->with('error', 'Invalid email or password');
+                return back()->with('error', __('auth.invalid_credentials'));
             }
 
             $request->session()->regenerate();
@@ -101,13 +101,13 @@ class AuthController extends Controller
             $user = Auth::user();
 
             return $user->role === 'admin'
-            ? redirect()->route('admin.dashboard')->with('success', 'Welcome back ' . $user->first_name . ' 👋')
-            : redirect()->intended(route('home'))->with('success', 'Welcome back ' . $user->first_name . ' 👋');
+            ? redirect()->route('admin.dashboard')->with('success', __('auth.welcome_back', ['name' => $user->first_name]))
+            : redirect()->intended(route('home'))->with('success', __('auth.welcome_back', ['name' => $user->first_name]));
 
         } catch (Throwable $e) {
             Log::error('Login failed', ['error' => $e->getMessage()]);
 
-            return back()->with('error', 'Unable to login. Try again later.');
+            return back()->with('error', __('auth.login_failed'));
         }
     }
 
@@ -136,7 +136,7 @@ class AuthController extends Controller
 
         } catch (Throwable $e) {
             Log::error('Password reset link failed', ['error' => $e->getMessage()]);
-            return back()->with('error', 'Unable to send reset link.');
+            return back()->with('error', __('auth.reset_link_failed'));
         }
     }
 
@@ -169,7 +169,7 @@ class AuthController extends Controller
 
         } catch (Throwable $e) {
             Log::error('Password reset failed', ['error' => $e->getMessage()]);
-            return back()->with('error', 'Unable to reset password.');
+            return back()->with('error', __('auth.reset_failed'));
         }
     }
 
@@ -222,14 +222,14 @@ class AuthController extends Controller
 
             DB::commit();
 
-            return back()->with('success', 'Profile updated successfully!');
+            return back()->with('success', __('auth.profile_updated'));
 
         } catch (Throwable $e) {
             DB::rollBack();
 
             Log::error('Profile update failed', ['error' => $e->getMessage()]);
 
-            return back()->with('error', 'Unable to update profile.');
+            return back()->with('error', __('auth.profile_update_failed'));
         }
     }
 
@@ -250,10 +250,10 @@ class AuthController extends Controller
         try {
             Mail::send('emails.contact-mail', $validated, function ($msg) {
                 $msg->to(config('mail.from.address'))
-                    ->subject('New Contact Form Submission');
+                    ->subject(__('auth.contact_subject'));
             });
 
-            return back()->with('success', 'Your message has been sent successfully!');
+            return back()->with('success', __('auth.contact_success'));
 
         } catch (Throwable $e) {
             Log::error('Contact mail failed', ['error' => $e->getMessage()]);

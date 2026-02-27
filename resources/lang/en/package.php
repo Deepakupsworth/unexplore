@@ -40,4 +40,5 @@ return array (
   'traveller.premium' => 'Premium Economy',
   'save' => 'Save',
   'sort.label' => 'Sort by:',
+  'invalid_item_type' => 'Invalid item type'
 );

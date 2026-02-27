@@ -90,4 +90,12 @@ return array (
   'ready_journey' => 'Get ready for an unforgettable journey',
   'back_home' => 'Back to Home',
   'explore_destinations' => 'Explore Destinations',
+  'invalid'              => 'Invalid coupon code.',
+  'expired'              => 'This coupon has expired.',
+  'package_not_found'    => 'Selected package not found.',
+  'invalid_category'     => 'This coupon is not valid for this category.',
+  'invalid_package'      => 'This coupon is not valid for this package.',
+  'usage_limit_reached'  => 'Coupon usage limit has been reached.',
+  'already_used'         => 'You have already used this coupon.',
+  'checkout_expired'     => 'Checkout session expired. Please refresh and try again.',
 );

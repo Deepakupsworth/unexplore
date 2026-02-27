@@ -82,8 +82,6 @@ Route::middleware([RedirectIfAuthenticated::class])->group(function () {
 Route::middleware('auth')->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-    
-    Route::get('/test-booking-mail', [BookingController::class, 'testBookingMail']);
 
     Route::post(
         '/checkout/update-travellers-session',
@@ -326,7 +324,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::get('{group}', [TranslationController::class, 'edit']);
         Route::post('{group}/update-one', [TranslationController::class, 'updateOne'])->name('admin.translations.updateOne');
         Route::post('{group}/update-all', [TranslationController::class, 'updateAll'])->name('admin.translations.updateAll');
-      
+
     });
 
     Route::prefix('admin')->name('admin.')->group(function () {
@@ -529,7 +527,7 @@ Route::get('/basic_table', function () {
 })->name('table.view');
 
 
-//events 
+//events
 Route::get('/events', [FrontendEventController::class, 'index'])->name('event.listing');
 Route::get('/events/{slug?}', [FrontendEventController::class, 'show'])->name('event.show');
 Route::get('/events-filter', [FrontendEventController::class, 'filter'])->name('events.filter');

@@ -52,4 +52,10 @@ return array (
   'pass.cta' => 'Unlock Saudi Pass',
   'filter.destination' => 'Destination',
   'filter.destination.label' => 'Search destinations like AlUla, Riyadh...',
+  'already_subscribed'  => 'You are already subscribed.',
+  'reactivated'         => 'Subscription reactivated successfully.',
+  'subscribed'          => 'Subscribed successfully.',
+  'unsubscribed'        => 'You have been unsubscribed successfully.',
+  'unsubscribe_failed'  => 'Unable to unsubscribe at the moment.',
+  'server_error'        => 'Something went wrong. Please try again.',
 );

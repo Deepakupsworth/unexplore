@@ -33,7 +33,7 @@ class AddressController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Address added successfully',
+            'message' => __('account.added_successfully'),
         ]);
     }
 
@@ -72,7 +72,7 @@ class AddressController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Address updated successfully',
+            'message' => __('account.updated_successfully'),
         ]);
     }
 
@@ -88,7 +88,7 @@ class AddressController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Address deleted successfully',
+            'message' => __('account.deleted_successfully'),
         ]);
     }
 
@@ -105,7 +105,7 @@ class AddressController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Address restored successfully',
+            'message' => __('account.restored_successfully'),
         ]);
     }
 }
