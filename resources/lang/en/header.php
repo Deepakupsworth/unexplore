@@ -19,7 +19,7 @@ return array (
   'explore_packages_title' => 'Explore Packages',
   'package.customizable' => 'Customizable',
   'package.group' => 'Group Package',
-  'login_signup' => 'Login \\/ Sign Up',
+  'login_signup' => 'Login / Sign Up',
   'book_now' => 'Book Now',
   'logout' => 'Logout',
   'feedback' => 'Feedback',

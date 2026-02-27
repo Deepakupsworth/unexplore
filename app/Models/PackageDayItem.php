@@ -31,6 +31,14 @@ class PackageDayItem extends Model
         'end_time'   => 'datetime:H:i',
     ];
 
+    protected $touches = ['package'];
+    
+    public function package()
+    {
+        return $this->belongsTo(Package::class);
+    }
+    
+
     public function day()
     {
         return $this->belongsTo(PackageDay::class);
@@ -83,8 +91,5 @@ class PackageDayItem extends Model
         return $this->belongsTo(PackageDay::class);
     }
 
-    public function package()
-    {
-        return $this->belongsTo(Package::class);
-    }
+    
 }

@@ -17,6 +17,8 @@ class PackageTranslation extends Model
         'description',
     ];
 
+    protected $touches = ['package'];
+
     public function package()
     {
         return $this->belongsTo(Package::class);

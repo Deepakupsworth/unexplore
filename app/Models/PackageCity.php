@@ -16,6 +16,8 @@ class PackageCity extends Model
         'sort_order',
     ];
 
+    protected $touches = ['package'];
+    
     public function package()
     {
         return $this->belongsTo(Package::class);

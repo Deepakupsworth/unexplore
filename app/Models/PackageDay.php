@@ -16,6 +16,8 @@ class PackageDay extends Model
         'city_id',
     ];
 
+    protected $touches = ['package'];
+    
     public function package()
     {
         return $this->belongsTo(Package::class);
