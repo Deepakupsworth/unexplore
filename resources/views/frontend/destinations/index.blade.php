@@ -39,7 +39,7 @@
                                     </h6>
                                     @if($cites->package_count > 0)
                                     <a class="btn btn-outline-primary rounded-pill" href="{{ route('packages.index', ['cities[]' => $cites->id]) }}">
-                                        Packages ({{ $cites->package_count }})
+                                        {{__('packages')}} ({{ $cites->package_count }})
                                     </a>
                                 @endif
                                 </div>

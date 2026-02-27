@@ -1,9 +1,7 @@
 @extends('frontend.layout')
-@section('title', 'Saudi Arabia Golf Travel Packages | Luxury Golf Experiences')
+@section('title', __('golf.meta_title'))
 
-@section('meta_description', 'Discover premium golf travel packages in Saudi Arabia. Enjoy championship courses, luxury
-    stays, VIP services, and curated golf experiences tailored to your trip.')
-
+@section('meta_description', __('golf.meta_description'))
 @section('content')
 
     <style>
@@ -28,7 +26,7 @@
             alt="Banner">
         <div class="container">
             <div class="dest-details-banner__content">
-                <h1 class="text-white">The World Golf Championships in <strong>Riyadh </strong></h1>
+                <h1 class="text-white">{{ __('golf.hero_title') }}</h1>
                 <img src="{{ asset('frontend/assets/hero-banner-vision.png') }}" alt="Vision 2030"
                     class="dest-details-banner__vision d-none-sm d-none-md golf-banner">
             </div>
@@ -89,12 +87,11 @@
     <section class="golf-booking-cta section-padding">
         <div class="container">
             <div class="golf-booking-cta__content">
-                <h2 class="section__heading mb-3 h1 fw-bold">Ready to Tee Off?</h2>
-                <p class="section__description mb-4">Book your exclusive golf experience with us today and
-                    enjoy
-                    unparalleled service and unforgettable moments on the greens.</p>
+                <h2 class="section__heading mb-3 h1 fw-bold"> {{ __('golf.cta_title') }}?</h2>
+                <p class="section__description mb-4">
+                    {{ __('golf.cta_description') }}</p>
                 <a href="#" class="btn btn-primary rounded-pill w-fit btn-lg">
-                    Book Now
+                    {{ __('golf.book_now') }}
                     <i class="fa-solid fa-angles-right"></i>
                 </a>
             </div>
@@ -107,14 +104,12 @@
                 <div class="col-md-3 d-flex align-items-center">
                     <div class="section__header flex-column align-items-start gap-4">
                         <div class="section__header-content">
-                            <h2 class="section__heading">Latest News</h2>
-                            <p class="section__description">Discover inspiring travel stories and valuable insights from
-                                across Saudi
-                                Arabia.</p>
+                            <h2 class="section__heading">{{ __('golf.latest_news_title') }}</h2>
+                            <p class="section__description">{{ __('golf.latest_news_description') }}</p>
                         </div>
                         <div class="section__header-CTA">
                             <a href="#" class="btn btn-primary rounded-pill">
-                                View All
+                                {{ __('golf.view_all') }}
                                 <i class="fa-solid fa-angles-right"></i>
                             </a>
                         </div>
@@ -188,9 +183,10 @@
         <div class="container">
             <div class="section__header align-items-start gap-4 mb-4">
                 <div class="section__header-content">
-                    <h2 class="section__heading">Photos: LIV Golf 2025</h2>
-                    <p class="section__description">Discover inspiring travel stories and valuable insights from across
-                        Saudi</p>
+                    <h2 class="section__heading">{{ __('golf.photos_title') }}</h2>
+                    <p class="section__description">
+                        {{ __('golf.photos_description') }}
+                    </p>
                 </div>
                 <!-- <div class="section__header-CTA">
                         <a href="#" class="btn btn-primary rounded-pill">
@@ -250,42 +246,37 @@
         <div class="container">
             <div class="section__header align-items-start gap-4 mb-4 justify-content-center">
                 <div class="section__header-content text-center">
-                    <h4 class="section__heading mb-2">We're always going the extra yard for golfers.</h4>
-                    <p class="section__description">Discover inspiring travel stories and valuable insights from across
-                        Saudi</p>
+                    <h4 class="section__heading mb-2"{{ __('golf.usp_title') }}</h4>
+                    <p class="section__description"> {{ __('golf.usp_description') }}</p>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6 col-lg-3">
                     <div class="golf-usp__item text-center p-2">
                         <img src="{{ asset('frontend/assets/icons/golf-usp-1.svg') }}" alt="USP" class="mb-3">
-                        <p class="p-large fw-600 my-2 text-light2">Dedicated Golf Experts</p>
-                        <p class="p-small text-light2">Unrivalled golf travel expertise on over 3500 destinations in 24
-                            countries.</p>
+                        <p class="p-large fw-600 my-2 text-light2">{{ __('golf.usp_1_title') }}</p>
+                        <p class="p-small text-light2">{{ __('golf.usp_1_desc') }}</p>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-3">
                     <div class="golf-usp__item text-center p-2">
                         <img src="{{ asset('frontend/assets/icons/golf-usp-2.svg') }}" alt="USP" class="mb-3">
-                        <p class="p-large fw-600 my-2 text-light2">Value You Can Trust</p>
-                        <p class="p-small text-light2">Unrivalled golf travel expertise on over 3500 destinations in 24
-                            countries.</p>
+                        <p class="p-large fw-600 my-2 text-light2">{{ __('golf.usp_2_title') }}</p>
+                        <p class="p-small text-light2">{{ __('golf.usp_2_desc') }}</p>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-3">
                     <div class="golf-usp__item text-center p-2">
                         <img src="{{ asset('frontend/assets/icons/golf-usp-3.svg') }}" alt="USP" class="mb-3">
-                        <p class="p-large fw-600 my-2 text-light2">Personalised Service</p>
-                        <p class="p-small text-light2">Unrivalled golf travel expertise on over 3500 destinations in 24
-                            countries.</p>
+                        <p class="p-large fw-600 my-2 text-light2">{{ __('golf.usp_3_title') }}</p>
+                        <p class="p-small text-light2">{{ __('golf.usp_3_desc') }}</p>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-3">
                     <div class="golf-usp__item text-center p-2">
                         <img src="{{ asset('frontend/assets/icons/golf-usp-1.svg') }}" alt="USP" class="mb-3">
-                        <p class="p-large fw-600 my-2 text-light2">Best in Industry Protection</p>
-                        <p class="p-small text-light2">Unrivalled golf travel expertise on over 3500 destinations in 24
-                            countries.</p>
+                        <p class="p-large fw-600 my-2 text-light2">{{ __('golf.usp_4_title') }}</p>
+                        <p class="p-small text-light2">{{ __('golf.usp_4_desc') }}</p>
                     </div>
                 </div>
             </div>

@@ -221,6 +221,7 @@
     "booking.things_to_do": "Things To Do",
     "booking.transport": "Transport",
     "booking.view_details": "View Details",
-    "booking.view_bookings": " View Bookings"
-    
+    "booking.view_bookings": " View Bookings",
+    "packages": "Packages",
+    "common.apply_filiters" : "Apply Filters"
 }

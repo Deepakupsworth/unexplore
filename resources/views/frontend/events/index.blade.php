@@ -50,33 +50,33 @@
                 <p>{{ __('events.discover_events_saudi') }}</p>
             </div>
         </div>
-    
+
     </section>
 
     <!-- 2. EVENTS SEARCH -->
     <section class="package-listing to-do-things-search">
         <div class="container">
-       
-        
+
+
         <div class="filtet-mob-button"> <button class="btn btn-outline-primary d-md-none mb-3" id="openFilters">
-                Filters
+                {{ __('common.filters') }}
             </button></div>
             <div class="package-listing__filters">
-            
-           
-           
+
+
+
 
                 <!-- LEFT FILTERS -->
                 <div class="package-listing__filter-section">
-                
-                
+
+
                     <div class="package-listing__filter-section-header d-md-none d-flex justify-content-between align-items-center mb-3 filter-header">
                         <h6>{{ __('common.filters') }}</h6>
-                  
+
                     <button class="btn btn-sm btn-outline-secondary" id="closeFilters">
                         ✕
                     </button>
-                
+
                     </div>
 
                     <div class="package-listing__filter-items filter-body">
@@ -239,14 +239,14 @@
                                 </div>
                             </div>
                         </div>
-                                        
-                                        
-                        
+
+
+
 
                     </div>
                     <div class="d-md-none position-sticky bottom-0 bg-white pt-3 pb-2 border-top filter-footer">
                             <button class="btn btn-success w-100" id="applyFilters">
-                                Apply Filters
+                                {{__('common.apply_filters') }}
                             </button>
                         </div>
                 </div>
