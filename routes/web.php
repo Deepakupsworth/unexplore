@@ -18,9 +18,6 @@ use App\Http\Controllers\Admin\AdminCouponController;
 use App\Http\Controllers\Admin\SeoController;
 use App\Http\Controllers\Frontend\Event\EventController as FrontendEventController;
 use App\Http\Controllers\Admin\TranslationController;
-
-use App\Http\Controllers\DemoJsonController;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Frontend\Blog\BlogController;
 use App\Http\Controllers\Admin\BlogController as AdminBlogController;
 use App\Http\Controllers\Frontend\Checkout\CheckoutController;
@@ -83,6 +80,9 @@ Route::middleware([RedirectIfAuthenticated::class])->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    
     Route::get('/test-booking-mail', [BookingController::class, 'testBookingMail']);
 
     Route::post(
@@ -134,28 +134,9 @@ Route::middleware(['auth', 'user'])->group(function () {
 
 
 
-Route::prefix('destinations')->group(function () {
-    Route::get('/', [FrontendDestinationController::class, 'index'])
-        ->name('destinations.index');
-
-    Route::get('{slug}', [FrontendDestinationController::class, 'show'])
-        ->name('destinations.show');
-});
-
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
-// User Dashboard
-
-Route::middleware(['auth', RoleMiddleware::class . ':user'])->group(function () {
-    Route::get('/user/dashboard', fn() => view('user.dashboard'))
-        ->name('user.dashboard');
-});
 
 
-Route::get('/events', [FrontendEventController::class, 'index'])->name('event.listing');
-Route::get('/events/{slug?}', [FrontendEventController::class, 'show'])->name('event.show');
 
-Route::get('/events-filter', [FrontendEventController::class, 'filter'])->name('events.filter');
 
 
 Route::middleware(['auth', 'admin'])->group(function () {
@@ -534,6 +515,7 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
         ->name('profile.image.delete');
 });
 
+
 Route::post('/apply-coupon', [CouponApplyController::class, 'apply'])
     ->name('coupon.apply');
 
@@ -547,32 +529,21 @@ Route::get('/basic_table', function () {
 })->name('table.view');
 
 
-// Frontend Routes
-Route::get('/destination', function () {
-    return view('frontend.destination');
-})->name('destination');
-
-
-Route::get('/destination-details/{slug?}', [HomeController::class, 'destination_details'])->name('destination.details');
-
-// event routes
-
+//events 
+Route::get('/events', [FrontendEventController::class, 'index'])->name('event.listing');
+Route::get('/events/{slug?}', [FrontendEventController::class, 'show'])->name('event.show');
+Route::get('/events-filter', [FrontendEventController::class, 'filter'])->name('events.filter');
 
 //package routes
 
 Route::get('/package-listing', [FrontendPackageController::class, 'list'])->name('package.listing');
-
 Route::get('/package-details', [FrontendPackageController::class, 'details'])->name('package.details');
 Route::get('/package-day-option/{id}/{type}/{index}', [FrontendPackageController::class, 'packageDayOption'])->name('package.details.options');
-
 Route::post('/store-traveller-session', [FrontendPackageController::class, 'storeSession'])
     ->name('store.traveller.session');
-
 Route::get('/package/{slug}/gallery', [FrontendPackageController::class, 'gallery'])
     ->name('package.gallery');
-
 Route::get('/package-day-option/{id}/{type}/{index}', [FrontendPackageController::class, 'packageDayOption'])->name('package.details.option');
-
 Route::any('/save-save-package-day-item-session', [FrontendPackageController::class, 'savePackageDayItemSession'])->name('package.day.item.option.session');
 
 
@@ -602,6 +573,16 @@ Route::get('/to-do-things-filter', [ToDoThingsController::class, 'filter'])
 
 Route::get('/to-do-things-search', [ToDoThingsController::class, 'search'])->name('to.do.things.search');
 
+
+//destinations
+Route::prefix('destinations')->group(function () {
+    Route::get('/', [FrontendDestinationController::class, 'index'])
+        ->name('destinations.index');
+
+    Route::get('{slug}', [FrontendDestinationController::class, 'show'])
+        ->name('destinations.show');
+});
+
 // blog routes
 Route::get('/blogs', [BlogController::class, 'index'])->name('blogs.view');
 Route::get('/blogs/{slug}', [BlogController::class, 'detail'])
@@ -615,6 +596,8 @@ Route::get('/blogs/{slug}', [BlogController::class, 'detail'])
 //pages routes
 Route::get('/about-us', [PageController::class, 'about_us'])->name('about.us');
 Route::get('/contact-us', [PageController::class, 'contact_us'])->name('contact.us.view');
+Route::get('/cities/search', [PageController::class, 'search'])
+    ->name('cities.search');
 
 //Route::post('/contact-submit', [AuthController::class, 'send'])->name('contact.send');
 Route::match(['get', 'post'], '/contact-submit', [AuthController::class, 'send'])->name('contact.send');
@@ -629,14 +612,6 @@ Route::get('/packages/ajax', [FrontendPackageController::class, 'ajax'])
 
 Route::get('packages/{slug}', [FrontendPackageController::class, 'show'])
     ->name('packages.show');
-//json file route
-Route::get('/saudi-packages', [DemoJsonController::class, 'index']);
-Route::get('/packege-details-json', [DemoJsonController::class, 'packege_details_page']);
-Route::get('/things-to-do-nature-json', [DemoJsonController::class, 'things_to_do_nature_page']);
-Route::get('/event-details-json', [DemoJsonController::class, 'event_details_page']);
-Route::get('/destination-details-json', [DemoJsonController::class, 'destination_detail_page']);
-
-
 
 Route::post('/checkout/init', [CheckoutController::class, 'init'])
     ->name('checkout.init');
@@ -689,6 +664,5 @@ Route::prefix('info')->name('info.')->group(function () {
         ->name('getting-around');
 });
 
-Route::get('/cities/search', [PageController::class, 'search'])
-    ->name('cities.search');
+
 
