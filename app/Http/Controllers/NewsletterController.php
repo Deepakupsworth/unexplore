@@ -24,7 +24,7 @@ class NewsletterController extends Controller
             if ($subscriber && $subscriber->is_active) {
                 return response()->json([
                     'status'  => 'info',
-                    'message' => 'You are already subscribed.'
+                    'message' => __('home.already_subscribed')
                 ]);
             }
 
@@ -37,7 +37,7 @@ class NewsletterController extends Controller
 
                 return response()->json([
                     'status'  => 'success',
-                    'message' => 'Subscription reactivated successfully.'
+                    'message' => __('home.reactivated')
                 ]);
             }
 
@@ -49,7 +49,7 @@ class NewsletterController extends Controller
 
             return response()->json([
                 'status'  => 'success',
-                'message' => 'Subscribed successfully.'
+                'message' => __('home.subscribed')
             ]);
 
         } catch (Throwable $e) {
@@ -61,7 +61,7 @@ class NewsletterController extends Controller
 
             return response()->json([
                 'status'  => 'error',
-                'message' => 'Something went wrong. Please try again.'
+                'message' => __('home.server_error')
             ], 500);
         }
     }
@@ -85,7 +85,7 @@ class NewsletterController extends Controller
 
             return response()->json([
                 'status'  => 'success',
-                'message' => 'You have been unsubscribed successfully.'
+                'message' => __('home.unsubscribed')
             ]);
 
         } catch (Throwable $e) {
@@ -97,7 +97,7 @@ class NewsletterController extends Controller
 
             return response()->json([
                 'status'  => 'error',
-                'message' => 'Unable to unsubscribe at the moment.'
+                'message' => __('home.unsubscribe_failed')
             ], 500);
         }
     }

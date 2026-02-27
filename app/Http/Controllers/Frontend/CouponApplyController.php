@@ -33,7 +33,7 @@ class CouponApplyController extends Controller
 
             if (!$coupon) {
                 return response()->json([
-                    'message' => 'Invalid coupon'
+                    'message' => __('checkout.invalid')
                 ], 422);
             }
 
@@ -43,7 +43,7 @@ class CouponApplyController extends Controller
                 ($coupon->ends_at && now()->gt($coupon->ends_at))
             ) {
                 return response()->json([
-                    'message' => 'Coupon expired'
+                    'message' => __('checkout.expired')
                 ], 422);
             }
 
@@ -52,7 +52,7 @@ class CouponApplyController extends Controller
 
             if (!$package) {
                 return response()->json([
-                    'message' => 'Package not found'
+                    'message' => __('checkout.package_not_found')
                 ], 422);
             }
 
@@ -64,7 +64,7 @@ class CouponApplyController extends Controller
                     !$coupon->categories->pluck('id')->contains($package->category_id))
             ) {
                 return response()->json([
-                    'message' => 'Coupon not valid for this category'
+                    'message' =>  __('checkout.invalid_category')
                 ], 422);
             }
 
@@ -73,7 +73,7 @@ class CouponApplyController extends Controller
                 !$coupon->packages->pluck('id')->contains($package->id)
             ) {
                 return response()->json([
-                    'message' => 'Coupon not valid for this package'
+                    'message' => __('checkout.invalid_package')
                 ], 422);
             }
 
@@ -84,7 +84,7 @@ class CouponApplyController extends Controller
                 $coupon->usages->count() >= $coupon->usage_limit
             ) {
                 return response()->json([
-                    'message' => 'Coupon usage limit reached'
+                    'message' => __('checkout.usage_limit_reached')
                 ], 422);
             }
 
@@ -96,7 +96,7 @@ class CouponApplyController extends Controller
                 ->count() >= $coupon->usage_per_user
             ) {
                 return response()->json([
-                    'message' => 'Coupon already used'
+                    'message' => __('checkout.already_used')
                 ], 422);
             }
 
@@ -111,7 +111,7 @@ class CouponApplyController extends Controller
                 !isset($checkout['pricing']['final_total'])
             ) {
                 return response()->json([
-                    'message' => 'Checkout session expired'
+                    'message' => __('checkout.checkout_expired')
                 ], 422);
             }
 

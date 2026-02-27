@@ -293,7 +293,7 @@
                         reader.readAsDataURL(file);
                         iziToast.success({
                             title: 'Success',
-                            message: 'Profile image updated successfully.',
+                            message: data?.message,
                             position: 'topRight',
                             timeout: 3000
                         });
@@ -321,7 +321,7 @@
 
                         iziToast.success({
                             title: 'Success',
-                            message: 'Profile image delated successfully.',
+                            message: data?.message,
                             position: 'topRight',
                             timeout: 3000
                         });

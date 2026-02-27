@@ -12,7 +12,7 @@ class RedirectIfAuthenticated
         if (Auth::check()) {
             return Auth::user()->role === 'admin'
                 ? redirect('/admin/dashboard')
-                : redirect('/user/dashboard');
+                : redirect('/');
         }
 
         return $next($request);

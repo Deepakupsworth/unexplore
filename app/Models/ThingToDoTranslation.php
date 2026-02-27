@@ -14,6 +14,8 @@ class ThingToDoTranslation extends Model
         'name',
         'about'
     ];
+    
+    protected $touches = ['thing'];
 
     public function thing()
     {

@@ -32,6 +32,7 @@ class CategoryController extends Controller
         })
         ->values();
 
+
         // 🔍 Search by category name (English)
         if ($request->filled('search')) {
             $query->whereHas('translation', function ($q) use ($request) {

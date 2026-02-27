@@ -17,28 +17,31 @@ class PackagePrice extends Model
         'per_person_price',
     ];
 
+    protected $touches = ['package'];
+
+
     public function package()
     {
         return $this->belongsTo(Package::class);
     }
 
    // PackagePrice.php
-public function increasePersons()
-{
-    return $this->hasMany(
-        PackagePriceIncreasePerson::class,
-        'package_id',
-        'package_id'
-    );
-}
+    public function increasePersons()
+    {
+        return $this->hasMany(
+            PackagePriceIncreasePerson::class,
+            'package_id',
+            'package_id'
+        );
+    }
 
-public function childPrices()
-{
-    return $this->hasMany(
-        PackageChildPrice::class,
-        'package_id',
-        'package_id'
-    );
-}
+    public function childPrices()
+    {
+        return $this->hasMany(
+            PackageChildPrice::class,
+            'package_id',
+            'package_id'
+        );
+    }
 
 }
