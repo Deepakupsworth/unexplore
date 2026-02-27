@@ -341,8 +341,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::prefix('admin/translations')->group(function () {
         Route::get('/', [TranslationController::class, 'index']);
         Route::get('{group}', [TranslationController::class, 'edit']);
-        Route::post('update-one', [TranslationController::class, 'updateOne']);
-        Route::post('update-all', [TranslationController::class, 'updateAll']);
+        Route::post('{group}/update-one', [TranslationController::class, 'updateOne'])->name('admin.translations.updateOne');
+        Route::post('{group}/update-all', [TranslationController::class, 'updateAll'])->name('admin.translations.updateAll');
+      
     });
 
     Route::prefix('admin')->name('admin.')->group(function () {
