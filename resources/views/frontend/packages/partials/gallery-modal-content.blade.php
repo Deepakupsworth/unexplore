@@ -34,7 +34,7 @@
                              <li class="nav-item" role="presentation">
                                  <button class="nav-link" data-target="galleryTabsActivities" type="button"
                                      role="tab">
-                                     {{ __('gallery.events') }}
+                                     {{ __('checkout.events') }}
                                      <!-- <small class="d-block text-light2 fw-normal">20 Photos</small> -->
                                  </button>
                              </li>
@@ -44,7 +44,7 @@
                              <li class="nav-item" role="presentation">
                                  <button class="nav-link" data-target="galleryTabsHighlights" type="button"
                                      role="tab">
-                                     {{ __('gallery.hotels') }}
+                                     {{ __('checkout.hotels') }}
                                      <!-- <small class="d-block text-light2 fw-normal">3 Photos</small> -->
                                  </button>
                              </li>

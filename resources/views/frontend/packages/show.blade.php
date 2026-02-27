@@ -160,7 +160,7 @@
                                 @if(!empty(@$finalArray['todo'][0]['thumb']))
                                 {{ __('package.gallery.activities') }}
                                 @else
-                                {{ __('package.gallery.events') }}
+                                {{ __('checkout.events') }}
                                  @endif
                                 </p>
 
@@ -192,7 +192,7 @@
                                 <img class="img-fluid" src="{{ $imagePathEvent }}" alt="">
                                 <p class="p-small">
                                 @if(!empty(@$finalArray['event'][0]['thumb']))
-                                {{ __('package.gallery.events') }}
+                                {{ __('checkout.events') }}
                                 @else
                                 {{ __('package.gallery.activities') }}
                                 @endif
@@ -228,7 +228,7 @@
 
 
                         <img class="img-fluid" src="{{ $imagePathHotel }}" alt="">
-                        <p class="p-small">{{ __('package.gallery.hotels') }}</p>
+                        <p class="p-small">{{ __('checkout.hotels') }}</p>
                     </div>
                 </div>
             </div>
