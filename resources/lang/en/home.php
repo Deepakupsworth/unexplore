@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'hero.title' => 'Unxplord <strong>Saudi Arabia<\\/strong>',
+  'hero.title' => 'Unxplord <strong>Saudi Arabia</strong>',
   'hero.subtitle' => 'Beyond Maps. Beyond Ordinary',
   'hero.description' => 'Journey into the heart of the Middle East to discover ancient heritage sites,futuristic cities, and untouched natural wonders. Your authentic Arabian adventure starts here.',
   'hero.explore_btn' => 'Explore Tours',

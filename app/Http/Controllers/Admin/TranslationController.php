@@ -261,8 +261,9 @@ class TranslationController extends Controller
 
             file_put_contents(
                 $file,
-                json_encode($existing, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
+                json_encode($existing, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
             );
+            
 
         } else {
             $dir = resource_path("lang/{$locale}");

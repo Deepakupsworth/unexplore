@@ -2,7 +2,7 @@
 
 return array (
   'banner.title' => 'Contact Us',
-  'banner.description' => '24\\/7—call us anytime or send your request using the form below.',
+  'banner.description' => '24/7—call us anytime or send your request using the form below.',
   'form.title' => 'Contact Us',
   'form.first_name' => 'First Name *',
   'form.last_name' => 'Last Name *',

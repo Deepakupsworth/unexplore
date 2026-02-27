@@ -78,7 +78,7 @@ return array (
   'enter_city' => 'Enter city',
   'postal_code' => 'Postal Code',
   'company_name' => 'Company Name',
-  'gst_number' => 'GST \\/ VAT Number',
+  'gst_number' => 'GST / VAT Number',
   'optional' => 'Optional',
   'select_country' => 'Select Country',
   'title' => 'Checkout',

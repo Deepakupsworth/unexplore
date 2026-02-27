@@ -31,7 +31,7 @@ return array (
   'exclusive.description' => 'Embark on unforgettable journeys and explore the hidden gems across the heart of Saudi Arabia',
   'exclusive.view_all' => 'View All',
   'exclusive.only_for_now' => 'Only for now',
-  'exclusive.per_person' => '\\/Person',
+  'exclusive.per_person' => '/Person',
   'exclusive.total_price' => 'Total Price',
   'explore.title' => 'Start exploring',
   'explore.description' => 'Embark on unforgettable journeys and explore the hidden gems across the heart of Saudi Arabia',
