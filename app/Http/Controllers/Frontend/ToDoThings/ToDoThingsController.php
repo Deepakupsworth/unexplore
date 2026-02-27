@@ -10,7 +10,7 @@ use App\Models\City;
 use App\Models\Event;
 use App\Models\Package;
 use Illuminate\Http\Request;
-use DB;
+use Illuminate\Support\Facades\DB;
 
 
 class ToDoThingsController extends Controller
@@ -229,7 +229,7 @@ class ToDoThingsController extends Controller
                 $q->where('language_code', $language),
                 'cities.city',
                 'price',
-               
+
             ])
             ->where('status', 'active')
             ->latest()

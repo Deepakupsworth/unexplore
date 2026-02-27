@@ -50,6 +50,7 @@
                 <img src="{{ asset('frontend/assets/hero-banner-vision.png') }}" alt="Vision 2030"
                     class="dest-details-banner__vision d-none-sm d-none-md">
                 <div class="dest-details-banner__btn-group">
+                    @dd($thing->package_count)
                     @if($thing->package_count > 0)
                         <a href="{{ route('packages.index', ['todo_id' => $thing->id]) }}"
                         class="btn btn-outline-light gap-1 rounded-pill">
