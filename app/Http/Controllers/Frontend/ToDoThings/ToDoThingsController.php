@@ -140,7 +140,7 @@ class ToDoThingsController extends Controller
             ->withCount([
                 'packageDayItems as package_count' => function ($q) {
                     $q->whereHas(
-                        'package',
+                        'packageDay.package',
                         fn($q2) => $q2->where('status', 'active')
                     )
                         ->join('package_days', 'package_day_items.package_day_id', '=', 'package_days.id')
