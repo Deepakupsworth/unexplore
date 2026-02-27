@@ -10,6 +10,7 @@ use App\Models\City;
 use App\Models\Event;
 use App\Models\Package;
 use Illuminate\Http\Request;
+use DB;
 
 
 class ToDoThingsController extends Controller
@@ -138,9 +139,12 @@ class ToDoThingsController extends Controller
             ])
             ->withCount([
                 'packageDayItems as package_count' => function ($q) {
-                    $q->whereHas('packageDay.package', function ($q2) {
-                        $q2->where('status', 'active');
-                    });
+                    $q->whereHas(
+                        'package',
+                        fn($q2) => $q2->where('status', 'active')
+                    )
+                        ->join('package_days', 'package_day_items.package_day_id', '=', 'package_days.id')
+                        ->select(DB::raw('COUNT(DISTINCT package_days.package_id)'));
                 }
             ])
             ->firstOrFail();

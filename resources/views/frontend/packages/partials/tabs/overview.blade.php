@@ -59,7 +59,7 @@
                                                             data-bs-target="#hotelCollapse{{ $day->id }}">
                                                             <i class="fa-solid fa-chevron-down"></i>
                                                         </div>
-                                                        <p class="p-small fw-600">{{ __('package.item.hotel') }}</p>
+                                                        <p class="p-small fw-600">{{ __('checkout.hotel') }}</p>
                                                     </div>
                                                 </div>
                                                 <div class="d-flex gap-2 pkg-details__accordion-actions">
@@ -282,7 +282,7 @@
                                                             data-bs-target="#eventCollapse{{ $day->id }}">
                                                             <i class="fa-solid fa-chevron-down"></i>
                                                         </div>
-                                                        <p class="p-small fw-600">{{ __('package.item.event') }}</p>
+                                                        <p class="p-small fw-600">{{ __('events.events') }}</p>
                                                     </div>
                                                 </div>
                                                 <div class="d-flex gap-2 pkg-details__accordion-actions">
