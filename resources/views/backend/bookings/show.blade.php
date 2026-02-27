@@ -237,12 +237,13 @@
                                         <x-admin.table.table>
                                             <x-admin.table.thead>
                                                 <x-admin.table.tr>
+                                                    <x-admin.table.th>Action</x-admin.table.th>
                                                     <x-admin.table.th>Method</x-admin.table.th>
                                                     <x-admin.table.th>Txn ID</x-admin.table.th>
                                                     <x-admin.table.th>Amount</x-admin.table.th>
                                                     <x-admin.table.th>Status</x-admin.table.th>
                                                     <x-admin.table.th>Date</x-admin.table.th>
-                                                    <x-admin.table.th>Action</x-admin.table.th>
+
 
                                                 </x-admin.table.tr>
                                             </x-admin.table.thead>
@@ -250,6 +251,20 @@
                                             <x-admin.table.tbody>
                                                 @foreach ($booking->payments as $payment)
                                                     <x-admin.table.tr>
+                                                        <x-admin.table.td>
+                                                            <button class="btn btn-xs" data-bs-toggle="modal"
+                                                                data-bs-target="#paymentModal"
+                                                                data-payment-id="{{ $payment->id }}"
+                                                                data-method="{{ $payment->payment_method }}"
+                                                                data-amount="{{ $payment->amount }}"
+                                                                data-txn="{{ $payment->transaction_id }}"
+                                                                data-bank="{{ $payment->bank_name ?? '' }}"
+                                                                data-note="{{ $payment->payload_json['note'] ?? '' }}"
+                                                                data-status="{{ $payment->status }}">
+
+                                                                <iconify-icon icon="heroicons:pencil-square"></iconify-icon>
+                                                            </button>
+                                                        </x-admin.table.td>
                                                         <x-admin.table.td>{{ $payment->payment_method->label() }}</x-admin.table.td>
                                                         <x-admin.table.td>{{ $payment->transaction_id ?? '—' }}</x-admin.table.td>
                                                         <x-admin.table.td>
@@ -267,20 +282,7 @@
                                                         <x-admin.table.td>
                                                             {{ $payment->created_at->format('d M Y') }}
                                                         </x-admin.table.td>
-                                                        <x-admin.table.td>
-                                                            <button class="btn btn-xs" data-bs-toggle="modal"
-                                                                data-bs-target="#paymentModal"
-                                                                data-payment-id="{{ $payment->id }}"
-                                                                data-method="{{ $payment->payment_method }}"
-                                                                data-amount="{{ $payment->amount }}"
-                                                                data-txn="{{ $payment->transaction_id }}"
-                                                                data-bank="{{ $payment->bank_name ?? '' }}"
-                                                                data-note="{{ $payment->payload_json['note'] ?? '' }}"
-                                                                data-status="{{ $payment->status }}">
 
-                                                                <iconify-icon icon="heroicons:pencil-square"></iconify-icon>
-                                                            </button>
-                                                        </x-admin.table.td>
                                                     </x-admin.table.tr>
                                                 @endforeach
                                             </x-admin.table.tbody>
@@ -423,7 +425,7 @@
                     <!-- Modal header -->
                     <div
                         class="flex items-center justify-between p-5 border-b rounded-t dark:border-slate-600 bg-black-500">
-                        <h3 class="text-xl font-medium text-white dark:text-white capitalize">
+                        <h3 id="paymentModalTitle" class="text-xl font-medium text-white dark:text-white capitalize">
                             Add Payment
                         </h3>
                         <button type="button"
@@ -449,18 +451,22 @@
 
                             <!-- HEADER -->
                             <div class="modal-header bg-dark text-white">
-                                <h5 class="modal-title" id="paymentModalTitle">Add Payment</h5>
+
                                 <button type="button" class="btn-close btn-close-white"
                                     data-bs-dismiss="modal"></button>
                             </div>
 
                             <!-- BODY -->
                             <div class="modal-body space-y-3">
-                                <select name="payment_method" id="modal_payment_method">
-                                    @foreach (\App\Enums\PaymentMethod::options() as $value => $label)
-                                        <option value="{{ $value }}">{{ $label }}</option>
-                                    @endforeach
-                                </select>
+                                <div class="fromGroup">
+                                    <label class="form-label">Payment Method</label>
+                                    <select class="form-control" name="payment_method" id="modal_payment_method">
+                                        @foreach (\App\Enums\PaymentMethod::options() as $value => $label)
+                                            <option value="{{ $value }}">{{ $label }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
 
                                 {{-- <select name="payment_method" id="modal_payment_method" class="form-control" required>
                                     <option value="cash">Cash</option>
@@ -472,12 +478,16 @@
                                     <input type="text" name="bank_name" id="modal_bank_name" class="form-control"
                                         placeholder="Bank Name">
                                 </div>
+                                <div class="fromGroup">
+                                    <label class="form-label">Transaction ID</label>
+                                    <input type="text" name="transaction_id" id="modal_transaction_id"
+                                        class="form-control" placeholder="Transaction ID">
+                                </div>
 
-                                <input type="text" name="transaction_id" id="modal_transaction_id"
-                                    class="form-control" placeholder="Transaction ID">
-
-                                <input type="number" name="amount" id="modal_amount" class="form-control" required>
-
+                                <div class="fromGroup">
+                                    <label class="form-label">Amount</label>
+                                    <input type="number" name="amount" id="modal_amount" class="form-control" required>
+                                </div>
                                 <textarea name="note" id="modal_note" class="form-control" placeholder="Admin note"></textarea>
 
                                 {{-- <select name="status" id="modal_payment_status" class="form-control" required>
@@ -487,22 +497,23 @@
                                     <option value="refunded">Refunded</option>
                                     <option value="partial_refund">Partial Refund</option>
                                 </select> --}}
-
-                                <select name="status" id="modal_payment_status" class="form-control" required>
-                                    @foreach (\App\Enums\PaymentStatus::options() as $value => $label)
-                                        <option value="{{ $value }}">
-                                            {{ $label }}
-                                        </option>
-                                    @endforeach
-                                </select>
-
+                                <div class="fromGroup">
+                                    <label class="form-label">Status</label>
+                                    <select name="status" id="modal_payment_status" class="form-control" required>
+                                        @foreach (\App\Enums\PaymentStatus::options() as $value => $label)
+                                            <option value="{{ $value }}">
+                                                {{ $label }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
 
                             </div>
 
 
                             <!-- Modal footer -->
                             <div
-                                class="flex items-center justify-end p-6 space-x-2 border-t border-slate-200 rounded-b dark:border-slate-600">
+                                class="flex items-center justify-end mt-4  space-x-2 border-slate-200 rounded-b dark:border-slate-600">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                     Cancel
                                 </button>

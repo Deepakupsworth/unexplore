@@ -39,18 +39,21 @@
                         <select name="cities_ids[]" id="seachcities" multiple class="form-control select2"></select>
                     </div>
 
-                    {{-- Category --}}
-                    <div class="fromGroup">
-                        <label class="form-label">Category</label>
-                        <select name="category_id" class="form-control">
-                            <option value="">All Categories</option>
-                            @foreach ($categories as $id => $cat)
-                                <option value="{{ $id }}" {{ request('category_id') == $id ? 'selected' : '' }}>
-                                    {{ $cat }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
+                   {{-- Category --}}
+                   <div class="fromGroup">
+                    <label class="form-label">Category</label>
+
+                    <select name="category_ids[]" class="form-control select2" multiple>
+                        <option value="">All Categories</option>
+
+                        @foreach ($categories as $id => $cat)
+                            <option value="{{ $id }}"
+                                {{ in_array($id, request('category_ids', [])) ? 'selected' : '' }}>
+                                {{ $cat }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
 
                     {{-- Location --}}
                     <div class="fromGroup">

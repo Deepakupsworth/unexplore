@@ -41,6 +41,12 @@ class EventController extends Controller
                     $q->whereIn('city_id', $request->cities_ids)
             )
             ->when(
+                $request->filled('category_ids'),
+                fn ($q) =>
+                $q->whereIn('category_id', $request->category_ids)
+            )
+
+            ->when(
                 $request->filled('status'),
                 fn($q) =>
                 $q->where('status', $request->status)
@@ -61,7 +67,9 @@ class EventController extends Controller
 
         $cities = City::pluck('slug', 'id');
 
-        return view('backend.events.index', compact('events', 'cities'));
+        $categories = Category::whereType(CategoryType::EVENT)
+                ->pluck('slug', 'id');
+        return view('backend.events.index', compact('events', 'cities','categories'));
     }
 
     /* =========================

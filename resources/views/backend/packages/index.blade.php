@@ -11,7 +11,7 @@
                 </a>
             </li>
             <li class="text-slate-400">/</li>
-            <li class="text-slate-700 font-medium">Transport</li>
+            <li class="text-slate-700 font-medium">Packages</li>
         </ul>
     </div>
 
@@ -31,20 +31,38 @@
 
                     {{-- 🔍 Search --}}
                     <div class="fromGroup">
+                        <label class="form-label">Name</label>
                         <input type="text" name="search" value="{{ request('search') }}" placeholder="Search title..."
                         class="form-control">
                     </div>
 
-
                     {{-- 📦 Package Type --}}
-                    <select name="package_type" class="form-control">
+                  <div class="fromGroup">
+                    <label class="form-label">Package Type</label>
+                    <select name="package_type" class="form-control selectCountrySelect2">
                         <option value="">All Types</option>
                         <option value="fixed" @selected(request('package_type') == 'fixed')>Fixed</option>
                         <option value="customized" @selected(request('package_type') == 'customized')>Customized</option>
                     </select>
+                  </div>
+
+                    {{-- Category --}}
+                    <div class="fromGroup">
+                        <label class="form-label">Category</label>
+
+                        <select name="category_ids[]" class="form-control select2" multiple>
+                            <option value="">All Categories</option>
+                            @foreach ($categories as $id => $cat)
+                                <option value="{{ $id }}"
+                                    {{ in_array($id, request('category_ids', [])) ? 'selected' : '' }}>
+                                    {{ $cat }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
 
                     {{-- ⚡ Status --}}
-                    <select name="status" class="form-control">
+                    <select name="status" class="form-control selectCountrySelect2">
                         <option value="">All Status</option>
                         <option value="active" @selected(request('status') == 'active')>Active</option>
                         <option value="inactive" @selected(request('status') == 'inactive')>Inactive</option>

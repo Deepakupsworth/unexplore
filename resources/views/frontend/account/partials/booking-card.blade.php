@@ -55,7 +55,7 @@
 /* Footer always at bottom */
 .card-actions {
     margin-top: auto;
-    gap: 12px;   
+    gap: 12px;
 }
 /* Fixed height for title + badge row */
 .title-row {
@@ -125,14 +125,14 @@
         {{ $label }}
     </div>
 
-   
+
     <button
                         class="btn btn-outline-primary user-bookings__view-details-btn gap-0 px-2 rounded-pill fw-500"
                         data-bs-toggle="offcanvas" data-bs-target="#viewBookingDetailsSideDrawer"
                         data-label="{{ $label }}" data-badge-class="{{ $badgeClass }}"
                         data-thumb="{{ asset('storage/' . $thumbPath) }}"
                         data-title="{{ $booking->package?->translation?->title }}" data-route="{{ $cityRouteText }}"
-                        data-total="{{ number_format($booking->booking_total_amount) }}"
+                        data-total="{{ number_format((float) $booking->booking_total_amount, 2) }}"
                         data-travellers="{{ $booking->total_person }}"
                         data-date="{{ \Carbon\Carbon::parse($booking->created_at)->format('d M, Y') }}"
                         data-days='@json($daysPayload)'

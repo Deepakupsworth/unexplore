@@ -1,6 +1,6 @@
 @extends('frontend.layout')
 
-@section('title','Profile')
+@section('title', 'Profile')
 
 @section('meta_description', '')
 
@@ -64,11 +64,11 @@
                         </li>
 
                         <!-- <li>
-                                                        <a href="javascript:void(0)" class="nav-link account-tab" data-tab="wishlist">
-                                                            <i class="fa-solid fa-heart p-large"></i>
-                                                            Wishlist
-                                                        </a>
-                                                    </li> -->
+                                                            <a href="javascript:void(0)" class="nav-link account-tab" data-tab="wishlist">
+                                                                <i class="fa-solid fa-heart p-large"></i>
+                                                                Wishlist
+                                                            </a>
+                                                        </li> -->
 
                     </ul>
                 </div>
@@ -95,8 +95,8 @@
 @push('scripts')
     <script>
         /* =========================================================
-           ACCOUNT TAB LOADER (PRODUCTION READY)
-        ========================================================= */
+               ACCOUNT TAB LOADER (PRODUCTION READY)
+            ========================================================= */
 
         function loadAccountTab(tab) {
 
@@ -319,7 +319,7 @@
                         document.querySelector('[data-profile-preview]')
                             .src = '{{ asset('frontend/assets/user.png') }}';
 
-                            iziToast.success({
+                        iziToast.success({
                             title: 'Success',
                             message: 'Profile image delated successfully.',
                             position: 'topRight',
@@ -506,7 +506,6 @@
 
                     /* ---------- ITEMS ---------- */
                     (day.items || []).forEach(item => {
-
                         const title = item.title || item.item_type || 'Item';
                         const imagePath = item.image_path || null;
                         const extraPrice = parseFloat(item.extra_price || 0);
@@ -621,13 +620,11 @@
     <script>
         $('.addreessCountry').select2({
             dropdownParent: $('#addAddressModal')
-            });
-    </script>
-    <script>
-    $('.travellerCountry').select2({
-        dropdownParent: $('#travellerModal')
         });
     </script>
-
-
+    <script>
+        $('.travellerCountry').select2({
+            dropdownParent: $('#travellerModal')
+        });
+    </script>
 @endpush

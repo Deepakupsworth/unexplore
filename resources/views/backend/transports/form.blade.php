@@ -25,7 +25,7 @@
                             {{-- City --}}
                             <div>
                                 <label class="form-label">City</label>
-                                <select name="city_id" class="form-control">
+                                <select name="city_id" class="form-control selectCountrySelect2">
                                     <option value="">Select City</option>
                                     @foreach ($cities as $id => $name)
                                         <option value="{{ $id }}"
@@ -40,7 +40,7 @@
                             <div>
 
                                 <label class="form-label">Transport Type</label>
-                                <select name="type" class="form-control" required>
+                                <select name="type" class="form-control selectCountrySelect2" required>
                                     <option value="">Select Transport Type</option>
 
                                     @foreach ($types as $type)

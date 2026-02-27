@@ -40,6 +40,10 @@ class HotelController extends Controller
             $query->where('city_id', $request->city_id);
         }
 
+        if($request->filled('cities_ids')){
+            $query->whereIn('city_id', $request->cities_ids);
+        }
+
         // ⭐ Filter by star rating
         if ($request->filled('star')) {
             $query->where('star_rating', $request->star);

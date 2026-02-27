@@ -33,7 +33,7 @@
                             {{-- City --}}
                             <div>
                                 <label class="form-label">City <span class="text-red-500">*</span></label>
-                                <select name="city_id" class="form-control @error('city_id') border-red-500 @enderror">
+                                <select name="city_id" class="selectCountrySelect2 form-control @error('city_id') border-red-500 @enderror">
                                     <option value="">Select City</option>
                                     @foreach ($cities as $id => $name)
                                         <option value="{{ $id }}"
@@ -50,7 +50,7 @@
                             {{-- Stars --}}
                             <div>
                                 <label class="form-label">Star Rating</label>
-                                <select name="star_rating" class="form-control">
+                                <select name="star_rating" class="form-control selectCountrySelect2">
                                     <option value="">None</option>
                                     @for ($i = 1; $i <= 5; $i++)
                                         <option value="{{ $i }}"

@@ -61,37 +61,40 @@
 
                     <div class="fromGroup">
                         <label class="form-label">Package Type *</label>
-                        <select name="package_type" class="form-control">
+                        <select name="package_type" class="form-control selectCountrySelect2">
                             <option value="fixed" {{ old('package_type') == 'fixed' ? 'selected' : '' }}>Fixed</option>
-                            <option value="customized" {{ old('package_type') == 'customized' ? 'selected' : '' }}>Customized</option>
+                            <option value="customized" {{ old('package_type') == 'customized' ? 'selected' : '' }}>
+                                Customized</option>
                         </select>
                     </div>
 
                     <div class="fromGroup">
                         <label class="form-label">Duration Days *</label>
-                        <input value="{{ old('duration_days') }}" id="duration_days" type="number" name="duration_days" class="form-control" min="1"
-                            required>
+                        <input value="{{ old('duration_days') }}" id="duration_days" type="number" name="duration_days"
+                            class="form-control" min="1" required>
                     </div>
 
                     <div class="fromGroup">
                         <label class="form-label">Duration Nights *</label>
-                        <input  value="{{ old('duration_nights') }}" id="duration_nights" type="number" name="duration_nights" class="form-control"
-                            min="0" required>
+                        <input value="{{ old('duration_nights') }}" id="duration_nights" type="number"
+                            name="duration_nights" class="form-control" min="0" required>
                     </div>
 
                     <div class="fromGroup">
                         <label class="form-label">Base Persons</label>
-                        <input value="{{ old('base_persons', 2) }}" type="number" name="base_persons" class="form-control" value="2">
+                        <input value="{{ old('base_persons', 2) }}" type="number" name="base_persons" class="form-control"
+                            value="2">
                     </div>
 
                     <div class="fromGroup">
                         <label class="form-label">Max Persons *</label>
-                        <input  value="{{ old('max_persons') }}" type="number" name="max_persons" class="form-control" required>
+                        <input value="{{ old('max_persons') }}" type="number" name="max_persons" class="form-control"
+                            required>
                     </div>
 
                     <div class="fromGroup">
                         <label class="form-label">Package Status *</label>
-                        <select name="status" class="form-control" required>
+                        <select name="status" class="form-control selectCountrySelect2" required>
                             <option value="draft" {{ old('status') == 'draft' ? 'selected' : '' }}>
                                 Draft
                             </option>
@@ -149,21 +152,25 @@
                 <div class="grid grid-cols-2 gap-4 mb-4">
                     <div>
                         <label class="form-label">Available From *</label>
-                        <input type="date" name="availability[available_from]"   value="{{ old('availability.available_from') }}" class="form-control" required>
+                        <input type="date" name="availability[available_from]"
+                            value="{{ old('availability.available_from') }}" class="form-control" required>
                     </div>
                     <div>
                         <label class="form-label">Available To *</label>
-                        <input type="date" name="availability[available_to]" value="{{ old('availability.available_to') }}" class="form-control" required>
+                        <input type="date" name="availability[available_to]"
+                            value="{{ old('availability.available_to') }}" class="form-control" required>
                     </div>
 
                     <div>
                         <label class="form-label">Booking Start Date</label>
-                        <input type="date" name="availability[booking_start_date]" value="{{ old('availability.booking_start_date') }}" class="form-control">
+                        <input type="date" name="availability[booking_start_date]"
+                            value="{{ old('availability.booking_start_date') }}" class="form-control">
                     </div>
 
                     <div>
                         <label class="form-label">Booking End Date</label>
-                        <input type="date" name="availability[booking_end_date]" value="{{ old('availability.booking_end_date') }}" class="form-control">
+                        <input type="date" name="availability[booking_end_date]"
+                            value="{{ old('availability.booking_end_date') }}" class="form-control">
                     </div>
                 </div>
 
@@ -184,13 +191,27 @@
                 {{-- PRICING --}}
                 {{-- ================================================= --}}
                 <h3 class="text-lg font-semibold mb-2">Pricing</h3>
+                <input type="hidden" name="pricing[currency]" value="{{ $baseCurrency }}">
 
                 <div class="grid grid-cols-2 gap-4 mb-4">
-                    <div class="fromGroup">
+                    {{-- <div>
                         <label class="form-label">Currency *</label>
-                        <input name="pricing[currency]" value="{{ old('pricing[currency]') }}" value="SAR"
-                            class="form-control" required>
-                    </div>
+
+                        <select class="form-control" name="pricing[currency]" required>
+                            @foreach ($currencies as $currency)
+                                <option value="{{ $currency->code ?? $currency['code'] }}"
+                                    {{ old('pricing.currency', $package->price->currency ?? 'SAR') == ($currency->code ?? $currency['code'])
+                                        ? 'selected'
+                                        : '' }}>
+
+                                    {{ $currency->code ?? $currency['code'] }}
+                                    -
+                                    {{ $currency->name ?? $currency['name'] }}
+
+                                </option>
+                            @endforeach
+                        </select>
+                    </div> --}}
                     <div class="fromGroup">
                         <label class="form-label">Price (Per Person) *</label>
                         <input type="number" step="0.01" name="pricing[per_person_price]" class="form-control"
@@ -214,7 +235,8 @@
                 {{-- ADDITIONAL INFO --}}
                 <div class="fromGroup mb-4">
                     <label class="form-label">Thumbnail</label>
-                    <input type="file" class="form-control @error('thumb') error-input @enderror" name="thumb" required>
+                    <input type="file" class="form-control @error('thumb') error-input @enderror" name="thumb"
+                        required>
                     @error('thumb')
                         <p class="error-text">{{ $message }}</p>
                     @enderror
@@ -458,6 +480,4 @@
             if (duration_days.value) renderDays(duration_days.value);
         });
     </script>
-
-
 @endsection
