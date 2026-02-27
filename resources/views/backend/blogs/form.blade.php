@@ -36,6 +36,10 @@
             <form action="{{ route('admin.blogs.save') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="id" value="{{ $model->id }}">
+               <div class="mb-4">
+                <x-admin.form.category-select label="Category" :categories="$categories" name="category_id" :selected="$model?->category_id"
+                    required />
+               </div>
 
                 {{-- ================= LANGUAGE TABS ================= --}}
                 <div class="flex gap-2 mb-4">

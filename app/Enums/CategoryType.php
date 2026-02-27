@@ -10,6 +10,7 @@ enum CategoryType: string
     case THING_TO_DO  = 'thing_to_do';
     case PACKAGE      = 'package';
     case  CITY        = 'city';
+    case BLOG         = 'blog';
 
     public function label(): string
     {
@@ -20,6 +21,7 @@ enum CategoryType: string
             self::THING_TO_DO => 'Things To Do',
             self::PACKAGE     => 'Package',
             self::CITY       => 'City',
+            self::BLOG        => 'Blog',
         };
     }
 }

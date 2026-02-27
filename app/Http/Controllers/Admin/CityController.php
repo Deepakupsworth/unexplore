@@ -43,13 +43,22 @@ class CityController extends Controller
             $query->where('country_id', $request->country_id);
         }
 
+        if ($request->filled('category_ids')) {
+            // dd($request->category_ids);
+            $query->whereHas('categories', function ($q) use ($request) {
+                $q->whereIn('categories.id', $request->category_ids);
+            });
+        }
+
         // Execute query
         $cities = $query->latest()->paginate(10)->withQueryString();
 
         // For dropdown
         $countries = \App\Models\Country::pluck('name', 'id');
-
-        return view('backend.cities.index', compact('cities', 'countries'));
+        $categories = Category::where('type', CategoryType::CITY)
+        ->with('translation')
+        ->get();
+        return view('backend.cities.index', compact('cities', 'countries','categories'));
     }
 
 
@@ -327,7 +336,7 @@ class CityController extends Controller
 
     public function search(Request $request)
     {
-       
+
         return City::query()
             ->whereHas('translations', function ($t) use ($request) {
                 $t->where('name', 'like', '%' . $request->q . '%');
@@ -355,6 +364,6 @@ class CityController extends Controller
                 ];
             });
     }
-    
+
 
 }

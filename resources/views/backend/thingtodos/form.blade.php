@@ -43,189 +43,209 @@
             <li class="font-medium">{{ $model->id ? 'Edit' : 'Add' }} Thing To Do</li>
         </ul>
     </div>
+    <form method="POST" action="{{ route('thingtodos.save') }}" enctype="multipart/form-data">
+        @csrf
+        <div class="grid grid-cols-12 gap-6">
 
-    <div class="card">
-        <header class="card-header">
-            <h4 class="card-title">
-                {{ $model->id ? 'Edit' : 'Add' }} Thing To Do
-            </h4>
-        </header>
+            <div class="xl:col-span-8 col-span-12 space-y-6">
+                <div class="card">
+                    <header class="card-header">
+                        <h4 class="card-title">
+                            Basic Information
+                        </h4>
+                    </header>
 
-        <div class="card-body p-6">
+                    <div class="card-body p-6">
 
-            {{-- Errors --}}
-            @if ($errors->any())
-                <div class="mb-6 bg-red-50 border border-red-200 p-4 rounded-lg text-red-700">
-                    <ul class="list-disc pl-5 text-sm">
-                        @foreach ($errors->all() as $e)
-                            <li>{{ $e }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
-            <form method="POST" action="{{ route('thingtodos.save') }}" enctype="multipart/form-data">
-                @csrf
-                <input type="hidden" name="id" value="{{ $model->id }}">
-                <input type="hidden" name="slug" value="{{ old('slug', $model->slug) }}">
-
-                {{-- LANGUAGE TABS --}}
-                <div class="flex gap-2 mb-6">
-                    @foreach ($languages as $lang)
-                        <button type="button" class="lang-btn {{ $loop->first ? 'active' : '' }}"
-                            data-lang="{{ strtolower($lang->code) }}">
-                            {{ strtoupper($lang->code) }}
-                        </button>
-                    @endforeach
-                </div>
-
-                {{-- LANGUAGE SECTIONS --}}
-                @foreach ($languages as $lang)
-                    @php
-                        $code = strtolower($lang->code);
-                        $trans = $model->translations->where('language_code', $code)->first();
-                    @endphp
-
-                    <div class="lang-section {{ $loop->first ? 'active' : '' }}" id="lang-{{ $code }}">
-
-                        <div class="bg-slate-50 border rounded-xl p-5 mb-6">
-                            <div class="mb-4">
-                                <label class="form-label">
-                                    Name ({{ strtoupper($code) }})
-                                    @if ($code == 'en')
-                                        <span class="text-red-500">*</span>
-                                    @endif
-                                </label>
-                                <input class="form-control" name="translations[{{ $code }}][name]"
-                                    value="{{ old("translations.$code.name", $trans->name ?? '') }}"
-                                    {{ $code == 'en' ? 'required' : '' }}>
-                            </div>
-
-                            <div>
-                                <label class="form-label">
-                                    About ({{ strtoupper($code) }})
-                                </label>
-                                <textarea class="editor form-control" name="translations[{{ $code }}][about]" rows="4">{{ old("translations.$code.about", $trans->about ?? '') }}</textarea>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-
-                {{-- BASIC INFO --}}
-                <div class="card rounded-xl p-5 mb-6">
-                    <h5 class="font-semibold text-slate-700 mb-4">Basic Information</h5>
-                    <div class="card-body">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="form-label">City *</label>
-                                <select name="city_id" class="form-control selectCountrySelect2" required>
-                                    <option value="">Select City</option>
-                                    @foreach ($cities as $id => $name)
-                                        <option value="{{ $id }}"
-                                            {{ old('city_id', $model->city_id) == $id ? 'selected' : '' }}>
-                                            {{ $name }}
-                                        </option>
+                        {{-- Errors --}}
+                        @if ($errors->any())
+                            <div class="mb-6 bg-red-50 border border-red-200 p-4 rounded-lg text-red-700">
+                                <ul class="list-disc pl-5 text-sm">
+                                    @foreach ($errors->all() as $e)
+                                        <li>{{ $e }}</li>
                                     @endforeach
-                                </select>
+                                </ul>
+                            </div>
+                        @endif
+
+
+                        <input type="hidden" name="id" value="{{ $model->id }}">
+                        <input type="hidden" name="slug" value="{{ old('slug', $model->slug) }}">
+
+                        {{-- BASIC INFO --}}
+                        <div class="card rounded-xl p-5 mb-6">
+                            {{-- <h5 class="font-semibold text-slate-700 mb-4">Basic Information</h5> --}}
+                            <div class="card-body">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="form-label">City *</label>
+                                        <select name="city_id" class="form-control selectCountrySelect2" required>
+                                            <option value="">Select City</option>
+                                            @foreach ($cities as $id => $name)
+                                                <option value="{{ $id }}"
+                                                    {{ old('city_id', $model->city_id) == $id ? 'selected' : '' }}>
+                                                    {{ $name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <x-admin.form.category-select label="Categories" :categories="$categories" name="category_ids"
+                                        :selected="$model?->thingCategories->pluck('category_id')->toArray()" multiple required />
+                                    <div>
+                                        <label class="form-label">Video URL</label>
+                                        <input class="form-control @error('video_url') error-input @enderror"
+                                            name="video_url" value="{{ old('video_url', $model->video_url) }}">
+                                        @error('video_url')
+                                            <p class="error-text">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                </div>
+
                             </div>
 
-                            <x-admin.form.category-select label="Categories" :categories="$categories" name="category_ids"
-                                :selected="$model?->thingCategories->pluck('category_id')->toArray()" multiple required />
-                            <div>
-                                <label class="form-label">Video URL</label>
-                                <input class="form-control @error('video_url') error-input @enderror" name="video_url"
-                                    value="{{ old('video_url', $model->video_url) }}">
-                                @error('video_url')
-                                    <p class="error-text">{{ $message }}</p>
-                                @enderror
+                        </div>
+
+                        {{-- LOCATION --}}
+                        <div class="bg-slate-50 border rounded-xl p-5 mb-6">
+                            <h5 class="font-semibold text-slate-700 mb-4">Location</h5>
+
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="form-label">Latitude</label>
+                                    <input type="text" name="latitude" value="{{ old('latitude', $model->latitude) }}"
+                                        class="form-control" placeholder="25.5941">
+                                </div>
+
+                                <div>
+                                    <label class="form-label">Longitude</label>
+                                    <input type="text" name="longitude"
+                                        value="{{ old('longitude', $model->longitude) }}" class="form-control"
+                                        placeholder="85.1376">
+                                </div>
+
+                                <div>
+                                    <label class="form-label">Address</label>
+                                    <input type="text" name="location" value="{{ old('location', $model->location) }}"
+                                        class="form-control" placeholder="At-Turaif, Riyadh">
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                </div>
+                        {{-- OPENING HOURS --}}
+                        <div class="bg-slate-50 border rounded-xl p-5 mb-6">
+                            <h5 class="font-semibold text-slate-700 mb-4">Opening Hours</h5>
 
-                {{-- LOCATION --}}
-                <div class="bg-slate-50 border rounded-xl p-5 mb-6">
-                    <h5 class="font-semibold text-slate-700 mb-4">Location</h5>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="form-label">Opening Time</label>
+                                    <input type="time" name="opening_time"
+                                        value="{{ old('opening_time', $model->opening_time) }}" class="form-control">
+                                </div>
 
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="form-label">Latitude</label>
-                            <input type="text" name="latitude" value="{{ old('latitude', $model->latitude) }}"
-                                class="form-control" placeholder="25.5941">
+                                <div>
+                                    <label class="form-label">Closing Time</label>
+                                    <input type="time" name="closing_time"
+                                        value="{{ old('closing_time', $model->closing_time) }}" class="form-control">
+                                </div>
+                            </div>
                         </div>
 
-                        <div>
-                            <label class="form-label">Longitude</label>
-                            <input type="text" name="longitude" value="{{ old('longitude', $model->longitude) }}"
-                                class="form-control" placeholder="85.1376">
+                        {{-- LANGUAGE TABS --}}
+                        <div class="flex gap-2 mb-6">
+                            @foreach ($languages as $lang)
+                                <button type="button" class="lang-btn {{ $loop->first ? 'active' : '' }}"
+                                    data-lang="{{ strtolower($lang->code) }}">
+                                    {{ strtoupper($lang->code) }}
+                                </button>
+                            @endforeach
                         </div>
 
-                        <div>
-                            <label class="form-label">Address</label>
-                            <input type="text" name="location" value="{{ old('location', $model->location) }}"
-                                class="form-control" placeholder="At-Turaif, Riyadh">
-                        </div>
-                    </div>
-                </div>
+                        {{-- LANGUAGE SECTIONS --}}
+                        @foreach ($languages as $lang)
+                            @php
+                                $code = strtolower($lang->code);
+                                $trans = $model->translations->where('language_code', $code)->first();
+                            @endphp
 
-                {{-- OPENING HOURS --}}
-                <div class="bg-slate-50 border rounded-xl p-5 mb-6">
-                    <h5 class="font-semibold text-slate-700 mb-4">Opening Hours</h5>
+                            <div class="lang-section {{ $loop->first ? 'active' : '' }}"
+                                id="lang-{{ $code }}">
 
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="form-label">Opening Time</label>
-                            <input type="time" name="opening_time"
-                                value="{{ old('opening_time', $model->opening_time) }}" class="form-control">
-                        </div>
+                                <div class="bg-slate-50 border rounded-xl p-5 mb-6">
+                                    <div class="mb-4">
+                                        <label class="form-label">
+                                            Name ({{ strtoupper($code) }})
+                                            @if ($code == 'en')
+                                                <span class="text-red-500">*</span>
+                                            @endif
+                                        </label>
+                                        <input class="form-control" name="translations[{{ $code }}][name]"
+                                            value="{{ old("translations.$code.name", $trans->name ?? '') }}"
+                                            {{ $code == 'en' ? 'required' : '' }}>
+                                    </div>
 
-                        <div>
-                            <label class="form-label">Closing Time</label>
-                            <input type="time" name="closing_time"
-                                value="{{ old('closing_time', $model->closing_time) }}" class="form-control">
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Tags --}}
-                <div class="bg-slate-50 border rounded-xl p-5 mb-6">
-                    <label class="form-label mb-2 block">Tags</label>
-
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
-                        @foreach ($tags as $tag)
-                            <x-admin.form.checkbox name="tags[]" :value="$tag->id" :checked="in_array($tag->id, $selectedTags)" :label="$tag->name" />
+                                    <div>
+                                        <label class="form-label">
+                                            About ({{ strtoupper($code) }})
+                                        </label>
+                                        <textarea class="editor form-control" name="translations[{{ $code }}][about]" rows="4">{{ old("translations.$code.about", $trans->about ?? '') }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
                         @endforeach
                     </div>
-
                 </div>
+            </div>
 
-                {{-- MEDIA --}}
-                <div class="bg-slate-50 border rounded-xl p-5 mb-6">
-                    <h5 class="font-semibold text-slate-700 mb-4">Media</h5>
+            <div class="xl:col-span-4 col-span-12 space-y-6">
+                <div class="card">
+                    <header class="card-header">
+                        <h4 class="card-title">
+                            Gallery & Tags
+                        </h4>
+                    </header>
 
-                    <div class="mb-4">
-                        <label class="form-label">Thumb Image</label>
-                        <input type="file" name="thumb_image" class="form-control">
+                    <div class="card-body p-6">
+                        {{-- Tags --}}
+                        <div class="bg-slate-50 border rounded-xl p-5 mb-6">
+                            <label class="form-label mb-2 block">Tags</label>
 
-                        @if ($model->thumb)
-                            <img src="{{ asset('storage/' . $model->thumb->image_path) }}"
-                                class="w-20 h-20 mt-3 rounded-lg border object-cover">
-                        @endif
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                @foreach ($tags as $tag)
+                                    <x-admin.form.checkbox name="tags[]" :value="$tag->id" :checked="in_array($tag->id, $selectedTags)"
+                                        :label="$tag->name" />
+                                @endforeach
+                            </div>
+
+                        </div>
+
+                        {{-- MEDIA --}}
+                        <div class="bg-slate-50 border rounded-xl p-5 mb-6">
+                            <h5 class="font-semibold text-slate-700 mb-4">Media</h5>
+
+                            <div class="mb-4">
+                                <label class="form-label">Thumb Image</label>
+                                <input type="file" name="thumb_image" class="form-control">
+
+                                @if ($model->thumb)
+                                    <img src="{{ asset('storage/' . $model->thumb->image_path) }}"
+                                        class="w-20 h-20 mt-3 rounded-lg border object-cover">
+                                @endif
+                            </div>
+                            <x-admin.form.gallery :model="$model" deleteRoute="{{ route('gallery.delete', ':id') }}" />
+                        </div>
+
+                        {{-- SUBMIT --}}
+                        <div class="flex justify-end">
+                            <button class="btn btn-dark px-8 py-2 rounded-lg">
+                                {{ $model->id ? 'Update' : 'Create' }}
+                            </button>
+                        </div>
                     </div>
-                    <x-admin.form.gallery :model="$model" deleteRoute="{{ route('gallery.delete', ':id') }}" />
                 </div>
-
-                {{-- SUBMIT --}}
-                <div class="flex justify-end">
-                    <button class="btn btn-dark px-8 py-2 rounded-lg">
-                        {{ $model->id ? 'Update Thing' : 'Create Thing' }}
-                    </button>
-                </div>
-
-            </form>
+            </div>
         </div>
-    </div>
+    </form>
 
     <script>
         document.querySelectorAll('.lang-btn').forEach(btn => {

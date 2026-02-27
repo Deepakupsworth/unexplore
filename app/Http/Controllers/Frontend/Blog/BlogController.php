@@ -37,7 +37,8 @@ class BlogController extends Controller
         $blog = Blog::with([
             'translation' => fn($q) => $q->where('language_code', $language),
             'user',
-            'thumb'
+            'thumb',
+            'category.translation'
         ])
         ->where('slug', $slug)
         ->where('is_published', 1)

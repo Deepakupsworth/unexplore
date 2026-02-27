@@ -5,7 +5,7 @@
 <form method="POST"
       action="{{ route('admin.seo.update', [$type, $item->id]) }}" >
     @csrf
-   
+
 
     <div class="card " style="padding:40px">
         <div class="card-body space-y-6">
@@ -102,15 +102,16 @@
                             {{-- CURRENCY --}}
                             <div>
                                 <label class="form-label">Currency</label>
-                                <select class="form-control"  name="seo[{{ $code }}][schema][currency]">
-                                <option value="">Select Currency</option>
-                                    @if(!empty($currencies))
-                                        @foreach($currencies as $currency)
-                                        <option value="{{$currency->code}}" @if($schema['currency'] == $currency->code) @endif >{{$currency->code}}</option>
-                                        @endforeach
-                                    @endif
+                                <select class="form-control" name="seo[{{ $code }}][schema][currency]">
+                                    <option value="">Select Currency</option>
+
+                                    @foreach($currencies ?? [] as $currency)
+                                        <option value="{{ $currency?->code }}"
+                                            {{ ($schema['currency'] ?? '') === $currency?->code ? 'selected' : '' }}>
+                                            {{ $currency?->code }}
+                                        </option>
+                                    @endforeach
                                 </select>
-                               
                             </div>
 
                         </div>
