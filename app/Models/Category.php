@@ -81,4 +81,9 @@ class Category extends Model
     {
         return $this->morphToMany(Tag::class, 'taggable');
     }
+
+    public function blogs()
+    {
+        return $this->hasMany(Blog::class);
+    }
 }

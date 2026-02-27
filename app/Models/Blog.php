@@ -11,6 +11,7 @@ class Blog extends Model
 
     protected $fillable = [
         'user_id',
+        'category_id',
         'slug',
         'is_published',
         'published_at',
@@ -51,5 +52,10 @@ class Blog extends Model
     public function images()
     {
         return $this->morphMany(Image::class, 'imageable');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 }

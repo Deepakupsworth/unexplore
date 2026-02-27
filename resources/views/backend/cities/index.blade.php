@@ -50,6 +50,24 @@
                         </select>
                     </div>
 
+
+                     {{-- Category --}}
+                     <div class="fromGroup">
+                        <label class="form-label">Category</label>
+
+                        <select name="category_ids[]" class="form-control select2" multiple>
+
+                            @foreach ($categories as $cat)
+                                <option value="{{ $cat->id }}"
+                                    {{ in_array($cat->id, request('category_ids', [])) ? 'selected' : '' }}>
+                                    {{ $cat?->translation?->name ?? '—' }}
+                                </option>
+                            @endforeach
+
+                        </select>
+                    </div>
+
+
                 </div>
 
                 <div class="flex justify-end gap-2 mt-4">

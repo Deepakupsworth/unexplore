@@ -356,7 +356,7 @@
                     <h4 class="font-semibold mb-2">Day ${d}</h4>
 
                     <label class="form-label">City</label>
-                    <select class="form-control mb-3" name="days[${d}][city_id]">
+                    <select required class="form-control mb-3" name="days[${d}][city_id]">
                         <option value="">Select City</option>
                         ${cities.map(c => `<option value="${c.id}">${c.slug}</option>`).join('')}
                     </select>

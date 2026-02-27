@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\CategoryType;
 use App\Http\Controllers\Controller;
 use App\Models\Blog;
 use App\Models\BlogTranslation;
+use App\Models\Category;
 use App\Models\Language;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -31,23 +33,33 @@ class BlogController extends Controller
     {
         $model = new Blog();
         $languages = Language::all();
+        $categories = Category::where('type', CategoryType::BLOG)
+            ->with('translation')
+            ->get();
 
-        return view('backend.blogs.form', compact('model', 'languages'));
+        return view('backend.blogs.form', compact('model', 'languages','categories'));
     }
 
     public function edit($id)
     {
         $model = Blog::with('translations', 'thumb')->findOrFail($id);
         $languages = Language::all();
+        $categories = Category::where('type', CategoryType::BLOG)
+        ->with('translation')
+        ->get();
 
 
-        return view('backend.blogs.form', compact('model', 'languages'));
+
+        return view('backend.blogs.form', compact('model', 'languages','categories'));
     }
 
     public function save(Request $request)
     {
+        // dd($request->all());
         /** ---------------- VALIDATION ---------------- */
         $validated = $request->validate([
+            'category_id' => 'required|exists:categories,id',
+
             'translations.en.title'   => 'required|string|max:255',
             'translations.en.content' => 'required|string',
 
@@ -92,6 +104,7 @@ class BlogController extends Controller
             /** ---------------- BLOG DATA ---------------- */
             $blog->fill([
                 'user_id'      => auth()->id(),
+                'category_id'  => $validated['category_id'],
                 'slug'         => Str::slug($validated['translations']['en']['title']),
                 'is_published' => $isPublished,
                 'published_at' => $publishedAt,
