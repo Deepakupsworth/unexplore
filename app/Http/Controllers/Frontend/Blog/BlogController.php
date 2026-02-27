@@ -22,7 +22,7 @@ class BlogController extends Controller
             ->latest('published_at')
             ->paginate(9);
 
-        return view('frontend.blogs', compact('blogs'));
+        return view('frontend.blogs.index', compact('blogs'));
     }
 
     /**
