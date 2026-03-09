@@ -139,7 +139,7 @@
                         </div>
 
                         <div class="d-flex flex-column gap-2" >
-                            <div class="gallery-item half open-gallery"  @if(!empty(@$finalArray['todo'][0]['thumb'])) data-open-tab="galleryTabsProperty" @else data-open-tab="galleryTabsActivities" @endif  data-bs-toggle="modal"
+                            <div class="gallery-item half open-gallery"  @if(!empty(@$finalArray['todo'][0]['thumb'])) data-open-tab="galleryTabsProperty" @elseif($finalArray['event'][0]['thumb']) data-open-tab="galleryTabsActivities"  @else data-open-tab="galleryTabsHighlights" @endif  data-bs-toggle="modal"
                             data-bs-target="#galleryModal">
                                 <?php
 
@@ -171,7 +171,7 @@
 
                             </div>
 
-                            <div class="gallery-item  half open-gallery" @if(!empty(@$finalArray['event'][0]['thumb'])) data-open-tab="galleryTabsActivities" @else data-open-tab="galleryTabsProperty" @endif data-bs-toggle="modal"
+                            <div class="gallery-item  half open-gallery" @if(!empty(@$finalArray['event'][0]['thumb'])) data-open-tab="galleryTabsActivities" @elseif($finalArray['todo'][0]['thumb']) data-open-tab="galleryTabsProperty" @else data-open-tab="galleryTabsHighlights" @endif data-bs-toggle="modal"
                             data-bs-target="#galleryModal">
                                 @php
                                     $imagePathEvent = match (true) {
