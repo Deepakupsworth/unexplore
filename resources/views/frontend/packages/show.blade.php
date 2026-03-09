@@ -146,7 +146,11 @@
                                 $imagePathToDo = match (true) {
                                     !empty($finalArray['todo'][0]['thumb']) => asset('storage/' . $finalArray['todo'][0]['thumb']->image_path),
 
+                                    !empty($finalArray['event'][1]['thumb']) => asset('storage/' . $finalArray['event'][1]['thumb']->image_path),
+
                                     !empty($finalArray['event'][0]['thumb']) => asset('storage/' . $finalArray['event'][0]['thumb']->image_path),
+
+                                    !empty($finalArray['hotel'][1]['thumb']) => asset('storage/' . $finalArray['hotel'][1]['thumb']->image_path),
 
                                     !empty($finalArray['hotel'][0]['thumb']) => asset('storage/' . $finalArray['hotel'][0]['thumb']->image_path),
 
@@ -175,8 +179,16 @@
                                             'storage/' . $finalArray['event'][0]['thumb']->image_path,
                                         ),
 
+                                        !empty($finalArray['todo'][1]['thumb']) => asset(
+                                            'storage/' . $finalArray['todo'][1]['thumb']->image_path,
+                                        ),
+
                                         !empty($finalArray['todo'][0]['thumb']) => asset(
                                             'storage/' . $finalArray['todo'][0]['thumb']->image_path,
+                                        ),
+
+                                        !empty($finalArray['hotel'][1]['thumb']) => asset(
+                                            'storage/' . $finalArray['hotel'][1]['thumb']->image_path,
                                         ),
 
                                         !empty($finalArray['hotel'][0]['thumb']) => asset(
