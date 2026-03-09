@@ -363,6 +363,7 @@
                                     <i class="fa-solid fa-location-dot me-2"></i>{{__('home.filter.destination')}}
                                 </span>
                                 <div class="hb-input-pill">
+                                   
                                 <input required type="text" id="citySearchInput" class="search-input-new"
                                     placeholder="{{__('home.filter.destination.label')}}"
                                     autocomplete="off">
@@ -976,82 +977,153 @@ document.querySelectorAll('.tab-btn').forEach(button => {
     });
 });
 </script>
+
 <script>
     const input = document.getElementById('citySearchInput');
-    const box = document.getElementById('citySuggestionBox');
-    const form = input.closest('form');
+const box = document.getElementById('citySuggestionBox');
+const form = input.closest('form');
 
-    let debounceTimer;
+let debounceTimer;
 
-    // 🔥 fetch helper
-    function fetchCities(query = '') {
-        fetch('/cities/search?q=' + encodeURIComponent(query))
-            .then(res => res.json())
-            .then(renderCities)
-            .catch(() => box.classList.add('d-none'));
+// 🔥 fetch helper
+function fetchCities(query = '') {
+    fetch('/cities/search?q=' + encodeURIComponent(query))
+        .then(res => res.json())
+        .then(renderCities)
+        .catch(() => box.classList.add('d-none'));
+}
+
+// ✅ show default cities on focus
+input.addEventListener('focus', function () {
+    fetchCities(); // first 20 cities
+});
+
+// ✅ typing search
+input.addEventListener('input', function () {
+    const query = this.value.trim();
+
+    clearTimeout(debounceTimer);
+
+    if (query.length < 2) {
+        fetchCities(); // show default again
+        return;
     }
 
-    // ✅ typing → only after 2 chars
-    input.addEventListener('input', function () {
-        const query = this.value.trim();
+    debounceTimer = setTimeout(() => {
+        fetchCities(query);
+    }, 300);
+});
 
-        clearTimeout(debounceTimer);
-
-        if (query.length < 2) {
-            box.classList.add('d-none');
-            return;
-        }
-
-        debounceTimer = setTimeout(() => {
-            fetchCities();
-        }, 300);
-    });
-
-    // ✅ render
-    function renderCities(cities) {
-        if (!cities || !cities.length) {
-            box.innerHTML = `<div class="city-suggestion-item">No destinations found</div>`;
-            box.classList.remove('d-none');
-            return;
-        }
-
-        box.innerHTML = cities.map(city => `
-            <div class="city-suggestion-item"
-                 data-name="${city.name}" data-id="${city.id}">
-                <span>${city.name}</span>
-            </div>
-        `).join('');
-
+// ✅ render
+function renderCities(cities) {
+    if (!cities || !cities.length) {
+        box.innerHTML = `<div class="city-suggestion-item">No destinations found</div>`;
         box.classList.remove('d-none');
+        return;
     }
 
-    // 🚀 ✅ CLICK → FILL + AUTO SUBMIT
-    box.addEventListener('click', function (e) {
-        const item = e.target.closest('.city-suggestion-item');
-        if (!item) return;
+    box.innerHTML = cities.map(city => `
+        <div class="city-suggestion-item"
+             data-name="${city.name}" data-id="${city.id}">
+            <span>${city.name}</span>
+        </div>
+    `).join('');
 
-        // fill input
-        input.value = item.dataset.name;
+    box.classList.remove('d-none');
+}
 
-        // Store ID in hidden input
+// 🚀 select city
+box.addEventListener('click', function (e) {
+    const item = e.target.closest('.city-suggestion-item');
+    if (!item) return;
+
+    input.value = item.dataset.name;
     document.getElementById("cityIdInput").value = item.dataset.id;
-        console.log(item);
 
-        // hide dropdown
+    box.classList.add('d-none');
+});
+
+// ✅ outside click
+document.addEventListener('click', function (e) {
+    if (!e.target.closest('.search-input-wrap')) {
         box.classList.add('d-none');
+    }
+});
+    // const input = document.getElementById('citySearchInput');
+    // const box = document.getElementById('citySuggestionBox');
+    // const form = input.closest('form');
 
-        // 🔥 small delay for smooth UX
-        // setTimeout(() => {
-        //     form.submit();
-        // }, 150);
-    });
+    // let debounceTimer;
 
-    // ✅ outside click
-    document.addEventListener('click', function (e) {
-        if (!e.target.closest('.search-input-wrap')) {
-            box.classList.add('d-none');
-        }
-    });
+    // // 🔥 fetch helper
+    // function fetchCities(query = '') {
+    //     fetch('/cities/search?q=' + encodeURIComponent(query))
+    //         .then(res => res.json())
+    //         .then(renderCities)
+    //         .catch(() => box.classList.add('d-none'));
+    // }
+
+    // // ✅ typing → only after 2 chars
+    // input.addEventListener('input', function () {
+    //     const query = this.value.trim();
+
+    //     clearTimeout(debounceTimer);
+
+    //     if (query.length < 2) {
+    //         box.classList.add('d-none');
+    //         return;
+    //     }
+
+    //     debounceTimer = setTimeout(() => {
+    //         fetchCities();
+    //     }, 300);
+    // });
+
+    // // ✅ render
+    // function renderCities(cities) {
+    //     if (!cities || !cities.length) {
+    //         box.innerHTML = `<div class="city-suggestion-item">No destinations found</div>`;
+    //         box.classList.remove('d-none');
+    //         return;
+    //     }
+
+    //     box.innerHTML = cities.map(city => `
+    //         <div class="city-suggestion-item"
+    //              data-name="${city.name}" data-id="${city.id}">
+    //             <span>${city.name}</span>
+    //         </div>
+    //     `).join('');
+
+    //     box.classList.remove('d-none');
+    // }
+
+    // // 🚀 ✅ CLICK → FILL + AUTO SUBMIT
+    // box.addEventListener('click', function (e) {
+    //     const item = e.target.closest('.city-suggestion-item');
+    //     if (!item) return;
+
+    //     // fill input
+    //     input.value = item.dataset.name;
+
+    //     // Store ID in hidden input
+    // document.getElementById("cityIdInput").value = item.dataset.id;
+    //     console.log(item);
+
+    //     // hide dropdown
+    //     box.classList.add('d-none');
+
+    //     // 🔥 small delay for smooth UX
+    //     // setTimeout(() => {
+    //     //     form.submit();
+    //     // }, 150);
+    // });
+
+    // // ✅ outside click
+    // document.addEventListener('click', function (e) {
+    //     if (!e.target.closest('.search-input-wrap')) {
+    //         box.classList.add('d-none');
+    //     }
+    // });
     </script>
 <script>
 (function () {
@@ -1116,6 +1188,7 @@ document.querySelectorAll('.tab-btn').forEach(button => {
 })();
 </script>
 
+ 
     @endpush
 
 @endsection

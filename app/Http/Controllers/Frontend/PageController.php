@@ -255,6 +255,7 @@ class PageController extends Controller
         $language = $this->language;
 
         $cities = City::query()
+            ->whereHas('packages')
             ->whereHas('translation', function ($query) use ($q, $language) {
                 $query->where('language_code', $language);
 

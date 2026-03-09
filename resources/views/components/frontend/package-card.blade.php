@@ -28,7 +28,10 @@
 
 {{-- @dd($city) --}}
 
-<a href="{{ route('packages.show', $package->slug) }}"
+<a href="{{ route('packages.show', array_merge(
+        ['slug' => $package->slug],
+        request()->only(['start_date','adult','children'])
+    )) }}" 
    class="text-decoration-none text-dark">
 
     <div class="exclusive-offers__carousel-item">
