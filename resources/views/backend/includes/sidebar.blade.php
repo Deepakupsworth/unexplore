@@ -266,6 +266,30 @@
                 </x-sidebar-link>
             </li>
 
+            <li>
+                <x-sidebar-link href="{{ route('admin.golf.queries') }}">
+                <span class="flex items-center">
+                    <iconify-icon 
+                        class="nav-icon"
+                        icon="heroicons-outline:chat-bubble-left-right">
+                    </iconify-icon>
+                    <span>Golf Queries</span>
+                </span>
+            </x-sidebar-link>
+            </li>
+            <li>
+                <x-sidebar-link href="{{ route('admin.translations') }}">
+                    <span class="flex items-center">
+                        <iconify-icon
+                            class="nav-icon"
+                            icon="heroicons-outline:language">
+                        </iconify-icon>
+
+                        <span>Translations</span>
+                    </span>
+                </x-sidebar-link>
+            </li>
+
 
             <li class="sidebar-menu-title">SETTINGS</li>
 
