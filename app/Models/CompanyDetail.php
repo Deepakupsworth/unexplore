@@ -20,6 +20,9 @@ class CompanyDetail extends Model
         'instagram_url',
         'facebook_url',
         'twitter_url',
+        'youtube_url',
+        'linkedin_url',
+        'threads_url',
     ];
 
     protected $casts = [

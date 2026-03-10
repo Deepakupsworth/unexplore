@@ -166,6 +166,30 @@
                                    placeholder="https://twitter.com/...">
                         </div>
 
+                        <div class="fromGroup">
+                            <label class="form-label">YouTube URL</label>
+                            <input type="url"
+                                   name="youtube_url"
+                                   value="{{ old('youtube_url', $model->youtube_url) }}"
+                                   class="form-control"
+                                   placeholder="https://youtube.com/...">
+                        </div>
+                        <div class="fromGroup">
+                            <label class="form-label">LinkedIn URL</label>
+                            <input type="url"
+                                   name="linkedin_url"
+                                   value="{{ old('linkedin_url', $model->linkedin_url) }}"
+                                   class="form-control"
+                                   placeholder="https://linkedin.com/...">
+                        </div>
+                        <div class="fromGroup">
+                            <label class="form-label">Threads URL</label>
+                            <input type="url"
+                                   name="threads_url"
+                                   value="{{ old('threads_url', $model->threads_url) }}"
+                                   class="form-control"
+                                   placeholder="https://threads.net/...">
+                        </div>
                     </div>
                 </div>
 

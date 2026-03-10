@@ -17,7 +17,7 @@ class PackageDay extends Model
     ];
 
     protected $touches = ['package'];
-    
+
     public function package()
     {
         return $this->belongsTo(Package::class);
@@ -38,4 +38,12 @@ class PackageDay extends Model
         return $this->hasMany(PackageDayItemOption::class);
     }
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($day) {
+            $day->items()->delete();
+        });
+    }
 }

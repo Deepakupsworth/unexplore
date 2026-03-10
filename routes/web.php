@@ -253,7 +253,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
             Route::get('/{id}/edit', [EventController::class, 'form'])->name('events.edit');
             Route::get('/{id}', [EventController::class, 'show'])->name('events.show');
             Route::post('/save', [EventController::class, 'save'])->name('events.save');
-            Route::delete('/delete/{id}', [EventController::class, 'destroy'])->name('events.delete');
+            Route::delete('/delete/{id}', [EventController::class, 'delete'])->name('events.delete');
             Route::delete('/gallery/delete/{id}', [EventController::class, 'deleteGalleryImage'])->name('events.gallery.delete');
         });
     });
@@ -407,7 +407,16 @@ Route::middleware(['auth', 'admin'])->group(function () {
                 '/seachIds',
                 [AdminPackageController::class, 'seachIds']
             )->name('seachIds');
+
+            Route::delete(
+                '/{package}/city/{city}',
+                [AdminPackageController::class, 'removeCity']
+            )->name('city.remove');
+
+            Route::delete('/{package}', [AdminPackageController::class, 'delete'])->name('delete');
+
         });
+
     });
 
     Route::prefix('admin')->name('admin.')->group(function () {

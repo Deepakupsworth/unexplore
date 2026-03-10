@@ -74,6 +74,9 @@ class CompanyDetailController extends Controller
                 'instagram_url',
                 'facebook_url',
                 'twitter_url',
+                'youtube_url',
+                'linkedin_url',
+                'threads_url',
             ]));
 
             $company->save();

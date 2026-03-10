@@ -12,6 +12,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Enums\TransportType;
 use App\Models\Category;
+use App\Models\PackageDayItem;
+use Illuminate\Support\Facades\Log;
 
 class TransportController extends Controller
 {
@@ -148,12 +150,52 @@ class TransportController extends Controller
 
     public function delete($id)
     {
-        $transport = Transport::findOrFail($id);
-        foreach ($transport->images as $img) {
-            Storage::disk('public')->delete($img->image_path);
-        }
-        $transport->delete();
+        try {
 
-        return back()->with('success', 'Transport deleted');
+            $transport = Transport::with('images')->findOrFail($id);
+
+            /*
+            |--------------------------------------------------------------------------
+            | CHECK IF TRANSPORT USED IN ANY PACKAGE
+            |--------------------------------------------------------------------------
+            */
+
+            $usedInPackage = PackageDayItem::where('item_type', 'transport')
+                ->where('item_id', $transport->id)
+                ->exists();
+
+            if ($usedInPackage) {
+                return back()->with('error', 'Transport cannot be deleted because it is used in a package.');
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | DELETE IMAGES
+            |--------------------------------------------------------------------------
+            */
+
+            foreach ($transport->images as $img) {
+                Storage::disk('public')->delete($img->image_path);
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | DELETE TRANSPORT
+            |--------------------------------------------------------------------------
+            */
+
+            $transport->delete();
+
+            return back()->with('success', 'Transport deleted successfully');
+
+        } catch (\Throwable $e) {
+
+            Log::error('Transport delete failed', [
+                'transport_id' => $id,
+                'error' => $e->getMessage()
+            ]);
+
+            return back()->with('error', 'Unable to delete transport');
+        }
     }
 }

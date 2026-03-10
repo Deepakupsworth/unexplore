@@ -154,6 +154,14 @@
                                 <a href="{{ route('admin.packages.edit', $package) }}" class="action-btn">
                                     <iconify-icon icon="heroicons:pencil-square"></iconify-icon>
                                 </a>
+
+                                <form action="{{ route('admin.packages.delete', $package->id) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button onclick="return confirm('Delete this package?')" class="action-btn">
+                                        <iconify-icon icon="heroicons:trash"></iconify-icon>
+                                    </button>
+                                </form>
                             </td>
                         </tr>
 
