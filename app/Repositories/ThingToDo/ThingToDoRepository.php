@@ -7,8 +7,10 @@ use App\Models\ThingToDoTranslation;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use App\Enums\CategoryType;
+use App\Models\PackageDayItem;
 use App\Models\ThingToDoCategory;
+use Illuminate\Support\Facades\Log;
+
 
 class ThingToDoRepository implements ThingToDoRepositoryInterface
 {
@@ -235,9 +237,41 @@ class ThingToDoRepository implements ThingToDoRepositoryInterface
 
     public function delete(int $id): bool
     {
-        $thing = ThingToDo::findOrFail($id);
+        try {
 
-        // Deletes images automatically via images() cascade
-        return $thing->delete();
+            $thing = ThingToDo::findOrFail($id);
+
+            /*
+            |--------------------------------------------------------------------------
+            | CHECK IF USED IN PACKAGE
+            |--------------------------------------------------------------------------
+            */
+
+            $usedInPackage = PackageDayItem::where('item_type', 'todo')
+                ->where('item_id', $thing->id)
+                ->exists();
+
+            if ($usedInPackage) {
+
+                throw new \Exception('This activity is used in a package itinerary.');
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | DELETE
+            |--------------------------------------------------------------------------
+            */
+
+            return $thing->delete();
+
+        } catch (\Throwable $e) {
+
+            Log::error('ThingToDo delete failed', [
+                'todo_id' => $id,
+                'error' => $e->getMessage(),
+            ]);
+
+            return false;
+        }
     }
 }

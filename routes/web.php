@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\HotelController;
 use App\Http\Controllers\Admin\ImageController;
 use App\Http\Controllers\Admin\TransportController;
 use App\Http\Controllers\Admin\AdminCouponController;
+use App\Http\Controllers\Admin\AdminGolfContactQueryController;
 use App\Http\Controllers\Admin\SeoController;
 use App\Http\Controllers\Frontend\Event\EventController as FrontendEventController;
 use App\Http\Controllers\Admin\TranslationController;
@@ -30,6 +31,7 @@ use App\Models\Event;
 use App\Http\Controllers\Frontend\Profile\ProfileController as FrontendProfileController;
 use App\Http\Controllers\Frontend\Destination\DestinationController as FrontendDestinationController;
 use App\Http\Controllers\Frontend\{TravellerController, AddressController, AccountController, CouponApplyController};
+use App\Http\Controllers\Frontend\GolfContactQueryController;
 use App\Http\Controllers\Frontend\Booking\BookingController;
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 use App\Http\Controllers\Admin\CompanyDetailController;
@@ -53,6 +55,8 @@ Route::get('/lang/{locale}', function ($locale) {
 
 Route::get('/', [PageController::class, 'index'])->name('home');
 
+Route::post('/golf/query-store',[GolfContactQueryController::class,'store'])
+    ->name('golf.query.store');
 
 
 Route::get('/signup', function () {
@@ -138,6 +142,20 @@ Route::middleware(['auth', 'user'])->group(function () {
 
 
 Route::middleware(['auth', 'admin'])->group(function () {
+
+
+    Route::prefix('admin')->name('admin.')->group(function () {
+
+        Route::get('golf-queries', [AdminGolfContactQueryController::class, 'index'])->name('golf.queries');
+    
+        Route::get('golf-queries/{id}', [AdminGolfContactQueryController::class, 'show'])->name('golf.queries.show');
+    
+        Route::delete('golf-queries/{id}', [AdminGolfContactQueryController::class, 'destroy'])->name('golf.queries.delete');
+
+        Route::patch('golf-queries/{id}/status', [AdminGolfContactQueryController::class,'updateStatus'])
+        ->name('golf.queries.status');
+    
+    });
 
     // Notification
     Route::post('/admin/notifications/{id}/read', function ($id) {
@@ -253,7 +271,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
             Route::get('/{id}/edit', [EventController::class, 'form'])->name('events.edit');
             Route::get('/{id}', [EventController::class, 'show'])->name('events.show');
             Route::post('/save', [EventController::class, 'save'])->name('events.save');
-            Route::delete('/delete/{id}', [EventController::class, 'destroy'])->name('events.delete');
+            Route::delete('/delete/{id}', [EventController::class, 'delete'])->name('events.delete');
             Route::delete('/gallery/delete/{id}', [EventController::class, 'deleteGalleryImage'])->name('events.gallery.delete');
         });
     });
@@ -320,7 +338,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     });
 
     Route::prefix('admin/translations')->group(function () {
-        Route::get('/', [TranslationController::class, 'index']);
+        Route::get('/', [TranslationController::class, 'index'])->name('admin.translations');
         Route::get('{group}', [TranslationController::class, 'edit']);
         Route::post('{group}/update-one', [TranslationController::class, 'updateOne'])->name('admin.translations.updateOne');
         Route::post('{group}/update-all', [TranslationController::class, 'updateAll'])->name('admin.translations.updateAll');
@@ -407,7 +425,16 @@ Route::middleware(['auth', 'admin'])->group(function () {
                 '/seachIds',
                 [AdminPackageController::class, 'seachIds']
             )->name('seachIds');
+
+            Route::delete(
+                '/{package}/city/{city}',
+                [AdminPackageController::class, 'removeCity']
+            )->name('city.remove');
+
+            Route::delete('/{package}', [AdminPackageController::class, 'delete'])->name('delete');
+
         });
+
     });
 
     Route::prefix('admin')->name('admin.')->group(function () {

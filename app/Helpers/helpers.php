@@ -194,6 +194,3 @@ if (! function_exists('country_name')) {
         return \App\Models\Country::where('code', $value)->value('name');
     }
 }
-
-
-

@@ -425,7 +425,7 @@ class PackageController extends Controller
      */
 
 
-     public function show(string $slug)
+     public function show(Request $request,string $slug)
      {
          $language = current_lang();
          //session()->flush();
@@ -444,6 +444,27 @@ class PackageController extends Controller
          ])
          ->where('slug', $slug)
          ->firstOrFail();
+
+ 
+        $filtersessionKey = "filter_package_{$package->id}";
+        $filter_package_session_data = session($filtersessionKey);
+        
+        $startDate = $request->start_date;
+        $adults = (int) $request->adult;
+        $children = (int) $request->children;
+     
+        // validate conditions
+        if ($startDate && $adults > 0 && empty($filter_package_session_data)) {
+    
+            session([
+                "filter_package_{$package->id}" => [
+                    'adults' => $adults,
+                    'children' => $children,
+                    'date' => $startDate,
+                ]
+            ]);
+        }
+
 
          /* -------------------------------------------------
           | CITY → NIGHTS
@@ -472,12 +493,13 @@ class PackageController extends Controller
                  ->toArray();
          }
 
+         
 
         // print_r($dayWiseOptions);die;
          /* -------------------------------------------------
           | SESSION OVERRIDE + COLLECT IDS
           |--------------------------------------------------*/
-         $sessionItems = session("package_day_items.{$package->id}", []);
+        $sessionItems = session("package_day_items.{$package->id}", []);
          //print_r($sessionItems);
 
 

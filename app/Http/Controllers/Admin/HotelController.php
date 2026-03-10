@@ -8,6 +8,7 @@ use App\Models\HotelTranslation;
 use App\Models\City;
 use App\Models\Image;
 use App\Models\Language;
+use App\Models\PackageDayItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
@@ -40,7 +41,7 @@ class HotelController extends Controller
             $query->where('city_id', $request->city_id);
         }
 
-        if($request->filled('cities_ids')){
+        if ($request->filled('cities_ids')) {
             $query->whereIn('city_id', $request->cities_ids);
         }
 
@@ -211,29 +212,112 @@ class HotelController extends Controller
     /**
      * Delete Hotel
      */
+    // public function delete($id)
+    // {
+    //     DB::beginTransaction();
+
+    //     try {
+    //         $hotel = Hotel::with(['gallery', 'thumb', 'translations'])->findOrFail($id);
+
+    //         // 🖼 Delete thumb
+    //         if ($hotel->thumb) {
+    //             Storage::disk('public')->delete($hotel->thumb->image_path);
+    //             $hotel->thumb()->delete();
+    //         }
+
+    //         // 🖼 Delete gallery images
+    //         foreach ($hotel->gallery as $image) {
+    //             Storage::disk('public')->delete($image->image_path);
+    //             $image->delete();
+    //         }
+
+    //         // 🌍 Delete translations
+    //         $hotel->translations()->delete();
+
+    //         // 🏨 Delete hotel
+    //         $hotel->delete();
+
+    //         DB::commit();
+
+    //         return redirect()
+    //             ->route('hotels.index')
+    //             ->with('success', 'Hotel deleted successfully');
+    //     } catch (\Throwable $e) {
+
+    //         DB::rollBack();
+
+    //         Log::error('Hotel delete failed', [
+    //             'error' => $e->getMessage()
+    //         ]);
+
+    //         return redirect()
+    //             ->route('hotels.index')
+    //             ->with('error', 'Something went wrong while deleting hotel');
+    //     }
+    // }
+
+
     public function delete($id)
     {
         DB::beginTransaction();
 
         try {
+
             $hotel = Hotel::with(['gallery', 'thumb', 'translations'])->findOrFail($id);
 
-            // 🖼 Delete thumb
+            /*
+        |--------------------------------------------------------------------------
+        | CHECK IF HOTEL USED IN ANY PACKAGE
+        |--------------------------------------------------------------------------
+        */
+
+            $usedInPackage = PackageDayItem::where('item_type', 'hotel')
+                ->where('item_id', $hotel->id)
+                ->exists();
+
+            if ($usedInPackage) {
+
+                return redirect()
+                    ->route('hotels.index')
+                    ->with('error', 'Hotel cannot be deleted because it is used in a package.');
+            }
+
+            /*
+        |--------------------------------------------------------------------------
+        | DELETE THUMB
+        |--------------------------------------------------------------------------
+        */
+
             if ($hotel->thumb) {
                 Storage::disk('public')->delete($hotel->thumb->image_path);
                 $hotel->thumb()->delete();
             }
 
-            // 🖼 Delete gallery images
+            /*
+        |--------------------------------------------------------------------------
+        | DELETE GALLERY IMAGES
+        |--------------------------------------------------------------------------
+        */
+
             foreach ($hotel->gallery as $image) {
                 Storage::disk('public')->delete($image->image_path);
                 $image->delete();
             }
 
-            // 🌍 Delete translations
+            /*
+        |--------------------------------------------------------------------------
+        | DELETE TRANSLATIONS
+        |--------------------------------------------------------------------------
+        */
+
             $hotel->translations()->delete();
 
-            // 🏨 Delete hotel
+            /*
+        |--------------------------------------------------------------------------
+        | DELETE HOTEL
+        |--------------------------------------------------------------------------
+        */
+
             $hotel->delete();
 
             DB::commit();
@@ -246,6 +330,7 @@ class HotelController extends Controller
             DB::rollBack();
 
             Log::error('Hotel delete failed', [
+                'hotel_id' => $id,
                 'error' => $e->getMessage()
             ]);
 

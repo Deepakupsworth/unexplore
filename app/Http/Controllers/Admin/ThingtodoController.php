@@ -136,7 +136,12 @@ class ThingtodoController extends Controller
 
     public function destroy($id)
     {
-        $this->repo->delete($id);
+        $deleted = $this->repo->delete($id);
+
+        if (!$deleted) {
+            return back()->with('error', 'Unable to delete. This activity may be used in a package.');
+        }
+
         return back()->with('success', 'Deleted successfully');
     }
 }

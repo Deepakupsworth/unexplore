@@ -36,16 +36,23 @@
             display: block
         }
 
-        #daysContainer select.form-control.item-select
-        {
-            margin-top:15px;
-            margin-bottom:15px;
+        #daysContainer select.form-control.item-select {
+            margin-top: 15px;
+            margin-bottom: 15px;
         }
-        .select2-container
-        {
-            margin-top:15px !important;
-            margin-bottom:15px !important;
 
+        .select2-container {
+            margin-top: 15px !important;
+            margin-bottom: 15px !important;
+
+        }
+
+        .select2-container--default {
+            margin: 0px !important;
+        }
+
+        .select2-selection--single {
+            margin-bottom: 15px !important;
         }
     </style>
     <div class="card">
@@ -461,7 +468,63 @@
             /* ======================================================
                CITIES (NIGHTS) RENDER – EDIT SAFE
             ====================================================== */
+            //     function renderCities(n) {
+            //         citiesContainer.innerHTML = '';
+            //         n = parseInt(n || 0);
+
+            //         for (let i = 0; i < n; i++) {
+
+            //             const row = window.existingCities?.[i] || {};
+
+            //             citiesContainer.insertAdjacentHTML('beforeend', `
+    //     <div class="border rounded p-4 mb-4 bg-gray-50">
+
+    //         <h5 class="font-semibold mb-3">City ${i + 1}</h5>
+
+    //         <div class="grid grid-cols-3 gap-4">
+
+    //             <div>
+    //                 <label class="form-label">Select City *</label>
+    //                 <select class="form-control selectCountrySelect2"
+    //                         name="cities[${i}][city_id]"
+    //                         required>
+    //                     <option value="">Select City</option>
+    //                     ${cities.map(c =>
+    //                         `<option value="${c.id}" ${c.id == row.city_id ? 'selected' : ''}>
+            //                                                                                     ${c.slug}
+            //                                                                                 </option>`
+    //                     ).join('')}
+    //                 </select>
+    //             </div>
+
+    //             <div>
+    //                 <label class="form-label">Number of Nights *</label>
+    //                 <input class="form-control"
+    //                        type="number"
+    //                        min="1"
+    //                        name="cities[${i}][nights]"
+    //                        value="${row.nights ?? 1}"
+    //                        required>
+    //             </div>
+
+    //             <div>
+    //                 <label class="form-label">Sort Order</label>
+    //                 <input class="form-control"
+    //                        type="number"
+    //                        min="1"
+    //                        name="cities[${i}][sort_order]"
+    //                        value="${row.sort_order ?? (i + 1)}">
+    //             </div>
+
+    //         </div>
+    //     </div>
+    // `);
+            //         }
+
+            //     }
+
             function renderCities(n) {
+
                 citiesContainer.innerHTML = '';
                 n = parseInt(n || 0);
 
@@ -470,50 +533,69 @@
                     const row = window.existingCities?.[i] || {};
 
                     citiesContainer.insertAdjacentHTML('beforeend', `
-            <div class="border rounded p-4 mb-4 bg-gray-50">
 
-                <h5 class="font-semibold mb-3">City ${i + 1}</h5>
+<div class="border rounded p-4 mb-4 bg-gray-50 city-row">
 
-                <div class="grid grid-cols-3 gap-4">
+<div class="flex justify-between items-center mb-3">
+    <h5 class="font-semibold">City ${i + 1}</h5>
 
-                    <div>
-                        <label class="form-label">Select City *</label>
-                        <select class="form-control selectCountrySelect2"
-                                name="cities[${i}][city_id]"
-                                required>
-                            <option value="">Select City</option>
-                            ${cities.map(c =>
-                                `<option value="${c.id}" ${c.id == row.city_id ? 'selected' : ''}>
-                                                                    ${c.slug}
-                                                                </option>`
-                            ).join('')}
-                        </select>
-                    </div>
+    <button type="button"
+            class="btn btn-sm btn-outline-dark remove-city" data-city="${row.city_id ?? ''}"  data-tippy-content="Delete Cities">
+            <iconify-icon icon="heroicons:trash"></iconify-icon>
+    </button>
 
-                    <div>
-                        <label class="form-label">Number of Nights *</label>
-                        <input class="form-control"
-                               type="number"
-                               min="1"
-                               name="cities[${i}][nights]"
-                               value="${row.nights ?? 1}"
-                               required>
-                    </div>
+</div>
 
-                    <div>
-                        <label class="form-label">Sort Order</label>
-                        <input class="form-control"
-                               type="number"
-                               min="1"
-                               name="cities[${i}][sort_order]"
-                               value="${row.sort_order ?? (i + 1)}">
-                    </div>
+<div class="grid grid-cols-3 gap-4">
 
-                </div>
-            </div>
-        `);
+    <div>
+        <label class="form-label">Select City *</label>
+
+        <select class="form-control selectCountrySelect2"
+                name="cities[${i}][city_id]"
+                required>
+
+            <option value="">Select City</option>
+
+            ${cities.map(c => `
+                                                                        <option value="${c.id}" ${c.id == row.city_id ? 'selected' : ''}>
+                                                                            ${c.slug}
+                                                                        </option>
+                                                                    `).join('')}
+
+        </select>
+    </div>
+
+    <div>
+        <label class="form-label">Number of Nights *</label>
+
+        <input class="form-control city-nights"
+               type="number"
+               min="0"
+               name="cities[${i}][nights]"
+               value="${row.nights ?? 0}"
+               readonly
+               required>
+    </div>
+
+    <div>
+        <label class="form-label">Sort Order</label>
+
+        <input class="form-control"
+               type="number"
+               min="1"
+               name="cities[${i}][sort_order]"
+               value="${row.sort_order ?? (i + 1)}">
+    </div>
+
+</div>
+
+</div>
+
+`);
                 }
 
+                tippy('[data-tippy-content]');
             }
 
             /* ======================================================
@@ -544,14 +626,58 @@
         `).join('');
                 }
 
+                //                 return `
+        // <div class="border p-3 mb-3">
+        //     <select class="form-control selectCountrySelect2 mb-4 activity-type">
+        //         <option value="">Activity Type</option>
+        //         ${['hotel','event','todo','transport'].map(t =>
+        //             `<option value="${t}" ${item.item_type === t ? 'selected' : ''}>
+                //                                                                                                                                                 ${t.charAt(0).toUpperCase()+t.slice(1)}
+                //                                                                                                                                             </option>`
+        //         ).join('')}
+        //     </select>
+
+        //     <select class="form-control mb-2 item-select selectCountrySelect2"
+        //             name="days[${day}][items][${index}][item_id]">
+        //         <option value="">Select Item</option>
+        //         ${optionsHTML}
+        //     </select>
+
+        //     <input type="hidden"
+        //            name="days[${day}][items][${index}][item_type]"
+        //            value="${item.item_type ?? ''}">
+
+        //     <label class="form-label">Start Time</label>
+        //     <input type="time"
+        //            class="form-control mb-2"
+        //            name="days[${day}][items][${index}][start_time]"
+        //            value="${item.start_time ?? ''}">
+
+        //     <label class="form-label">End Time</label>
+        //     <input type="time"
+        //            class="form-control"
+        //            name="days[${day}][items][${index}][end_time]"
+        //            value="${item.end_time ?? ''}">
+        // </div>
+        // `;
+
+                //             }
                 return `
-<div class="border p-3 mb-3">
+<div class="border p-3 mb-3 activity-row">
+
+    <div class="flex justify-between items-center mb-2">
+        <strong>Activity</strong>
+        <button type="button" class="btn btn-sm btn-outline-dark remove-activity" data-tippy-content="Delete Activity">
+            <iconify-icon icon="heroicons:trash"></iconify-icon>
+        </button>
+    </div>
+
     <select class="form-control selectCountrySelect2 mb-4 activity-type">
         <option value="">Activity Type</option>
         ${['hotel','event','todo','transport'].map(t =>
             `<option value="${t}" ${item.item_type === t ? 'selected' : ''}>
-                                                                                                                                                ${t.charAt(0).toUpperCase()+t.slice(1)}
-                                                                                                                                            </option>`
+                                                                                                ${t.charAt(0).toUpperCase()+t.slice(1)}
+                                                                                            </option>`
         ).join('')}
     </select>
 
@@ -579,7 +705,10 @@
 </div>
 `;
 
+                tippy('[data-tippy-content]');
+
             }
+
 
             /* ======================================================
                DAYS + ACTIVITIES – EDIT SAFE
@@ -599,16 +728,23 @@
                     });
 
                     daysContainer.insertAdjacentHTML('beforeend', `
-            <div class="border rounded p-4 mb-6">
-                <h4 class="font-semibold mb-2">Day ${d}</h4>
+<div class="border rounded p-4 mb-6 day-row">
+    <div class="flex justify-between items-center mb-2">
+    <h4 class="font-semibold">Day ${d}</h4>
 
-                <select class="form-control selectCountrySelect2 mb-2"
+    <button type="button"
+            class="btn btn-sm btn-outline-dark remove-day" data-tippy-content="Delete Day">
+            <iconify-icon icon="heroicons:trash"></iconify-icon>
+    </button>
+</div>
+
+                <select class="form-control selectCountrySelect2"
                         name="days[${d}][city_id]">
                     <option value="">Select City</option>
                     ${cities.map(c =>
                         `<option value="${c.id}" ${c.id == dayData.city_id ? 'selected' : ''}>
-                                                                                                                                                                                                                                    ${c.slug}
-                                                                                                                                                                                                                                </option>`
+                                                                                                                                                                                                                                                                                                                    ${c.slug}
+                                                                                                                                                                                                                                                                                                                </option>`
                     ).join('')}
                 </select>
 
@@ -625,6 +761,8 @@
             `);
                 }
 
+                tippy('[data-tippy-content]');
+
             }
 
             /* ======================================================
@@ -639,6 +777,18 @@
 
                 box.insertAdjacentHTML('beforeend', activityBlock(day, index));
                 // $('.selectCountrySelect2').select2();
+
+            });
+
+            document.addEventListener('click', function(e) {
+
+                if (!e.target.classList.contains('remove-activity')) return;
+
+                const row = e.target.closest('.activity-row');
+
+                if (confirm("Remove this activity?")) {
+                    row.remove();
+                }
 
             });
 
@@ -713,6 +863,103 @@
             document.addEventListener('DOMContentLoaded', () => {
                 if (duration_nights.value > 0) renderCities(duration_nights.value);
                 if (duration_days.value > 0) renderDays(duration_days.value);
+            });
+
+            document.addEventListener('click', function(e) {
+
+                if (!e.target.classList.contains('remove-day')) return;
+
+                const row = e.target.closest('.day-row');
+                row.remove();
+
+                const totalDays = document.querySelectorAll('.day-row').length;
+
+                duration_days.value = totalDays;
+                duration_nights.value = totalDays > 0 ? totalDays - 1 : 0;
+
+            });
+
+            document.addEventListener("input", function(e) {
+
+                if (!e.target.classList.contains("city-nights")) return;
+
+                let nights = 0;
+
+                document.querySelectorAll(".city-nights").forEach(el => {
+                    nights += parseInt(el.value || 0);
+                });
+
+                duration_nights.value = nights;
+                duration_days.value = nights > 0 ? nights + 1 : 1;
+
+            });
+
+            function reindexCities() {
+
+                const rows = document.querySelectorAll('.city-row');
+
+                rows.forEach((row, index) => {
+
+                    row.querySelector("h5").innerText = `City ${index+1}`;
+
+                    row.querySelector("select").name = `cities[${index}][city_id]`;
+                    row.querySelector(".city-nights").name = `cities[${index}][nights]`;
+
+                    row.querySelector('input[name*="sort_order"]').name = `cities[${index}][sort_order]`;
+
+                });
+
+            }
+
+            document.addEventListener("click", function(e) {
+
+                if (!e.target.classList.contains("remove-city")) return;
+
+                if (!confirm("Remove this city?")) return;
+
+                const cityId = e.target.dataset.city;
+
+                fetch(`/admin/packages/{{ $package->id }}/city/${cityId}`, {
+                        method: "DELETE",
+                        headers: {
+                            "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                            "Accept": "application/json"
+                        }
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+
+                        if (data.success) {
+
+                            e.target.closest(".city-row").remove();
+
+                            iziToast.success({
+                                title: "Success",
+                                message: data.message,
+                                position: "topRight"
+                            });
+
+                        } else {
+
+                            iziToast.error({
+                                title: "Error",
+                                message: data.message,
+                                position: "topRight"
+                            });
+
+                        }
+
+                    })
+                    .catch(() => {
+
+                        iziToast.error({
+                            title: "Error",
+                            message: "Something went wrong",
+                            position: "topRight"
+                        });
+
+                    });
+
             });
         </script>
     @endsection

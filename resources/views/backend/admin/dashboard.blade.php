@@ -2,6 +2,18 @@
 @section('title', 'Dashboard')
 @section('content')
 
+<style> 
+#bookingTrend{
+    width:100% !important;
+    height:100% !important;
+
+}
+#bookingStatus{
+    width:100% !important;
+    height:60% !important;
+}
+</style>
+
     <div>
         <div class="flex justify-between flex-wrap items-center mb-6">
             <h4
@@ -199,7 +211,8 @@
                 <div class="card">
                     <div class="card-body p-6">
                         <div class="legend-ring">
-                            <div id="revenue-barchart"></div>
+                            <!-- <div id="revenue-barchart"></div> -->
+                            <canvas  id="bookingTrend"></canvas>
                         </div>
                     </div>
                 </div>
@@ -212,15 +225,15 @@
                             <!-- BEGIN: Card Dropdown -->
                             <div class="relative">
                                 <div class="dropdown relative">
-                                    <button class="text-xl text-center block w-full " type="button"
+                                    <!-- <button class="text-xl text-center block w-full " type="button"
                                         data-bs-toggle="dropdown" aria-expanded="false">
                                         <span
                                             class="text-lg inline-flex h-6 w-6 flex-col items-center justify-center border border-slate-200 dark:border-slate-700
                     rounded dark:text-slate-400">
                                             <iconify-icon icon="heroicons-outline:dots-horizontal"></iconify-icon>
                                         </span>
-                                    </button>
-                                    <ul
+                                    </button> -->
+                                    <!-- <ul
                                         class=" dropdown-menu min-w-[120px] absolute text-sm text-slate-700 dark:text-white hidden bg-white dark:bg-slate-700
                 shadow z-[2] overflow-hidden list-none text-left rounded-lg mt-1 m-0 bg-clip-padding border-none">
                                         <li>
@@ -241,14 +254,15 @@
                         dark:hover:text-white">
                                                 Last Year</a>
                                         </li>
-                                    </ul>
+                                    </ul> -->
                                 </div>
                             </div>
                             <!-- END: Card Droopdown -->
                         </div>
                     </header>
                     <div class="card-body p-6">
-                        <div id="radial-bar"></div>
+                       
+                    <canvas id="bookingStatus"></canvas>                        <!-- <div id="radial-bar"></div> -->
                     </div>
                 </div>
             </div>
@@ -1058,7 +1072,54 @@
             ***/ ?>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const statusData = @json($stats['statusData']);
 
+const labels = Object.keys(statusData);
+const values = Object.values(statusData);
 
+console.log(statusData);
+
+new Chart(document.getElementById('bookingStatus'), {
+    type: 'pie',
+    data: {
+        labels: labels,
+        datasets: [{ 
+            data: values,
+            backgroundColor: [
+                '#F59E0B', // confirmed
+                '#3B82F6', // pending
+                '#22C55E', // completed
+                '#EF4444' // cancelled
+                
+            ]
+        }]
+    },
+    options:{
+        responsive:true,
+        plugins:{
+            legend:{
+                position:'bottom'
+            }
+        }
+    }
+});
+    </script>
+    <script>
+        const bookingTrend = new Chart(document.getElementById('bookingTrend'), {
+    type: 'line',
+    data: {
+        labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+        datasets: [{
+            label: 'Bookings',
+            data: @json(array_values($stats['monthBookingsChart']->toArray())),
+            borderColor: '#4F46E5',
+            backgroundColor: 'rgba(79,70,229,0.1)',
+            tension: 0.4
+        }]
+    }
+});
+        </script>
 
 @endsection
