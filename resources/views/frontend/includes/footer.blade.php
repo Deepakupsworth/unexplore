@@ -1,3 +1,17 @@
+<style>
+    .footer-icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.footer-icon img {
+    width: 22px;
+    height: 22px;
+}
+</style>
 <div class="footer-top-image">
     <img src="{{ asset('frontend/assets/footer-top.png') }}" alt="Footer">
 </div>
@@ -22,10 +36,14 @@
                                 {{ __('footer.popular_links') }}
                             </p>
                             <ul class="list-unstyled">
-                                <li><a href="{{ route('destinations.index') }}" class="footer-link">{{ __('footer.link.explore_saudi') }}</a></li>
-                                <li><a href="{{ route('things.to.do') }}" class="footer-link">{{ __('footer.link.things_to_do') }}</a></li>
-                                <li><a href="{{route('packages.index')}}" class="footer-link">{{ __('footer.link.plan_trip') }}</a></li>
-                                <li><a href="{{ route('event.listing') }}" class="footer-link">{{ __('footer.link.events_festivals') }}</a>
+                                <li><a href="{{ route('destinations.index') }}"
+                                        class="footer-link">{{ __('footer.link.explore_saudi') }}</a></li>
+                                <li><a href="{{ route('things.to.do') }}"
+                                        class="footer-link">{{ __('footer.link.things_to_do') }}</a></li>
+                                <li><a href="{{ route('packages.index') }}"
+                                        class="footer-link">{{ __('footer.link.plan_trip') }}</a></li>
+                                <li><a href="{{ route('event.listing') }}"
+                                        class="footer-link">{{ __('footer.link.events_festivals') }}</a>
                                 </li>
                                 <li><a href="#" class="footer-link">{{ __('footer.link.saudi_calendar') }}</a>
                                 </li>
@@ -37,13 +55,17 @@
                                 {{ __('footer.information') }}
                             </p>
                             <ul class="list-unstyled">
-                                <li><a href="{{route('terms-conditions')}}" class="footer-link">{{ __('footer.link.terms_conditions') }}</a>
+                                <li><a href="{{ route('terms-conditions') }}"
+                                        class="footer-link">{{ __('footer.link.terms_conditions') }}</a>
                                 </li>
-                                <li><a href="{{route('privacy-policy')}}" class="footer-link">{{ __('footer.link.privacy_policy') }}</a>
+                                <li><a href="{{ route('privacy-policy') }}"
+                                        class="footer-link">{{ __('footer.link.privacy_policy') }}</a>
                                 </li>
-                                <li><a href="{{route('faqs')}}" class="footer-link">{{ __('footer.link.faqs') }}</a></li>
+                                <li><a href="{{ route('faqs') }}" class="footer-link">{{ __('footer.link.faqs') }}</a>
+                                </li>
                                 <li><a href="#" class="footer-link">{{ __('footer.link.news_events') }}</a></li>
-                                <li><a href="{{route('cookie-policy')}}" class="footer-link">{{ __('footer.link.cookie_policy') }}</a>
+                                <li><a href="{{ route('cookie-policy') }}"
+                                        class="footer-link">{{ __('footer.link.cookie_policy') }}</a>
                                 </li>
                             </ul>
                         </div>
@@ -66,15 +88,31 @@
                 <!-- Social & Newsletter -->
                 <div class="col-md-6 col-lg-3 mb-4">
                     <div class="footer-icons-section">
-                        <a href={{ company('instagram_url') ?: '#' }}" class="footer-icon" target="__blank">
+
+                        <a href="{{ company('instagram_url') ?: '#' }}" class="footer-icon" target="_blank">
                             <img src="{{ asset('frontend/assets/icons/instagram.svg') }}" alt="instagram">
                         </a>
-                        <a href="{{ company('facebook_url') ?: '#' }}" class="footer-icon" target="__blank">
+
+                        <a href="{{ company('facebook_url') ?: '#' }}" class="footer-icon" target="_blank">
                             <img src="{{ asset('frontend/assets/icons/facebook.svg') }}" alt="facebook">
                         </a>
-                        <a href="{{ company('twitter_url') ?: '#' }}" class="footer-icon" target="__blank">
+
+                        <a href="{{ company('twitter_url') ?: '#' }}" class="footer-icon" target="_blank">
                             <img src="{{ asset('frontend/assets/icons/x.svg') }}" alt="x">
                         </a>
+
+                        <a href="{{ company('linkedin_url') ?: '#' }}" class="footer-icon" target="_blank">
+                            <img src="{{ asset('frontend/assets/icons/linkedin.svg') }}" alt="linkedin">
+                        </a>
+
+                        <a href="{{ company('youtube_url') ?: '#' }}" class="footer-icon" target="_blank">
+                            <img src="{{ asset('frontend/assets/icons/youtube.svg') }}" alt="youtube">
+                        </a>
+
+                        <a href="{{ company('threads_url') ?: '#' }}" class="footer-icon" target="_blank">
+                            <img src="{{ asset('frontend/assets/icons/threads.svg') }}" alt="threads">
+                        </a>
+
                     </div>
 
                     <div class="footer-newsletter-section">
@@ -97,7 +135,8 @@
                 </button>
               </form> --}}
 
-                        <form id="newsletterForm" action="{{ route('newsletter.subscribe') }}" method="POST" class="d-flex flex-column">
+                        <form id="newsletterForm" action="{{ route('newsletter.subscribe') }}" method="POST"
+                            class="d-flex flex-column">
                             @csrf
 
                             <div class="custom-input-group mb-2">
@@ -130,15 +169,15 @@
                 {{ __('footer.copyright') }}
             </span>
             <span>
-                <a href="{{route('terms-conditions')}}" class="footer-link text-white mx-2">
+                <a href="{{ route('terms-conditions') }}" class="footer-link text-white mx-2">
                     {{ __('footer.bottom.terms') }}
                 </a>
                 &bull;
-                <a href="{{route('privacy-policy')}}" class="footer-link text-white mx-2">
+                <a href="{{ route('privacy-policy') }}" class="footer-link text-white mx-2">
                     {{ __('footer.bottom.privacy') }}
                 </a>
                 &bull;
-                <a href="{{route('cookie-policy')}}" class="footer-link text-white mx-2">
+                <a href="{{ route('cookie-policy') }}" class="footer-link text-white mx-2">
                     {{ __('footer.bottom.cookie') }}
                 </a>
                 {{-- &bull;
@@ -151,76 +190,76 @@
 
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
 
             const form = document.getElementById('newsletterForm');
             if (!form) return;
 
-            form.addEventListener('submit', function (e) {
+            form.addEventListener('submit', function(e) {
                 e.preventDefault();
 
                 const formData = new FormData(form);
                 const action = form.getAttribute('action');
 
                 fetch(action, {
-                    method: "POST",
-                    headers: {
-                        'X-CSRF-TOKEN': form.querySelector('[name=_token]').value,
-                        'Accept': 'application/json'
-                    },
-                    body: formData
-                })
-                .then(async response => {
+                        method: "POST",
+                        headers: {
+                            'X-CSRF-TOKEN': form.querySelector('[name=_token]').value,
+                            'Accept': 'application/json'
+                        },
+                        body: formData
+                    })
+                    .then(async response => {
 
-                    const data = await response.json();
+                        const data = await response.json();
 
-                    if (!response.ok) {
-                        throw data;
-                    }
+                        if (!response.ok) {
+                            throw data;
+                        }
 
-                    return data;
-                })
-                .then(data => {
+                        return data;
+                    })
+                    .then(data => {
 
-                    iziToast[data.status || 'success']({
-                        title: data.status?.charAt(0).toUpperCase() + data.status?.slice(1),
-                        message: data.message,
-                        position: 'topRight',
-                        timeout: 5000
-                    });
+                        iziToast[data.status || 'success']({
+                            title: data.status?.charAt(0).toUpperCase() + data.status?.slice(1),
+                            message: data.message,
+                            position: 'topRight',
+                            timeout: 5000
+                        });
 
-                    if (data.status === 'success') {
-                        form.reset();
-                    }
+                        if (data.status === 'success') {
+                            form.reset();
+                        }
 
-                })
-                .catch(error => {
+                    })
+                    .catch(error => {
 
-                    if (error.errors) {
-                        // Laravel validation errors
-                        Object.values(error.errors).forEach(messages => {
-                            messages.forEach(message => {
-                                iziToast.error({
-                                    title: 'Validation Error',
-                                    message: message,
-                                    position: 'topRight',
-                                    timeout: 6000
+                        if (error.errors) {
+                            // Laravel validation errors
+                            Object.values(error.errors).forEach(messages => {
+                                messages.forEach(message => {
+                                    iziToast.error({
+                                        title: 'Validation Error',
+                                        message: message,
+                                        position: 'topRight',
+                                        timeout: 6000
+                                    });
                                 });
                             });
-                        });
-                    } else {
-                        iziToast.error({
-                            title: 'Error',
-                            message: error.message || 'Something went wrong.',
-                            position: 'topRight',
-                            timeout: 6000
-                        });
-                    }
-                });
+                        } else {
+                            iziToast.error({
+                                title: 'Error',
+                                message: error.message || 'Something went wrong.',
+                                position: 'topRight',
+                                timeout: 6000
+                            });
+                        }
+                    });
 
             });
 
         });
-        </script>
+    </script>
 
 </footer>
