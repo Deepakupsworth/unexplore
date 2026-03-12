@@ -558,26 +558,24 @@
             <option value="">Select City</option>
 
             ${cities.map(c => `
-                                                                        <option value="${c.id}" ${c.id == row.city_id ? 'selected' : ''}>
-                                                                            ${c.slug}
-                                                                        </option>
-                                                                    `).join('')}
+                                                                                <option value="${c.id}" ${c.id == row.city_id ? 'selected' : ''}>
+                                                                                    ${c.slug}
+                                                                                </option>
+                                                                            `).join('')}
 
         </select>
     </div>
 
     <div>
-        <label class="form-label">Number of Nights *</label>
+    <label class="form-label">Number of Nights *</label>
 
-        <input class="form-control city-nights"
-               type="number"
-               min="0"
-               name="cities[${i}][nights]"
-               value="${row.nights ?? 0}"
-               readonly
-               required>
-    </div>
-
+    <input class="form-control city-nights"
+           type="number"
+           min="1"
+           name="cities[${i}][nights]"
+           value="${row.nights ? row.nights : 1}"
+           required>
+</div>
     <div>
         <label class="form-label">Sort Order</label>
 
@@ -676,8 +674,8 @@
         <option value="">Activity Type</option>
         ${['hotel','event','todo','transport'].map(t =>
             `<option value="${t}" ${item.item_type === t ? 'selected' : ''}>
-                                                                                                ${t.charAt(0).toUpperCase()+t.slice(1)}
-                                                                                            </option>`
+                                                                                                        ${t.charAt(0).toUpperCase()+t.slice(1)}
+                                                                                                    </option>`
         ).join('')}
     </select>
 
@@ -739,12 +737,12 @@
 </div>
 
                 <select class="form-control selectCountrySelect2"
-                        name="days[${d}][city_id]">
+                        name="days[${d}][city_id]" required>
                     <option value="">Select City</option>
                     ${cities.map(c =>
                         `<option value="${c.id}" ${c.id == dayData.city_id ? 'selected' : ''}>
-                                                                                                                                                                                                                                                                                                                    ${c.slug}
-                                                                                                                                                                                                                                                                                                                </option>`
+                                                                                                                                                                                                                                                                                                                            ${c.slug}
+                                                                                                                                                                                                                                                                                                                        </option>`
                     ).join('')}
                 </select>
 
@@ -861,10 +859,21 @@
                INITIAL LOAD (CREATE + EDIT)
             ====================================================== */
             document.addEventListener('DOMContentLoaded', () => {
-                if (duration_nights.value > 0) renderCities(duration_nights.value);
-                if (duration_days.value > 0) renderDays(duration_days.value);
-            });
 
+                const nights = parseInt(duration_nights.value || 0);
+                const days = parseInt(duration_days.value || 0);
+
+                if (window.existingCities && window.existingCities.length) {
+                    renderCities(window.existingCities.length);
+                } else if (nights > 0) {
+                    renderCities(nights);
+                }
+
+                if (days > 0) {
+                    renderDays(days);
+                }
+
+            });
             document.addEventListener('click', function(e) {
 
                 if (!e.target.classList.contains('remove-day')) return;
