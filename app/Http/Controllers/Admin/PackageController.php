@@ -493,90 +493,21 @@ class PackageController extends Controller
                         ]
                     );
                 }
-            }  /*
-        |--------------------------------------------------------------------------
-        | CITIES
-        |--------------------------------------------------------------------------
-        */
-            // if (!$isPartialUpdate || $section === 'itinerary') {
-            //     foreach ($request->cities ?? [] as $row) {
-
-            //         if (empty($row['city_id'])) continue;
-
-            //         $package->cities()->updateOrCreate(
-            //             ['city_id' => $row['city_id']],
-            //             [
-            //                 'nights'     => $row['nights'] ?? 1,
-            //                 'sort_order' => $row['sort_order'] ?? 0,
-            //             ]
-            //         );
-            //     }
-            // }
-
-
-            /*
-|--------------------------------------------------------------------------
-| CITIES
-|--------------------------------------------------------------------------
-*/
-
-            if (!$isPartialUpdate || $section === 'itinerary') {
-
-                $incomingCities = collect($request->cities ?? [])
-                    ->pluck('city_id')
-                    ->filter()
-                    ->toArray();
-
-                // Cities that were removed
-                $removedCities = $package->cities()
-                    ->whereNotIn('city_id', $incomingCities)
-                    ->pluck('city_id');
-
-                /*
-    |--------------------------------------------------------------------------
-    | DELETE DAYS OF REMOVED CITIES
-    |--------------------------------------------------------------------------
-    */
-
-                if ($removedCities->count()) {
-                    $package->days()
-                        ->whereIn('city_id', $removedCities)
-                        ->delete();
-                }
-
-                /*
-    |--------------------------------------------------------------------------
-    | DELETE REMOVED CITIES
-    |--------------------------------------------------------------------------
-    */
-
-                $package->cities()
-                    ->whereIn('city_id', $removedCities)
-                    ->delete();
-
-                /*
-    |--------------------------------------------------------------------------
-    | CREATE / UPDATE CITIES
-    |--------------------------------------------------------------------------
-    */
-
-                foreach ($request->cities ?? [] as $row) {
-
-                    if (empty($row['city_id'])) continue;
-
-                    $package->cities()->updateOrCreate(
-                        [
-                            'package_id' => $package->id,
-                            'city_id'    => $row['city_id'],
-                        ],
-                        [
-                            'nights'     => $row['nights'] ?? 0,
-                            'sort_order' => $row['sort_order'] ?? 0,
-                        ]
-                    );
-                }
             }
 
+
+            $package->cities()->delete();
+
+            foreach ($request->cities ?? [] as $row) {
+
+                if (empty($row['city_id'])) continue;
+
+                $package->cities()->create([
+                    'city_id'    => $row['city_id'],
+                    'nights'     => $row['nights'] ?? 0,
+                    'sort_order' => $row['sort_order'] ?? 0,
+                ]);
+            }
             /*
         |--------------------------------------------------------------------------
         | DAYS & ITEMS
